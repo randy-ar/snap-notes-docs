@@ -1,0 +1,239 @@
+classDiagram
+    direction TB
+
+    %% ==================== LAPISAN CORE ====================
+    class DioClient {
+        +Dio dio
+        +DioClient(FlutterSecureStorage storage)
+    }
+    
+    class AuthInterceptor {
+        -FlutterSecureStorage storage
+        +onRequest(RequestOptions options, RequestInterceptorHandler handler)
+        +onError(DioException err, ErrorInterceptorHandler handler)
+    }
+    
+    class Failure {
+        <<abstract>>
+        +String message
+    }
+    
+    class ServerFailure {
+        +ServerFailure(String message)
+    }
+    
+    class LocalFailure {
+        +LocalFailure(String message)
+    }
+    
+    class ServerException {
+        +String message
+        +int? statusCode
+    }
+
+    DioClient --> AuthInterceptor : menggunakan
+    Failure <|-- ServerFailure
+    Failure <|-- LocalFailure
+
+    %% ==================== MODUL AUTHENTICATION ====================
+    class Pengguna {
+        +String id
+        +String email
+        +String namaLengkap
+        +String? fotoProfilUrl
+    }
+    
+    class AuthToken {
+        +String accessToken
+        +String refreshToken
+    }
+    
+    class AuthService {
+        -Dio _dio
+        -FlutterSecureStorage _storage
+        -SupabaseClient _supabaseClient
+        +masuk(String email, String password) Future~Pengguna~
+        +daftar(String email, String password, String nama) Future~Pengguna~
+        +keluar() Future~void~
+    }
+    
+    class AuthViewModel {
+        -AuthService _authService
+        -Pengguna? _pengguna
+        +bool get isAuthed
+        +cekStatusAutentikasi() Future~void~
+    }
+    
+    class LoginViewModel {
+        -AuthService _authService
+        +bool isLoading
+        +String? errorMessage
+        +login(String email, String password) Future~void~
+    }
+
+    AuthViewModel --> AuthService : bergantung pada
+    LoginViewModel --> AuthService : bergantung pada
+    AuthService --> Pengguna : mengembalikan
+    AuthService --> AuthToken : mengelola
+
+    %% ==================== MODUL PEMASUKAN ====================
+    class Pemasukan {
+        +String id
+        +double jumlah
+        +DateTime tanggal
+        +String deskripsi
+        +String? catatan
+    }
+    
+    class PemasukanService {
+        -Dio _dio
+        +getDaftarPemasukan() Future~List~Pemasukan~~
+        +tambahPemasukan(Pemasukan data) Future~Pemasukan~
+    }
+    
+    class PemasukanViewModel {
+        -PemasukanService _pemasukanService
+        +List~Pemasukan~ pemasukanList
+        +bool isLoading
+        +loadPemasukan() Future~void~
+        +tambahPemasukan(Pemasukan data) Future~void~
+    }
+
+    PemasukanViewModel --> PemasukanService : bergantung pada
+    PemasukanService --> Pemasukan : mengelola
+
+    %% ==================== MODUL PENGELUARAN ====================
+    class Pengeluaran {
+        +String id
+        +double jumlah
+        +DateTime tanggal
+        +String deskripsi
+        +String? strukId
+    }
+    
+    class PengeluaranService {
+        -Dio _dio
+        +getDaftarPengeluaran() Future~List~Pengeluaran~~
+        +tambahPengeluaran(Pengeluaran data) Future~Pengeluaran~
+    }
+    
+    class PengeluaranViewModel {
+        -PengeluaranService _pengeluaranService
+        +List~Pengeluaran~ pengeluaranList
+        +bool isLoading
+        +loadPengeluaran() Future~void~
+        +tambahPengeluaran(Pengeluaran data) Future~void~
+    }
+
+    PengeluaranViewModel --> PengeluaranService : bergantung pada
+    PengeluaranService --> Pengeluaran : mengelola
+
+    %% ==================== MODUL RECEIPT (SCAN STRUK) ====================
+    class Receipt {
+        +String id
+        +String storeName
+        +DateTime date
+        +double totalAmount
+        +List~ReceiptItem~ items
+        +String imageUrl
+        +bool isConfirmed
+    }
+    
+    class ReceiptItem {
+        +String id
+        +String name
+        +int quantity
+        +double price
+        +double totalPrice
+    }
+    
+    class ReceiptService {
+        -Dio _dio
+        +uploadStruk(File file) Future~String~
+        +scanStruk(String rawText, String imageUrl) Future~Receipt~
+        +konfirmasiStruk(String id) Future~void~
+    }
+    
+    class ReceiptViewModel {
+        -ReceiptService _receiptService
+        +Receipt? currentReceipt
+        +bool isScanning
+        +prosesOCRDanKirim(File image) Future~void~
+        +konfirmasiDataStruk() Future~void~
+    }
+
+    ReceiptViewModel --> ReceiptService : bergantung pada
+    ReceiptService --> Receipt : mengelola
+    Receipt *-- ReceiptItem : komposisi (1 ke banyak)
+
+    %% ==================== MODUL DASHBOARD ====================
+    class Ringkasan {
+        +double totalPemasukan
+        +double totalPengeluaran
+        +double saldo
+    }
+    
+    class DashboardService {
+        -Dio _dio
+        +getRingkasanDashboard() Future~Ringkasan~
+    }
+    
+    class DashboardViewModel {
+        -DashboardService _dashboardService
+        +Ringkasan? ringkasan
+        +loadDashboardData() Future~void~
+    }
+
+    DashboardViewModel --> DashboardService : bergantung pada
+    DashboardService --> Ringkasan : mengelola
+
+    %% ==================== MODUL NOTIFIKASI ====================
+    class PreferensiNotifikasi {
+        +List~String~ hariAktif
+        +String jamNotifikasi
+        +bool aktif
+    }
+    
+    class NotifikasiService {
+        -Dio _dio
+        -FlutterLocalNotificationsPlugin _notificationsPlugin
+        +simpanPreferensi(PreferensiNotifikasi data) Future~void~
+        +jadwalkanNotifikasiLokal() Future~void~
+    }
+    
+    class NotifikasiViewModel {
+        -NotifikasiService _notifikasiService
+        +PreferensiNotifikasi? preferensi
+        +loadPreferensi() Future~void~
+        +updatePreferensi(PreferensiNotifikasi data) Future~void~
+    }
+
+    NotifikasiViewModel --> NotifikasiService : bergantung pada
+    NotifikasiService --> PreferensiNotifikasi : mengelola
+
+    %% ==================== HUBUNGAN ANTAR-LAPISAN MVVM ====================
+    class LoginPage {
+        +LoginViewModel viewModel
+    }
+    
+    class PemasukanPage {
+        +PemasukanViewModel viewModel
+    }
+    
+    class PengeluaranPage {
+        +PengeluaranViewModel viewModel
+    }
+    
+    class ReceiptScanPage {
+        +ReceiptViewModel viewModel
+    }
+    
+    class DashboardPage {
+        +DashboardViewModel viewModel
+    }
+
+    LoginPage --> LoginViewModel : mendengarkan state
+    PemasukanPage --> PemasukanViewModel : mendengarkan state
+    PengeluaranPage --> PengeluaranViewModel : mendengarkan state
+    ReceiptScanPage --> ReceiptViewModel : mendengarkan state
+    DashboardPage --> DashboardViewModel : mendengarkan state

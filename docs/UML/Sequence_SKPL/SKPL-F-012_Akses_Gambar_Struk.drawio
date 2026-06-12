@@ -1,0 +1,221 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Akses Gambar Struk Tersimpan" id="seq-akses-gambar">
+    <mxGraphModel dx="1707" dy="775" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Lifeline: Pengguna (Actor) -->
+        <mxCell id="ll_actor" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="«actor»&lt;br&gt;&lt;b&gt;Pengguna&lt;/b&gt;" vertex="1">
+          <mxGeometry height="950" width="100" x="100" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_actor" parent="ll_actor" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="850" width="10" x="45" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: ReceiptDetailPage (View) -->
+        <mxCell id="ll_page" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="ReceiptDetailPage" vertex="1">
+          <mxGeometry height="950" width="140" x="350" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_page" parent="ll_page" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="850" width="10" x="65" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: ReceiptViewModel (ViewModel) -->
+        <mxCell id="ll_vm" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="ReceiptViewModel" vertex="1">
+          <mxGeometry height="950" width="160" x="600" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_vm" parent="ll_vm" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="850" width="10" x="75" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: ReceiptService (Service) -->
+        <mxCell id="ll_service" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="ReceiptService" vertex="1">
+          <mxGeometry height="950" width="130" x="850" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_service" parent="ll_service" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="850" width="10" x="60" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: DioClient (Client) -->
+        <mxCell id="ll_client" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="DioClient" vertex="1">
+          <mxGeometry height="950" width="120" x="1080" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_client" parent="ll_client" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="850" width="10" x="55" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: Web Service (Aktor Pendukung) -->
+        <mxCell id="ll_webservice" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="«actor»&lt;br&gt;&lt;b&gt;Web Service&lt;/b&gt;" vertex="1">
+          <mxGeometry height="950" width="120" x="1300" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_webservice" parent="ll_webservice" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="850" width="10" x="55" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Messages -->
+        <!-- Step 1: Membuka Halaman Detail Struk -->
+        <mxCell id="msg_1" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="Buka Halaman Detail Struk Belanja">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="155" y="140" as="sourcePoint" />
+            <mxPoint x="415" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_2" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="getReceiptDetail(receiptId)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="425" y="170" as="sourcePoint" />
+            <mxPoint x="675" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- self call _setLoading(true) -->
+        <mxCell id="act_loading" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="681" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_loading" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_loading" value="_setLoading(true)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="200" />
+            </Array>
+            <mxPoint x="686" y="180" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_3" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="getReceiptDetail(receiptId)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="685" y="245" as="sourcePoint" />
+            <mxPoint x="910" y="245" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_4" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="GET /api/struk/{id}">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="275" as="sourcePoint" />
+            <mxPoint x="1135" y="275" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_5" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="Kueri Struk &amp; Detail dari Database">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1145" y="305" as="sourcePoint" />
+            <mxPoint x="1355" y="305" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_ok_ws" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="HTTP 200 OK (Struk JSON dengan gambarUrl)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1355" y="335" as="sourcePoint" />
+            <mxPoint x="1145" y="335" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_ok_api" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="HttpResponse (Map data JSON)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1135" y="365" as="sourcePoint" />
+            <mxPoint x="920" y="365" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_ok_service" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Receipt (objek struk dengan imageUrl)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="910" y="395" as="sourcePoint" />
+            <mxPoint x="685" y="395" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- self call _setLoading(false) -->
+        <mxCell id="act_loading_false" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="681" y="415" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_loading_false" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_loading_false" value="_setLoading(false)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="425" />
+            </Array>
+            <mxPoint x="686" y="405" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_notify" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="notifyListeners() (_receiptDetail updated)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="675" y="460" as="sourcePoint" />
+            <mxPoint x="415" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Step 2: Mengambil Gambar dari Supabase Storage -->
+        <mxCell id="msg_get_image" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="Tarik berkas gambar (Image.network(receipt.imageUrl))">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="425" y="500" as="sourcePoint" />
+            <mxPoint x="1135" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_forward_storage" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="GET /storage/v1/object/public/... (ke Supabase Storage)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1145" y="530" as="sourcePoint" />
+            <mxPoint x="1355" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Alt Frame for Image loading success/fail -->
+        <mxCell id="frame_image" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=80;height=30;" value="Alt" vertex="1">
+          <mxGeometry height="320" width="1280" x="90" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="txt_image_fail" parent="frame_image" style="text;html=1;" value="&lt;b&gt;[Timeout / URL Rusak / Gagal Memuat Aset]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" relative="1" width="300" as="geometry">
+            <mxPoint x="90" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_image_fail_ws" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="HTTP Error / Connection Timeout">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1355" y="600" as="sourcePoint" />
+            <mxPoint x="1145" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_image_fail_client" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Trigger errorBuilder di widget Image">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1135" y="630" as="sourcePoint" />
+            <mxPoint x="425" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_image_fail_render" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Tampilkan ikon Gambar Tidak Dapat Dimuat">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="415" y="660" as="sourcePoint" />
+            <mxPoint x="155" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Separator Image Alt -->
+        <mxCell id="line_image" parent="frame_image" style="line;strokeWidth=1;dashed=1;labelPosition=center;verticalLabelPosition=bottom;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;html=1;whiteSpace=wrap;" value="" vertex="1">
+          <mxGeometry height="10" width="1280" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="txt_image_ok" parent="frame_image" style="text;html=1;" value="&lt;b&gt;[Gambar Berhasil Ditarik]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="200" x="90" y="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="msg_image_ok_ws" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Kembalikan file bytes gambar struk belanja">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1355" y="730" as="sourcePoint" />
+            <mxPoint x="1145" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_image_ok_client" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Decode bytes &amp; simpan di memori cache">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1135" y="760" as="sourcePoint" />
+            <mxPoint x="425" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_image_ok_render" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Tampilkan visual gambar struk belanja penuh">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="415" y="800" as="sourcePoint" />
+            <mxPoint x="155" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

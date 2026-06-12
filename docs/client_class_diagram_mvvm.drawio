@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="Client MVVM Class Diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- COLUMN 0 CORE LAYER -->
+        <mxCell id="core_dio" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;DioClient&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;+ dio: Dio&lt;hr/&gt;+ DioClient(storage: FlutterSecureStorage)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="20" y="510" width="220" height="90" />
+        </mxCell>
+
+        <mxCell id="core_interceptor" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;AuthInterceptor&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _storage: FlutterSecureStorage&lt;hr/&gt;+ onRequest(options, handler)&lt;br/&gt;+ onError(err, handler)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="20" y="640" width="220" height="100" />
+        </mxCell>
+
+        <!-- COLUMN 1 AUTHENTICATION -->
+        <mxCell id="view_login" value="&lt;b&gt;LoginPage&lt;/b&gt;&lt;br/&gt;+ build(context)" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="300" y="50" width="180" height="60" />
+        </mxCell>
+
+        <mxCell id="vm_login" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;LoginViewModel&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _authService: AuthService&lt;br/&gt;- _isLoading: bool&lt;br/&gt;- _errorMessage: String?&lt;hr/&gt;+ login(email, password)&lt;br/&gt;+ _setLoading(value)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="280" y="180" width="220" height="140" />
+        </mxCell>
+
+        <mxCell id="vm_auth" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;AuthViewModel&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _authService: AuthService&lt;br/&gt;- _pengguna: Pengguna?&lt;br/&gt;- _isLoading: bool&lt;hr/&gt;+ cekStatusAutentikasi()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="280" y="340" width="220" height="140" />
+        </mxCell>
+
+        <mxCell id="svc_auth" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;AuthService&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _dio: Dio&lt;br/&gt;- _storage: SecureStorage&lt;br/&gt;- _supabaseClient: SupabaseClient&lt;hr/&gt;+ masuk(email, pass)&lt;br/&gt;+ daftar(email, pass, nama)&lt;br/&gt;+ keluar()&lt;br/&gt;+ getProfil()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="280" y="510" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="ent_pengguna" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;Pengguna&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;+ id: String&lt;br/&gt;+ email: String&lt;br/&gt;+ namaLengkap: String&lt;br/&gt;+ fotoProfilUrl: String?&lt;hr/&gt;+ fromJson(json)&lt;br/&gt;+ toJson()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="280" y="690" width="220" height="130" />
+        </mxCell>
+
+        <!-- COLUMN 2 PEMASUKAN -->
+        <mxCell id="view_pemasukan" value="&lt;b&gt;PemasukanPage&lt;/b&gt;&lt;br/&gt;+ build(context)" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="560" y="50" width="180" height="60" />
+        </mxCell>
+
+        <mxCell id="vm_pemasukan" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;PemasukanViewModel&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _pemasukanService: PemasukanService&lt;br/&gt;- _pemasukanList: List&lt;Pemasukan&gt;&lt;br/&gt;- _isLoading: bool&lt;hr/&gt;+ loadPemasukan()&lt;br/&gt;+ tambahPemasukan()&lt;br/&gt;+ hapusPemasukan()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="540" y="180" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="svc_pemasukan" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;PemasukanService&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _dio: Dio&lt;hr/&gt;+ getDaftarPemasukan()&lt;br/&gt;+ tambahPemasukan()&lt;br/&gt;+ getPemasukanDetail()&lt;br/&gt;+ updatePemasukan()&lt;br/&gt;+ hapusPemasukan()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="540" y="510" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="ent_pemasukan" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;Pemasukan&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;+ id: String&lt;br/&gt;+ penggunaId: String&lt;br/&gt;+ jumlah: double&lt;br/&gt;+ tanggal: DateTime&lt;br/&gt;+ deskripsi: String&lt;br/&gt;+ catatan: String?&lt;hr/&gt;+ fromJson(json)&lt;br/&gt;+ toJson()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="540" y="690" width="220" height="150" />
+        </mxCell>
+
+        <!-- COLUMN 3 PENGELUARAN -->
+        <mxCell id="view_pengeluaran" value="&lt;b&gt;PengeluaranPage&lt;/b&gt;&lt;br/&gt;+ build(context)" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="820" y="50" width="180" height="60" />
+        </mxCell>
+
+        <mxCell id="vm_pengeluaran" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;PengeluaranViewModel&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _pengeluaranService: PengeluaranService&lt;br/&gt;- _pengeluaranList: List&lt;Pengeluaran&gt;&lt;br/&gt;- _isLoading: bool&lt;hr/&gt;+ loadPengeluaran()&lt;br/&gt;+ tambahPengeluaran()&lt;br/&gt;+ hapusPengeluaran()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="800" y="180" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="svc_pengeluaran" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;PengeluaranService&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _dio: Dio&lt;hr/&gt;+ getDaftarPengeluaran()&lt;br/&gt;+ tambahPengeluaran()&lt;br/&gt;+ getPengeluaranDetail()&lt;br/&gt;+ updatePengeluaran()&lt;br/&gt;+ hapusPengeluaran()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="800" y="510" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="ent_pengeluaran" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;Pengeluaran&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;+ id: String&lt;br/&gt;+ penggunaId: String&lt;br/&gt;+ jumlah: double&lt;br/&gt;+ tanggal: DateTime&lt;br/&gt;+ deskripsi: String&lt;br/&gt;+ catatan: String?&lt;br/&gt;+ strukId: String?&lt;hr/&gt;+ fromJson(json)&lt;br/&gt;+ toJson()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="800" y="690" width="220" height="160" />
+        </mxCell>
+
+        <!-- COLUMN 4 RECEIPT SCAN STRUK -->
+        <mxCell id="view_receipt" value="&lt;b&gt;ReceiptScanPage&lt;/b&gt;&lt;br/&gt;+ build(context)" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="50" width="180" height="60" />
+        </mxCell>
+
+        <mxCell id="vm_receipt" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;ReceiptViewModel&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _receiptService: ReceiptService&lt;br/&gt;- _currentReceipt: Receipt?&lt;br/&gt;- _isScanning: bool&lt;hr/&gt;+ prosesOCRDanKirim(image)&lt;br/&gt;+ konfirmasiDataStruk()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="180" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="svc_receipt" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;ReceiptService&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _dio: Dio&lt;hr/&gt;+ uploadStruk(file)&lt;br/&gt;+ scanStruk(rawText, imageUrl)&lt;br/&gt;+ konfirmasiStruk(id)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="510" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="ent_receipt" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;Receipt&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;+ id: String&lt;br/&gt;+ storeName: String&lt;br/&gt;+ date: DateTime&lt;br/&gt;+ totalAmount: double&lt;br/&gt;+ items: List&lt;ReceiptItem&gt;&lt;br/&gt;+ imageUrl: String&lt;hr/&gt;+ fromJson(json)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="690" width="220" height="160" />
+        </mxCell>
+
+        <mxCell id="ent_receipt_item" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;ReceiptItem&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;+ id: String&lt;br/&gt;+ name: String&lt;br/&gt;+ quantity: int&lt;br/&gt;+ price: double&lt;br/&gt;+ totalPrice: double" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="880" width="220" height="120" />
+        </mxCell>
+
+        <!-- COLUMN 5 DASHBOARD -->
+        <mxCell id="view_dashboard" value="&lt;b&gt;DashboardPage&lt;/b&gt;&lt;br/&gt;+ build(context)" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="50" width="180" height="60" />
+        </mxCell>
+
+        <mxCell id="vm_dashboard" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;DashboardViewModel&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _dashboardService: DashboardService&lt;br/&gt;- _ringkasan: Ringkasan?&lt;br/&gt;- _isLoading: bool&lt;hr/&gt;+ loadDashboardData()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="180" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="svc_dashboard" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;DashboardService&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _dio: Dio&lt;hr/&gt;+ getRingkasanDashboard()&lt;br/&gt;+ getStatistikKategori()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="510" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="ent_ringkasan" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;Ringkasan&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;+ totalPemasukan: double&lt;br/&gt;+ totalPengeluaran: double&lt;br/&gt;+ saldo: double&lt;hr/&gt;+ fromJson(json)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="690" width="220" height="130" />
+        </mxCell>
+
+        <!-- COLUMN 6 NOTIFIKASI -->
+        <mxCell id="view_notifikasi" value="&lt;b&gt;NotifikasiSettingsPage&lt;/b&gt;&lt;br/&gt;+ build(context)" style="rounded=1;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="50" width="180" height="60" />
+        </mxCell>
+
+        <mxCell id="vm_notifikasi" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;NotifikasiViewModel&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _notifikasiService: NotifikasiService&lt;br/&gt;- _preferensi: PreferensiNotifikasi?&lt;hr/&gt;+ loadPreferensi()&lt;br/&gt;+ updatePreferensi(data)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="180" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="svc_notifikasi" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;NotifikasiService&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;- _dio: Dio&lt;br/&gt;- _notificationsPlugin: Plugin&lt;hr/&gt;+ simpanPreferensi(data)&lt;br/&gt;+ jadwalkanNotifikasiLokal()" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="510" width="220" height="150" />
+        </mxCell>
+
+        <mxCell id="ent_notifikasi" value="&lt;p align=&quot;center&quot;&gt;&lt;b&gt;PreferensiNotifikasi&lt;/b&gt;&lt;/p&gt;&lt;hr/&gt;+ hariAktif: List&lt;String&gt;&lt;br/&gt;+ jamNotifikasi: String&lt;br/&gt;+ aktif: bool&lt;hr/&gt;+ fromJson(json)" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="690" width="220" height="130" />
+        </mxCell>
+
+
+        <!-- EDGES RELATIONS -->
+        
+        <!-- COLUMN 1 AUTH EDGES -->
+        <mxCell id="edge_login_to_vm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="view_login" target="vm_login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_login_vm_to_svc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="vm_login" target="svc_auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_auth_vm_to_svc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="vm_auth" target="svc_auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_auth_svc_to_pengguna" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_auth" target="ent_pengguna">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 2 PEMASUKAN EDGES -->
+        <mxCell id="edge_pemasukan_to_vm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="view_pemasukan" target="vm_pemasukan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_pemasukan_vm_to_svc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="vm_pemasukan" target="svc_pemasukan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_pemasukan_svc_to_ent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_pemasukan" target="ent_pemasukan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 3 PENGELUARAN EDGES -->
+        <mxCell id="edge_pengeluaran_to_vm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="view_pengeluaran" target="vm_pengeluaran">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_pengeluaran_vm_to_svc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="vm_pengeluaran" target="svc_pengeluaran">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_pengeluaran_svc_to_ent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_pengeluaran" target="ent_pengeluaran">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 4 RECEIPT EDGES -->
+        <mxCell id="edge_receipt_to_vm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="view_receipt" target="vm_receipt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_receipt_vm_to_svc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="vm_receipt" target="svc_receipt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_receipt_svc_to_ent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_receipt" target="ent_receipt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_receipt_to_item" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=diamondThin;endFill=1;" edge="1" parent="1" source="ent_receipt" target="ent_receipt_item">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 5 DASHBOARD EDGES -->
+        <mxCell id="edge_dashboard_to_vm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="view_dashboard" target="vm_dashboard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_dashboard_vm_to_svc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="vm_dashboard" target="svc_dashboard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_dashboard_svc_to_ent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_dashboard" target="ent_ringkasan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN 6 NOTIFIKASI EDGES -->
+        <mxCell id="edge_notifikasi_to_vm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="view_notifikasi" target="vm_notifikasi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_notifikasi_vm_to_svc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="vm_notifikasi" target="svc_notifikasi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_notifikasi_svc_to_ent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_notifikasi" target="ent_notifikasi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+
+        <!-- SERVICES TO CORE DIO EDGES -->
+        <mxCell id="edge_auth_to_dio" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_auth" target="core_dio">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="260" y="585" />
+              <mxPoint x="260" y="533" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_pemasukan_to_dio" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_pemasukan" target="core_dio">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="520" y="585" />
+              <mxPoint x="520" y="555" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_pengeluaran_to_dio" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_pengeluaran" target="core_dio">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="780" y="585" />
+              <mxPoint x="780" y="578" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_receipt_to_dio" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_receipt" target="core_dio">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="585" />
+              <mxPoint x="1040" y="555" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_dashboard_to_dio" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_dashboard" target="core_dio">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1300" y="585" />
+              <mxPoint x="1300" y="555" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_notifikasi_to_dio" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="svc_notifikasi" target="core_dio">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1560" y="585" />
+              <mxPoint x="1560" y="555" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- CORE TO INTERCEPTOR EDGES -->
+        <mxCell id="edge_dio_to_interceptor" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;" edge="1" parent="1" source="core_dio" target="core_interceptor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

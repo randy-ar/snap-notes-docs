@@ -1,0 +1,55 @@
+/*#supportForm{display:none;}*/
+@font-face {font-family: 'Roboto';font-style: normal;font-weight: 200;src: url(/fonts/sparx.woff);}
+
+body {margin-top: 80px;}
+a:link {color: #003460;}
+a:hover{color: #EF8000;}
+.w3-container{padding:0px}
+/*
+.w3-responsive{overflow-x:auto}
+.w3-rest{overflow:hidden}
+.w3-section{margin-top:16px!important;margin-bottom:16px!important}
+.w3-container:after,.w3-row:after,.w3-row-padding:after,.w3-topnav:after,.w3-clear:after,.w3-btn-group:before,.w3-btn-group:after,.w3-btn-bar:before,.w3-btn-bar:after
+{content:"";display:table;clear:both}
+.w3-row-padding,.w3-row-padding>.w3-half,.w3-row-padding>.w3-third,.w3-row-padding>.w3-twothird,.w3-row-padding>.w3-threequarter,.w3-row-padding>.w3-quarter,.w3-row-padding>.w3-col{padding:0 8px}
+.w3-col,.w3-half,.w3-third,.w3-twothird,.w3-threequarter,.w3-quarter{float:left;width:100%}
+*/
+
+.w3-row, .w3-row-padding {padding:0px;max-width:1200px;margin:0 auto;} /* extends to 1200 for add book a demo*/
+.w3-row #navbar{max-width:1200px!important;margin: 0 auto;}/* extends to 1200 for add book a demo*/
+.topic_heading {text-align: center;font-size: 5em;font-weight: 400;color: #666;margin: 0px;font-family: "Roboto",sans-serif;}
+.main_heading {margin-bottom:0;text-align:center;}
+#ealogoimage {margin-top: 0px;width: 36px;}
+.ea-logo-header {display: inline-block;font-weight:bold;vertical-align:top;font-size:32px;}
+.breadcrumb {margin: 12px 20px 12px 20px;padding: 0px 20px;}
+
+.content-header div.breadcrumb {background: #FDFDFD;border: 1px solid #E5E5E5;font-size: 11px;padding: 0;height: 28px;position: relative;overflow: hidden;}
+.content-header div.breadcrumb li {padding-top: 8px!important;}
+.content-header div.breadcrumb ul {margin: 0;padding: 0 0 0 9px;}
+.content-header div.breadcrumb li {background: url('/images/layout/bcDivider.png') no-repeat;color: #555;float: left;height: 28px;list-style: none;margin: 0 4px 0 9px;padding: 4px 0 0 23px;}
+.content-header div.breadcrumb li.current {font-weight: bold;margin-right: 0;}
+.content-header div.breadcrumb li.home { background-image: none;padding: 9px 0px 0px 0px !important;margin: 0;}
+.content-header div.breadcrumb li.home img {padding-top: 10px;}
+.content-header div.breadcrumb li A, .content-header div.breadcrumb li A:visited {color: #555;font-weight: bold;text-decoration: none;}
+.content-header div.breadcrumb li A:active, .content-header div.breadcrumb li A:hover {color: #F8981C;}
+
+.topic_heading {text-align: center;font-size: 4em;font-weight: 400;color: #666;margin: 0px;font-family: "Roboto",sans-serif;line-height: 1em;margin: 32px 0px 26px 0px;}
+.page-heading {text-align: center;margin: 24px 0px;line-height: 1em;font-size: 4em;font-weight: 400;font-family: "Roboto",sans-serif;}
+.topic-container{overflow: hidden;color: #595959;}
+.topic-container p{letter-spacing: 0px;}
+.download-title {margin-bottom: 15px;padding:10px;overflow: hidden;}
+.content {padding: 0px 20px 0px 20px;}
+.last-update-line {padding: 30px 0px 0px 0px;font-size: 12px;}
+.copyright-line {text-align: center;}
+h3 {font-weight: 600;}
+.heading4 {font-weight: 600;padding: 10px 0px 0px 0px;}
+
+/*
+.rounded-blue-button {font-family:"Roboto",sans-serif;font-size:20px;font-weight:bold;cursor:pointer;background-color:#74cef4;border:1px solid #7a7a7a;border-radius:15px;color:#fff;margin:4px 5px;padding:0px 15px;text-align: center;min-width:190px;display:inline-block;}
+.rounded-blue-button {font-family:"Roboto",sans-serif;font-size:20px;font-weight:bold;cursor:pointer;background-color:#39B3D7;border:1px solid #7a7a7a;border-radius:12px;color:#fff;margin:4px 5px;padding:0px 15px;text-align: center;min-width:190px;display:inline-block;}
+.rounded-blue-button:hover {background-color:#44cef4;cursor: pointer;border:1px solid #7a7a7a;}
+*/
+.rounded-blue-button {font-family:"Roboto",sans-serif;font-size:20px;font-weight:bold;cursor:pointer;background-color:#1e88e5;border:1px solid #7a7a7a;border-radius:12px;color:#fff;margin:4px 5px;padding:0px 15px;text-align: center;min-width:190px;display:inline-block;}
+.rounded-blue-button:hover {background-color:#0b6cc2;cursor: pointer;border:1px solid #7a7a7a;}
+.rounded-blue-button a {color:#fff;text-decoration:none;}
+ 

@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)https://sparxsystems.com/resources/tutorials/uml2/class-diagram.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	
+<style>
+	.mobile-show {display:block;visibility:visible;}
+	.mobile-hide {display:none!important;visibility:hidden;}
+</style>
+	<meta name="Description" content="Unlock the potential of UML2 Class Diagrams with our in-depth tutorial. Delve into the principles and practices essential for crafting, interpreting, and harnessing class diagrams effectively. ">
+	<title>Class Diagram - UML 2 Tutorial | Sparx Systems</title>
+ 
+  <link rel="stylesheet" type="text/css" href="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/sparx-nav.css" media="all">
+	<script defer="defer" src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/jquery.min.js"></script>
+	<script defer="defer" src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/sparx-common-201807.min.js"></script>
+
+
+
+<link rel="stylesheet" type="text/css" href="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/sparx-201807.css" media="all">
+
+</head>
+<body class="">
+	<a id="top"></a>
+	<style>
+#side-book-demo a
+{
+	bottom: 250px;
+	transition: all 0.5s ease 0s;
+	right: 0px;
+	display: block;
+	background: #E4E5F3;
+	color: #001E63;
+	opacity: 1;
+	font-size: 14px;
+	text-align: center;
+	padding: 4px 15px;
+	cursor: pointer;
+	margin: 0;
+	visibility: visible;
+	z-index: 2147483646;
+	transform-origin: right bottom;
+	-ms-transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+	z-index: 2147483646;
+	position: fixed;
+	border-top: 0px solid #E4E5F3;
+	border-left: 0px solid #E4E5F3;
+	border-right: 0px solid #E4E5F3;
+	font-family: calibri,Roboto,arial,helvetica;
+	border-radius: 4px 4px 0px 0px !important;
+	box-shadow: 2px 2px 20px rgb(0 0 0 / 20%);
+	box-sizing: border-box;
+    text-decoration:none;
+}
+#side-book-demo a:hover
+{
+	color: #FFF;
+	background: #001E63;
+}
+</style>
+<!--sphider_noindex-->
+<div id="side-book-demo" tabindex="0"><a href="https://sparxsystems.com/support/forms/demo-contact-form.html" target="_blank">Book a Demo</a></div>
+<!--/sphider_noindex-->
+
+<!--sphider_noindex-->
+    <div class="w3-row">
+		<div id="navbar" style="display: block;">
+			<div id="navbar-inner">
+				<div id="nav">
+					<table id="switch">
+						<tbody><tr>
+							<td>
+								<div class="nav-hamburger">
+									<img onclick="Burger_Click(&#39;OpenClose&#39;)" id="burger-icon" src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" class="nav-home" width="30" height="30" alt="Home">
+								</div>
+							</td>
+							<td>
+								<div id="homelogosmall"><a href="https://sparxsystems.com/"><div class="nav-sparx">&nbsp;</div></a></div>
+							</td>
+						</tr>
+					</tbody></table>
+					<ul id="OpenClose" class="w3-navbar w3-padding-16">
+						<li><div id="homelogo"><a class="nav-no-padding" href="https://sparxsystems.com/"><div class="nav-sparx">&nbsp;</div></a></div></li>
+						<li id="hover-product" class="w3-dropdown-hover">
+							<a id="aproductshow" class="arrow-right" onclick="Mobile_Click(&#39;productshow&#39;)">Products <img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" class="nav-bullet-transparent" width="4" height="7" alt=" &gt;"></a>
+														<div id="productshow" class="demo w3-dropdown-content w3-white w3-card-2">
+								<div class="nav-dropdown-items">
+									<div id="aeashow" onclick="Category_Heading_Click(&#39;eashow&#39;)" class="nav-dropdown-header-pad arrow-right">
+										<div class="nav-dropdown-header nav-dropdown-header-prod">
+											<div class="nav-ea-logo"></div>
+											<div class="nav-dropdown-header-text">Enterprise Architect</div>
+										</div>
+									</div>
+
+									<div id="eashow" class="sub-heading-menu-hover">
+										<a href="https://sparxsystems.com/products/ea/17.1/index.html">What is new in v17</a>
+										<a href="https://sparxsystems.com/products/ea/16.1/index.html">What was new in v16.1</a>
+										<a href="https://sparxsystems.com/products/ea/index.html">Overview</a>
+										<a class="childproduct" href="https://sparxsystems.com/products/ea/editions/professional.html">Professional</a>
+										<a class="childproduct" href="https://sparxsystems.com/products/ea/editions/corporate.html">Corporate</a>
+										<a class="childproduct" href="https://sparxsystems.com/products/ea/editions/unified.html">Unified</a>
+										<a class="childproduct" href="https://sparxsystems.com/products/ea/editions/ultimate.html">Ultimate</a>
+										<a href="https://sparxsystems.com/products/ea/compare-editions.html">Compare Editions</a>
+										<a href="https://sparxsystems.com/products/ea/saas/index.html">SaaS</a>
+										<a href="https://sparxsystems.com/products/ea/trial/request.html">Free Trial</a>
+										<a href="https://sparxsystems.com/registered/reg_ea_down.html">Registered Downloads</a>
+
+										<div class="secondary-menu-hover add-info">
+											<a id="aeamoreinfoshow" onclick="Category_Heading_Click(&#39;eamoreinfoshow&#39;)" class="secondary-menu-heading add-info-heading arrow-right">
+												Additional Info
+											</a>
+											<div id="eamoreinfoshow" class="secondary-menu-content w3-card-4 secondary-additional-info">
+												<a href="https://sparxsystems.com/enterprise-architect/index.html">30 Minute Tour</a>
+												<a href="https://sparxsystems.com/products/ea/history.html">Release History</a>
+												<a href="https://sparxsystems.com/products/ea/license_info.html">License Info</a>
+												<a href="https://sparxsystems.com/products/ea/floating_licenses.html">Floating Licenses</a>
+												<a href="https://sparxsystems.com/products/academic_pricing.html">Academic Pricing</a>
+												<a href="https://sparxsystems.com/products/ea/sysreq.html">System Requirements</a>
+												<a href="https://sparxsystems.com/products/ea/eula.html">EULA</a>
+												<a href="https://sparxsystems.com/products/ea/eaactivation.html">License Activation</a>
+												<a href="https://sparxsystems.com/products/mdg/index.html">MDG Extensions</a>
+												<a href="https://sparxsystems.com/products/3rdparty.html">3rd Party Extensions</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="nav-dropdown-items">
+									<div id="apcsshow" onclick="Category_Heading_Click(&#39;pcsshow&#39;)" class="nav-dropdown-header-pad arrow-right">
+										<div class="nav-dropdown-header nav-dropdown-header-prod2">
+											<div class="nav-pcs-logo"></div>
+											<div class="nav-dropdown-header-text">Pro Cloud Server</div>
+										</div>
+									</div>
+									<div id="pcsshow" class="sub-heading-menu-hover">
+<a href="https://sparxsystems.com/products/procloudserver/6.1/index.html">What is new in v6</a><a href="https://sparxsystems.com/products/procloudserver/5.1/index.html">What was new in v5.1</a>										<a href="https://sparxsystems.com/products/procloudserver/index.html">Overview</a>
+										<a class="childproduct" href="https://sparxsystems.com/products/procloudserver/#webeabook">WebEA</a>
+										<!--<a  class="childproduct" href="/products/procloudserver/prolaborate.html">Prolaborate</a>-->
+										<a class="childproduct" href="https://sparxsystems.com/products/procloudserver/#sbpi-integrations">Integrations</a>
+										<a class="childproduct" href="https://sparxsystems.com/products/procloudserver/#floating-license">Floating License Server</a>
+										<a href="https://sparxsystems.com/products/procloudserver/compare-editions.html">Compare Editions</a>
+										<a href="https://sparxsystems.com/products/procloudserver/request-trial.html">Free Trial</a>
+										<a href="https://sparxsystems.com/products/procloudserver/downloads.html">Downloads</a>
+
+										<div class="secondary-menu-hover add-info">
+											<a id="apcsmoreinfoshow" onclick="Category_Heading_Click(&#39;pcsmoreinfoshow&#39;)" class="secondary-menu-heading add-info-heading arrow-right">
+												Additional Info
+											</a>
+										  <div id="pcsmoreinfoshow" class="secondary-menu-content w3-white w3-card-4 secondary-additional-info">
+											<a href="https://sparxsystems.com/products/procloudserver/30-min-tour/index.html">30 Minute Tour</a>
+											<a href="https://sparxsystems.com/products/procloudserver/history.html">Release History</a>
+											<a href="https://sparxsystems.com/products/procloudserver/sysreq.html">System Requirements</a>
+											<a href="https://sparxsystems.com/products/procloudserver/eula.html">EULA</a>
+										  </div>
+										</div>
+									</div>
+								</div>
+								<!--Prolab-->
+								<div class="nav-dropdown-items">
+									<div id="aprolabshow" onclick="Category_Heading_Click(&#39;prolabshow&#39;)" class="nav-dropdown-header-pad arrow-right">
+										<div class="nav-dropdown-header nav-dropdown-header-prod3">
+											<div class="nav-prolab-logo"></div>
+											<div class="nav-dropdown-header-text">Prolaborate</div>
+										</div>
+									</div>
+									<div id="prolabshow" class="sub-heading-menu-hover">
+										<a href="https://prolaborate.sparxsystems.com/resources/articles/prolaborate-5-6-keyfeatures_sparxea17" target="_blank">What is new in 5.6</a>
+										<a href="https://prolaborate.sparxsystems.com/features" target="_blank">Overview</a>
+										<a href="https://prolaborate.sparxsystems.com/prolaborate5" target="_blank">Introduction</a>
+										<a href="https://prolaborate.sparxsystems.com/resources" target="_blank">Resources</a>
+										<a class="childproduct" href="https://prolaborate.sparxsystems.com/articles" target="_blank">Articles</a>
+										<a class="childproduct" href="https://prolaborate.sparxsystems.com/documentation/v5-documentation" target="_blank">Documentation</a>
+										<a class="childproduct" href="https://prolaborate.sparxsystems.com/release-history/release-notes-v5#561" target="_blank">Release History</a>
+<!--										<a class="childproduct" href="https://prolaborate.sparxsystems.com/release-history/release-notes-v5?id=500" target="_blank">Release Notes</a>   -->
+										<a class="childproduct" href="https://prolaborate.sparxsystems.com/faq/prolaborate-faq-v5" target="_blank">FAQ</a>
+										<a class="childproduct" href="https://prolaborate.sparxsystems.com/events" target="_blank">Events</a>
+										<a class="childproduct" href="https://prolaborate.sparxsystems.com/videos" target="_blank">Videos </a>
+										<a href="https://prolaborate.sparxsystems.com/try-instant-trial" target="_blank">Free Trial</a>
+										<a href="https://sparxsystems.com/products/procloudserver/downloads.html#prolaborate">Downloads</a>
+										<div class="secondary-menu-hover add-info">
+											<a id="aprolabmoreinfoshow" onclick="Category_Heading_Click(&#39;prolabmoreinfoshow&#39;)" class="secondary-menu-heading add-info-heading arrow-right">
+												Additional Info
+											</a>
+											<div id="prolabmoreinfoshow" class="secondary-menu-content w3-white w3-card-4 secondary-additional-info">
+												<a href="https://prolaborate.sparxsystems.com/book-demo" target="_blank">Request a Demo</a>
+												<a href="https://prolaborate.sparxsystems.com/book-poc" target="_blank">Proof of Concept</a>
+												<a href="https://prolaborate.sparxsystems.com/sparx-cloud-platform" target="_blank">Prolaborate SaaS</a>
+												<a href="https://prolaborate.sparxsystems.com/prolaborate-cloud-services-eula" target="_blank">EULA</a>
+												<a href="https://prolaborate.sparxsystems.com/resources/v5-documentation/installation-guide#2-prerequisites" target="_blank">System Requirements</a>
+											</div>
+										</div>
+									</div>
+								</div>
+
+                                    <div class="nav-dropdown-items">
+                                        <div id="atreradoshow" onclick="Category_Heading_Click(&#39;treradoshow&#39;)" class="nav-dropdown-header-pad arrow-right">
+                                            <div class="nav-dropdown-header nav-dropdown-header-prod">
+                                                <div class="nav-trerado-logo"></div>
+                                                <div class="nav-dropdown-header-text">Trerado</div>
+										        <span class="nav-dropdown-header-ribbon">New</span>
+                                            </div>
+                                        </div>
+                                        <div id="treradoshow" class="sub-heading-menu-hover noborder">
+                                            <a href="https://trerado.sparxsystems.com/" target="_blank">Introduction</a>
+                                            <a href="https://sparxsystems.com/products/trerado/history.html">Release History</a>
+                                            <a href="https://sparxsystems.com/products/trerado/sysreq.html">System Requirements</a>
+                                            <a href="https://sparxsystems.com/products/trerado/eula.html">EULA</a>
+                                        </div>
+                                    </div>
+                                    <hr>
+							</div>
+						</li>
+												<li id="hover-price" class="w3-dropdown-hover">
+							<a id="apriceshow" class="arrow-right" onclick="Mobile_Click(&#39;priceshow&#39;)">Pricing <img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" class="nav-bullet-transparent" width="4" height="7" alt=" &gt;"></a>
+														<div id="priceshow" class="demo w3-dropdown-content w3-white w3-card-2">
+								<div class="nav-dropdown-items">
+									<a href="https://sparxsystems.com/products/ea/shop/index.html">
+										<div class="nav-ea-sml nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text">Enterprise Architect</div>
+									</a>
+									<a href="https://sparxsystems.com/products/procloudserver/purchase.html">
+										<div class="nav-pcs-sml nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text">Pro Cloud Server</div>
+									</a>
+									<a href="https://sparxsystems.com/products/procloudserver/prolaborate-purchase.html">
+										<div class="nav-prolab-sml nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text" style="padding-left:3px;">Prolaborate</div>
+									</a>
+
+                                    <a href="https://sparxsystems.com/products/trerado/trerado-purchase.html">
+	                                    <div class="nav-trerado-sml nav-dropdown-item-image"></div>
+	                                    <div class="nav-purchase-item-text">Trerado</div>
+                                    </a>
+                               </div><hr>
+							</div>
+						</li>
+												<li id="hover-support" class="w3-dropdown-hover">
+							<a id="asupportshow" class="arrow-right" onclick="Mobile_Click(&#39;supportshow&#39;)">Support <img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" class="nav-bullet-transparent" width="4" height="7" alt=" &gt;"></a>
+							<div id="supportshow" class="demo w3-dropdown-content w3-white w3-card-2">
+								<div class="nav-dropdown-items">
+									<a href="https://sparxsystems.com/forums/smf/"><div class="nav-forum nav-dropdown-item-image"></div><div class="nav-dropdown-item-text">Forum</div></a>
+									<a href="https://sparxsystems.com/enterprise_architect_user_guide/17.1/welcome/index.html"><div class="nav-uml-tutorial nav-dropdown-item-image"></div><div class="nav-dropdown-item-text">User Guide / Help</div></a>
+
+									<div class="secondary-menu-hover ">
+
+										<a id="acontactusshow" onclick="Category_Heading_Click(&#39;contactusshow&#39;)" class="secondary-menu-heading arrow-right">
+											<div class="nav-services nav-dropdown-item-image"></div>
+											<div class="nav-dropdown-item-text">Contact Us</div>
+										</a>
+										<div id="contactusshow" class="secondary-menu-content w3-white w3-card-4 secondary-support">
+											<a href="https://sparxsystems.com/support/forms/bug_report.html">
+												<div class="nav-bug-report nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Bug Report</div>
+											</a>
+											<a href="https://sparxsystems.com/support/forms/feature_request.html">
+												<div class="nav-feature-request nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Request a Feature</div>
+											</a>
+											<a href="https://sparxsystems.com/support/forms/change_email.html">
+												<div class="nav-feature-request nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Change Your Email</div></a>
+											<a href="https://sparxsystems.com/registered/forms/reg_bug_report.html">
+												<div class="nav-bug-report nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Priority Bug Report</div>
+											</a>
+											<a href="mailto:support@sparxsystems.com">
+												<div class="nav-email nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Email Support</div>
+											</a>
+											<a href="mailto:sales@sparxsystems.com">
+												<div class="nav-email nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Email Sales</div>
+											</a>
+											<a href="https://sparxsystems.com/support/forms/newsletter-unsubscribe.html">
+												<div class="nav-email nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Newsletter Unsubscribe</div>
+											</a>
+										</div>
+									</div>
+
+									<div class="secondary-menu-hover">
+										<a id="afaqshow" onclick="Category_Heading_Click(&#39;faqshow&#39;)" class="secondary-menu-heading arrow-right">
+											<div class="nav-support nav-dropdown-item-image"></div>
+											<div class="nav-dropdown-item-text">FAQ</div>
+										</a>
+										<div id="faqshow" class="secondary-menu-content w3-white w3-card-4 secondary-support">
+											<a href="https://sparxsystems.com/support/faq/index.html">
+												<div class="nav-support nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Support</div>
+											</a>
+											<a href="https://sparxsystems.com/support/sales_faq.html">
+												<div class="nav-support nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Sales</div>
+											</a>
+										</div>
+									</div>
+
+									<a href="https://sparxsystems.com/about.html">
+										<div class="nav-ea-blue nav-dropdown-item-image"></div>
+										<div class="nav-dropdown-item-text">Company Details</div>
+									</a>
+
+									<a href="https://sparxsystems.com/press/">
+										<div class="nav-news nav-dropdown-item-image"></div>
+										<div class="nav-dropdown-item-text">News Room</div>
+									</a>
+
+									<div class="secondary-menu-hover">
+										<a id="aresellershow" onclick="Category_Heading_Click(&#39;resellershow&#39;)" class="secondary-menu-heading arrow-right">
+											<div class="nav-resellers nav-dropdown-item-image"></div>
+											<div class="nav-dropdown-item-text">Resellers</div>
+										</a>
+										<div id="resellershow" class="secondary-menu-content w3-white w3-card-4 secondary-support">
+											<a href="https://sparxsystems.com/partners/resellers/africa.html">
+												<div class="nav-africa nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Africa</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/resellers/asia.html">
+												<div class="nav-asia nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Asia</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/resellers/europe.html">
+												<div class="nav-europe nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Europe</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/resellers/middle_east.html">
+												<div class="nav-middle-east nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Middle East</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/resellers/north_america.html">
+												<div class="nav-north-america nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">North America</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/resellers/oceania.html">
+												<div class="nav-oceania nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Oceania</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/resellers/south_america.html">
+												<div class="nav-south-america nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">South America</div>
+											</a>
+										</div>
+									</div>
+
+									<div class="secondary-menu-hover">
+										<a id="asparxserviceshow" onclick="Category_Heading_Click(&#39;sparxserviceshow&#39;)" class="secondary-menu-heading arrow-right">
+											<div class="nav-sparx-services nav-dropdown-item-image"></div>
+											<div class="nav-dropdown-item-text">Sparx Services</div>
+										</a>
+										<div id="sparxserviceshow" class="secondary-menu-content w3-white w3-card-4 secondary-support">
+																						<a href="https://sparxsystems.com/partners/sisters/sparx-services-australia.html">
+												<div class="nav-australia nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Australia</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/sisters/sparx-services-central-europe.html">
+												<div class="nav-europe nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Central Europe</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/sisters/sparx-services-middle-east.html">
+												<div class="nav-middle-east nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Middle East</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/sisters/sparx-services-united-kingdom.html">
+												<div class="nav-uk nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">United Kingdom</div>
+											</a>
+										</div>
+									</div>
+
+									<div class="secondary-menu-hover">
+										<a id="asistercompaniesshow" onclick="Category_Heading_Click(&#39;sistercompaniesshow&#39;)" class="secondary-menu-heading arrow-right">
+											<div class="nav-sister-companies nav-dropdown-item-image"></div>
+											<div class="nav-dropdown-item-text">Sister Companies</div>
+										</a>
+										<div id="sistercompaniesshow" class="secondary-menu-content w3-white w3-card-4 secondary-support">
+											<a href="https://sparxsystems.com/partners/sisters/argentina.html">
+												<div class="nav-argentina nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Argentina</div>
+											</a>
+											<a href="https://sparxsystems.cn/">
+												<div class="nav-china nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">China</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/sisters/europe.html">
+												<div class="nav-europe nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Central Europe</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/sisters/malaysia.html">
+												<div class="nav-malaysia nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Malaysia</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/sisters/middle-east.html">
+												<div class="nav-middle-east nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Middle East</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/sisters/north-america.html">
+												<div class="nav-north-america nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">North America</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/sisters/india.html">
+												<div class="nav-india nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">India</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/sisters/japan.html">
+												<div class="nav-japan nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Japan</div>
+											</a>
+										</div>
+									</div>
+
+									<div class="secondary-menu-hover">
+										<a id="atrainershow" onclick="Category_Heading_Click(&#39;trainershow&#39;)" class="secondary-menu-heading arrow-right">
+											<div class="nav-trainer-consultant nav-dropdown-item-image"></div>
+											<div class="nav-dropdown-item-text">Trainers/Consultants</div>
+										</a>
+										<div id="trainershow" class="secondary-menu-content w3-white w3-card-4 secondary-support noborder">
+											<a href="https://sparxsystems.com/partners/africa.html">
+												<div class="nav-africa nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Africa</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/north_america.html">
+												<div class="nav-north-america nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">North America</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/south_america.html">
+												<div class="nav-south-america nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">South America</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/asia.html">
+												<div class="nav-asia nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Asia</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/europe.html">
+												<div class="nav-europe nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Europe</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/oceania.html">
+												<div class="nav-oceania nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Oceania</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/middle_east.html">
+												<div class="nav-middle-east nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Middle East</div>
+											</a>
+											<a href="https://sparxsystems.com/partners/online_training.html">
+												<div class="nav-online nav-dropdown-item-image"></div>
+												<div class="nav-dropdown-item-text">Online</div>
+											</a>
+										</div>
+									</div>
+								</div><hr>
+							</div>
+						</li>
+						<li id="hover-resource" class="w3-dropdown-hover">
+							<a id="aresourceshow" class="arrow-right" onclick="Mobile_Click(&#39;resourceshow&#39;)">Resources <img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" class="nav-bullet-transparent" width="4" height="7" alt=" &gt;"></a>
+							<div id="resourceshow" class="demo multi-float w3-dropdown-content w3-white w3-card-2">
+
+								<div class="nav-dropdown-items sub-heading-menu">
+									<div id="awebinarshow" onclick="Category_Heading_Click(&#39;webinarshow&#39;)" class="nav-dropdown-header-pad arrow-right">
+										<div class="nav-dropdown-header">
+											<div class="nav-dropdown-header-text">Webinars</div>
+										</div>
+									</div>
+									<div id="webinarshow" class="sub-heading-menu-hover">
+										<a href="https://sparxsystems.com/resources/webinar/webinar-registration.html">Upcoming Webinars</a>
+										<a href="https://sparxsystems.com/resources/webinar/webinar-series.html">Webinars Library</a>
+										<a href="https://sparxsystems.com/support/forms/newsletter.html">Sign Up</a>
+									</div>
+									<div id="avideoshow" onclick="Category_Heading_Click(&#39;videoshow&#39;)" class="nav-dropdown-header-pad arrow-right">
+										<div class="nav-dropdown-header">
+											<div class="nav-dropdown-header-text">Videos</div>
+										</div>
+									</div>
+									<div id="videoshow" class="sub-heading-menu-hover">
+										<a href="https://sparxsystems.com/resources/demos/index.html">Demo Videos</a>
+										<a href="https://sparxsystems.com/resources/lectures/index.html">Lecture Videos</a>
+									</div>
+								</div>
+
+								<div class="nav-dropdown-items sub-heading-menu">
+									<div id="apdflibraryshow" onclick="Category_Heading_Click(&#39;pdflibraryshow&#39;)" class="nav-dropdown-header-pad arrow-right">
+										<div class="nav-dropdown-header">
+											<div class="nav-dropdown-header-text">PDF Library</div>
+										</div>
+									</div>
+									<div id="pdflibraryshow" class="sub-heading-menu-hover">
+										<a href="https://sparxsystems.com/resources/user-guides/17.1/index.html#fundamentals">Fundamentals</a>
+										<a href="https://sparxsystems.com/resources/user-guides/17.1/index.html#modeling">Modeling</a>
+										<a href="https://sparxsystems.com/resources/user-guides/17.1/index.html#collaboration">Collaboration</a>
+										<a href="https://sparxsystems.com/resources/user-guides/17.1/index.html#publishing">Publishing</a>
+										<a href="https://sparxsystems.com/resources/user-guides/17.1/index.html#simulation">Simulation</a>
+										<a href="https://sparxsystems.com/resources/user-guides/17.1/index.html#project-management">Project Management</a>
+										<a href="https://sparxsystems.com/resources/user-guides/17.1/index.html">View Entire Library</a>
+									</div>
+								</div>
+								<div class="nav-dropdown-items sub-heading-menu">
+									<div id="aothershow" onclick="Category_Heading_Click(&#39;othershow&#39;)" class="nav-dropdown-header-pad arrow-right">
+										<div class="nav-dropdown-header">
+											<div class="nav-dropdown-header-text">Other</div>
+										</div>
+									</div>
+									<div id="othershow" class="sub-heading-menu-hover">
+										<a href="https://sparxsystems.com/resources/whitepapers/">Whitepapers</a>
+										<a href="https://sparxsystems.com/resources/tutorials/index.html">Tutorials</a>
+										<a href="https://sparxsystems.com/resources/casestudies/index.html">Case Studies</a>
+										<a href="https://sparxsystems.com/resources/libraries/17.1/index.html">Learning Center</a>
+										<a href="https://sparxsystems.com/resources/gallery/index.html">Diagram Gallery</a>
+										<a href="https://sparxsystems.com/resources/brochures-library/index.html">Brochures</a>
+									</div>
+								</div>
+								<div class="nav-dropdown-items">
+									<div class="sub-heading-menu">
+										<div id="aregisteredusershow" onclick="Category_Heading_Click(&#39;registeredusershow&#39;)" class="nav-dropdown-header-pad arrow-right">
+											<div class="nav-dropdown-header">
+												<div class="nav-dropdown-header-text">Registered Users</div>
+											</div>
+										</div>
+										<div id="registeredusershow" class="sub-heading-menu-hover">
+											<a href="https://sparxsystems.com/registered/index.html">Enterprise Architect</a>
+											<a href="https://sparxsystems.com/securedownloads/procloud_premium/index.html">Pro Cloud Server</a>
+										</div>
+									</div>
+									<div class="sub-heading-menu">
+										<div id="aallusershow" onclick="Category_Heading_Click(&#39;allusershow&#39;)" class="nav-dropdown-header-pad arrow-right">
+											<div class="nav-dropdown-header">
+												<div class="nav-dropdown-header-text">All Users</div>
+											</div>
+										</div>
+										<div id="allusershow" class="sub-heading-menu-hover">
+											<a href="https://sparxsystems.com/products/ea/downloads.html">Free Downloads</a>
+											<a href="https://sparxsystems.com/resources/repositories/index.html">DBMS Repository Scripts</a>
+											<a href="https://sparxsystems.com/resources/corporate/index.html#key_sec">User Security Key</a>
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="nav-dropdown-items">
+									<a class="nav-light-blue-text" href="https://sparxsystems.com/resources/index.html">All Resources &gt;</a>
+								</div>
+								<hr>
+							</div>
+						</li>
+						<li><a href="https://sparxsystems.com/resources/tutorials/uml/part1.html">UML Tutorial</a></li>
+																		<li id="hover-solution" class="w3-dropdown-hover">
+							<a id="asolutionshow" class="arrow-right" onclick="Mobile_Click(&#39;solutionshow&#39;)">Solutions <img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" class="nav-bullet-transparent" width="4" height="7" alt=" &gt;"></a>
+							<div id="solutionshow" class="demo w3-dropdown-content w3-white w3-card-2">
+								<div class="nav-dropdown-items">
+									<a href="https://solutions.sparxsystems.com/">
+										<div class="nav-solution-home nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text">Home</div>
+									</a>
+									<a href="https://solutions.sparxsystems.com/getting-started/">
+									   	<div class="nav-solution-gettingstarted nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text">Getting Started</div>
+									</a>
+									<a href="https://solutions.sparxsystems.com/book-a-demo/">
+                                       	<div class="nav-solution-bookademo nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text">Book a Demo</div>
+									</a>
+									<a href="https://solutions.sparxsystems.com/solutions/">
+                                        <div class="nav-solution-accelerators nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text">Accelerators</div>
+									</a>
+									<a href="https://solutions.sparxsystems.com/use-cases/">
+                                       	<div class="nav-solution-usecases nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text">Use Cases</div>
+									</a>
+								</div><hr>
+							</div>
+						</li>
+												<li><a href="https://community.sparxsystems.com/">Community</a></li>												<li id="hover-trial" class="w3-dropdown-hover">
+							<a id="atrialshow" class="arrow-right" onclick="Mobile_Click(&#39;trialshow&#39;)">Download Now <img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" class="nav-bullet-transparent" width="4" height="7" alt=" &gt;"></a>
+							<div id="trialshow" class="demo w3-dropdown-content w3-white w3-card-2">
+								<div class="nav-dropdown-items">
+									<a href="https://sparxsystems.com/products/ea/trial/request.html">
+										<div class="nav-ea-sml nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text">Enterprise Architect&nbsp;</div>
+									</a>
+									<a href="https://sparxsystems.com/products/procloudserver/request-trial.html">
+										<div class="nav-pcs-sml nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text">Pro Cloud Server&nbsp;</div>
+									</a>
+									<a href="https://prolaborate.sparxsystems.com/release-history/release-notes-v5#561" target="_blank">
+<!--									<a href="https://prolaborate.sparxsystems.com/release-history/release-notes-v4?id=421"> -->
+										<div class="nav-prolab-sml nav-dropdown-item-image"></div>
+										<div class="nav-purchase-item-text">Prolaborate&nbsp;</div>
+									</a>
+								</div><hr>
+							</div>
+						</li>
+                                                                        <li id="login_dialog" class="w3-right">
+                            <a href="https://sparxsystems.com/registered/index.html">
+                                <img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" class="nav-login" width="18" height="18" alt="register users"> Login
+                            </a>
+                        </li>
+                    						<li class="w3-right">
+							<div class="searchborder">
+								<form action="https://sparxsystems.com/search/sphider/search.php" method="get">
+									<table class="nav-search-table">
+										<tbody><tr>
+											<td>
+												<input type="text" name="query" class="searchterm" placeholder=" Search...">
+											</td>
+											<td>
+												<input type="hidden" name="search" value="1">
+												<input type="image" class="searchsubmit nav-magnifier" src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" width="15" height="15" name="submit" alt="Search">
+											</td>
+										</tr>
+									</tbody></table>
+								</form>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--/sphider_noindex-->
+<script>
+
+var x = document.getElementsByTagName("body")[0];
+var ignore = document.getElementById('nav');
+x.addEventListener("click", clickTriggered);
+
+function clickTriggered(event) {
+    var target = event.target;
+    if (target === ignore || ignore.contains(target)) {
+    }
+	else
+	{
+		body_click();
+	}
+}
+
+document.addEventListener("DOMContentLoaded", function(event) { restore_nav(); });
+window.addEventListener("resize", function(){restore_nav()}, true);
+
+function Burger_Click(a)
+{
+
+    var x = document.getElementById(a);
+    var y = document.getElementById("burger-icon");
+
+
+	if (x.className.indexOf("mobile-show") == -1 && x.className.indexOf("mobile-hide") == -1)
+	{
+		x.className += " mobile-show";
+		if(y !== null && y !== undefined)
+		{
+			y.className = y.className.replace("nav-home", "nav-burger-close");
+		}
+
+	}
+	else
+	{
+		if (x.className.indexOf("mobile-show") >= 0 )
+		{
+			x.className = x.className.replace("mobile-show", "");
+			if(y !== null && y !== undefined)
+			{
+				 y.className = y.className.replace("nav-burger-close", "nav-home");
+			}
+		}
+		else
+		{
+			x.className = x.className.replace( "","mobile-show");
+			 if(y !== null && y !== undefined)
+			 {
+				y.className = y.className.replace("nav-home", "nav-burger-close");
+			 }
+		}
+	}
+}
+function Mobile_Click(a)
+{
+    winW = document.body.clientWidth;
+	if(winW >895) {cleanup_click(a);}
+    var x = document.getElementById(a);
+    var y = document.getElementById("a"+ a);
+	if (x.className.indexOf("mobile-show") == -1 && x.className.indexOf("mobile-hide") == -1)
+	{
+
+		if(y !== null && y !== undefined)
+		{
+			x.className += " mobile-show";
+			y.className += " arrow-down";
+		}
+	}
+	else
+	{
+		if (x.className.indexOf("mobile-show") >= 0 )
+		{
+
+			if(y !== null && y !== undefined)
+			{
+				x.className = x.className.replace("mobile-show", "");
+				y.className = y.className.replace("arrow-down", "");
+			}
+		}
+		else
+		{
+
+			 if(y !== null && y !== undefined)
+			 {
+				x.className = x.className.replace("","mobile-show");
+				y.className = y.className.replace("", "arrow-down");
+			 }
+		}
+	}
+}
+
+function Category_Heading_Click(a)
+{
+    winW = document.body.clientWidth;
+    var x = document.getElementById(a);
+    var y = document.getElementById("a"+ a);
+	if (x.className.indexOf("mobile-show") == -1 && x.className.indexOf("mobile-hide") == -1)
+	{
+		x.className += " mobile-show";
+		y.className += " arrow-down";
+	}
+	else
+	{
+		if (x.className.indexOf("mobile-show") >= 0 )
+		{
+			x.className = x.className.replace("mobile-show", "");
+			y.className = y.className.replace("arrow-down", "");
+		}
+		else
+		{
+			x.className = x.className.replace( "","mobile-show");
+			y.className = y.className.replace("", "arrow-down");
+		}
+	}
+}
+
+function cleanup_click(a)
+{
+	active_tab = a ;
+	if (active_tab !== "productshow" )
+	{
+		document.getElementById("productshow").classList.remove('mobile-show');
+		document.getElementById("aproductshow").style.backgroundColor  = "";
+	}
+	 if (active_tab !== "supportshow" )
+	{
+	  document.getElementById("supportshow").classList.remove('mobile-show');
+		document.getElementById("asupportshow").style.backgroundColor  = "";
+	}
+	if (active_tab !== "priceshow" )
+	{
+	  document.getElementById("priceshow").classList.remove('mobile-show');
+		document.getElementById("apriceshow").style.backgroundColor  = "";
+	}
+	if (active_tab !== "solutionshow" )
+	{
+	  document.getElementById("solutionshow").classList.remove('mobile-show');
+		document.getElementById("asolutionshow").style.backgroundColor  = "";
+	}
+	if (active_tab !== "resourceshow" )
+	{
+	document.getElementById("resourceshow").classList.remove('mobile-show');
+	document.getElementById("aresourceshow").style.backgroundColor  = "";
+	}
+	if (active_tab !== "trialshow" )
+	{
+	document.getElementById("trialshow").classList.remove('mobile-show');
+	document.getElementById("atrialshow").style.backgroundColor  = "";
+	}
+}
+function restore_nav()
+{
+	winW = document.body.clientWidth;
+	el = document.getElementById("OpenClose");
+	if(winW >995)
+
+	{
+	    cleanup_click("OpenClose");
+
+		if (el !== null && el!== undefined )
+		{
+			el.classList.remove("mobile-hide");
+			document.getElementById('navbar').style.display = 'block';
+		}
+
+
+		var e_mobile = document.getElementsByClassName('mobile-hide');
+		if (e_mobile !== null && e_mobile !== undefined )
+		{
+				var i;
+				for (i = 0; i < e_mobile.length; i++) {
+						e_mobile[i].classList.remove('mobile-hide');
+				}
+		}
+
+		var a_mobile = document.getElementsByClassName('mobile-show');
+		if (a_mobile !== null && a_mobile !== undefined )
+		{
+				var i;
+				for (i = 0; i < a_mobile.length; i++) {
+						a_mobile[i].classList.remove('mobile-show');
+				}
+		}
+
+		var b_mobile = document.getElementsByClassName('arrow-down');
+		if (b_mobile !== null && b_mobile !== undefined )
+		{
+				var i;
+				for (i = 0; i < b_mobile.length; i++) {
+						b_mobile[i].classList.remove('arrow-down');
+				}
+		}
+	}
+	if(winW < 995)
+	{
+		var burger_class = document.getElementById("burger-icon").className;
+
+		if ( burger_class == "nav-burger-close")
+		{
+			el.classList.add("mobile-show");
+		}
+
+	}
+
+}
+function body_click()
+{
+	var x = document.getElementsByClassName("nav-burger-close");
+	var z = document.getElementById("burger-icon");
+	var e_mobile = document.getElementsByClassName('mobile-show');
+
+	if (e_mobile !== null && e_mobile !== undefined )
+	{
+		var i;
+		for (i = 0; i < e_mobile.length; i++) {
+				e_mobile[i].classList.remove('mobile-show');
+		}
+	}
+
+	if (x !== null && x !== undefined )
+	{
+		z.className = z.className.replace("nav-burger-close", "nav-home");
+    }
+}
+</script>
+
+	<div class="topic-container">
+		<div class="w3-row">
+			<div class="content">
+				<div class="content-header">
+					<div class="breadcrumb">
+						<ul>
+							<li class="home"><a href="https://sparxsystems.com/index.html"><div class="nav-bread-crumb-home"></div></a></li>
+							<li><a href="https://sparxsystems.com/resources/index.html">Resources</a></li>
+							<li><a href="https://sparxsystems.com/resources/tutorials/index.html">Tutorials</a></li>
+							<li><a href="https://sparxsystems.com/resources/tutorials/uml2/index.html">UML 2 Tutorial</a></li>
+							<li class="current">Class Diagram</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="container">
+					<article class="post">
+
+				<div id="content-area" class="clear-block">
+					<div class="contentBox contentBoxPadding">
+						<h1 class="page-heading">UML 2 Tutorial - Class Diagram</h1>
+						<h2 class="heading4">Class Diagrams</h2>
+
+
+						<p class="body-text-bld">
+							<span class="body-text">The class diagram shows the building blocks of any object-orientated system. Class diagrams depict a static view of the model, or part of the model, describing what attributes and behavior it has rather than detailing the methods for achieving operations. Class diagrams are most useful in illustrating relationships between classes and interfaces. Generalizations, aggregations, and associations are all valuable in reflecting inheritance, composition or usage, and connections respectively.</span><span class="body-text"><br>
+								<br>
+								The diagram below illustrates aggregation relationships between classes. The lighter aggregation indicates that the class "Account" uses AddressBook, but does not necessarily contain an instance of it. The strong, composite aggregations by the other connectors indicate ownership or containment of the source classes by the target classes, for example Contact and ContactGroup values will be contained in AddressBook.</span>
+							</p>
+							<p class="body-text-bld">
+								<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/cl01.png" width="651" height="459" alt="Class Diagram">
+							</p>
+
+							<br>
+							<h3>Classes</h3>
+							<p class="body-text-bld">
+								<span class="body-text">A class is an element that defines the attributes and behaviors that an object is able to generate. The behavior is described by the possible messages the class is able to understand, along with operations that are appropriate for each message. Classes may also have definitions of constraints, tagged values and stereotypes.</span>
+							</p>
+
+							<br>
+							<h3>Class Notation</h3>
+							<p class="body-text-bld">
+								<span class="body-text">Classes are represented by rectangles which show the name of the class and optionally the name of the operations and attributes. Compartments are used to divide the class name, attributes and operations.<br>
+									<br>
+									In the diagram below the class contains the class name in the topmost compartment, the next compartment details the attributes, with the "center" attribute showing initial values. The final compartment shows the operations setWidth, setLength and setPosition and their parameters. The notation that precedes the attribute, or operation name, indicates the visibility of the element: if the + symbol is used, the attribute, or operation, has a public level of visibility; if a - symbol is used, the attribute, or operation, is private. In addition the # symbol allows an operation, or attribute, to be defined as protected, while the ~ symbol indicates package visibility.</span>
+								</p>
+								<p class="body-text">
+									<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL02.GIF" width="211" height="206" alt="Class Notation">
+								</p>
+
+								<br>
+								<h3>Interfaces</h3>
+								<p>
+									<span class="body-text">An interface is a specification of behavior that implementers agree to meet; it is a contract. By realizing an interface, classes are guaranteed to support a required behavior, which allows the system to treat non-related elements in the same way – that is, through the common interface.</span>
+								</p>
+								<p class="body-text">
+									<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL03.GIF" width="204" height="315" alt="Interface">
+								</p>
+								<p>
+									<span class="body-text">Interfaces may be drawn in a similar style to a class, with operations specified, as shown below. They may also be drawn as a circle with no explicit operations detailed. When drawn as a circle, realization links to the circle form of notation are drawn without target arrows.</span>
+								</p>
+								<p class="body-text">
+									<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL04.GIF" width="261" height="140" alt="Interface 2">
+								</p>
+
+								<br>
+								<h3>Tables</h3>
+								<p>
+									<span class="body-text">Although not a part of the base UML, a table is an example of what can be done with stereotypes. It is drawn with a small table icon in the upper right corner. Table attributes are stereotyped «column». Most tables will have a primary key, being one or more fields that form a unique combination used to access the table, plus a primary key operation which is stereotyped «PK». Some tables will have one or more foreign keys, being one or more fields that together map onto a primary key in a related table, plus a foreign key operation which is stereotyped «FK».</span>
+								</p>
+								<p class="body-text">
+									<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL05.GIF" width="218" height="161" alt="Tables">
+								</p>
+
+								<br>
+								<h3>Associations</h3>
+								<p>
+									<span class="body-text">An association implies two model elements have a relationship - usually implemented as an instance variable in one class. This connector may include named roles at each end, cardinality, direction and constraints. Association is the general relationship type between elements. For more than two elements, a diamond representation toolbox element can be used as well. When code is generated for class diagrams, named association ends become instance variables in the target class. So, for the example below, "playsFor" will become an instance variable in the "Player" class.</span>
+								</p>
+								<p class="body-text">
+									<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL06.GIF" width="351" height="121" alt="Associations">
+								</p>
+
+								<br>
+								<h3>Generalizations</h3>
+								<p>
+									<span class="body-text">A generalization is used to indicate inheritance. Drawn from the specific classifier to a general classifier, the generalize implication is that the source inherits the target's characteristics. The following diagram shows a parent class generalizing a child class. Implicitly, an instantiated object of the Circle class will have attributes x_position, y_position and radius and a method display(). Note that the class "Shape" is abstract, shown by the name being italicized.</span>
+								</p>
+								<p class="body-text">
+									<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL07.GIF" width="346" height="138" alt="Generalization">
+								</p>
+								<p class="body-text">
+									The following diagram shows an equivalent view of the same information.
+								</p>
+								<p class="body-text">
+									<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL08.GIF" width="157" height="180" alt="Generalizations 2">
+								</p>
+
+								<br>
+								<h3>Aggregations</h3>
+								<p>
+									<span class="body-text">Aggregations are used to depict elements which are made up of smaller components. Aggregation relationships are shown by a white diamond-shaped arrowhead pointing towards the target or parent class.<br>
+										<br>
+										A stronger form of aggregation - a composite aggregation - is shown by a black diamond-shaped arrowhead and is used where components can be included in a maximum of one composition at a time. If the parent of a composite aggregation is deleted, usually all of its parts are deleted with it; however a part can be individually removed from a composition without having to delete the entire composition. Compositions are transitive, asymmetric relationships and can be recursive. <br>
+										<br>
+										The following diagram illustrates the difference between weak and strong aggregations. An address book is made up of a multiplicity of contacts and contact groups. A contact group is a virtual grouping of contacts; a contact may be included in more than one contact group. If you delete an address book, all the contacts and contact groups will be deleted too; if you delete a contact group, no contacts will be deleted. </span>
+									</p>
+									<p class="body-text">
+										<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL09.GIF" width="314" height="263" alt="Aggregations">
+									</p>
+
+									<br>
+									<h3>Association Classes</h3>
+									<p>
+										<span class="body-text">An association class is a construct that allows an association connection to have operations and attributes. The following example shows that there is more to allocating an employee to a project than making a simple association link between the two classes: the role the employee takes up on the project is a complex entity in its own right and contains detail that does not belong in the employee or project class. For example, an employee may be working on several projects at the same time and have different job titles and security levels on each.</span>
+									</p>
+									<p class="body-text">
+										<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL10.GIF" width="396" height="225" alt="Association Classes">
+									</p>
+
+									<br>
+									<h3>Dependencies</h3>
+									<p>
+										<span class="body-text">A dependency is used to model a wide range of dependent relationships between model elements. It would normally be used early in the design process where it is known that there is some kind of link between two elements, but it is too early to know exactly what the relationship is. Later in the design process, dependencies will be stereotyped (stereotypes available include «instantiate», «trace», «import», and others), or replaced with a more specific type of connector.</span>
+									</p>
+
+									<br>
+									<h3>Traces</h3>
+									<p>
+										<span class="body-text">The trace relationship is a specialization of a dependency, linking model elements or sets of elements that represent the same idea across models. Traces are often used to track requirements and model changes. As changes can occur in both directions, the order of this dependency is usually ignored. The relationship's properties can specify the trace mapping, but the trace is usually bi-directional, informal and rarely computable.</span>
+									</p>
+
+									<br>
+									<h3>Realizations</h3>
+									<p>
+										<span class="body-text">The source object implements or realizes the destination. Realizations are used to express traceability and completeness in the model - a business process or requirement is realized by one or more use cases, which are in turn realized by some classes, which in turn are realized by a component, etc. Mapping requirements, classes, etc. across the design of your system, up through the levels of modeling abstraction, ensures the big picture of your system remembers and reflects all the little pictures and details that constrain and define it. A realization is shown as a dashed line with a solid arrowhead.</span>
+									</p>
+									<p class="body-text">
+										<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL03.GIF" width="204" height="315" alt="Realizations">
+									</p>
+
+									<br>
+									<h3>Nestings</h3>
+									<p>
+										<span class="body-text">A nesting is connector that shows the source element is nested within the target element. The following diagram shows the definition of an inner class, although in EA it is more usual to show them by their position in the project view hierarchy.</span>
+									</p>
+									<p class="body-text">
+										<img src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/CL12.GIF" width="340" height="120" alt="Nestings">
+									</p>
+								</div>
+							</div>
+						
+    <div style="margin:36px auto;text-align:center; /*background-color:#D5E8F7;*/ max-width:980px;">
+        <p style="0px auto;">
+           <span style="display:block;font-size:21px;color:#333;height:30px;margin:0px 36px;vertical-align:top;">Create your own Class  Diagram!</span>           
+           <span style="display:block;text-align:center;margin:8px 36px;vertical-align:top">
+           <a href="https://sparxsystems.com/products/ea/trial/request.html" style="display:block;font-size:16px;text-decoration: none;color:#003460">
+             <img style="padding:0px 0px 0px 0px;margin:0px 1px -5px 0px;" src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/download-blue-icon.png" alt="Installer">
+             Download your free Enterprise Architect trial
+           </a>
+           <span style="display:block;font-size:12px; margin: 5px auto;font-size:10px;">No registration required.</span>
+         </span>
+         
+        </p><p>
+    </p></div>
+</article>
+					</div>
+						</div>
+					</div>
+				</div>
+				<script src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/infinite-scroll.pkgd.min.js"></script>
+				<!--sphider_noindex-->
+
+     <script>
+        // Global variables for cookie and banner ID
+        var consentCookieName = 'sparx-cookie-consent'; // cookie name
+        var bannerId = 'cookie-banner'; // banner's div id name
+        var consentExpiryDays = 180; // Days until consent expires
+
+        // Function to set a cookie
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        // Function to get a cookie by name
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) {
+                    return c.substring(nameEQ.length, c.length);
+                }
+            }
+            return null;
+        }
+
+        // Function to submit the consent form and create the cookie
+        function submit_cookie_consent_form() {
+            var checkboxes = document.querySelectorAll('input[name="sparxcookies[]"]');
+            var selectedCookies = [];
+
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    selectedCookies.push(checkbox.value);
+                }
+            });
+
+            // Store the selected cookies in a cookie for later use
+            setCookie(consentCookieName, JSON.stringify(selectedCookies), consentExpiryDays);
+
+            // Hide the cookie consent banner and set a cookie to prevent showing the banner for 30 days
+            close_cookie_banner(true);
+            /*
+             if (selectedCookies.includes('tracking-performance')) {
+                enableFullConsentTracking();
+            }
+            */
+            // Check the selected cookies and trigger appropriate actions
+
+
+            if (selectedCookies.includes('tracking-performance')) {
+                // If 'tracking-performance' is included in selected cookies, enable full consent tracking
+                enableFullConsentTracking();
+            } else if (selectedCookies.length === 1 && selectedCookies.includes('strictly-necessary')) {
+                // If the only selected cookie is 'strictly-necessary', activate minimal compliance
+                activateMinimalCompliance();
+            }
+        }
+
+        // Function to submit the consent form and create the cookie with minimum cookies
+        function submit_min_cookie_consent_form() {
+            const MincookieTypes = ["strictly-necessary"];
+            setCookie(consentCookieName, JSON.stringify(MincookieTypes), consentExpiryDays);
+
+            // Hide the cookie consent banner and set a cookie to prevent showing the banner for 30 days
+            close_cookie_banner();
+        }
+
+		// Function to handle banner closure directly and default to strictly-necessary cookies
+		function handle_banner_closure() {
+			const MincookieTypes = ["strictly-necessary"];
+			setCookie(consentCookieName, JSON.stringify(MincookieTypes), consentExpiryDays);
+
+			// Alert the user that closing the banner will automatically apply the minimum necessary cookies
+			// Show a notification to the user
+
+			showNotification("Closing the banner will apply minimum necessary cookies. You can change your preferences later on the Privacy Policy page.");
+			// Set a cookie to prevent showing the banner for 30 days
+
+			close_cookie_banner();
+		}
+
+		// Function to display a notification
+		function showNotification(message) {
+			let notification = document.createElement("div");
+			notification.className = "cookie-notification";
+			notification.innerText = message;
+
+			document.body.appendChild(notification);
+
+			// Automatically hide the notification after 5 seconds
+			setTimeout(() => {
+				notification.style.display = 'none';
+			}, 5000);
+		}
+      //   Function to close the cookie banner and a solo cookie to stop banner, not perferable
+        function close_cookie_banner() {
+            var banner = document.getElementById(bannerId);
+            if (banner) {
+                banner.classList.add('hidden');
+            }
+        }
+
+        // Function to show the cookie banner if consent is not set
+        function show_cookie_banner() {
+            var banner = document.getElementById(bannerId);
+            if (banner) {
+                banner.style.display = 'block';
+            }
+        }
+
+		// Function to change cookie preferences if consent is set
+		function change_cookie_preferences() {
+			var banner = document.getElementById(bannerId);
+
+			// Show the banner
+			if (banner) {
+				banner.style.display = 'block';
+			}
+
+			// Retrieve the saved cookie consent
+			var consentCookie = getCookie(consentCookieName);
+
+			// If there is saved consent, update the checkboxes to reflect the user's previous choice
+			if (consentCookie) {
+				var selectedCookies = JSON.parse(consentCookie);
+
+				// Iterate through the checkboxes and update their state based on saved preferences
+				var checkboxes = document.querySelectorAll('input[name="sparxcookies[]"]');
+
+				checkboxes.forEach(function (checkbox) {
+					// Enable or disable the checkbox depending on whether it was previously selected
+					if (selectedCookies.includes(checkbox.value)) {
+						checkbox.checked = true;
+					} else {
+						checkbox.checked = false;
+					}
+				});
+			}
+			// Set the checkbox to checked and restore accept all when the page loads
+			document.getElementById('cookie_settings').checked = true;
+			var acceptAllBtn = document.getElementById('accept_all_btn');
+			acceptAllBtn.style.backgroundColor = 'white';
+			acceptAllBtn.style.color = '#595959';
+		}
+
+        // Function to load Google Analytics script based on domain
+
+        function activateMinimalCompliance() {
+            var trackingId;
+            var hostname = window.location.hostname;
+
+            if (hostname === 'sparxsystems.com' || hostname === 'ssdev20' || hostname === 'sstest20') {
+                trackingId = 'G-GMQCPJPY9Y'; // English site
+            } else if (hostname === 'sparxsystems.fr' || hostname === 'ssdevfr20' || hostname === 'sstestfr20') {
+                trackingId = 'G-TG7B01LD94'; // French site
+            } else if (hostname === 'sparxsystems.cn' || hostname === 'ssdevcn20' || hostname === 'sstestcn20') {
+                trackingId = 'G-Q3P8LD4E8V'; // Chinese site
+            } else {
+                console.log('No matching tracking ID for this domain.');
+                return;
+            }
+
+            // Load the Google Analytics script
+            var script1 = document.createElement('script');
+            script1.async = true;
+            script1.src = "https://www.googletagmanager.com/gtag/js?id=" + trackingId;
+            document.head.appendChild(script1);
+
+            // Set up the tracking code with privacy settings  Kgu 18/march/2025
+            var script2 = document.createElement('script');
+            script2.text = `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+
+            gtag('js', new Date());
+<<<<<<< .mine
+
+            gtag('consent', 'update', {
+              'analytics_storage': 'granted',
+              'ads_storage': 'granted',
+              'ad_personalization': 'granted',
+              'ad_user_data': 'granted',
+              'wait_for_update': 500
+||||||| .r1743
+            gtag('consent', 'default', {
+              'analytics_storage': 'denied',
+              'ads_storage': 'denied',
+              'ad_personalization': 'denied',
+              'ad_user_data': 'denied',
+              'wait_for_update': 500,
+=======
+
+            gtag('consent', 'update', {
+              'analytics_storage': 'granted',
+              'ad_storage': 'granted',
+              'ad_personalization': 'granted',
+              'ad_user_data': 'granted',
+              'wait_for_update': 500
+>>>>>>> .r1744
+            });
+
+            gtag('event', 'page_view', {
+              page_location: window.location.href,
+              page_title: document.title,
+              page_referrer: document.referrer,
+              device_category: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+              browser: navigator.userAgent,
+              operating_system: navigator.platform,
+              language: navigator.language,
+              screen_resolution: screen.width + 'x' + screen.height,
+              color_depth: screen.colorDepth + ' bits',
+              timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+              cookie_enabled: navigator.cookieEnabled ? 'yes' : 'no',
+              do_not_track: navigator.doNotTrack || 'unspecified',
+              connection_type: navigator.connection?.effectiveType || 'unknown'
+            });
+
+              gtag('config', '${trackingId}', {
+              anonymize_ip: true,
+              allow_google_signals: false,
+              allow_ad_personalization: false,
+              url_passthrough: false
+            });
+             `;
+            document.head.appendChild(script2);
+        }
+        // Function to load Google Analytics script based on domain
+        function enableFullConsentTracking() {
+            var trackingId;
+            var hostname = window.location.hostname;
+
+            if (hostname === 'sparxsystems.com' || hostname === 'ssdev20' || hostname === 'sstest20') {
+                trackingId = 'G-GMQCPJPY9Y'; // English site
+            } else if (hostname === 'sparxsystems.fr' || hostname === 'ssdevfr20' || hostname === 'sstestfr20') {
+                trackingId = 'G-TG7B01LD94'; // French site
+            } else if (hostname === 'sparxsystems.cn' || hostname === 'ssdevcn20' || hostname === 'sstestcn20') {
+                trackingId = 'G-Q3P8LD4E8V'; // Chinese site
+            } else {
+                console.log('No matching tracking ID for this domain.');
+                return;
+            }
+
+            var script1 = document.createElement('script');
+            script1.async = true;
+            script1.src = "https://www.googletagmanager.com/gtag/js?id=" + trackingId;
+            document.head.appendChild(script1);
+
+            var script2 = document.createElement('script');
+            script2.text = `
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+
+            gtag('js', new Date());
+
+            gtag('consent', 'update', {
+              'analytics_storage': 'granted',
+              'ad_storage': 'granted',
+              'ad_personalization': 'granted',
+              'ad_user_data': 'granted',
+              'wait_for_update': 500
+            });
+
+			gtag('config', '${trackingId}',{
+                url_passthrough: false,
+                anonymize_ip: true,
+                allow_ad_personalization: true,
+                allow_google_signals: false
+            });
+            `;
+            document.head.appendChild(script2);
+        }
+
+
+        // Function to toggle Accept All button background color
+        function toggleAcceptAllButton() {
+            var acceptAllBtn = document.getElementById('accept_all_btn');
+            if (acceptAllBtn.style.backgroundColor === 'white') {
+                acceptAllBtn.style.backgroundColor = '#1E90FF';
+                acceptAllBtn.style.color = 'white';
+            } else {
+                acceptAllBtn.style.backgroundColor = 'white';
+                acceptAllBtn.style.color = '#595959';
+            }
+        }
+
+        /* Check if the consent cookie is already set and hide/show the banner accordingly*/
+        window.onload = function () {
+            var consentCookie = getCookie(consentCookieName);
+
+            if (!consentCookie) {
+                // If no consent cookie is found, show the cookie banner
+                show_cookie_banner();
+            } else {
+                var selectedCookies = JSON.parse(consentCookie);
+
+                /*
+                 The switch(true) statement is used here to evaluate multiple conditions in a structured way.
+                 Each case checks a boolean expression, and when it evaluates to true, the corresponding code block is executed.
+                */
+                switch (true) {
+                    // If 'tracking-performance' is included in selected cookies, enable full consent tracking
+                    case selectedCookies.includes('tracking-performance'):
+                        enableFullConsentTracking();
+                        break;
+
+                    // If the only selected cookie is 'strictly-necessary', activate minimal compliance
+                    case selectedCookies.length === 1 && selectedCookies.includes('strictly-necessary'):
+                        activateMinimalCompliance();
+                        break;
+
+                    // Default case (optional): If none of the conditions match, do nothing
+                    default:
+                        break;
+                }
+            }
+        };
+
+
+        // Attach event listeners to handle direct closure
+        document.addEventListener('DOMContentLoaded', function () {
+            var closeBtn = document.querySelector('.close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', handle_banner_closure);
+            }
+        });
+
+
+		// Check if the "Change Cookie Preferences" link exists
+		var cookiePreferencesLink = document.getElementById('change-cookie-preferences');
+
+		if (cookiePreferencesLink) {
+			// Attach the event listener to the "Change Cookie Preferences" link
+			cookiePreferencesLink.addEventListener('click', function(event) {
+				event.preventDefault(); // Prevent the default link behavior
+				change_cookie_preferences(); // Show the cookie banner again and restore previous preferences
+			});
+		}
+
+
+        function showContent(id) {
+            var contents = document.querySelectorAll('.cookie-content');
+            contents.forEach(function (content) {
+                content.style.display = 'none';
+            });
+            document.getElementById(id).style.display = 'block';
+
+            var navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(function (item) {
+                item.classList.remove('active');
+            });
+            document.querySelector('.nav-item[onclick="showContent(\'' + id + '\')"]').classList.add('active');
+        }
+    </script>
+
+
+
+
+<style>
+#cookie-banner {
+    box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #FEFEFE;
+    padding: 0px;
+    z-index: 3147483647;
+    transition: transform 0.5s ease-in-out;
+    transform: translateY(0);
+    display: none;
+    color: #595959;
+    font-family: arial,sans-serif;
+	overflow: hidden;
+	font: 78%/130% "Verdana", "Arial", "Helvetica", sans-serif;
+}
+
+table.cookie-terms-table {
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+	border-spacing: 0;
+}
+table.cookie-terms-table tr, table.cookie-terms-table td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+#cookie-banner a:link{
+    color: #003460;
+	text-decoration: underline;
+}
+
+#cookie-banner  a:hover, #cookie-banner  a:visited{
+    color: #EF5800;
+	text-decoration: underline;
+}
+.cookie-banner-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+	color:#666;
+	padding: 3px;
+	font: 99% arial, helvetica, clean, sans-serif;
+}
+.cookie-banner-close-btn:hover{
+    border:none;
+	color: #000;
+
+	background-color: #DDD;
+
+}
+#cookie-banner.hidden {
+    transform: translateY(100%);
+}
+
+#cookie-banner .cookie-banner-content {
+    width: 100%;
+    max-width:1200px;
+    margin: 0 auto;
+	padding: 0px 0px;
+}
+#cookie-banner p {
+    margin: 0px;
+	color: #666;
+	font-family: Arial, Helvetica, sans-serif;
+}
+#cookie-banner .notice-line {
+    margin-bottom:12px;
+	font-size: 14px;
+	line-height:16px;
+}
+.cookie-collapse label, .cookie-btn {
+    text-decoration: none;
+    color: #666;
+    background-color:#FFF;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    border: 1px solid #7a7a7a;
+    border-radius: 12px;
+    margin: 4px 10px 4px 0px;
+    padding: 5px 15px;
+    text-align: center;
+    min-width: 120px;
+    line-height: 17px!important
+}
+
+.cookie-collapse label:hover, .cookie-btn:hover {
+    background-color: #aaa!important;
+    color: #FFF!important;
+}
+
+.cookie-form {
+    margin: 0 auto;
+    width: 100%;
+}
+.cookie-terms-table {
+    margin: 0 auto;
+}
+
+.cookie-banner-expand {
+    display: none;
+    height: auto;
+    margin: 0;
+    background-color: transparent;
+    padding: 0px;
+	margin: 12px 0px;
+    width: 100%;
+    text-align: left;
+}
+
+.cookie-collapse label:hover {
+    color: #EF8000;
+}
+
+#cookie_settings {
+    display: none;
+}
+
+.cookie-collapse input[type=checkbox]:checked ~ .cookie-banner-expand {
+    display: block;
+
+	border-bottom: 1px solid #ccc;
+}
+
+.cookie-banner-expand {
+    display: none;
+
+.cookie-collapse input[type="checkbox"]:checked {
+            background-color: blue;
+}
+.cookie-collapse input {
+    margin:5px;
+
+}
+.cookie-container {
+    display: flex;
+}
+
+.cookie-banner-nav {
+    display: flex;
+    flex-direction: column;
+	text-align: left;
+	width:350px;
+	background-color: #f4f4f4;
+}
+
+.cookie-banner-nav .nav-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #FFF;
+	border-right: 1px solid #CCC;
+    color: #666;
+	font-size: 14px;
+	line-height: 23px;
+}
+
+.cookie-banner-nav .nav-item.active {
+    background-color: #FFF;
+    color: #333;
+	font-weight:bold;
+	border: 1px solid #CCC;
+	border-right: #FFF;
+	border-left: 1px solid #FFF;
+}
+
+.cookie-banner-nav .nav-item:hover {
+    background-color: #CCC;
+    color: white;
+}
+
+.cookie-content-container {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+	box-sizing: border-box;
+	border-top: 1px solid #ccc;
+}
+.cookie-content-container-heading{
+	padding-left:43px!important;
+}
+.cookie-content-container h4 {
+    color:#666;
+	margin:0px 0px 10px 0px;
+	padding: 0px;
+	font-weight: bold!important;
+	font-size: 18px!important;
+	line-height:22px;
+}
+
+.cookie-content-container p {
+    line-height: 17px;
+}
+.cookie-content {
+    padding: 10px 20px;
+    background-color: #fff;
+    display: none;
+	box-sizing: border-box;
+}
+
+.cookie-content.active {
+    display: block;
+}
+.cookie-content p {
+	font-size: 14px;
+	line-height:16px!important;
+	color: #666;
+}
+.cookie-notification {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    color: #333;
+    z-index: 1000;
+    border-radius: 5px;
+    font-size: 14px;
+}
+@media (max-width: 768px) {
+    .cookie-banner-nav {
+        width: 170px;
+    }
+	.cookie-content-container-heading{
+	 padding-left:0px!important;
+	}
+	.cookie-banner-nav .nav-item {
+    padding: 10px 2px;
+}
+</style>
+
+<div id="cookie-banner" style="display: block;">
+    <button class="cookie-banner-close-btn" onclick="handle_banner_closure()">X</button>
+    <div class="cookie-banner-content">
+        <form method="post" class="cookie-form" id="CookieConsentForm">
+            <table class="cookie-terms-table">
+                <tbody><tr>
+                    <td colspan="3">
+                        <h3 style="padding:15px 0px 0px 0px; margin:0px;font-weight: bold;line-height: 24px;font-size: 18px!important;color: #333;font-family: Arial, Helvetica, sans-serif;">This website uses cookies</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:6px 0px; text-align:left">
+                        <p class="notice-line">We use cookies to improve your experience on our website. Rejecting it may weaken protection and affect site loading speed.
+                        You can visit our <a href="https://sparxsystems.com/privacy.html">Privacy Policy</a> page for more information and adjust your cookie settings.</p>
+                        <label for="cookie_settings" class="cookie-btn" onclick="toggleAcceptAllButton()" style="margin-right:70px">Preferences</label><input class="cookie-btn" type="submit" value="Accept Minimum" id="minimum_cookies_btn" onclick="submit_min_cookie_consent_form() "><input class="cookie-btn" type="submit" value="Accept All" id="accept_all_btn" style=" background-color: #1E90FF; color: white" onclick="submit_cookie_consent_form() ">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+					   <!--Cookies Preference Center-->
+						<div class="cookie-collapse">
+							<input type="checkbox" id="cookie_settings">
+							<div class="cookie-banner-expand">
+								<div class="cookie-container">
+									<div class="cookie-banner-nav">
+										<div class="nav-item cookie-content-container-heading active" onclick="showContent(&#39;your-privacy-is-important-to-us&#39;)">
+											Your privacy
+										</div>
+										<div class="nav-item" onclick="showContent(&#39;strictlyNecessary&#39;)">
+											<input type="checkbox" name="sparxcookies[]" value="strictly-necessary" checked="" disabled="">Strictly necessary cookies
+
+										</div>
+										<div class="nav-item" onclick="showContent(&#39;trackingPerformance&#39;)">
+											<input type="checkbox" name="sparxcookies[]" value="tracking-performance" checked="" onchange="updateCheckboxValue(this)">Tracking and Performance Cookies
+										</div>
+										<div class="nav-item cookie-content-container-heading" onclick="showContent(&#39;moreinfo&#39;)">
+											More information
+										</div>
+										<div class="cookie-content-container-heading" style="border-right: 1px solid #ccc;flex-grow: 1;">
+											<input class="cookie-btn" type="submit" name="save_my_preference" value="Save My Preference" id="save_my_preference" style="background-color:#1E90FF;color:white;margin-left:0px" onclick="submit_cookie_consent_form() ">
+											</div>
+									</div>
+									<div class="cookie-content-container">
+										 <div id="your-privacy-is-important-to-us" class="cookie-content active" style="border-top: none!important;">
+											<h4>Your privacy is important to us</h4>
+											<p>Cookies are very small text files that are stored on your computer when you visit a website. We use cookies for a variety of purposes and to enhance your online experience on our website (for example, to remember your account login details).</p>
+
+											<p><br>You can change your preferences and decline certain types of cookies to be stored on your computer while browsing our website. You can also remove any cookies already stored on your computer, but keep in mind that deleting cookies may prevent you from using parts of our website. </p>
+										</div>
+										<div id="strictlyNecessary" class="cookie-content">
+										    <h4>Strictly necessary cookies</h4>
+											<p>These cookies are essential to provide you with services available through our website and to enable you to use certain features of our website. Without these cookies, we cannot provide you certain services on our website.</p>
+
+											<p><br>If you close the banner without making a selection, the 'Accept Minimum' option will be automatically applied to ensure basic functionality of the website.
+										</p></div>
+										<div id="trackingPerformance" class="cookie-content">
+										    <h4>Tracking and performance cookies</h4>
+											<p>These cookies are used to collect information to analyze the traffic to our website and how visitors are using our website. For example, these cookies may track things such as how long you spend on the website or the pages you visit which helps us to understand how we can improve our website site for you. </p><br>
+											<p>The information collected through these tracking and performance cookies do not identify any individual visitor.</p>
+										</div>
+										<div id="moreinfo" class="cookie-content">
+										    <h4>More information</h4>
+											<p> For any queries in relation to our <a href="https://sparxsystems.com/privacy.html" target="_blank">policy on cookies</a> and your choices, please <a href="mailto:sparks@sparxsystems.com">contact us</a>.</p>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--end of Cookies Preference Center-->
+                    </td>
+                </tr>
+            </tbody></table>
+        </form>
+    </div>
+</div>
+<div class="row">
+	<div id="footer">
+		<div id="footer-inner" class="clear-block">
+			<div class="row">
+				<div class="header">
+					<div class="footer-header-inner">
+						<a class="logo-image-footer" href="https://sparxsystems.com/">
+							<img class="transparentPNG nav-sparx" alt="Sparx Systems" src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" width="143" height="34">
+						</a>
+						<a class="logo-EA-footer" href="https://sparxsystems.com/products/ea/">
+							<img class="transparentPNG nav-enterprise-architect" alt="Enterprise Architect" src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/spriteplaceholder.png" width="160" height="44">
+						</a>
+						<div class="signup">
+							<div class="nav-stay-in-touch">
+								<a class="w3-text-white" href="https://sparxsystems.com/support/forms/newsletter.html">stay in touch</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="fcontent">
+					<div class="md">
+						<input class="footer-heading-off" id="input-id-ea" type="checkbox">
+						<label class="footer-heading-off" for="input-id-ea">Products</label>
+						<ul>
+							<li class="category"><a href="https://sparxsystems.com/products/index.html">Products</a></li>
+							<li><a href="https://sparxsystems.com/products/ea/index.html">Enterprise Architect</a></li>
+							<li><a href="https://sparxsystems.com/products/procloudserver/index.html">Pro Cloud Server</a></li>
+							<li><a href="https://sparxsystems.com/products/procloudserver/prolaborate.html">Prolaborate</a></li>
+						</ul>
+					</div>
+					<div class="md">
+						<input class="footer-heading-off" id="input-id-uml" type="checkbox">
+						<label class="footer-heading-off" for="input-id-uml">UML at a Glance</label>
+						<ul>
+							<li class="category"><a href="https://sparxsystems.com/platforms/uml.html">UML at a Glance</a></li>
+							<li><a href="https://sparxsystems.com/platforms/uml_tool.html">UML Tools</a></li>
+							<li><a href="https://sparxsystems.com/platforms/php_uml.html">PHP UML Modeling</a></li>
+							<li><a href="https://sparxsystems.com/platforms/business_process_modeling.html">Business Process Modeling</a></li>
+							<li><a href="https://sparxsystems.com/platforms/mda_tool.html">Model Driven Architecture</a></li>
+							<li><a href="https://sparxsystems.com/platforms/requirements_management.html">Requirements Management</a></li>
+							<li><a href="https://sparxsystems.com/platforms/software_development.html">Software Development</a></li>
+						</ul>
+					</div>
+					<div class="md">
+						<input class="footer-heading-off" id="input-id-solution" type="checkbox">
+						<label class="footer-heading-off" for="input-id-solution">Solutions</label>
+						<ul>
+							<li class="category"><a href="https://sparxsystems.com/solutions/index.html">Solutions</a></li>
+							<li><a href="https://sparxsystems.com/solutions/corporate.html">Corporate</a></li>
+							<li><a href="https://sparxsystems.com/solutions/government.html">Government</a></li>
+							<li><a href="https://sparxsystems.com/solutions/sme.html">Small/Medium Enterprise</a></li>
+							<li><a href="https://sparxsystems.com/solutions/professionals.html">IT Professionals</a></li>
+							<li><a href="https://sparxsystems.com/solutions/trainers.html">Trainers</a></li>
+							<li><a href="https://sparxsystems.com/solutions/academic.html">Academic</a></li>
+						</ul>
+					</div>
+					<div class="md">
+						<input class="footer-heading-off" id="input-id-resource" type="checkbox">
+						<label class="footer-heading-off" for="input-id-resource">Resources</label>
+						<ul>
+							<li class="category"><a href="https://sparxsystems.com/resources/index.html">Resources</a></li>
+							<li><a href="https://sparxsystems.com/resources/tutorials/uml2/index.html">UML 2.0 Tutorial</a></li>
+							<li><a href="https://sparxsystems.com/resources/corporate/index.html">Corporate Resources</a></li>
+							<li><a href="https://sparxsystems.com/resources/developers/index.html">Developer Resources</a></li>
+							<li><a href="https://sparxsystems.com/press/index.html">Media Resources</a></li>
+						</ul>
+					</div>
+					<div class="md">
+						<input class="footer-heading-off" id="input-id-support" type="checkbox">
+						<label class="footer-heading-off" for="input-id-support">Support</label>
+						<ul>
+							<li class="category"><a href="https://sparxsystems.com/support/index.html">Support</a></li>
+							<li><a href="https://sparxsystems.com/enterprise_architect_user_guide/17.1/welcome/index.html">Online Manual</a></li>
+							<li><a href="https://sparxsystems.com/forums/smf/index.php">User Forum</a></li>
+							<li><a href="https://sparxsystems.com/support/forms/bug_report.html">Report a Bug</a></li>
+							<li><a href="https://sparxsystems.com/support/forms/feature_request.html">Feature Request</a></li>
+							<li><a href="https://sparxsystems.com/products/ea/compare-editions.html">Compare Editions</a></li>
+							<li><a href="https://sparxsystems.com/products/ea/sysreq.html">System Requirements </a></li>
+						</ul>
+					</div>
+					<div class="md">
+						<input class="footer-heading-off" id="input-id-partner" type="checkbox">
+						<label class="footer-heading-off" for="input-id-partner">Global Partners</label>
+						<ul>
+							<li class="category"><a href="https://sparxsystems.com/partners/index.html">Global Partners</a></li>
+							<li><a href="https://sparxsystems.com/partners/trainers.html">Trainers</a></li>
+							<li><a href="https://sparxsystems.com/partners/resellers.html">Resellers</a></li>
+							<li><a href="https://sparxsystems.com/partners/sistercompanies.html">Sister Companies</a></li>
+							<li><a href="https://sparxsystems.com/partners/technical.html">Technical Partners</a></li>
+							<li><a href="https://sparxsystems.com/partners/standards.html">Standards Organizations</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="copyright">
+					<div class="copyrightitems">
+						© 2000 - 2026<strong>&nbsp;&nbsp;&nbsp;Sparx Systems Pty Ltd.</strong>&nbsp;&nbsp;&nbsp;All rights Reserved.
+					</div>
+					<div class="copyrightitems">
+						<a class="copyright-items-sep" href="https://sparxsystems.com/legal.html">Legal</a>
+						<a class="copyright-items-sep" href="https://sparxsystems.com/privacy.html">Privacy</a>
+						<a href="https://sparxsystems.com/about.html">About us</a>
+					</div>
+					<div class="social">
+						 <ul>
+							<li>
+								<a class="social-icon-youtube" target="_blank" rel="noopener noreferrer" title="See us on YouTube" href="https://www.youtube.com/channel/UC1IbtSvXDURkqZQf_EpyvgQ?view_as=public"></a>
+							</li>
+							<li>
+								<a class="social-icon-facebook" target="_blank" rel="noopener noreferrer" title="See us on Facebook" href="https://www.facebook.com/sparxsystems"></a>
+							</li>
+							<li>
+								<a class="social-icon-twitter" target="_blank" rel="noopener noreferrer" title="See us on X" href="https://twitter.com/sparxsystems"></a>
+							</li>
+							<li>
+								<a class="social-icon-linkedin" target="_blank" rel="noopener noreferrer" title="See us on LinkedIn" href="https://www.linkedin.com/company/sparx-systems"></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/sphider_noindex-->
+<script src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/clickheat.js"></script>
+<script>
+	clickHeatSite = 'sparxmain';
+	clickHeatGroup = window.location.pathname;
+	clickHeatServer = '/clickheat/click.php';
+	initClickHeat();
+</script>
+
+			<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a043bbeaebf38194',t:'MTc4MDIwNjk3Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; visibility: hidden;" src="./Class Diagram - UML 2 Tutorial _ Sparx Systems_files/saved_resource.html"></iframe>
+			
+<a href="https://sparxsystems.com/resources/tutorials/uml2/class-diagram.html#" id="toTop" style="display: none;"><span id="toTopHover"></span>To Top</a></body></html>

@@ -1,0 +1,235 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Riwayat Pengeluaran" id="seq-riwayat-pengeluaran">
+    <mxGraphModel dx="3413" dy="1638" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ll_actor" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="«actor»&lt;br&gt;&lt;b&gt;Pengguna&lt;/b&gt;" vertex="1">
+          <mxGeometry height="840" width="100" x="100" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_actor" parent="ll_actor" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="730" width="10" x="45" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_page" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="PengeluaranPage" vertex="1">
+          <mxGeometry height="840" width="130" x="350" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_page" parent="ll_page" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="730" width="10" x="60" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_vm" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="PengeluaranViewModel" vertex="1">
+          <mxGeometry height="840" width="160" x="600" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_vm" parent="ll_vm" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="700" width="10" x="75" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_service" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="PengeluaranService" vertex="1">
+          <mxGeometry height="840" width="130" x="850" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_service" parent="ll_service" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="580" width="10" x="60" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_client" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="DioClient" vertex="1">
+          <mxGeometry height="840" width="120" x="1080" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_client" parent="ll_client" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="520" width="10" x="55" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_webservice" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="«actor»&lt;br&gt;&lt;b&gt;Web Service&lt;/b&gt;" vertex="1">
+          <mxGeometry height="840" width="120" x="1300" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_webservice" parent="ll_webservice" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="470" width="10" x="55" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_1" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="Buka Halaman Riwayat Pengeluaran">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="155" y="160" as="sourcePoint" />
+            <mxPoint x="410" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_2" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="loadPengeluaran(bulan, tahun)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="170" as="sourcePoint" />
+            <mxPoint x="675" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="act_loading_true" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="681" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_loading_true" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_loading_true" value="_setLoading(true)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="200" />
+            </Array>
+            <mxPoint x="686" y="180" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_3" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="getDaftarPengeluaran(bulan, tahun)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="685" y="240" as="sourcePoint" />
+            <mxPoint x="910" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_4" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="GET /api/pengeluaran?bulan={b}&amp;tahun={t}">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="270" as="sourcePoint" />
+            <mxPoint x="1135" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_5" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="Kueri data Pengeluaran (PostgreSQL)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1145" y="300" as="sourcePoint" />
+            <mxPoint x="1355" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="frame_alt" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=80;height=30;" value="Alt" vertex="1">
+          <mxGeometry height="560" width="1320" x="100" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="txt_fail" parent="frame_alt" style="text;html=1;" value="&lt;b&gt;[Gangguan Koneksi / Server Error]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" relative="1" width="300" as="geometry">
+            <mxPoint x="90" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="line_alt1" parent="frame_alt" style="line;strokeWidth=1;dashed=1;labelPosition=center;verticalLabelPosition=bottom;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;html=1;whiteSpace=wrap;" value="" vertex="1">
+          <mxGeometry height="10" width="1320" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="txt_empty" parent="frame_alt" style="text;html=1;" value="&lt;b&gt;[Daftar Riwayat Kosong]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="200" x="90" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="line_alt2" parent="frame_alt" style="line;strokeWidth=1;dashed=1;labelPosition=center;verticalLabelPosition=bottom;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;html=1;whiteSpace=wrap;" value="" vertex="1">
+          <mxGeometry height="10" width="1320" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="txt_success" parent="frame_alt" style="text;html=1;" value="&lt;b&gt;[Daftar Riwayat Ditemukan]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="200" x="90" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_fail_ws" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Kembalikan status error (status: 500)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1355" y="370" as="sourcePoint" />
+            <mxPoint x="1145" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_fail_dio" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Throw DioException">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1135" y="390" as="sourcePoint" />
+            <mxPoint x="920" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_fail_service" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Throw ServerException">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="910" y="415" as="sourcePoint" />
+            <mxPoint x="685" y="415" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="act_loading_false_err" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="681" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_loading_false_err" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_loading_false_err" value="_setLoading(false)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="445" />
+            </Array>
+            <mxPoint x="686" y="425" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_notify_err" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="notifyListeners() (errorMessage set)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="675" y="490" as="sourcePoint" />
+            <mxPoint x="420" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_render_err" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Tampilkan pesan kesalahan koneksi di layar">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="520" as="sourcePoint" />
+            <mxPoint x="155" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_empty_ws" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Kembalikan daftar kosong (status: 200)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1355" y="570" as="sourcePoint" />
+            <mxPoint x="1145" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_empty_api" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="HttpResponse (data: [])">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1135" y="590" as="sourcePoint" />
+            <mxPoint x="920" y="590" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_empty_service" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="[] (List Kosong)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="910" y="610" as="sourcePoint" />
+            <mxPoint x="685" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="act_loading_false_empty" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="681" y="625" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_loading_false_empty" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_loading_false_empty" value="_setLoading(false)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="635" />
+            </Array>
+            <mxPoint x="686" y="615" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_notify_empty" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="notifyListeners() (_pengeluaranList is empty)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="675" y="680" as="sourcePoint" />
+            <mxPoint x="420" y="680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_render_empty" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Tampilkan ilustrasi &quot;Riwayat masih kosong&quot;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="700" as="sourcePoint" />
+            <mxPoint x="155" y="700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_ok_ws" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Kembalikan daftar pengeluaran (status: 200)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1355" y="750" as="sourcePoint" />
+            <mxPoint x="1145" y="750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_ok_api" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="HttpResponse (Map data JSON)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1135" y="770" as="sourcePoint" />
+            <mxPoint x="920" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_ok_service" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="List&lt;Pengeluaran&gt; (ter-parse dari JSON)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="910" y="795" as="sourcePoint" />
+            <mxPoint x="685" y="795" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="act_loading_false_ok" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="681" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_loading_false_ok" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_loading_false_ok" value="_setLoading(false)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="815" />
+            </Array>
+            <mxPoint x="686" y="795" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_notify_ok" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="notifyListeners() (_pengeluaranList updated)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="675" y="850" as="sourcePoint" />
+            <mxPoint x="420" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_render_list" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Menampilkan daftar transaksi pengeluaran&amp;nbsp;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="870" as="sourcePoint" />
+            <mxPoint x="155" y="870" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GK7VPmzBR4Ssj8p6JCad-1" connectable="0" parent="msg_render_list" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Text" vertex="1">
+          <mxGeometry relative="1" x="0.0534" y="-3" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

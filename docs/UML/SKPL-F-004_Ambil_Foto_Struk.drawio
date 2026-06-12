@@ -1,0 +1,149 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Ambil Foto Struk" id="seq-ambil-foto">
+    <mxGraphModel dx="1707" dy="775" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Lifeline: Pengguna (Actor) -->
+        <mxCell id="ll_actor" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="«actor»&lt;br&gt;&lt;b&gt;Pengguna&lt;/b&gt;" vertex="1">
+          <mxGeometry height="700" width="100" x="100" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_actor" parent="ll_actor" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="600" width="10" x="45" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: ScannerPage (View) -->
+        <mxCell id="ll_page" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="ScannerPage" vertex="1">
+          <mxGeometry height="700" width="130" x="350" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_page" parent="ll_page" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="600" width="10" x="60" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: ReceiptViewModel (ViewModel) -->
+        <mxCell id="ll_vm" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="ReceiptViewModel" vertex="1">
+          <mxGeometry height="700" width="150" x="600" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_vm" parent="ll_vm" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="600" width="10" x="70" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Messages -->
+        <mxCell id="msg_1" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="clickKameraButton()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="155" y="150" as="sourcePoint" />
+            <mxPoint x="410" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- self call _initCamera() -->
+        <mxCell id="act_init_camera" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="416" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_init_camera" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_init_camera" value="_initCamera() &amp; Cek Izin">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="190" />
+            </Array>
+            <mxPoint x="421" y="170" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Alt Frame for Camera Permission -->
+        <mxCell id="frame_perm" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=80;height=30;" value="Alt" vertex="1">
+          <mxGeometry height="400" width="620" x="90" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="txt_perm_fail" parent="frame_perm" style="text;html=1;" value="&lt;b&gt;[Izin Kamera Ditolak]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" relative="1" width="150" as="geometry">
+            <mxPoint x="90" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_perm_fail" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Tampilkan pesan izin ditolak &amp; batalkan proses">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="290" as="sourcePoint" />
+            <mxPoint x="155" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Separator Perm -->
+        <mxCell id="line_perm" parent="frame_perm" style="line;strokeWidth=1;dashed=1;labelPosition=center;verticalLabelPosition=bottom;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;html=1;whiteSpace=wrap;" value="" vertex="1">
+          <mxGeometry height="10" width="620" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="txt_perm_ok" parent="frame_perm" style="text;html=1;" value="&lt;b&gt;[Izin Kamera Diterima]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="150" x="90" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Skenario izin diterima -->
+        <mxCell id="msg_capture" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="_captureImage()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="155" y="360" as="sourcePoint" />
+            <mxPoint x="410" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- self call _cropImage() -->
+        <mxCell id="act_crop" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="416" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_crop" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_crop" value="_cropImage(imageFile)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="390" />
+            </Array>
+            <mxPoint x="421" y="370" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Alt Frame for Image Approval -->
+        <mxCell id="frame_approve" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=80;height=30;" value="Alt" vertex="1">
+          <mxGeometry height="200" width="620" x="90" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="txt_retry" parent="frame_approve" style="text;html=1;" value="&lt;b&gt;[Masyarakat Memilih Ulangi]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" relative="1" width="200" as="geometry">
+            <mxPoint x="90" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_retry" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="Kembali ke langkah pengambilan gambar">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="155" y="470" as="sourcePoint" />
+            <mxPoint x="410" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Separator Approve -->
+        <mxCell id="line_approve" parent="frame_approve" style="line;strokeWidth=1;dashed=1;labelPosition=center;verticalLabelPosition=bottom;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;html=1;whiteSpace=wrap;" value="" vertex="1">
+          <mxGeometry height="10" width="620" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="txt_ok" parent="frame_approve" style="text;html=1;" value="&lt;b&gt;[Masyarakat Menyetujui Gambar]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="220" x="90" y="70" as="geometry" />
+        </mxCell>
+
+        <!-- Skenario setuju -->
+        <mxCell id="msg_select_image" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="selectImage(image)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="540" as="sourcePoint" />
+            <mxPoint x="665" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_ready" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="state = ReceiptScanStep.imageSelected">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="665" y="580" as="sourcePoint" />
+            <mxPoint x="420" y="580" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg_ui_preview" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Tampilkan gambar terpilih di halaman pratinjau">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="610" as="sourcePoint" />
+            <mxPoint x="155" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

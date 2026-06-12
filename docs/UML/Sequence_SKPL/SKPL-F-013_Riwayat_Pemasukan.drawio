@@ -1,0 +1,180 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Riwayat Pemasukan" id="seq-riwayat-pemasukan">
+    <mxGraphModel dx="1707" dy="775" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Lifeline: Pengguna (Actor) -->
+        <mxCell id="ll_actor" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="«actor»&lt;br&gt;&lt;b&gt;Pengguna&lt;/b&gt;" vertex="1">
+          <mxGeometry height="700" width="100" x="100" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_actor" parent="ll_actor" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="600" width="10" x="45" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: PemasukanPage (View) -->
+        <mxCell id="ll_page" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="PemasukanPage" vertex="1">
+          <mxGeometry height="700" width="130" x="350" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_page" parent="ll_page" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="600" width="10" x="60" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: PemasukanViewModel (ViewModel) -->
+        <mxCell id="ll_vm" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="PemasukanViewModel" vertex="1">
+          <mxGeometry height="700" width="150" x="600" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_vm" parent="ll_vm" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="600" width="10" x="70" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: PemasukanService (Service) -->
+        <mxCell id="ll_service" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="PemasukanService" vertex="1">
+          <mxGeometry height="700" width="150" x="850" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_service" parent="ll_service" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="600" width="10" x="70" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: DioClient (Client) -->
+        <mxCell id="ll_client" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="DioClient" vertex="1">
+          <mxGeometry height="700" width="120" x="1100" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_client" parent="ll_client" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="600" width="10" x="55" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Lifeline: AuthInterceptor (Interceptor) -->
+        <mxCell id="ll_interceptor" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="AuthInterceptor" vertex="1">
+          <mxGeometry height="700" width="140" x="1320" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_interceptor" parent="ll_interceptor" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="600" width="10" x="65" y="80" as="geometry" />
+        </mxCell>
+
+        <!-- Messages -->
+        
+        <!-- 1. bukaHalamanPemasukan() -->
+        <mxCell id="msg_1" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="bukaHalamanPemasukan()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="155" y="160" as="sourcePoint" />
+            <mxPoint x="410" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 2. loadPemasukan(bulan, tahun) -->
+        <mxCell id="msg_2" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="loadPemasukan(bulan, tahun)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="200" as="sourcePoint" />
+            <mxPoint x="670" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 3. _setLoading(true) [Self Call] -->
+        <mxCell id="act_self_loading_true" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="676" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_3" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_self_loading_true" value="_setLoading(true)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="240" />
+            </Array>
+            <mxPoint x="681" y="220" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 4. getDaftarPemasukan(bulan, tahun) -->
+        <mxCell id="msg_4" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="getDaftarPemasukan(bulan, tahun)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="680" y="300" as="sourcePoint" />
+            <mxPoint x="920" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 5. get('/api/pemasukan', queryParameters) -->
+        <mxCell id="msg_5" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="get('/api/pemasukan', queryParameters)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="930" y="340" as="sourcePoint" />
+            <mxPoint x="1155" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 6. onRequest(options) -->
+        <mxCell id="msg_6" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="onRequest(options)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1165" y="380" as="sourcePoint" />
+            <mxPoint x="1385" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 7. RequestOptions (with token) [Return] -->
+        <mxCell id="msg_7" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="RequestOptions (disisipi JWT Token)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1385" y="420" as="sourcePoint" />
+            <mxPoint x="1165" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 8. HttpResponse (JSON data) [Return] -->
+        <mxCell id="msg_8" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="HttpResponse (JSON data)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1155" y="460" as="sourcePoint" />
+            <mxPoint x="930" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 9. Pemasukan.fromJson(json) [Self Call] -->
+        <mxCell id="act_self_mapping" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="926" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_9" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_self_mapping" value="Pemasukan.fromJson(json)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="960" y="500" />
+            </Array>
+            <mxPoint x="931" y="480" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 10. List<Pemasukan> [Return] -->
+        <mxCell id="msg_10" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="List&lt;Pemasukan&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="550" as="sourcePoint" />
+            <mxPoint x="680" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 11. _setLoading(false) [Self Call] -->
+        <mxCell id="act_self_loading_false" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&amp;quot;curved&amp;quot;:0,&amp;quot;rounded&amp;quot;:0};" value="" vertex="1">
+          <mxGeometry height="40" width="10" x="676" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_11" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;" target="act_self_loading_false" value="_setLoading(false)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="590" />
+            </Array>
+            <mxPoint x="681" y="570" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 12. notifyListeners() [Return] -->
+        <mxCell id="msg_12" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="notifyListeners() (Pembaruan State)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="670" y="640" as="sourcePoint" />
+            <mxPoint x="420" y="640" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 13. Render Tampilan Daftar Pemasukan -->
+        <mxCell id="msg_13" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Tampilkan daftar riwayat pemasukan">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="670" as="sourcePoint" />
+            <mxPoint x="155" y="670" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
