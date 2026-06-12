@@ -1,0 +1,281 @@
+<mxfile host="app.diagrams.net" modified="2024-05-30T11:47:00.000Z" agent="SnapNotes" version="22.1.0" type="device">
+  <diagram name="Class Diagram - Fitur Autentikasi" id="fitur-auth">
+    <mxGraphModel dx="1500" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="Class Diagram UML 2.0 - Fitur Autentikasi&#xa;(Presentation + Domain + Data Layer)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="20" width="400" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== PRESENTATION LAYER ==================== -->
+        <mxCell id="layer_presentation" value="PRESENTATION LAYER" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="150" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- PAGES -->
+        <mxCell id="loginpage" value="LoginPage&#xa;(StatelessWidget)&#xa;--&#xa;--&#xa;+ build(context): Widget" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#e1f5fe;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="160" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="registerpage" value="RegisterPage&#xa;(StatelessWidget)&#xa;--&#xa;--&#xa;+ build(context): Widget" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#e1f5fe;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="230" y="100" width="160" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- WIDGETS -->
+        <mxCell id="authform" value="AuthForm&#xa;(StatelessWidget)&#xa;--&#xa;- emailController: TextEditingController&#xa;- passwordController: TextEditingController&#xa;--&#xa;+ build(context): Widget&#xa;+ onSubmit(): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#e3f2fd;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="230" width="180" height="130" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="googlebutton" value="GoogleSignInButton&#xa;(StatelessWidget)&#xa;--&#xa;--&#xa;+ build(context): Widget&#xa;+ onPressed(): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#e3f2fd;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="250" y="230" width="180" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- CUBIT (Presentation) -->
+        <mxCell id="authcubit" value="AuthCubit&#xa;--&#xa;- masukUseCase: MasukUseCase&#xa;- daftarUseCase: DaftarUseCase&#xa;- keluarUseCase: KeluarUseCase&#xa;+ state: AuthState&#xa;--&#xa;+ masuk(email, password): void&#xa;+ daftar(data): void&#xa;+ keluar(): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#fff3e0;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="470" y="100" width="220" height="180" as="geometry" />
+        </mxCell>
+        
+        <!-- STATES -->
+        <mxCell id="authstate" value="AuthState&#xa;(sealed class)&#xa;--&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#f5f5f5;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="470" y="310" width="160" height="80" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="authinitial" value="AuthInitial&#xa;--&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="470" y="420" width="140" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="authloading" value="AuthLoading&#xa;--&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="640" y="420" width="140" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="authauthenticated" value="AuthAuthenticated&#xa;--&#xa;- pengguna: Pengguna&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="470" y="510" width="160" height="90" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="autherror" value="AuthError&#xa;--&#xa;- message: String&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="660" y="510" width="140" height="90" as="geometry" />
+        </mxCell>
+        
+        <!-- Inheritance States -->
+        <mxCell id="state_inherit1" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="authinitial" target="authstate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="state_inherit2" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="authloading" target="authstate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="state_inherit3" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="authauthenticated" target="authstate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="state_inherit4" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="autherror" target="authstate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Dependency Page -> Cubit -->
+        <mxCell id="page_cubit" value="uses" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="loginpage" target="authcubit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== DOMAIN LAYER ==================== -->
+        <mxCell id="layer_domain" value="DOMAIN LAYER" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="640" width="120" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- CORE -->
+        <mxCell id="equatable" value="Equatable&#xa;(abstract)&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;&#xa;+ ==(other): bool" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;fillColor=#f5f5f5;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="670" width="160" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="usecase" value="UseCase&#38;lt;Type, Params&#38;gt;&#xa;(abstract)&#xa;--&#xa;+ call(Params): Future&#38;lt;Either&#38;lt;Failure, Type&#38;gt;&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;fillColor=#f5f5f5;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="800" width="160" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="failure" value="Failure&#xa;(abstract)&#xa;--&#xa;- message: String" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#f5f5f5;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="930" width="160" height="90" as="geometry" />
+        </mxCell>
+        
+        <!-- ENTITY -->
+        <mxCell id="pengguna" value="Pengguna&#xa;(Entity)&#xa;--&#xa;- id: String&#xa;- email: String&#xa;- namaLengkap: String&#xa;- fotoProfilUrl: String?&#xa;--&#xa;+ copyWith(): Pengguna&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#e8f5e9;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="670" width="180" height="150" as="geometry" />
+        </mxCell>
+        
+        <!-- REPOSITORY INTERFACE -->
+        <mxCell id="authrepo" value="AuthRepository&#xa;(interface)&#xa;--&#xa;+ masuk(email, pass): Either&#38;lt;Failure, Pengguna&#38;gt;&#xa;+ daftar(data): Either&#38;lt;Failure, Pengguna&#38;gt;&#xa;+ masukDenganGoogle(): Either&#38;lt;Failure, Pengguna&#38;gt;&#xa;+ keluar(): Either&#38;lt;Failure, void&#38;gt;&#xa;+ getProfil(): Either&#38;lt;Failure, Pengguna&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#e8e8e8;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="260" y="670" width="240" height="150" as="geometry" />
+        </mxCell>
+        
+        <!-- USE CASES -->
+        <mxCell id="masukuc" value="MasukUseCase&#xa;--&#xa;- repository: AuthRepository&#xa;--&#xa;+ call(params): Either&#38;lt;Failure, Pengguna&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="540" y="670" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="daftaruc" value="DaftarUseCase&#xa;--&#xa;- repository: AuthRepository&#xa;--&#xa;+ call(params): Either&#38;lt;Failure, Pengguna&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="540" y="790" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="keluaruc" value="KeluarUseCase&#xa;--&#xa;- repository: AuthRepository&#xa;--&#xa;+ call(params): Either&#38;lt;Failure, void&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="540" y="910" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== DATA LAYER ==================== -->
+        <mxCell id="layer_data" value="DATA LAYER" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="840" y="640" width="100" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- REPOSITORY IMPLEMENTATION -->
+        <mxCell id="authrepoimpl" value="AuthRepositoryImpl&#xa;--&#xa;- remoteDataSource: AuthRemoteDataSource&#xa;- localDataSource: AuthLocalDataSource&#xa;- supabaseDataSource: AuthSupabaseDataSource&#xa;--&#xa;+ masuk(email, pass)&#xa;+ daftar(data)&#xa;+ masukDenganGoogle()&#xa;+ keluar()&#xa;+ getProfil()" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#fff8e1;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="840" y="670" width="260" height="180" as="geometry" />
+        </mxCell>
+        
+        <!-- MODEL -->
+        <mxCell id="penggunamodel" value="PenggunaModel&#xa;--&#xa;- id: String&#xa;- email: String&#xa;- namaLengkap: String&#xa;- fotoProfilUrl: String?&#xa;--&#xa;+ fromJson(json): PenggunaModel&#xa;+ toJson(): Map&#xa;+ toEntity(): Pengguna" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#fff8e1;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="840" y="880" width="200" height="160" as="geometry" />
+        </mxCell>
+        
+        <!-- DATASOURCES -->
+        <mxCell id="authremoteds" value="AuthRemoteDataSource&#xa;(interface)&#xa;--&#xa;+ masuk(credentials): Future&#38;lt;PenggunaModel&#38;gt;&#xa;+ daftar(data): Future&#38;lt;PenggunaModel&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#f0f0f0;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="670" width="220" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="authlocalds" value="AuthLocalDataSource&#xa;(interface)&#xa;--&#xa;+ cacheToken(token): Future&#38;lt;void&#38;gt;&#xa;+ getCachedToken(): Future&#38;lt;String?&#38;gt;&#xa;+ clearCache(): Future&#38;lt;void&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#f0f0f0;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="800" width="220" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="authsupabaseds" value="AuthSupabaseDataSource&#xa;--&#xa;- supabase: SupabaseClient&#xa;--&#xa;+ signInWithPassword(): Future&#38;lt;AuthResponse&#38;gt;&#xa;+ signUp(): Future&#38;lt;AuthResponse&#38;gt;&#xa;+ signInWithOAuth(): Future&#38;lt;bool&#38;gt;&#xa;+ signOut(): Future&#38;lt;void&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#fff8e1;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="920" width="220" height="130" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== RELATIONSHIPS ==================== -->
+        
+        <!-- Cubit -> UseCase (Dependency) -->
+        <mxCell id="cubit_usecase" value="uses" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="authcubit" target="masukuc">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="690" y="190" />
+              <mxPoint x="690" y="190" />
+              <mxPoint x="640" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Page -> Cubit (Dependency) -->
+        <mxCell id="page_cubit" value="uses" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="loginpage" target="authcubit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="page_cubit2" value="uses" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="registerpage" target="authcubit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Widget -> Cubit (Dependency) -->
+        <mxCell id="widget_cubit" value="uses" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="authform" target="authcubit">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="130" y="360" />
+              <mxPoint x="580" y="360" />
+              <mxPoint x="580" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- UseCase -> Repository (Dependency) -->
+        <mxCell id="uc_repo" value="uses" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="masukuc" target="authrepo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="uc_repo2" value="uses" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="daftaruc" target="authrepo">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="540" y="840" />
+              <mxPoint x="500" y="840" />
+              <mxPoint x="500" y="745" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- UseCase inherits UseCase<T,P> -->
+        <mxCell id="uc_inherit" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="masukuc" target="usecase">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="640" y="670" />
+              <mxPoint x="640" y="600" />
+              <mxPoint x="1380" y="600" />
+              <mxPoint x="1380" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- RepositoryImpl implements Repository -->
+        <mxCell id="impl_arrow" value="implements" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="authrepoimpl" target="authrepo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- RepositoryImpl -> DataSource (Dependency) -->
+        <mxCell id="impl_ds1" value="uses" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="authrepoimpl" target="authremoteds">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="impl_ds2" value="uses" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="authrepoimpl" target="authlocalds">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1100" y="750" />
+              <mxPoint x="1100" y="850" />
+              <mxPoint x="1150" y="850" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="impl_ds3" value="uses" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="authrepoimpl" target="authsupabaseds">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1100" y="780" />
+              <mxPoint x="1100" y="985" />
+              <mxPoint x="1150" y="985" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Model extends Entity -->
+        <mxCell id="model_entity" value="extends" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="penggunamodel" target="pengguna">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="940" y="960" />
+              <mxPoint x="940" y="1020" />
+              <mxPoint x="130" y="1020" />
+              <mxPoint x="130" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- DataSource implements Interface -->
+        <mxCell id="ds_impl" value="implements" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="authsupabaseds" target="authremoteds">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1260" y="920" />
+              <mxPoint x="1260" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Entity inherits Equatable -->
+        <mxCell id="entity_equatable" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="pengguna" target="equatable">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="130" y="640" />
+              <mxPoint x="1380" y="640" />
+              <mxPoint x="1380" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend" value="LEGEND:&#xa;- ▲ Inheritance (is-a)&#xa;- △ Implementation (implements)&#xa;- → Dependency (uses)&#xa;- Blue: Presentation (UI)&#xa;- Green: Domain (Entity)&#xa;- Gray: Repository Interface&#xa;- Yellow: Data (Impl/Model)&#xa;- Dashed: Abstract/Interface" style="text;html=1;strokeColor=#000000;fillColor=#ffffff;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="20" y="1050" width="200" height="140" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

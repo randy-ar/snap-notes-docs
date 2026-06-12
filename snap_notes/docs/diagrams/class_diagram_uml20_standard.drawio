@@ -1,0 +1,353 @@
+<mxfile host="app.diagrams.net" modified="2024-05-30T11:30:00.000Z" agent="SnapNotes" etag="uml20-standard" version="22.1.0" type="device">
+  <diagram name="Class Diagram UML 2.0 Standard" id="uml20-standard">
+    <mxGraphModel dx="3000" dy="2000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- ==================== CORE ABSTRACT ==================== -->
+        <mxCell id="equatable" value="Equatable&#xa;(abstract)&#xa;--&#xa;- props: List&#38;lt;Object?&#38;gt;&#xa;--&#xa;+ ==(other): bool&#xa;+ hashCode: int" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=60;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1680" y="40" width="200" height="140" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="usecase" value="UseCase&#38;lt;Type, Params&#38;gt;&#xa;(abstract)&#xa;--&#xa;--&#xa;+ call(Params): Future&#38;lt;Either&#38;lt;Failure, Type&#38;gt;&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=60;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1680" y="220" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="failure" value="Failure&#xa;(abstract)&#xa;--&#xa;- message: String&#xa;--&#xa;+ toString(): String" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=60;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1680" y="360" width="200" height="120" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="serverfailure" value="ServerFailure&#xa;--&#xa;- message: String&#xa;--&#xa;+ ServerFailure(message)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1540" y="520" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cachefailure" value="CacheFailure&#xa;--&#xa;- message: String&#xa;--&#xa;+ CacheFailure(message)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1820" y="520" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Inheritance Failure -->
+        <mxCell id="failure_serverfailure" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="serverfailure" target="failure">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1640" y="520" as="sourcePoint" />
+            <mxPoint x="1750" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="failure_cachefailure" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="cachefailure" target="failure">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1920" y="500" />
+              <mxPoint x="1780" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- ==================== ENTITIES ==================== -->
+        <mxCell id="pengguna" value="Pengguna&#xa;--&#xa;- id: String&#xa;- email: String&#xa;- namaLengkap: String&#xa;- fotoProfilUrl: String?&#xa;- createdAt: DateTime&#xa;- updatedAt: DateTime&#xa;--&#xa;+ copyWith(): Pengguna&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="220" height="180" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="struk" value="Struk&#xa;--&#xa;- id: String?&#xa;- namaToko: String&#xa;- tanggal: String&#xa;- total: double&#xa;- kategoriId: String?&#xa;- kategoriNama: String?&#xa;- gambarUrl: String?&#xa;- sudahDikonfirmasi: bool?&#xa;- createdAt: DateTime?&#xa;- updatedAt: DateTime?&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="300" y="40" width="240" height="220" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="itemstruk" value="ItemStruk&#xa;--&#xa;- id: String?&#xa;- namaItem: String&#xa;- jumlah: int&#xa;- hargaSatuan: double&#xa;- subtotal: double&#xa;- kategoriId: String?&#xa;- kategoriNama: String?&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="320" y="300" width="200" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="pemasukan" value="Pemasukan&#xa;--&#xa;- id: String&#xa;- penggunaId: String&#xa;- kategoriId: String?&#xa;- kategoriNama: String?&#xa;- deskripsi: String&#xa;- jumlah: double&#xa;- tanggal: DateTime&#xa;- catatan: String?&#xa;- createdAt: DateTime&#xa;- updatedAt: DateTime&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="580" y="40" width="220" height="200" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="pengeluaran" value="Pengeluaran&#xa;--&#xa;- id: String&#xa;- penggunaId: String&#xa;- strukId: String?&#xa;- kategoriId: String?&#xa;- kategoriNama: String?&#xa;- deskripsi: String&#xa;- jumlah: double&#xa;- tanggal: DateTime&#xa;- catatan: String?&#xa;- createdAt: DateTime&#xa;- updatedAt: DateTime&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="840" y="40" width="220" height="220" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ringkasandashboard" value="RingkasanDashboard&#xa;--&#xa;- totalPemasukan: double&#xa;- totalPengeluaran: double&#xa;- saldo: double&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="40" width="200" height="120" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="preferensinotifikasi" value="PreferensiNotifikasi&#xa;--&#xa;- id: String?&#xa;- hariAktif: List&#38;lt;String&#38;gt;&#xa;- jamNotifikasi: String&#xa;- aktif: bool&#xa;--&#xa;+ props: List&#38;lt;Object?&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="40" width="200" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- Inheritance Entity -> Equatable -->
+        <mxCell id="pengguna_equatable" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="pengguna" target="equatable">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="150" y="20" />
+              <mxPoint x="1780" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="struk_equatable" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="struk" target="equatable">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="20" />
+              <mxPoint x="1780" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="itemstruk_equatable" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="itemstruk" target="equatable">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="280" />
+              <mxPoint x="420" y="20" />
+              <mxPoint x="1780" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="pemasukan_equatable" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="pemasukan" target="equatable">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="690" y="20" />
+              <mxPoint x="1780" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="pengeluaran_equatable" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="pengeluaran" target="equatable">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="950" y="20" />
+              <mxPoint x="1780" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="ringkasan_equatable" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="ringkasandashboard" target="equatable">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1200" y="20" />
+              <mxPoint x="1780" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="preferensi_equatable" value="" style="endArrow=block;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="preferensinotifikasi" target="equatable">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1440" y="20" />
+              <mxPoint x="1780" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Association Struk -> ItemStruk (Composition) -->
+        <mxCell id="struk_itemstruk" value="items" style="endArrow=diamondThin;endFill=1;startArrow=none;startFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" edge="1" parent="1" source="struk" target="itemstruk">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="260" as="sourcePoint" />
+            <mxPoint x="420" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="struk_itemstruk_card" value="1..*" style="edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;fontSize=10;" connectable="0" vertex="1" parent="struk_itemstruk">
+          <mxGeometry x="0.8" y="-10" relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== REPOSITORY INTERFACES ==================== -->
+        <mxCell id="authrepo" value="AuthRepository&#xa;(interface)&#xa;--&#xa;--&#xa;+ masuk(email, pass): Either&#38;lt;Failure, Pengguna&#38;gt;&#xa;+ daftar(data): Either&#38;lt;Failure, Pengguna&#38;gt;&#xa;+ masukDenganGoogle(): Either&#38;lt;Failure, Pengguna&#38;gt;&#xa;+ keluar(): Either&#38;lt;Failure, void&#38;gt;&#xa;+ getProfil(): Either&#38;lt;Failure, Pengguna&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="320" width="260" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="receiptrepo" value="ReceiptRepository&#xa;(interface)&#xa;--&#xa;--&#xa;+ scanStruk(image, text): Either&#38;lt;Failure, Struk&#38;gt;&#xa;+ getDaftarStruk(): Either&#38;lt;Failure, List&#38;lt;Struk&#38;gt;&#38;gt;&#xa;+ getStrukDetail(id): Either&#38;lt;Failure, Struk&#38;gt;&#xa;+ konfirmasiStruk(id): Either&#38;lt;Failure, void&#38;gt;&#xa;+ hapusStruk(id): Either&#38;lt;Failure, void&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="340" y="320" width="280" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="pemasukanrepo" value="PemasukanRepository&#xa;(interface)&#xa;--&#xa;--&#xa;+ getDaftar(): Either&#38;lt;Failure, List&#38;lt;Pemasukan&#38;gt;&#38;gt;&#xa;+ getDetail(id): Either&#38;lt;Failure, Pemasukan&#38;gt;&#xa;+ tambah(data): Either&#38;lt;Failure, Pemasukan&#38;gt;&#xa;+ update(id, data): Either&#38;lt;Failure, Pemasukan&#38;gt;&#xa;+ hapus(id): Either&#38;lt;Failure, void&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="660" y="320" width="280" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="pengeluaranrepo" value="PengeluaranRepository&#xa;(interface)&#xa;--&#xa;--&#xa;+ getDaftar(): Either&#38;lt;Failure, List&#38;lt;Pengeluaran&#38;gt;&#38;gt;&#xa;+ getDetail(id): Either&#38;lt;Failure, Pengeluaran&#38;gt;&#xa;+ tambah(data): Either&#38;lt;Failure, Pengeluaran&#38;gt;&#xa;+ update(id, data): Either&#38;lt;Failure, Pengeluaran&#38;gt;&#xa;+ hapus(id): Either&#38;lt;Failure, void&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="980" y="320" width="280" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="notifikasirepo" value="NotifikasiRepository&#xa;(interface)&#xa;--&#xa;--&#xa;+ getPreferensi(): Either&#38;lt;Failure, PreferensiNotifikasi&#38;gt;&#xa;+ simpanPreferensi(data): Either&#38;lt;Failure, void&#38;gt;&#xa;+ toggleNotifikasi(aktif): Either&#38;lt;Failure, void&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="320" width="260" height="120" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dashboardrepo" value="DashboardRepository&#xa;(interface)&#xa;--&#xa;--&#xa;+ getRingkasan(): Either&#38;lt;Failure, RingkasanDashboard&#38;gt;&#xa;+ getStatistik(period): Either&#38;lt;Failure, Map&#38;gt;&#xa;+ getHeatmapData(): Either&#38;lt;Failure, List&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e8e8e8;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="680" width="280" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== REPOSITORY IMPLEMENTATIONS ==================== -->
+        <mxCell id="authrepoimpl" value="AuthRepositoryImpl&#xa;--&#xa;- remoteDataSource: AuthRemoteDataSource&#xa;- localDataSource: AuthLocalDataSource&#xa;- supabaseDataSource: AuthSupabaseDataSource&#xa;--&#xa;+ masuk(email, pass): Either&#38;lt;Failure, Pengguna&#38;gt;&#xa;+ daftar(data): Either&#38;lt;Failure, Pengguna&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="540" width="260" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="receiptrepoimpl" value="ReceiptRepositoryImpl&#xa;--&#xa;- remoteDataSource: ReceiptRemoteDataSource&#xa;- localDataSource: ReceiptLocalDataSource&#xa;--&#xa;+ scanStruk(image, text): Either&#38;lt;Failure, Struk&#38;gt;&#xa;+ getDaftarStruk(): Either&#38;lt;Failure, List&#38;lt;Struk&#38;gt;&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="340" y="540" width="260" height="140" as="geometry" />
+        </mxCell>
+        
+        <!-- Implementation Arrows -->
+        <mxCell id="impl_auth" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="authrepoimpl" target="authrepo">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="540" as="sourcePoint" />
+            <mxPoint x="170" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="impl_auth_label" value="implements" style="edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;fontSize=9;fontStyle=2;" connectable="0" vertex="1" parent="impl_auth">
+          <mxGeometry x="0.5" y="-10" relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="impl_receipt" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" edge="1" parent="1" source="receiptrepoimpl" target="receiptrepo">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="540" as="sourcePoint" />
+            <mxPoint x="480" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- ==================== DATASOURCES ==================== -->
+        <mxCell id="authremoteds" value="AuthRemoteDataSource&#xa;(interface)&#xa;--&#xa;--&#xa;+ masuk(credentials): Future&#38;lt;Pengguna&#38;gt;&#xa;+ daftar(data): Future&#38;lt;Pengguna&#38;gt;&#xa;+ refreshToken(token): Future&#38;lt;AuthToken&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="760" width="240" height="120" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="authlocalds" value="AuthLocalDataSource&#xa;(interface)&#xa;--&#xa;--&#xa;+ cacheToken(token): Future&#38;lt;void&#38;gt;&#xa;+ getCachedToken(): Future&#38;lt;AuthToken&#38;gt;&#xa;+ clearCache(): Future&#38;lt;void&#38;gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="320" y="760" width="240" height="120" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="authsupabaseds" value="AuthSupabaseDataSource&#xa;--&#xa;--&#xa;+ signInWithPassword(): Future&#38;lt;AuthResponse&#38;gt;&#xa;+ signUp(): Future&#38;lt;AuthResponse&#38;gt;&#xa;+ signInWithOAuth(): Future&#38;lt;bool&#38;gt;&#xa;+ signOut(): Future&#38;lt;void&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="600" y="760" width="240" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- Dependency RepoImpl -> DataSource -->
+        <mxCell id="dep_auth_impl_remote" value="" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="authrepoimpl" target="authremoteds">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="120" y="700" />
+              <mxPoint x="160" y="700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="dep_auth_impl_local" value="" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="authrepoimpl" target="authlocalds">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="720" />
+              <mxPoint x="440" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- ==================== CUBITS ==================== -->
+        <mxCell id="authcubit" value="AuthCubit&#xa;--&#xa;- masukUseCase: MasukUseCase&#xa;- daftarUseCase: DaftarUseCase&#xa;- keluarUseCase: KeluarUseCase&#xa;+ state: AuthState&#xa;--&#xa;+ masuk(email, password): void&#xa;+ daftar(data): void&#xa;+ keluar(): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="920" width="220" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="receiptcubit" value="ReceiptCubit&#xa;--&#xa;- scanStrukUseCase: ScanStrukUseCase&#xa;- getDaftarStrukUseCase: GetDaftarStrukUseCase&#xa;+ state: ReceiptState&#xa;--&#xa;+ scanImage(file): void&#xa;+ getDaftarStruk(): void&#xa;+ konfirmasiStruk(id): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="300" y="920" width="240" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="transaksicubit" value="TransaksiCubit&#xa;--&#xa;- getDaftarUseCase: GetDaftarTransaksiUseCase&#xa;- tambahUseCase: TambahTransaksiUseCase&#xa;+ state: TransaksiState&#xa;--&#xa;+ getDaftar(): void&#xa;+ tambahTransaksi(data): void&#xa;+ updateTransaksi(id, data): void&#xa;+ hapusTransaksi(id): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="580" y="920" width="260" height="170" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dashboardcubit" value="DashboardCubit&#xa;--&#xa;- getRingkasanUseCase: GetRingkasanDashboardUseCase&#xa;+ state: DashboardState&#xa;--&#xa;+ loadDashboard(): void&#xa;+ getStatistik(period): void&#xa;+ getHeatmapData(): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="880" y="920" width="240" height="150" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== USE CASES ==================== -->
+        <mxCell id="masukuc" value="MasukUseCase&#xa;--&#xa;- repository: AuthRepository&#xa;--&#xa;+ call(params): Either&#38;lt;Failure, Pengguna&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1140" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="scanstrukuc" value="ScanStrukUseCase&#xa;--&#xa;- repository: ReceiptRepository&#xa;--&#xa;+ call(params): Either&#38;lt;Failure, Struk&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="280" y="1140" width="200" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="getdaftartransaksiuc" value="GetDaftarTransaksiUseCase&#xa;--&#xa;- repository: TransaksiRepository&#xa;--&#xa;+ call(params): Either&#38;lt;Failure, List&#38;lt;Transaksi&#38;gt;&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="520" y="1140" width="240" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="getringkasanuc" value="GetRingkasanDashboardUseCase&#xa;--&#xa;- repository: DashboardRepository&#xa;--&#xa;+ call(params): Either&#38;lt;Failure, RingkasanDashboard&#38;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="800" y="1140" width="260" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Inheritance UseCase -->
+        <mxCell id="uc_masuk" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="masukuc" target="usecase">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="140" y="1140" />
+              <mxPoint x="1780" y="1140" />
+              <mxPoint x="1780" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="uc_scan" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="scanstrukuc" target="usecase">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="1140" />
+              <mxPoint x="1780" y="1140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Dependency Cubit -> UseCase -->
+        <mxCell id="cubit_uc_auth" value="" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="authcubit" target="masukuc">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="1080" as="sourcePoint" />
+            <mxPoint x="140" y="1240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="cubit_uc_receipt" value="" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="receiptcubit" target="scanstrukuc">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="1080" />
+              <mxPoint x="380" y="1080" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="cubit_uc_transaksi" value="" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="transaksicubit" target="getdaftartransaksiuc">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="1090" />
+              <mxPoint x="640" y="1090" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="cubit_uc_dashboard" value="" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dashboardcubit" target="getringkasanuc">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1000" y="1070" />
+              <mxPoint x="930" y="1070" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Dependency UseCase -> Repository -->
+        <mxCell id="uc_repo_auth" value="" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="masukuc" target="authrepo">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="140" y="1120" />
+              <mxPoint x="170" y="1120" />
+              <mxPoint x="170" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="uc_repo_receipt" value="" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="scanstrukuc" target="receiptrepo">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="1120" />
+              <mxPoint x="480" y="1120" />
+              <mxPoint x="480" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Title -->
+        <mxCell id="title" value="Class Diagram UML 2.0 - Snap Notes Client&#xa;Clean Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="10" width="400" height="40" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

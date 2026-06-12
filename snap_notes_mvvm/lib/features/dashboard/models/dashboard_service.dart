@@ -1,0 +1,24 @@
+import 'package:dio/dio.dart';
+import 'package:snap_notes_mvvm/features/dashboard/models/ringkasan.dart';
+
+/// Service untuk dashboard
+class DashboardService {
+  final Dio _dio;
+
+  DashboardService({required this._dio});
+
+  /// Get ringkasan dashboard
+  Future<RingkasanDashboard> getRingkasan({int? bulan, int? tahun}) async {
+    final Map<String, dynamic> queryParams = {};
+    if (bulan != null) queryParams['bulan'] = bulan.toString();
+    if (tahun != null) queryParams['tahun'] = tahun.toString();
+
+    final response = await _dio.get('/api/dashboard/ringkasan', queryParameters: queryParams);
+
+    if (response.statusCode == 200) {
+      return RingkasanDashboard.fromJson(response.data['data']);
+    } else {
+      throw Exception('Gagal memuat ringkasan dashboard');
+    }
+  }
+}

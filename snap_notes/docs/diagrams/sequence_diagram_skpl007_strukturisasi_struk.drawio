@@ -1,0 +1,299 @@
+<mxfile host="app.diagrams.net" modified="2026-05-30T14:19:00.000Z" agent="SnapNotes" version="22.1.0" type="device">
+  <diagram name="Sequence Diagram - SKPL-F-007 Strukturisasi Data Struk" id="seq-skpl007">
+    <mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ==================== TITLE ==================== -->
+        <mxCell id="title" value="Sequence Diagram: SKPL-F-007&#xa;Melakukan Strukturisasi Data Struk Belanja&#xa;(Flutter MVVM + NestJS MVC)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="500" y="10" width="500" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== LIFELINES ==================== -->
+
+        <!-- 1. Pengguna (Actor) -->
+        <mxCell id="actor" value="&lt;b&gt;:Pengguna&lt;/b&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#f5f5f5;strokeColor=#666666;size=40;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="60" y="100" width="100" height="1300" as="geometry" />
+        </mxCell>
+
+        <!-- 2. ScannerPage (View - MVVM Flutter) -->
+        <mxCell id="view" value="&lt;b&gt;:ScannerPage&lt;/b&gt;&#xa;(View)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#e3f2fd;strokeColor=#1565c0;size=40;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="220" y="100" width="120" height="1300" as="geometry" />
+        </mxCell>
+
+        <!-- 3. ReceiptViewModel (ViewModel - MVVM Flutter) -->
+        <mxCell id="viewmodel" value="&lt;b&gt;:ReceiptViewModel&lt;/b&gt;&#xa;(ViewModel)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#fff3e0;strokeColor=#e65100;size=40;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="400" y="100" width="140" height="1300" as="geometry" />
+        </mxCell>
+
+        <!-- 4. ReceiptService (Model/Service - MVVM Flutter) -->
+        <mxCell id="flutter_service" value="&lt;b&gt;:ReceiptService&lt;/b&gt;&#xa;(Model/Service)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#fce4ec;strokeColor=#c62828;size=40;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="600" y="100" width="130" height="1300" as="geometry" />
+        </mxCell>
+
+        <!-- 5. TextRecognitionService (ML Kit - Flutter) -->
+        <mxCell id="mlkit" value="&lt;b&gt;:TextRecognition&lt;/b&gt;&#xa;&lt;b&gt;Service&lt;/b&gt;&#xa;(Google ML Kit)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#e0f2f1;strokeColor=#00695c;size=50;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="790" y="100" width="130" height="1300" as="geometry" />
+        </mxCell>
+
+        <!-- 6. StrukController (Controller - NestJS MVC) -->
+        <mxCell id="controller" value="&lt;b&gt;:StrukController&lt;/b&gt;&#xa;(NestJS Controller)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#e8f5e9;strokeColor=#2e7d32;size=40;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="100" width="140" height="1300" as="geometry" />
+        </mxCell>
+
+        <!-- 7. StrukService (Service - NestJS MVC) -->
+        <mxCell id="nest_service" value="&lt;b&gt;:StrukService&lt;/b&gt;&#xa;(NestJS Service)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#fff8e1;strokeColor=#f57f17;size=40;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="100" width="130" height="1300" as="geometry" />
+        </mxCell>
+
+        <!-- 8. GeminiService (AI Service - NestJS) -->
+        <mxCell id="gemini_svc" value="&lt;b&gt;:GeminiService&lt;/b&gt;&#xa;(AI Integration)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#ede7f6;strokeColor=#4527a0;size=40;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="100" width="130" height="1300" as="geometry" />
+        </mxCell>
+
+        <!-- 9. Gemini AI (External) -->
+        <mxCell id="gemini_ai" value="&lt;b&gt;:Gemini AI&lt;/b&gt;&#xa;(Google External)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#f3e5f5;strokeColor=#6a1b9a;size=40;fontFamily=Times New Roman;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="100" width="130" height="1300" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== LAYER LABELS ==================== -->
+        <mxCell id="layer_client" value="FLUTTER CLIENT (MVVM)" style="text;html=1;strokeColor=#1565c0;fillColor=#e3f2fd;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11;fontStyle=1;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="210" y="80" width="720" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="layer_server" value="NESTJS BACKEND (MVC)" style="text;html=1;strokeColor=#2e7d32;fillColor=#e8f5e9;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11;fontStyle=1;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="990" y="80" width="530" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="layer_external" value="EXTERNAL" style="text;html=1;strokeColor=#6a1b9a;fillColor=#f3e5f5;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11;fontStyle=1;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="1575" y="80" width="140" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== BOUNDARY LINE ==================== -->
+        <mxCell id="boundary" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=2;strokeColor=#FF0000;dashPattern=8 8;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="100" as="sourcePoint" />
+            <mxPoint x="950" y="1400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="boundary_label" value="HTTP / REST API&#xa;(Network Boundary)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;fontColor=#FF0000;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="900" y="155" width="100" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== MESSAGES ==================== -->
+
+        <!-- 1. User -> View: Ambil foto struk / pilih dari galeri -->
+        <mxCell id="msg1" value="1. Ambil foto struk / pilih dari galeri" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <mxPoint x="110" y="210" as="sourcePoint" />
+            <mxPoint x="270" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 2. View -> ViewModel: scanReceipt(imageFile) -->
+        <mxCell id="msg2" value="2. scanReceipt(imageFile)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <mxPoint x="280" y="260" as="sourcePoint" />
+            <mxPoint x="460" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 3. ViewModel: emit(ReceiptScanning) -->
+        <mxCell id="msg3" value="3. emit(ReceiptScanning)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#999999;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="300" as="sourcePoint" />
+            <mxPoint x="280" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Note: View shows scanning animation -->
+        <mxCell id="note1" value="View menampilkan&#xa;animasi scanning" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFFDE7;strokeColor=#F9A825;fontSize=9;fontFamily=Times New Roman;size=10;" vertex="1" parent="1">
+          <mxGeometry x="130" y="310" width="110" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- 4. ViewModel -> ML Kit: processImage(imageFile) [OCR On-Device] -->
+        <mxCell id="msg4" value="4. processImage(imageFile)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.05" relative="1" as="geometry">
+            <mxPoint x="470" y="360" as="sourcePoint" />
+            <mxPoint x="845" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Note: OCR on-device -->
+        <mxCell id="note_ocr" value="OCR dilakukan&#xa;on-device (lokal)&#xa;tanpa internet" style="shape=note;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00695C;fontSize=9;fontFamily=Times New Roman;size=10;" vertex="1" parent="1">
+          <mxGeometry x="790" y="370" width="110" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- 5. ML Kit -> ViewModel: return RecognizedTextEntity (rawText) -->
+        <mxCell id="msg5" value="5. return RecognizedTextEntity (rawText)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#999999;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <mxPoint x="845" y="430" as="sourcePoint" />
+            <mxPoint x="470" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 6. ViewModel -> Service: scanReceipt(imageFile, rawText) -->
+        <mxCell id="msg6" value="6. scanReceipt(imageFile, rawText)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <mxPoint x="470" y="490" as="sourcePoint" />
+            <mxPoint x="655" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 7. Service -> Controller: POST /struk/scan (multipart: image + rawText) -->
+        <mxCell id="msg7" value="7. POST /struk/scan&#xa;   multipart/form-data:&#xa;   {image, rawText}" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontFamily=Times New Roman;fontSize=11;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry x="-0.05" relative="1" as="geometry">
+            <mxPoint x="665" y="550" as="sourcePoint" />
+            <mxPoint x="1060" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 8. Controller: Validasi DTO -->
+        <mxCell id="note_validate" value="Validasi ScanStrukDto&#xa;(class-validator)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFFDE7;strokeColor=#F9A825;fontSize=9;fontFamily=Times New Roman;size=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="575" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- 9. Controller -> StrukService: scanStruk(dto, userId) -->
+        <mxCell id="msg8" value="8. scanStruk(scanStrukDto, penggunaId)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.05" relative="1" as="geometry">
+            <mxPoint x="1070" y="620" as="sourcePoint" />
+            <mxPoint x="1255" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 10. StrukService: Upload gambar ke Supabase Storage -->
+        <mxCell id="note_upload" value="Upload gambar ke&#xa;Supabase Storage&#xa;&#x2192; dapatkan publicUrl" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFFDE7;strokeColor=#F9A825;fontSize=9;fontFamily=Times New Roman;size=10;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="640" width="130" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- 11. StrukService -> GeminiService: parseReceiptText(rawText) -->
+        <mxCell id="msg9" value="9. parseReceiptText(rawText)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.05" relative="1" as="geometry">
+            <mxPoint x="1265" y="710" as="sourcePoint" />
+            <mxPoint x="1445" y="710" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 12. GeminiService: Buat prompt -->
+        <mxCell id="note_prompt" value="Buat prompt:&#xa;&quot;Ekstrak data struk&#xa;dari teks berikut...&#xa;format JSON&quot;" style="shape=note;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#4527A0;fontSize=9;fontFamily=Times New Roman;size=10;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="725" width="130" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- 13. GeminiService -> Gemini AI: generateContent(prompt + rawText) -->
+        <mxCell id="msg10" value="10. generateContent(prompt + rawText)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontFamily=Times New Roman;fontSize=11;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry x="-0.05" relative="1" as="geometry">
+            <mxPoint x="1455" y="800" as="sourcePoint" />
+            <mxPoint x="1635" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 14. Gemini AI processes -->
+        <mxCell id="note_ai" value="Gemini AI memproses:&#xa;1. Analisis rawText&#xa;2. Identifikasi item&#xa;3. Parsing harga&#xa;4. Generate JSON" style="shape=note;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#6A1B9A;fontSize=9;fontFamily=Times New Roman;size=10;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="815" width="130" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- 15. Gemini AI -> GeminiService: return JSON structured -->
+        <mxCell id="msg11" value="11. return JSON&#xa;    {namaToko, tanggal, items[], total}" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#999999;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <mxPoint x="1635" y="910" as="sourcePoint" />
+            <mxPoint x="1455" y="910" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 16. GeminiService: Validasi JSON -->
+        <mxCell id="note_validate_json" value="Validasi JSON response:&#xa;- Format valid?&#xa;- Field lengkap?&#xa;- Tipe data benar?" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFFDE7;strokeColor=#F9A825;fontSize=9;fontFamily=Times New Roman;size=10;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="925" width="130" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- 17. GeminiService -> StrukService: return ParsedReceipt -->
+        <mxCell id="msg12" value="12. return ParsedReceipt (validated JSON)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#999999;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <mxPoint x="1445" y="1000" as="sourcePoint" />
+            <mxPoint x="1265" y="1000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 18. StrukService: Simpan ke DB (Prisma transaction) -->
+        <mxCell id="note_db" value="Prisma Transaction:&#xa;1. Create Struk&#xa;2. Create ItemStruk[]&#xa;3. Create Pengeluaran" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFFDE7;strokeColor=#F9A825;fontSize=9;fontFamily=Times New Roman;size=10;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="1020" width="130" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- 19. StrukService -> Controller: return Struk + Items -->
+        <mxCell id="msg13" value="13. return {struk, items[], pengeluaran}" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#999999;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <mxPoint x="1255" y="1100" as="sourcePoint" />
+            <mxPoint x="1070" y="1100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 20. Controller -> Flutter Service: HTTP 201 Created -->
+        <mxCell id="msg14" value="14. HTTP 201 Created&#xa;    {struk, items[], pengeluaran}" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#999999;rounded=0;fontFamily=Times New Roman;fontSize=11;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <mxPoint x="1060" y="1160" as="sourcePoint" />
+            <mxPoint x="665" y="1160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 21. Flutter Service -> ViewModel: return ReceiptEntity -->
+        <mxCell id="msg15" value="15. return Either&lt;Failure, ReceiptEntity&gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#999999;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <mxPoint x="655" y="1220" as="sourcePoint" />
+            <mxPoint x="470" y="1220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 22. ViewModel -> View: emit(ReceiptScanned(receipt)) -->
+        <mxCell id="msg16" value="16. emit(ReceiptScanned(receipt, rawText))" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#999999;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="1280" as="sourcePoint" />
+            <mxPoint x="280" y="1280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 23. View -> User: Tampilkan halaman review hasil scan -->
+        <mxCell id="msg17" value="17. Tampilkan ReceiptReviewPage&#xa;    (data terstruktur untuk ditinjau)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#999999;rounded=0;fontFamily=Times New Roman;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="270" y="1340" as="sourcePoint" />
+            <mxPoint x="110" y="1340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ==================== ALT FRAGMENT (Error from Gemini) ==================== -->
+        <mxCell id="alt_frame" value="alt" style="shape=umlFrame;whiteSpace=wrap;html=1;width=40;height=20;fillColor=none;strokeColor=#B71C1C;fontFamily=Times New Roman;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="1370" width="1360" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alt_label" value="[Gemini AI gagal parsing / timeout / response invalid]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;fontColor=#B71C1C;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="430" y="1372" width="350" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="msg_err" value="emit(ReceiptError(&quot;Gagal memproses struk, silakan coba lagi&quot;))" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#B71C1C;rounded=0;fontFamily=Times New Roman;fontSize=10;fontColor=#B71C1C;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="460" y="1420" as="sourcePoint" />
+            <mxPoint x="280" y="1420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ==================== LEGEND ==================== -->
+        <mxCell id="legend_title" value="KETERANGAN ARSITEKTUR &amp; CLASS YANG TERLIBAT:" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1470" width="350" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend_mvvm" value="&lt;b&gt;FLUTTER CLIENT (MVVM):&lt;/b&gt;&#xa;&#xa;&lt;b&gt;View:&lt;/b&gt; ScannerPage&#xa;  - Menampilkan UI kamera/galeri&#xa;  - Menampilkan animasi scanning&#xa;  - Navigasi ke ReceiptReviewPage&#xa;&#xa;&lt;b&gt;ViewModel:&lt;/b&gt; ReceiptViewModel&#xa;  - Orkestrasi alur OCR + API call&#xa;  - Mengelola state (Scanning/Scanned/Error)&#xa;&#xa;&lt;b&gt;Model/Service:&lt;/b&gt;&#xa;  - TextRecognitionService (OCR lokal)&#xa;  - ReceiptService (HTTP ke backend)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontSize=10;fontFamily=Times New Roman;size=15;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1500" width="280" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend_mvc" value="&lt;b&gt;NESTJS BACKEND (MVC):&lt;/b&gt;&#xa;&#xa;&lt;b&gt;Controller:&lt;/b&gt; StrukController&#xa;  - @Post('/struk/scan')&#xa;  - Validasi DTO (ScanStrukDto)&#xa;  - Guard: SupabaseAuthGuard&#xa;&#xa;&lt;b&gt;Service:&lt;/b&gt; StrukService&#xa;  - Upload gambar ke Supabase Storage&#xa;  - Panggil GeminiService&#xa;  - Simpan ke DB (Prisma transaction)&#xa;&#xa;&lt;b&gt;Service (Shared):&lt;/b&gt; GeminiService&#xa;  - Buat prompt untuk Gemini AI&#xa;  - Kirim request ke Google API&#xa;  - Validasi &amp; parse JSON response" style="shape=note;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;fontSize=10;fontFamily=Times New Roman;size=15;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="370" y="1500" width="280" height="230" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend_flow" value="&lt;b&gt;ALUR STRUKTURISASI (SKPL-F-007):&lt;/b&gt;&#xa;&#xa;1. Pengguna ambil foto struk&#xa;2. ML Kit OCR ekstrak rawText (on-device)&#xa;3. Flutter kirim rawText + image ke backend&#xa;4. Backend upload image ke Storage&#xa;5. Backend kirim rawText ke Gemini AI&#xa;6. &lt;b&gt;Gemini AI strukturisasi teks &#x2192; JSON&lt;/b&gt;&#xa;   {namaToko, tanggal, items[], total}&#xa;7. Backend validasi JSON&#xa;8. Backend simpan ke DB (transaction)&#xa;9. Return data terstruktur ke Flutter&#xa;10. Flutter tampilkan untuk review&#xa;&#xa;&lt;b&gt;Aktor Utama:&lt;/b&gt; Gemini AI&#xa;&lt;b&gt;Aktor Pendukung:&lt;/b&gt; Web Service" style="shape=note;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#6A1B9A;fontSize=10;fontFamily=Times New Roman;size=15;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1500" width="290" height="230" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

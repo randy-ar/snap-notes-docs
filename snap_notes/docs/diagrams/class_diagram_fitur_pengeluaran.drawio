@@ -1,0 +1,152 @@
+<mxfile host="app.diagrams.net" modified="2024-05-30T12:10:00.000Z" agent="SnapNotes" version="22.1.0" type="device">
+  <diagram name="Class Diagram - Fitur Pengeluaran" id="fitur-pengeluaran">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="Class Diagram UML 2.0&#xa;Fitur: Pengeluaran (Domain Layer)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="500" y="20" width="400" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== STEP 1: DOMAIN LAYER ==================== -->
+        <mxCell id="label_domain" value="«layer» DOMAIN LAYER" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=2;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="150" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- CORE: Equatable -->
+        <mxCell id="equatable" value="«abstract»&#xa;Equatable&#xa;--&#xa;+ props: List&lt;Object?&gt;&#xa;--&#xa;+ ==(Object): bool&#xa;+ hashCode: int" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;fillColor=#f5f5f5;strokeColor=#000000;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="110" width="180" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- ENTITY: Pengeluaran -->
+        <mxCell id="pengeluaran" value="Pengeluaran&#xa;--&#xa;- id: String&#xa;- penggunaId: String&#xa;- strukId: String?&#xa;- kategoriId: String?&#xa;- kategoriNama: String?&#xa;- deskripsi: String&#xa;- jumlah: double&#xa;- tanggal: DateTime&#xa;- catatan: String?&#xa;- createdAt: DateTime&#xa;- updatedAt: DateTime&#xa;- struk: ReceiptEntity?&#xa;--&#xa;+ copyWith(): Pengeluaran&#xa;+ props: List&lt;Object?&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#e8f5e9;strokeColor=#000000;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="80" y="110" width="220" height="280" as="geometry" />
+        </mxCell>
+        
+        <!-- ENTITY: Kategori -->
+        <mxCell id="kategori" value="Kategori&#xa;--&#xa;- id: String&#xa;- nama: String&#xa;- icon: String?&#xa;- warna: String?&#xa;- tipe: String&#xa;--&#xa;+ props: List&lt;Object?&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#e8f5e9;strokeColor=#000000;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="340" y="110" width="180" height="150" as="geometry" />
+        </mxCell>
+        
+        <!-- ENTITY: ReceiptEntity (from other feature) -->
+        <mxCell id="receipt" value="«external»&#xa;ReceiptEntity&#xa;--&#xa;- id: String&#xa;- storeName: String&#xa;- totalAmount: double&#xa;--&#xa;+ props: List&lt;Object?&gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;fillColor=#fff8e1;strokeColor=#000000;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="80" y="420" width="180" height="130" as="geometry" />
+        </mxCell>
+        
+        <!-- Inheritance: Pengeluaran -> Equatable -->
+        <mxCell id="inherit1" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="pengeluaran" target="equatable">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="190" y="90" />
+              <mxPoint x="1190" y="90" />
+              <mxPoint x="1190" y="110" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Inheritance: Kategori -> Equatable -->
+        <mxCell id="inherit2" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="kategori" target="equatable">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="430" y="90" />
+              <mxPoint x="1190" y="90" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Association: Pengeluaran -> Receipt (optional) -->
+        <mxCell id="assoc1" value="0..1" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;fontSize=10;fontFamily=Times New Roman;" edge="1" parent="1" source="pengeluaran" target="receipt">
+          <mxGeometry x="0.2" y="10" relative="1" as="geometry">
+            <mxPoint x="-5" y="10" as="offset" />
+            <Array as="points">
+              <mxPoint x="170" y="390" />
+              <mxPoint x="170" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Association: Pengeluaran -> Kategori (optional) -->
+        <mxCell id="assoc2" value="0..1" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;fontSize=10;fontFamily=Times New Roman;" edge="1" parent="1" source="pengeluaran" target="kategori">
+          <mxGeometry x="0.2" relative="1" as="geometry">
+            <mxPoint x="-10" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- REPOSITORY INTERFACE -->
+        <mxCell id="pengeluaranrepo" value="«interface»&#xa;PengeluaranRepository&#xa;--&#xa;--&#xa;+ create(Pengeluaran): Either&lt;Failure, Pengeluaran&gt;&#xa;+ read(String): Either&lt;Failure, Pengeluaran&gt;&#xa;+ update(String, Pengeluaran): Either&lt;Failure, Pengeluaran&gt;&#xa;+ delete(String): Either&lt;Failure, void&gt;&#xa;+ getAll(): Either&lt;Failure, List&lt;Pengeluaran&gt;&gt;&#xa;+ getByPengguna(String): Either&lt;Failure, List&lt;Pengeluaran&gt;&gt;&#xa;+ getByKategori(String): Either&lt;Failure, List&lt;Pengeluaran&gt;&gt;&#xa;+ getByTanggalRange(DateTime, DateTime): Either&lt;Failure, List&lt;Pengeluaran&gt;&gt;&#xa;+ getTotalByBulan(int, int): Either&lt;Failure, double&gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;fillColor=#e0e0e0;strokeColor=#000000;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="560" y="110" width="280" height="240" as="geometry" />
+        </mxCell>
+        
+        <!-- USE CASES -->
+        <mxCell id="usecase" value="«abstract»&#xa;UseCase&lt;Type, Params&gt;&#xa;--&#xa;--&#xa;+ call(Params): Future&lt;Either&lt;Failure, Type&gt;&gt;" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;fillColor=#f5f5f5;strokeColor=#000000;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="900" y="400" width="240" height="110" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tambahpengeluaranuc" value="TambahPengeluaranUseCase&#xa;--&#xa;- repository: PengeluaranRepository&#xa;--&#xa;+ call(TambahParams): Either&lt;Failure, Pengeluaran&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="560" y="400" width="240" height="110" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="getpengeluaranuc" value="GetPengeluaranUseCase&#xa;--&#xa;- repository: PengeluaranRepository&#xa;--&#xa;+ call(GetParams): Either&lt;Failure, List&lt;Pengeluaran&gt;&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="560" y="540" width="240" height="110" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="hapuspengeluaranuc" value="HapusPengeluaranUseCase&#xa;--&#xa;- repository: PengeluaranRepository&#xa;--&#xa;+ call(String): Either&lt;Failure, void&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;fillColor=#ffffff;strokeColor=#000000;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="560" y="680" width="240" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Inheritance UseCases -->
+        <mxCell id="uc_inherit1" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="tambahpengeluaranuc" target="usecase">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="455" />
+              <mxPoint x="900" y="455" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="uc_inherit2" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="getpengeluaranuc" target="usecase">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="595" />
+              <mxPoint x="1020" y="595" />
+              <mxPoint x="1020" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="uc_inherit3" value="" style="endArrow=block;endFill=0;strokeWidth=1.5;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="hapuspengeluaranuc" target="usecase">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="730" />
+              <mxPoint x="1050" y="730" />
+              <mxPoint x="1050" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Dependency UseCase -> Repository -->
+        <mxCell id="dep1" value="«use»" style="endArrow=open;endFill=0;strokeWidth=1;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;dashed=1;fontStyle=2;fontSize=10;fontFamily=Times New Roman;" edge="1" parent="1" source="tambahpengeluaranuc" target="pengeluaranrepo">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="400" />
+              <mxPoint x="680" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend" value="NOTASI UML 2.0:&#xa;• «abstract» = Class Abstrak&#xa;• «interface» = Interface&#xa;• «external» = Entity dari fitur lain&#xa;• ▲ = Generalization (extends)&#xa;• ▷ = Dependency (uses)&#xa;• ──► = Association&#xa;• 0..1 = Multiplicity (optional)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#fff9e6;strokeColor=#000000;fontSize=10;fontFamily=Times New Roman;size=15;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="300" width="200" height="150" as="geometry" />
+        </mxCell>
+        
+        <!-- STEP 2 Label (for next iteration) -->
+        <mxCell id="label_step2" value="[STEP 2: Data Layer akan ditambahkan di bawah ini]" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=2;fontFamily=Times New Roman;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="80" y="820" width="300" height="20" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
