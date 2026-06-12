@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="W20QzPU0y-wElQk89ILb">
+    <mxGraphModel dx="883" dy="684" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bAAMVpLDxwpMR5IflYNA-1" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Flowchart Alur Proses Analisis Google ML Kit" vertex="1">
+          <mxGeometry height="430" width="320" x="320" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-22" edge="1" parent="bAAMVpLDxwpMR5IflYNA-1" source="dvCOUr6m1zMDtDBvuIDO-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dvCOUr6m1zMDtDBvuIDO-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-19" parent="bAAMVpLDxwpMR5IflYNA-1" style="ellipse;fillColor=strokeColor;html=1;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="65" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-24" edge="1" parent="bAAMVpLDxwpMR5IflYNA-1" source="dvCOUr6m1zMDtDBvuIDO-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dvCOUr6m1zMDtDBvuIDO-23" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-21" parent="bAAMVpLDxwpMR5IflYNA-1" style="rounded=1;whiteSpace=wrap;html=1;" value="Pengguna mengunggah foto struk belanja" vertex="1">
+          <mxGeometry height="60" width="120" x="20" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-26" edge="1" parent="bAAMVpLDxwpMR5IflYNA-1" source="dvCOUr6m1zMDtDBvuIDO-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dvCOUr6m1zMDtDBvuIDO-25" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-23" parent="bAAMVpLDxwpMR5IflYNA-1" style="rounded=1;whiteSpace=wrap;html=1;" value="Google ML Kit&lt;div&gt;menerima input&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="20" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-28" edge="1" parent="bAAMVpLDxwpMR5IflYNA-1" source="dvCOUr6m1zMDtDBvuIDO-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dvCOUr6m1zMDtDBvuIDO-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-25" parent="bAAMVpLDxwpMR5IflYNA-1" style="rounded=1;whiteSpace=wrap;html=1;" value="Memproses input dengan Library TextRecognition" vertex="1">
+          <mxGeometry height="60" width="120" x="20" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-27" parent="bAAMVpLDxwpMR5IflYNA-1" style="ellipse;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="65" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-32" edge="1" parent="bAAMVpLDxwpMR5IflYNA-1" source="dvCOUr6m1zMDtDBvuIDO-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dvCOUr6m1zMDtDBvuIDO-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-29" parent="bAAMVpLDxwpMR5IflYNA-1" style="ellipse;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="220" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-34" edge="1" parent="bAAMVpLDxwpMR5IflYNA-1" source="dvCOUr6m1zMDtDBvuIDO-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dvCOUr6m1zMDtDBvuIDO-33" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-31" parent="bAAMVpLDxwpMR5IflYNA-1" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengenali teks dan koordinat pada gambar" vertex="1">
+          <mxGeometry height="60" width="120" x="175" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-36" edge="1" parent="bAAMVpLDxwpMR5IflYNA-1" source="dvCOUr6m1zMDtDBvuIDO-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dvCOUr6m1zMDtDBvuIDO-35" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-33" parent="bAAMVpLDxwpMR5IflYNA-1" style="rounded=1;whiteSpace=wrap;html=1;" value="Menghasilkan objek kelas dengan atribut teks dan koordinat" vertex="1">
+          <mxGeometry height="60" width="120" x="175" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-39" edge="1" parent="bAAMVpLDxwpMR5IflYNA-1" source="dvCOUr6m1zMDtDBvuIDO-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dvCOUr6m1zMDtDBvuIDO-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-35" parent="bAAMVpLDxwpMR5IflYNA-1" style="rounded=1;whiteSpace=wrap;html=1;" value="Aplikasi menampilkan teks dan koordinat boxline" vertex="1">
+          <mxGeometry height="60" width="120" x="175" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="dvCOUr6m1zMDtDBvuIDO-38" parent="bAAMVpLDxwpMR5IflYNA-1" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="220" y="370" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

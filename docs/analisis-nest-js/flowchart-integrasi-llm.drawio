@@ -1,0 +1,91 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Integrasi LLM NestJS" id="0">
+    <mxGraphModel dx="981" dy="760" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" parent="1" style="swimlane;whiteSpace=wrap;html=1;fontFamily=Verdana;startSize=23;" value="Flowchart Alur Integrasi LLM (Gemini AI) - NestJS" vertex="1">
+          <mxGeometry height="590" width="970" x="100" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="3" parent="2" style="ellipse;fillColor=strokeColor;html=1;fontFamily=Verdana;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="137.25" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Hzh0rQ7tGrrn71JXzchM-35" edge="1" parent="2" source="4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;endArrow=none;endFill=0;startArrow=classic;startFill=1;" target="3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4" parent="2" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Modul service menerima data teks hasil OCR dari client" vertex="1">
+          <mxGeometry height="60" width="180" x="62.25" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="5" parent="2" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Mengekstrak teks mentah dan memetakan titik koordinat spasial" vertex="1">
+          <mxGeometry height="60" width="180" x="62.25" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="6" parent="2" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="&lt;div&gt;Apakah teks mentah&amp;nbsp;&lt;/div&gt;&lt;div&gt;dan koordinat&amp;nbsp;&lt;/div&gt;&lt;div&gt;spasial lengkap?&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="185.5" x="60" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="7" parent="2" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Sistem menghentikan proses" vertex="1">
+          <mxGeometry height="50" width="150" x="317.25" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="Hzh0rQ7tGrrn71JXzchM-40" edge="1" parent="2" source="8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;" target="Hzh0rQ7tGrrn71JXzchM-39">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8" parent="2" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Aplikasi menginisiasi modul service untuk LLM" vertex="1">
+          <mxGeometry height="60" width="180" x="62.25" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="9" parent="2" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Menyusun instruksi (prompt) berdasarkan konteks spasial gambar struk" vertex="1">
+          <mxGeometry height="60" width="180" x="540" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="10" parent="2" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Mengirimkan instruksi ke Gemini API untuk mengembalikan data JSON" vertex="1">
+          <mxGeometry height="60" width="180" x="540" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="2" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="&lt;div&gt;Apakah respons AI&amp;nbsp;&lt;/div&gt;&lt;div&gt;diterima tepat waktu?&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="165" x="548" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="12" parent="2" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Memutus koneksi otomatis (503 Service Unavailable)" vertex="1">
+          <mxGeometry height="50" width="150" x="775" y="305" as="geometry" />
+        </mxCell>
+        <mxCell id="13" parent="2" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;" value="Menerima data JSON model yang terstrukturisasi" vertex="1">
+          <mxGeometry height="60" width="180" x="540" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="14" parent="2" style="ellipse;html=1;shape=endState;fillColor=strokeColor;fontFamily=Verdana;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="615" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="21" edge="1" parent="2" source="4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;" target="5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="22" edge="1" parent="2" source="5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;" target="6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="23" edge="1" parent="2" source="6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Verdana;" target="7" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="24" edge="1" parent="2" source="6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=Verdana;" target="8" value="Ya">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="26" edge="1" parent="2" source="9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;" target="10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="27" edge="1" parent="2" source="10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;" target="11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="28" edge="1" parent="2" source="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Verdana;" target="12" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="29" edge="1" parent="2" source="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=Verdana;" target="13" value="Ya">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="30" edge="1" parent="2" source="13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;" target="14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Hzh0rQ7tGrrn71JXzchM-39" parent="2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontFamily=Verdana;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="137.25" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="Hzh0rQ7tGrrn71JXzchM-42" edge="1" parent="2" source="Hzh0rQ7tGrrn71JXzchM-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Verdana;" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Hzh0rQ7tGrrn71JXzchM-41" parent="2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontFamily=Verdana;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="615.5" y="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
