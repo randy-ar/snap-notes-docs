@@ -1,134 +1,118 @@
 <mxfile host="app.diagrams.net">
-  <diagram name="Komunikasi Client NestJS" id="0">
-    <mxGraphModel dx="1472" dy="1030" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+  <diagram name="Komunikasi Client NestJS" id="client-communication">
+    <mxGraphModel dx="2020" dy="1040" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="2" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Flowchart Alur Komunikasi Client dengan NestJS" vertex="1">
-          <mxGeometry height="590" width="860" x="230" y="100" as="geometry" />
+        <mxCell id="swimlane" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;" value="Alur Integrasi Komunikasi Aplikasi Client dengan NestJS" vertex="1">
+          <mxGeometry height="630" width="800" x="40" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="3" parent="2" style="ellipse;fillColor=strokeColor;html=1;" value="" vertex="1">
-          <mxGeometry height="30" width="30" x="105" y="40" as="geometry" />
+        <mxCell id="start" parent="swimlane" style="ellipse;fillColor=strokeColor;html=1;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="95" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="4" parent="2" style="rounded=1;whiteSpace=wrap;html=1;" value="Aplikasi client mengirimkan data struk fisik dan teks OCR" vertex="1">
-          <mxGeometry height="60" width="180" x="30" y="100" as="geometry" />
+        <mxCell id="step1" parent="swimlane" style="rounded=1;whiteSpace=wrap;html=1;" value="Aplikasi client mengirimkan permintaan dengan data gambar struk dan teks OCR" vertex="1">
+          <mxGeometry height="60" width="180" x="20" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="5" parent="2" style="rounded=1;whiteSpace=wrap;html=1;" value="NestJS mengekstrak token keamanan (JWT) dari permintaan" vertex="1">
-          <mxGeometry height="60" width="180" x="30" y="200" as="geometry" />
+        <mxCell id="step2" parent="swimlane" style="rounded=1;whiteSpace=wrap;html=1;" value="NestJS mengekstrak token keamanan (JWT) dari header permintaan" vertex="1">
+          <mxGeometry height="60" width="180" x="20" y="190" as="geometry" />
         </mxCell>
-        <mxCell id="6" parent="2" style="rhombus;whiteSpace=wrap;html=1;" value="Apakah sesi pengguna terotentikasi &amp;amp; valid?" vertex="1">
-          <mxGeometry height="90" width="180" x="30" y="295" as="geometry" />
+        <mxCell id="dec1" parent="swimlane" style="rhombus;whiteSpace=wrap;html=1;" value="Apakah token dan sesi pengguna valid?" vertex="1">
+          <mxGeometry height="80" width="160" x="30" y="280" as="geometry" />
         </mxCell>
-        <mxCell id="7" parent="2" style="rounded=1;whiteSpace=wrap;html=1;" value="Sistem menolak permintaan (401 Unauthorized)" vertex="1">
-          <mxGeometry height="50" width="140" x="275" y="315" as="geometry" />
+        <mxCell id="err1" parent="swimlane" style="rounded=1;whiteSpace=wrap;html=1;" value="Menolak permintaan (401 &lt;i&gt;Unauthorized&lt;/i&gt;)" vertex="1">
+          <mxGeometry height="50" width="140" x="260" y="295" as="geometry" />
         </mxCell>
-        <mxCell id="8" parent="2" style="rounded=1;whiteSpace=wrap;html=1;" value="Modul controller menerima berkas gambar dan data teks masukan" vertex="1">
-          <mxGeometry height="60" width="180" x="30" y="420" as="geometry" />
+        <mxCell id="step3" parent="swimlane" style="rounded=1;whiteSpace=wrap;html=1;" value="Modul controller menerima berkas gambar dan teks" vertex="1">
+          <mxGeometry height="60" width="180" x="20" y="390" as="geometry" />
         </mxCell>
-        <mxCell id="20" edge="1" parent="2" source="3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="4">
+        <mxCell id="step4" parent="swimlane" style="rounded=1;whiteSpace=wrap;html=1;" value="Validasi kelengkapan dan format data masukan (DTO)" vertex="1">
+          <mxGeometry height="60" width="180" x="20" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="conn1_out" parent="swimlane" style="ellipse;whiteSpace=wrap;html=1;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="95" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="03FoyXV-64z9_owa3Ahd-5" edge="1" parent="swimlane" source="conn1_in" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="03FoyXV-64z9_owa3Ahd-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="21" edge="1" parent="2" source="4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5">
+        <mxCell id="conn1_in" parent="swimlane" style="ellipse;whiteSpace=wrap;html=1;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="495" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="step5" parent="swimlane" style="rounded=1;whiteSpace=wrap;html=1;" value="Meneruskan data valid ke modul service" vertex="1">
+          <mxGeometry height="60" width="180" x="420" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="dec3" parent="swimlane" style="rhombus;whiteSpace=wrap;html=1;" value="Terjadi kesalahan pemrosesan internal?" vertex="1">
+          <mxGeometry height="80" width="160" x="430" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="err3" parent="swimlane" style="rounded=1;whiteSpace=wrap;html=1;" value="Exception Filter menangkap error (500 &lt;i&gt;Internal Server Error&lt;/i&gt;)" vertex="1">
+          <mxGeometry height="50" width="140" x="640" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="step6" parent="swimlane" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengirimkan respons sukses JSON ke aplikasi client" vertex="1">
+          <mxGeometry height="60" width="180" x="420" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="end" parent="swimlane" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="495" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="swimlane" source="start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="step1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="22" edge="1" parent="2" source="5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="6">
+        <mxCell id="e2" edge="1" parent="swimlane" source="step1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="step2">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="23" edge="1" parent="2" source="6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="7" value="Tidak">
+        <mxCell id="e3" edge="1" parent="swimlane" source="step2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dec1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="24" edge="1" parent="2" source="6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="8" value="Ya">
+        <mxCell id="e4" edge="1" parent="swimlane" source="dec1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;" target="err1" value="Tidak">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="26" edge="1" parent="2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="10">
+        <mxCell id="e5" edge="1" parent="swimlane" source="dec1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;" target="step3" value="Ya">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="swimlane" source="step3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="step4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="swimlane" source="step4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="conn1_out">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="275.0000000000002" y="580" as="sourcePoint" />
+            <mxPoint x="110" y="570" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="27" edge="1" parent="2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="11" value="Tidak">
+        <mxCell id="e8" edge="1" parent="swimlane" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;" target="err2" value="Tidak">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="365.0000000000002" y="660" as="sourcePoint" />
+            <mxPoint x="190" y="610.0000000000002" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="28" edge="1" parent="2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="12" value="Ya">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="275.0000000000002" y="710" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="29" edge="1" parent="2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="13">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="275.0000000000002" y="810" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="30" edge="1" parent="2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="14">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="275.0000000000002" y="890" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-46" edge="1" parent="2" source="86kdWopaOPrkLhoibCl3-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="86kdWopaOPrkLhoibCl3-31">
+        <mxCell id="e11" edge="1" parent="swimlane" source="step5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="dec3">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-30" parent="2" style="rounded=1;whiteSpace=wrap;html=1;" value="Sistem melakukan validasi kelengkapan dan format data (DTO)" vertex="1">
-          <mxGeometry height="60" width="180" x="455" y="100" as="geometry" />
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-41" edge="1" parent="2" source="86kdWopaOPrkLhoibCl3-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="86kdWopaOPrkLhoibCl3-33">
+        <mxCell id="e12" edge="1" parent="swimlane" source="dec3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;" target="err3" value="Ya">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-44" connectable="0" parent="86kdWopaOPrkLhoibCl3-41" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Ya" vertex="1">
-          <mxGeometry relative="1" x="-0.4563" y="-2" as="geometry">
+        <mxCell id="e13" edge="1" parent="swimlane" source="dec3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;" target="step6" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="swimlane" source="step6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="03FoyXV-64z9_owa3Ahd-3" edge="1" parent="swimlane" source="03FoyXV-64z9_owa3Ahd-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="03FoyXV-64z9_owa3Ahd-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="03FoyXV-64z9_owa3Ahd-6" connectable="0" parent="03FoyXV-64z9_owa3Ahd-3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Tidak" vertex="1">
+          <mxGeometry relative="1" x="-0.1026" y="2" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-42" edge="1" parent="2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="680" y="239.83" />
-              <mxPoint x="680" y="239.83" />
-            </Array>
-            <mxPoint x="635" y="239.83" as="sourcePoint" />
-            <mxPoint x="700" y="239.83" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="03FoyXV-64z9_owa3Ahd-4" edge="1" parent="swimlane" source="03FoyXV-64z9_owa3Ahd-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="step5">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-43" connectable="0" parent="86kdWopaOPrkLhoibCl3-42" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Tidak" vertex="1">
-          <mxGeometry relative="1" x="0.2" y="1" as="geometry">
+        <mxCell id="03FoyXV-64z9_owa3Ahd-7" connectable="0" parent="03FoyXV-64z9_owa3Ahd-4" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Ya" vertex="1">
+          <mxGeometry relative="1" x="-0.1885" y="-1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-31" parent="2" style="rhombus;whiteSpace=wrap;html=1;" value="Apakah format masukan sesuai spesifikasi DTO?" vertex="1">
-          <mxGeometry height="100" width="180" x="455" y="190" as="geometry" />
+        <mxCell id="03FoyXV-64z9_owa3Ahd-1" parent="swimlane" style="rhombus;whiteSpace=wrap;html=1;" value="Apakah format masukan sesuai DTO?" vertex="1">
+          <mxGeometry height="80" width="160" x="430" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-32" parent="2" style="rounded=1;whiteSpace=wrap;html=1;" value="Sistem mengembalikan pesan error (400 Bad Request)" vertex="1">
-          <mxGeometry height="50" width="140" x="700" y="215" as="geometry" />
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-40" edge="1" parent="2" source="86kdWopaOPrkLhoibCl3-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="86kdWopaOPrkLhoibCl3-34">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-33" parent="2" style="rounded=1;whiteSpace=wrap;html=1;" value="Modul controller meneruskan data yang sah ke modul service" vertex="1">
-          <mxGeometry height="60" width="180" x="455" y="330" as="geometry" />
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-39" edge="1" parent="2" source="86kdWopaOPrkLhoibCl3-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="86kdWopaOPrkLhoibCl3-35">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-34" parent="2" style="rounded=1;whiteSpace=wrap;html=1;" value="Sistem mengirimkan respons sukses (JSON) kembali ke aplikasi client" vertex="1">
-          <mxGeometry height="50" width="180" x="455" y="420" as="geometry" />
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-35" parent="2" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" value="" vertex="1">
-          <mxGeometry height="30" width="30" x="530" y="510" as="geometry" />
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-37" edge="1" parent="2" source="8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="86kdWopaOPrkLhoibCl3-36" value="">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="350" y="580" as="sourcePoint" />
-            <mxPoint x="350.0000000000002" y="620" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-36" parent="2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" value="1" vertex="1">
-          <mxGeometry height="30" width="30" x="105" y="510" as="geometry" />
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-48" edge="1" parent="2" source="86kdWopaOPrkLhoibCl3-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="86kdWopaOPrkLhoibCl3-30">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="86kdWopaOPrkLhoibCl3-47" parent="2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" value="1" vertex="1">
-          <mxGeometry height="30" width="30" x="530" y="40" as="geometry" />
+        <mxCell id="03FoyXV-64z9_owa3Ahd-2" parent="swimlane" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengembalikan pesan error (400 &lt;i&gt;Bad Request&lt;/i&gt;)" vertex="1">
+          <mxGeometry height="50" width="140" x="640" y="115" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
