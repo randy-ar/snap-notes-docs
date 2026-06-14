@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="flowchart-supabase">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Single Container -->
+        <mxCell id="container" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Flowchart Analisis Penyimpanan Data Supabase PostgreSQL" vertex="1">
+          <mxGeometry height="600" width="600" x="100" y="50" as="geometry" />
+        </mxCell>
+        
+        <!-- Column 1 -->
+        <mxCell id="start" parent="container" style="ellipse;fillColor=#000000;strokeColor=#000000;html=1;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="135" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="step1" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Supabase menyediakan PostgreSQL" vertex="1">
+          <mxGeometry height="60" width="140" x="80" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="step2" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Supabase menyediakan Connection String (URL)" vertex="1">
+          <mxGeometry height="60" width="140" x="80" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="step3" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Web Service membaca parameter koneksi dari berkas konfigurasi" vertex="1">
+          <mxGeometry height="60" width="140" x="80" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="step4" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Web Service menginisialisasi modul Prisma ORM" vertex="1">
+          <mxGeometry height="60" width="140" x="80" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="conn1" parent="container" style="ellipse;html=1;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="135" y="520" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" edge="1" parent="container" source="start" target="step1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="container" source="step1" target="step2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="container" source="step2" target="step3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="container" source="step3" target="step4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="container" source="step4" target="conn1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Column 2 -->
+        <mxCell id="conn2" parent="container" style="ellipse;html=1;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="415" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="step5" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Web Service menyiapkan objek data transaksi (payload)" vertex="1">
+          <mxGeometry height="60" width="140" x="360" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="step6" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Prisma ORM mengirim kueri melalui Database Transaction" vertex="1">
+          <mxGeometry height="60" width="140" x="360" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="step7" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Supabase menyimpan dan memastikan keutuhan data (Atomicity)" vertex="1">
+          <mxGeometry height="60" width="140" x="360" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="step8" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Supabase mengembalikan respons status penyimpanan" vertex="1">
+          <mxGeometry height="60" width="140" x="360" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="end" parent="container" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="415" y="520" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e6" edge="1" parent="container" source="conn2" target="step5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="container" source="step5" target="step6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="container" source="step6" target="step7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="container" source="step7" target="step8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="container" source="step8" target="end" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

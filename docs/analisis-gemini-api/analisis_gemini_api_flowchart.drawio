@@ -1,0 +1,102 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Flowchart Gemini API" id="uml_flowchart">
+    <mxGraphModel dx="2357" dy="1213" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <UserObject label="https://ai.google.dev/gemini-api/docs/structured-output" link="https://ai.google.dev/gemini-api/docs/structured-output" id="container">
+          <mxCell parent="1" style="swimlane;whiteSpace=wrap;html=1;" vertex="1">
+            <mxGeometry height="560" width="720" x="40" y="40" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="start" parent="container" style="ellipse;fillColor=#000000;strokeColor=#000000;html=1;" vertex="1">
+          <mxGeometry height="30" width="30" x="120" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="step1" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Menerima Data Teks OCR &amp;amp; Koordinat Spasial" vertex="1">
+          <mxGeometry height="60" width="190" x="40" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="step2" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Membentuk Prompt Instruksi Ekstraksi" vertex="1">
+          <mxGeometry height="60" width="190" x="40" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="step3" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Mendefinisikan Skema Zod untuk Output JSON" vertex="1">
+          <mxGeometry height="60" width="190" x="40" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="SoNdATU_PopakYsdyFBE-10" edge="1" parent="container" source="step4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="SoNdATU_PopakYsdyFBE-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="step4" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Memanggil API generateContent() dengan config.responseFormat" vertex="1">
+          <mxGeometry height="60" width="190" x="40" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="step5" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Menerima Response Teks JSON" vertex="1">
+          <mxGeometry height="60" width="190" x="380" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="step6" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Parsing &amp;amp; Validasi JSON dengan Zod Schema" vertex="1">
+          <mxGeometry height="60" width="190" x="380" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="dec" parent="container" style="rhombus;whiteSpace=wrap;html=1;" value="Valid?" vertex="1">
+          <mxGeometry height="80" width="80" x="435" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="step7" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengembalikan Data JSON Terstruktur" vertex="1">
+          <mxGeometry height="60" width="120" x="310" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="step8" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Melempar Error Validasi" vertex="1">
+          <mxGeometry height="60" width="120" x="525" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="end" parent="container" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1">
+          <mxGeometry height="30" width="30" x="460" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="container" source="start" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;" target="step1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="container" source="step1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;" target="step2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="container" source="step2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;" target="step3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="container" source="step3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;" target="step4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="container" source="step5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;" target="step6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="container" source="step6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;" target="dec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="container" source="dec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;" target="step7" value="Ya">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="container" source="dec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="step8" value="Tidak">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="585" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="container" source="step7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;" target="end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="515" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="container" source="step8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=1;entryY=0.5;" target="end">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="585" y="515" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SoNdATU_PopakYsdyFBE-8" edge="1" parent="container" source="SoNdATU_PopakYsdyFBE-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="step5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SoNdATU_PopakYsdyFBE-7" parent="container" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="460" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="SoNdATU_PopakYsdyFBE-9" parent="container" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="120" y="510" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

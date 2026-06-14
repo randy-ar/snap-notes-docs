@@ -12,17 +12,13 @@ Analisis ini dilakukan untuk memahami kapabilitas NestJS sebagai *web service* d
 
 Tahapan proses pada *flowchart* tersebut dijelaskan sebagai berikut:
 
-1. Aplikasi klien mengirimkan permintaan yang berisi data gambar struk fisik dan teks hasil OCR ke *endpoint* API NestJS.
-2. NestJS mengekstrak token keamanan (*JSON Web Token*) dari *header* permintaan.
-3. Sistem memeriksa apakah token dan sesi pengguna tersebut valid atau tidak.
-   - Jika **Tidak**, sistem menolak permintaan dan mengembalikan pesan *error* dengan status HTTP *401 Unauthorized*.
-   - Jika **Ya**, modul *controller* pada NestJS menerima berkas gambar dan teks yang dikirimkan klien.
-4. Sistem melakukan validasi terhadap kelengkapan dan format data masukan menggunakan standar *Data Transfer Object* (DTO).
-5. Sistem memastikan format masukan sudah sesuai dengan spesifikasi DTO.
-   - Jika **Tidak**, sistem mengembalikan pesan *error* dengan status HTTP *400 Bad Request*.
-   - Jika **Ya**, modul *controller* meneruskan data yang sudah valid tersebut ke modul *service* untuk diproses.
-6. Modul *service* kemudian memproses logika bisnis. Jika di tengah pemrosesan terjadi kesalahan sistem yang tidak terduga (*internal error*), fitur pelindung bawaan NestJS (*Exception Filter*) secara otomatis akan mencegah peladen mati (*crash*) dan mengembalikan status HTTP *500 Internal Server Error*.
-7. Namun, apabila seluruh data berhasil diproses tanpa hambatan, sistem akan mengirimkan respons sukses berformat JSON kembali ke aplikasi klien.
+1. Proses komunikasi diawali ketika aplikasi klien mengirimkan HTTP *request* menuju *endpoint* API pada NestJS. *Request* ini membawa dua elemen utama, yaitu berkas gambar struk belanja dan teks hasil ekstraksi OCR.
+2. Sebelum memproses data masukan, server NestJS melakukan tindakan pengamanan awal dengan mengekstrak *JSON Web Token* (JWT) yang disematkan pada bagian *header* HTTP *request*.
+3. Sistem kemudian memverifikasi keabsahan sesi pengguna berdasarkan token tersebut. Apabila token tidak valid atau telah kedaluwarsa, server secara otomatis akan menolak permintaan dan mengembalikan respons *401 Unauthorized*. Sebaliknya, apabila token valid, modul *controller* akan menerima *payload* yang dikirimkan.
+4. Setelah tahap autentikasi berhasil, sistem menjalankan tahap inspeksi data. Format berkas gambar dan teks diuji kesesuaiannya menggunakan aturan baku yang telah didefinisikan dalam *Data Transfer Object* (DTO).
+5. Pada tahap pengujian ini, kelengkapan struktur data divalidasi secara ketat. Jika masukan tidak sesuai dengan spesifikasi DTO, sistem akan menolaknya dengan mengembalikan pesan *400 Bad Request*. Namun, jika data terbukti valid, modul *controller* akan meneruskan parameter tersebut kepada modul *service* untuk pemrosesan logika bisnis lanjutan.
+6. Selama modul *service* mengeksekusi logika bisnis, NestJS menerapkan mekanisme pelindung bawaan bernama *Exception Filter*. Jika terjadi kegagalan sistem komputasi yang tidak terduga (*internal server error*), lapisan ini akan mencegah terjadinya *crash* pada server dan mengembalikan respons *500 Internal Server Error* secara aman.
+7. Apabila keseluruhan pemrosesan data di modul *service* berjalan dengan sukses, server akan mengembalikan data hasil akhir dalam format JSON sebagai respons kesuksesan kepada aplikasi klien.
 
 #### 3.3.5.2 Analisis Integrasi Gemini API dengan NestJS
 
@@ -34,12 +30,12 @@ Analisis ini bertujuan untuk mengevaluasi sejauh mana kapabilitas NestJS dalam m
 
 Tahapan proses pada *flowchart* tersebut dijelaskan sebagai berikut:
 
-1. NestJS membaca kredensial kunci API (`GEMINI_API_KEY`) yang disimpan secara aman di dalam berkas konfigurasi `.env`. Hal ini dilakukan di peladen untuk mencegah tereksposnya kunci API pada perangkat pengguna.
-2. Modul layanan di NestJS menggunakan kunci tersebut untuk menginisialisasi pustaka pemrosesan AI, yaitu `@google/genai`.
-3. Modul layanan menyusun teks mentah (*rawText*) menjadi *prompt* terstruktur, lalu mengirimkan permintaan ke peladen Gemini API.
-4. Pada tahap ini, NestJS menerapkan batas waktu tunggu (*timeout*). Jika server pihak ketiga (Google) sedang gangguan atau tidak merespons dalam batas waktu tersebut, NestJS dengan sigap memutus koneksi dan mengembalikan pesan *error* dengan status HTTP *503 Service Unavailable*.
-5. Apabila Gemini API merespons dengan sukses, NestJS akan menerima teks keluaran dari AI dan memvalidasi kelengkapan datanya.
-6. Hasil yang sudah tervalidasi kemudian dikonversi menjadi format JSON terstruktur untuk dilanjutkan ke proses pencatatan basis data atau dikembalikan ke klien.
+1. Proses integrasi dengan layanan kecerdasan buatan dimulai dengan pengamanan kredensial. Server NestJS membaca *API Key* (`GEMINI_API_KEY`) yang disimpan secara ketat di dalam berkas lingkungan `.env`. Pendekatan arsitektural ini dilakukan untuk mencegah tereksposnya kunci rahasia pada sisi aplikasi klien pengguna.
+2. Dengan menggunakan kunci referensi tersebut, modul *service* pada lapisan NestJS melakukan inisialisasi terhadap pustaka `@google/genai`, yang berfungsi sebagai modul penghubung utama dengan ekosistem Gemini API.
+3. Setelah inisialisasi berhasil, modul *service* menyusun teks mentah hasil OCR menjadi instruksi terstruktur (*prompt*), kemudian mengirimkannya melalui antarmuka HTTP *request* menuju server Gemini API.
+4. Selama proses komunikasi data, sistem NestJS mengaktifkan mekanisme *timeout* untuk mengantisipasi keterlambatan laju jaringan. Apabila server pihak ketiga (Google) sedang mengalami gangguan atau tidak merespons dalam rentang waktu yang wajar, NestJS akan mengambil alih kendali dengan memutus koneksi lalu mengembalikan pesan *503 Service Unavailable*.
+5. Apabila permintaan berhasil diproses oleh Gemini API, server NestJS akan menerima respons kembalian berupa teks hasil ekstraksi dari *Large Language Model* (LLM).
+6. Teks keluaran (*output*) dari AI tersebut kemudian divalidasi dan diurai (*parsing*) untuk memastikan bahwa parameter yang dikembalikan mematuhi struktur format JSON murni. Setelah keutuhan data terverifikasi secara valid, hasil informasi keuangan ini siap dilanjutkan ke proses pencatatan basis data.
 
 #### 3.3.5.3 Analisis Integrasi Supabase dengan NestJS
 
@@ -51,10 +47,10 @@ Analisis ini bertujuan untuk memahami kapabilitas NestJS dalam mengelola persist
 
 Tahapan proses pada *flowchart* tersebut dijelaskan sebagai berikut:
 
-1. NestJS membaca parameter koneksi dari berkas `.env`, yang mencakup URL basis data (`DATABASE_URL`) untuk PostgreSQL, serta kredensial layanan (`SUPABASE_URL` dan *API Key*) untuk penyimpanan *file*.
-2. Menggunakan koneksi basis data tersebut, NestJS menginisialisasi *Prisma ORM* untuk mengelola jalur komunikasi ke tabel-tabel di PostgreSQL.
-3. Di waktu yang sama, NestJS juga menginisialisasi *Supabase Storage Client* menggunakan kredensial layanan untuk mengelola unggahan gambar struk.
-4. Saat proses berjalan, NestJS akan terlebih dahulu mengunggah gambar struk fisik ke ruang penyimpanan *bucket* Supabase. Apabila proses unggahan gagal karena gangguan jaringan, proses langsung dihentikan dan sistem mengembalikan pesan kegagalan (*HTTP 503*).
-5. Jika unggahan berhasil, sistem menerima tautan publik (URL) dari gambar tersebut dan menggabungkannya dengan data riwayat transaksi.
-6. NestJS kemudian mengirimkan perintah pencatatan ke PostgreSQL menggunakan fitur transaksi basis data (*database transaction*) bawaan dari *Prisma ORM*.
-7. Melalui mekanisme transaksi ini, NestJS menjamin keutuhan data (*Atomicity*). Apabila terjadi kegagalan mendadak saat pencatatan di pangkalan data, NestJS secara otomatis akan membatalkan seluruh proses penyimpanan (*rollback*) sehingga tidak ada data sebagian yang tertinggal, lalu mengirimkan laporan kesalahan ke aplikasi klien. Apabila berhasil, sistem merampungkan seluruh proses transaksi.
+1. Proses penyimpanan data finansial dimulai ketika server NestJS membaca variabel parameter koneksi dari berkas `.env`. Konfigurasi ini mencakup URL basis data (`DATABASE_URL`) untuk ruang PostgreSQL, serta kredensial antarmuka layanan (`SUPABASE_URL` dan *API Key*) untuk penyimpanan berkas *Cloud Storage*.
+2. Memanfaatkan paramater kredensial koneksi tersebut, sistem NestJS menginisialisasi modul *Prisma ORM* yang bertugas penuh untuk mengeksekusi lalu lintas kueri menuju tabel-tabel relasional di dalam PostgreSQL.
+3. Secara paralel, sistem juga membentuk ruang koneksi terhadap *Supabase Storage Client*. Layanan ini khusus disiapkan untuk menangani tata kelola objek statis, yakni pengunggahan berkas gambar fisik dari bukti pembayaran.
+4. Langkah awal dalam alur transaksi sistem adalah mengunggah (*upload*) berkas gambar struk ke dalam *bucket* penyimpanan Supabase. Apabila proses unggahan terhenti akibat instabilitas sinyal jaringan, operasional seketika dihentikan dan server akan mengembalikan status *503 Service Unavailable* kepada klien.
+5. Apabila proses *upload* rampung dengan sempurna, server NestJS akan mengekstrak tautan URL publik yang merepresentasikan gambar tersebut di awan. Tautan akses ini kemudian disematkan ke dalam struktur objek data (*payload*) transaksi riwayat belanja.
+6. Selanjutnya, modul *service* memerintahkan *Prisma ORM* untuk memasukkan objek kumpulan transaksi tersebut ke dalam PostgreSQL, yang secara teknis diproteksi menggunakan fitur *database transaction*.
+7. Implementasi proteksi dari *database transaction* bertujuan untuk menjamin terpenuhinya prinsip keutuhan data (*Atomicity*). Apabila terjadi kegagalan perekaman parsial ke dalam tabel basis data, *Prisma ORM* secara terprogram akan membatalkan seluruh komit perubahan sistem (*rollback*) demi menghindari inkonsistensi data, lantas meneruskan sinyal pengecualian *error* ke aplikasi klien. Sebaliknya, bila tahapan penyimpanan basis data berjalan sukses, server menyegel keseluruhan rangkaian interaksi penyelesaian transaksi.
