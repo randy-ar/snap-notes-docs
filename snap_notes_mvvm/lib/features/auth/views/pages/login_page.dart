@@ -5,6 +5,7 @@ import 'package:snap_notes_mvvm/features/auth/viewmodels/login_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/auth/viewmodels/register_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/auth/views/pages/register_page.dart';
 import 'package:snap_notes_mvvm/features/main/views/pages/main_page.dart';
+import 'package:snap_notes_mvvm/features/auth/viewmodels/auth_viewmodel.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -37,12 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     if (viewModel.errorMessage != null) {
       _showErrorToast(viewModel.errorMessage!);
     } else if (viewModel.token != null) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => const MainPage(),
-        ),
-        (route) => false,
-      );
+      await context.read<AuthViewModel>().checkAuth();
     }
   }
 
@@ -55,12 +51,7 @@ class _LoginPageState extends State<LoginPage> {
     if (viewModel.errorMessage != null) {
       _showErrorToast(viewModel.errorMessage!);
     } else if (viewModel.token != null) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => const MainPage(),
-        ),
-        (route) => false,
-      );
+      await context.read<AuthViewModel>().checkAuth();
     }
   }
 
@@ -91,26 +82,34 @@ class _LoginPageState extends State<LoginPage> {
     
     return Scaffold(
       child: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Gap(48),
-              _buildHeader(),
-              const Gap(40),
-              _buildEmailField(),
-              const Gap(16),
-              _buildPasswordField(),
-              const Gap(24),
-              _buildLoginButton(viewModel),
-              const Gap(16),
-              _buildDivider(),
-              const Gap(16),
-              _buildGoogleLoginButton(viewModel),
-              const Gap(24),
-              _buildRegisterLink(context),
-            ],
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Card(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildHeader(),
+                    const Gap(32),
+                    _buildEmailField(),
+                    const Gap(16),
+                    _buildPasswordField(),
+                    const Gap(24),
+                    _buildLoginButton(viewModel),
+                    const Gap(16),
+                    _buildDivider(),
+                    const Gap(16),
+                    _buildGoogleLoginButton(viewModel),
+                    const Gap(24),
+                    _buildRegisterLink(context),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),
@@ -119,18 +118,11 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildHeader() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(LucideIcons.receipt, size: 64),
-        const Gap(16),
-        const Text(
-          'Snap Notes',
-          textAlign: TextAlign.center,
-        ).h1(),
+        const Text('Masuk').h2(),
         const Gap(8),
-        const Text(
-          'Catat pengeluaran dari struk belanja',
-          textAlign: TextAlign.center,
-        ).muted(),
+        const Text('Masukkan email dan password untuk melanjutkan').muted(),
       ],
     );
   }

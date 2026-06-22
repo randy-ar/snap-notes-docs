@@ -1236,6 +1236,67 @@ Sequence diagram menggambarkan interaksi antara objek-objek dalam urutan waktu t
 
    2. #### **Perancangan Struktur Menu** {#perancangan-struktur-menu}
 
+   Perancangan struktur menu bertujuan untuk memetakan hierarki navigasi dan antarmuka pada aplikasi Snap Notes. Struktur menu dirancang untuk memudahkan masyarakat dalam mengakses fitur-fitur utama aplikasi secara efisien dan logis. Pada implementasinya, aplikasi menggunakan *bottom navigation bar* sebagai navigasi utama yang mencakup halaman *dashboard*, daftar pengeluaran, dan daftar pemasukan. Fitur utama pemindaian struk diakses secara cepat melalui *floating action button*. Selain itu, fitur pendukung seperti pengaturan notifikasi dan proses keluar akun (*logout*) ditempatkan secara terpusat pada header halaman *dashboard*.
+   Adapun rancangan struktur menu pada aplikasi Snap Notes dapat dilihat secara visual pada diagram berikut:
+
+```mermaid
+graph TD
+    %% Node Utama
+    Login[Masuk]
+    Register[Daftar]
+    Main[Beranda / Navigasi Utama]
+    
+    %% Navigasi Bawah
+    Dash[Dashboard]
+    Peng[Daftar Pengeluaran]
+    Pem[Daftar Pemasukan]
+    Scan[Scan Struk]
+    
+    %% Sub-menu Dashboard
+    NotifSettings[Pengaturan Notifikasi]
+    NotifForm[Form Notifikasi]
+    Logout[Keluar]
+    
+    %% Sub-menu Pengeluaran
+    PengDetail[Detail Pengeluaran]
+    PengForm[Form Pengeluaran]
+    
+    %% Sub-menu Pemasukan
+    PemDetail[Detail Pemasukan]
+    PemForm[Form Pemasukan]
+
+    %% Relasi
+    Login --> Register
+    Login --> Main
+    
+    Main --> Dash
+    Main --> Peng
+    Main --> Pem
+    Main --> Scan
+    
+    Dash --> NotifSettings
+    NotifSettings --> NotifForm
+    Dash --> Logout
+    Logout -.->|Kembali ke| Login
+    
+    Peng --> PengDetail
+    Peng --> PengForm
+    PengDetail -->|Edit| PengForm
+    
+    Pem --> PemDetail
+    Pem --> PemForm
+    PemDetail -->|Edit| PemForm
+```
+
+   Mengenai garis besar hierarki navigasi struktur menu yang dibangun pada diagram di atas, maka penjelasannya adalah sebagai berikut:
+
+   1. Akses awal aplikasi dimulai dari halaman Masuk (*Login*). Pengguna baru dapat diarahkan ke halaman Daftar (*Register*). Setelah proses autentikasi berhasil, pengguna akan diarahkan menuju Beranda (*Main Page*).
+   2. Beranda diimplementasikan menggunakan *bottom navigation bar* yang membungkus tiga menu utama: Dashboard, Daftar Pengeluaran, dan Daftar Pemasukan, serta menyediakan akses cepat ke fitur Scan Struk melalui tombol *floating action button*.
+   3. Halaman Dashboard berfungsi sebagai pusat informasi ringkas. Melalui halaman ini, fitur Pengaturan Notifikasi dan modifikasinya (Form Notifikasi) dapat diakses. Fitur Keluar (*Logout*) juga disediakan pada menu *header* untuk memutus sesi pengguna dan mengembalikannya ke halaman Masuk.
+   4. Halaman Daftar Pengeluaran dan Daftar Pemasukan menampilkan riwayat transaksi pencatatan keuangan. Melalui daftar tersebut, sebuah transaksi spesifik dapat dipilih untuk menavigasi ke halaman Detail Pengeluaran atau Detail Pemasukan.
+   5. Proses penambahan data keuangan baru maupun pengubahan data (*edit*) diakomodasi melalui hierarki Form Pengeluaran dan Form Pemasukan. Form ini dapat diakses secara langsung dari halaman daftar maupun halaman detail transaksi terkait.
+   6. Halaman Scan Struk difungsikan sebagai titik masuk bagi rangkaian proses berlapis (*multi-step flow*) yang mencakup pemilihan gambar, pratinjau OCR, pemrosesan otomatis dengan Gemini AI, hingga validasi hasil pindaian struk sebelum data dikonfirmasi penyimpanannya.
+
    3. #### **Perancangan Antarmuka Pengguna** {#perancangan-antarmuka-pengguna}
 
    4. #### **Perancangan Pesan** {#perancangan-pesan}

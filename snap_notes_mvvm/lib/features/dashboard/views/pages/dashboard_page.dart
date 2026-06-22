@@ -43,13 +43,134 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
+    final currencyFormat = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
+    );
     final dashboardViewModel = context.watch<DashboardViewModel>();
     final pengeluaranViewModel = context.watch<PengeluaranViewModel>();
-    
+
     return Scaffold(
       headers: [
         AppBar(
+          leading: [
+            Consumer<AuthViewModel>(
+              builder: (context, authState, child) {
+                final pengguna = authState.pengguna;
+                final namaLengkap = pengguna?.namaLengkap;
+                final name = (namaLengkap != null && namaLengkap.isNotEmpty)
+                    ? namaLengkap
+                    : 'User';
+                final photoUrl = pengguna?.fotoProfilUrl;
+
+                return Builder(
+                  builder: (context) {
+                    return IconButton.ghost(
+                      icon: Avatar(
+                        initials: Avatar.getInitials(name),
+                        size: 32,
+                        provider: photoUrl != null
+                            ? NetworkImage(photoUrl)
+                            : null,
+                      ),
+                      onPressed: () {
+                        final authViewModel = context.read<AuthViewModel>();
+                        showPopover(
+                          context: context,
+                          alignment: Alignment.bottomLeft,
+                          offset: const Offset(-48, 8),
+                          handler: OverlayHandler.popover,
+                          builder: (popoverContext) {
+                            return ModalContainer(
+                              child: SizedBox(
+                                width: 220,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 12,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(name).small().bold(),
+                                          if (pengguna?.email != null) ...[
+                                            const Gap(2),
+                                            Text(pengguna!.email).xSmall().muted(),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
+                                    const Divider(height: 1),
+                                    GhostButton(
+                                      onPressed: () {
+                                        closeOverlay(popoverContext);
+                                        showDialog(
+                                          context: context,
+                                          builder: (dialogContext) => AlertDialog(
+                                            title: const Text(
+                                              'Keluar Aplikasi',
+                                            ),
+                                            content: const Text(
+                                              'Apakah Anda yakin ingin keluar dari akun Anda?',
+                                            ),
+                                            actions: [
+                                              OutlineButton(
+                                                onPressed: () => Navigator.pop(
+                                                  dialogContext,
+                                                ),
+                                                child: const Text('Batal'),
+                                              ),
+                                              DestructiveButton(
+                                                onPressed: () {
+                                                  Navigator.pop(dialogContext);
+                                                  authViewModel.logout();
+                                                },
+                                                child: const Text('Keluar'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            LucideIcons.logOut,
+                                            size: 16,
+                                            color: Theme.of(
+                                              popoverContext,
+                                            ).colorScheme.destructive,
+                                          ),
+                                          const Gap(8),
+                                          Text(
+                                            'Keluar',
+                                            style: TextStyle(
+                                              color: Theme.of(
+                                                popoverContext,
+                                              ).colorScheme.destructive,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ],
           title: const Text('Dashboard'),
           trailing: [
             IconButton.ghost(
@@ -65,114 +186,109 @@ class DashboardView extends StatelessWidget {
                 );
               },
             ),
-            IconButton.ghost(
-              icon: Icon(LucideIcons.logOut, color: Theme.of(context).colorScheme.destructive),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (dialogContext) => AlertDialog(
-                    title: const Text('Keluar Aplikasi'),
-                    content: const Text('Apakah Anda yakin ingin keluar dari akun Anda?'),
-                    actions: [
-                      OutlineButton(
-                        onPressed: () => Navigator.pop(dialogContext),
-                        child: const Text('Batal'),
-                      ),
-                      DestructiveButton(
-                        onPressed: () {
-                          Navigator.pop(dialogContext);
-                          context.read<AuthViewModel>().logout();
-                        },
-                        child: const Text('Keluar'),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
           ],
         ),
       ],
       child: Builder(
         builder: (context) {
           if (dashboardViewModel.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Aktivitas Pengeluaran').h4(),
+                        const Gap(16),
+                        const SizedBox(height: 150),
+                      ],
+                    ),
+                  ).asSkeleton(),
+                ),
+                const Gap(24),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Tren Pengeluaran 30 Hari Terakhir').h4(),
+                        const Gap(16),
+                        const SizedBox(height: 200),
+                      ],
+                    ),
+                  ).asSkeleton(),
+                ),
+                const Gap(24),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Distribusi Pengeluaran').h4(),
+                        const Gap(16),
+                        const SizedBox(height: 200),
+                      ],
+                    ),
+                  ).asSkeleton(),
+                ),
+              ],
+            );
           } else if (dashboardViewModel.errorMessage != null) {
-            return Center(child: Text(dashboardViewModel.errorMessage!).muted());
+            return Center(
+              child: Text(dashboardViewModel.errorMessage!).muted(),
+            );
           } else if (dashboardViewModel.ringkasan != null) {
             final ringkasan = dashboardViewModel.ringkasan!;
+            final now = DateTime.now();
+            final monthNames = [
+              'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+              'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+            final currentMonthName = monthNames[now.month - 1];
             
+            // Hitung persentase pengeluaran
+            int spendingPercent = 0;
+            if (ringkasan.totalPemasukan > 0) {
+              spendingPercent = ((ringkasan.totalPengeluaran / ringkasan.totalPemasukan) * 100).toInt();
+            } else if (ringkasan.totalPengeluaran > 0 && ringkasan.saldo >= 0) {
+              // Jika tidak ada pemasukan bulan ini tapi ada saldo, pakai (pengeluaran / (saldo+pengeluaran))
+              spendingPercent = ((ringkasan.totalPengeluaran / (ringkasan.saldo + ringkasan.totalPengeluaran)) * 100).toInt();
+            }
+
             return RefreshIndicator(
               onRefresh: () async {
-                final now = DateTime.now();
-                context.read<DashboardViewModel>().loadRingkasan(bulan: now.month, tahun: now.year);
+                context.read<DashboardViewModel>().loadRingkasan(
+                  bulan: now.month,
+                  tahun: now.year,
+                );
                 context.read<DashboardViewModel>().loadMonthlyTrend();
                 context.read<PengeluaranViewModel>().loadPengeluaran();
               },
               child: ListView(
                 padding: const EdgeInsets.all(16.0),
                 children: [
-                  const Text('Ringkasan Bulan Ini').h3(),
-                  const Gap(16),
-                  
-                  // Compact Monochrome Card for Total Balance
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.card,
-                      border: Border.all(color: Theme.of(context).colorScheme.border),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Saldo Tersedia').muted(),
-                        const Gap(4),
-                        Text(currencyFormat.format(ringkasan.saldo)).h2(),
-                        const Gap(16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(LucideIcons.arrowDown, color: Theme.of(context).colorScheme.mutedForeground, size: 14),
-                                    const Gap(4),
-                                    const Text('Pemasukan').muted(),
-                                  ],
-                                ),
-                                const Gap(2),
-                                Text(currencyFormat.format(ringkasan.totalPemasukan)).large(),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text('Pengeluaran').muted(),
-                                    const Gap(4),
-                                    Icon(LucideIcons.arrowUp, color: Theme.of(context).colorScheme.mutedForeground, size: 14),
-                                  ],
-                                ),
-                                const Gap(2),
-                                Text(currencyFormat.format(ringkasan.totalPengeluaran)).large(),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Gap(24),
-                  // 1. Kalendar Heatmap
+                  // 2. Heatmap Calendar
                   if (pengeluaranViewModel.isLoading)
-                    const Center(child: CircularProgressIndicator())
+                    Card(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Aktivitas Pengeluaran').h4(),
+                          const Gap(16),
+                          const SizedBox(height: 150),
+                        ],
+                      ).asSkeleton(),
+                    )
                   else if (pengeluaranViewModel.pengeluaranList.isNotEmpty)
-                    ExpenseHeatmapWidget(dataTransaksi: pengeluaranViewModel.pengeluaranList)
+                    ExpenseHeatmapWidget(
+                      dataTransaksi: pengeluaranViewModel.pengeluaranList,
+                    )
                   else
                     const SizedBox.shrink(),
                   const Gap(24),
@@ -180,17 +296,30 @@ class DashboardView extends StatelessWidget {
                   const ExpenseLineChartWidget(),
                   const Gap(24),
                   // 3. Pie Chart
-                  if (!pengeluaranViewModel.isLoading)
-                    ExpensePieChartWidget(dataTransaksi: pengeluaranViewModel.pengeluaranList),
+                  if (pengeluaranViewModel.isLoading)
+                    Card(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Distribusi Pengeluaran').h4(),
+                          const Gap(16),
+                          const SizedBox(height: 200),
+                        ],
+                      ).asSkeleton(),
+                    )
+                  else
+                    ExpensePieChartWidget(
+                      dataTransaksi: pengeluaranViewModel.pengeluaranList,
+                    ),
                 ],
               ),
             );
           }
-          
+
           return const SizedBox.shrink();
         },
       ),
     );
   }
 }
-

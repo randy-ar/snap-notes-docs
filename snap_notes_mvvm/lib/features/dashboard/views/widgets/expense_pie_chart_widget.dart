@@ -67,7 +67,7 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
                 size: 48,
               ).muted(),
               const Gap(12),
-              const Text('Kategori Pengeluaran').small().semiBold(),
+              Text('Pengeluaran kategori di bulan ${_getMonthName(currentMonth)}').lead(),
               const Gap(4),
               Text(
                 'Belum ada pengeluaran dicatat pada ${_getMonthName(currentMonth)} $currentYear.',
@@ -100,17 +100,19 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
       final isTouched = i == _touchedIndex;
       final percentage = (entry.value / totalAmount) * 100;
       
-      // Batasi penggunaan index warna agar tidak out of bounds
       final color = _colorPalette[i % _colorPalette.length];
+      
+      final isLargest = i == 0;
+      final double radius = isTouched ? 105.0 : (isLargest ? 98.0 : 85.0);
       
       sections.add(
         PieChartSectionData(
           color: color,
           value: entry.value,
-          title: isTouched ? '${percentage.toStringAsFixed(0)}%' : '',
-          radius: isTouched ? 55.0 : 45.0,
+          title: isTouched || isLargest ? '${percentage.toStringAsFixed(0)}%' : '',
+          radius: radius,
           titleStyle: TextStyle(
-            fontSize: 12,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
             color: theme.colorScheme.card,
           ),
@@ -119,108 +121,76 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
     }
 
     return Card(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header Widget
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
             children: [
-              const Text('Kategori Pengeluaran').small().semiBold(),
-              const Gap(2),
-              Text('Distribusi bulan ${_getMonthName(currentMonth)} $currentYear').xSmall().muted(),
+              Text('Kategori Pengeluaran').small().muted(),
             ],
           ),
           const Gap(16),
-          
-          // Row untuk Pie Chart & Statistik Ringkas
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Pie Chart
-              SizedBox(
-                width: 120,
-                height: 120,
-                child: PieChart(
-                  PieChartData(
-                    pieTouchData: PieTouchData(
-                      touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                        setState(() {
-                          if (!event.isInterestedForInteractions ||
-                              pieTouchResponse == null ||
-                              pieTouchResponse.touchedSection == null) {
-                            _touchedIndex = -1;
-                            return;
-                          }
-                          _touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
-                        });
-                      },
-                    ),
-                    borderData: FlBorderData(show: false),
-                    sectionsSpace: 2,
-                    centerSpaceRadius: 30,
-                    sections: sections,
-                  ),
+          SizedBox(
+            height: 220,
+            child: PieChart(
+              PieChartData(
+                pieTouchData: PieTouchData(
+                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                    setState(() {
+                      if (!event.isInterestedForInteractions ||
+                          pieTouchResponse == null ||
+                          pieTouchResponse.touchedSection == null) {
+                        _touchedIndex = -1;
+                        return;
+                      }
+                      _touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                    });
+                  },
                 ),
+                borderData: FlBorderData(show: false),
+                sectionsSpace: 2,
+                centerSpaceRadius: 0,
+                sections: sections,
               ),
-              const Gap(16),
-              
-              // Total Pengeluaran Ringkas di samping chart
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Total Pengeluaran').xSmall().muted(),
-                    const Gap(2),
-                    Text(currencyFormat.format(totalAmount)).large().semiBold(),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
-          const Gap(20),
-          
-          // Legenda Kategori
-          Column(
-            children: List.generate(sortedCategories.length, (index) {
-              final entry = sortedCategories[index];
-              final percentage = (entry.value / totalAmount) * 100;
-              final color = _colorPalette[index % _colorPalette.length];
-              
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Row(
+          const Gap(24),
+          // Detail Section (on hover/touch)
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            decoration: BoxDecoration(
+               color: theme.colorScheme.muted.withValues(alpha: 0.5),
+               borderRadius: BorderRadius.circular(8),
+            ),
+            child: _touchedIndex != -1 
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Dot Warna
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                      ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            color: _colorPalette[_touchedIndex % _colorPalette.length],
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const Gap(8),
+                        Text(sortedCategories[_touchedIndex].key).medium().semiBold(),
+                      ],
                     ),
-                    const Gap(8),
-                    
-                    // Nama Kategori & Persentase
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(entry.key).xSmall().medium(),
-                          Text('${percentage.toStringAsFixed(1)}%').xSmall().muted(),
-                        ],
-                      ),
-                    ),
-                    const Gap(16),
-                    
-                    // Jumlah Rupiah
-                    Text(currencyFormat.format(entry.value)).xSmall().semiBold(),
+                    Text(currencyFormat.format(sortedCategories[_touchedIndex].value)).medium().semiBold(),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Total Pengeluaran').medium().muted(),
+                    Text(currencyFormat.format(totalAmount)).medium().semiBold(),
                   ],
                 ),
-              );
-            }),
           ),
         ],
       ),

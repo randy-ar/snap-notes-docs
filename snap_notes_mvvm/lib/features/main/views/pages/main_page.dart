@@ -35,9 +35,9 @@ class _MainPageState extends State<MainPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildNavItem(0, Icons.arrow_upward, 'Pengeluaran'),
-              _buildNavItem(1, Icons.dashboard, 'Dashboard'),
-              _buildNavItem(2, Icons.arrow_downward, 'Pemasukan'),
+              _buildNavItem(0, LucideIcons.shoppingCart, 'Pengeluaran'),
+              _buildNavItem(1, LucideIcons.chartPie, 'Dashboard'),
+              _buildNavItem(2, LucideIcons.piggyBank, 'Pemasukan'),
             ],
           ),
         ),
@@ -60,7 +60,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 );
               },
-              child: const Icon(Icons.document_scanner),
+              child: const Icon(LucideIcons.scanLine),
             ),
           ),
         ],

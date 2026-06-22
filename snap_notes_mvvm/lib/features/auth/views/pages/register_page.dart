@@ -96,91 +96,85 @@ class _RegisterPageState extends State<RegisterPage> {
     final viewModel = context.watch<RegisterViewModel>();
     
     return Scaffold(
-      headers: [
-        AppBar(
-          title: const Text('Buat Akun'),
-          leading: [
-            IconButton.ghost(
-              icon: const Icon(LucideIcons.arrowLeft),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        ),
-      ],
       child: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Daftar ke Snap Notes',
-              ).h2(),
-              const Gap(8),
-              const Text(
-                'Isi data berikut untuk membuat akun baru',
-              ).muted(),
-              const Gap(32),
-              _buildField(
-                label: 'Nama Lengkap',
-                controller: _namaController,
-                hint: 'Masukkan nama lengkap',
-                icon: LucideIcons.user,
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Card(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text('Daftar').h2(),
+                    const Gap(8),
+                    const Text('Isi data berikut untuk membuat akun baru').muted(),
+                    const Gap(32),
+                    _buildField(
+                      label: 'Nama Lengkap',
+                      controller: _namaController,
+                      hint: 'Masukkan nama lengkap',
+                      icon: LucideIcons.user,
+                    ),
+                    const Gap(16),
+                    _buildField(
+                      label: 'Email',
+                      controller: _emailController,
+                      hint: 'contoh@email.com',
+                      icon: LucideIcons.mail,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const Gap(16),
+                    _buildPasswordField(
+                      label: 'Password',
+                      controller: _passwordController,
+                      obscure: _obscurePassword,
+                      onToggle: () => setState(() => _obscurePassword = !_obscurePassword),
+                    ),
+                    const Gap(16),
+                    _buildPasswordField(
+                      label: 'Konfirmasi Password',
+                      controller: _konfirmasiPasswordController,
+                      obscure: _obscureKonfirmasi,
+                      onToggle: () => setState(() => _obscureKonfirmasi = !_obscureKonfirmasi),
+                    ),
+                    const Gap(32),
+                    PrimaryButton(
+                      onPressed: viewModel.isLoading ? null : _onDaftar,
+                      child: viewModel.isLoading
+                          ? const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(),
+                                ),
+                                Gap(8),
+                                Text('Membuat akun...'),
+                              ],
+                            )
+                          : const Text('Buat Akun'),
+                    ),
+                    const Gap(16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Sudah punya akun? ',
+                        ).muted(),
+                        LinkButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Masuk'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              const Gap(16),
-              _buildField(
-                label: 'Email',
-                controller: _emailController,
-                hint: 'contoh@email.com',
-                icon: LucideIcons.mail,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const Gap(16),
-              _buildPasswordField(
-                label: 'Password',
-                controller: _passwordController,
-                obscure: _obscurePassword,
-                onToggle: () => setState(() => _obscurePassword = !_obscurePassword),
-              ),
-              const Gap(16),
-              _buildPasswordField(
-                label: 'Konfirmasi Password',
-                controller: _konfirmasiPasswordController,
-                obscure: _obscureKonfirmasi,
-                onToggle: () => setState(() => _obscureKonfirmasi = !_obscureKonfirmasi),
-              ),
-              const Gap(32),
-              PrimaryButton(
-                onPressed: viewModel.isLoading ? null : _onDaftar,
-                child: viewModel.isLoading
-                    ? const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(),
-                          ),
-                          Gap(8),
-                          Text('Membuat akun...'),
-                        ],
-                      )
-                    : const Text('Buat Akun'),
-              ),
-              const Gap(16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Sudah punya akun? ',
-                  ).muted(),
-                  LinkButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Masuk'),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
         ),
       ),

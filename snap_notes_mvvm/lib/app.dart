@@ -11,12 +11,15 @@ class SnapNotesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShadcnApp(
-      title: 'Snap Notes',
-      theme: ThemeData(radius: 0.5),
-      home: ChangeNotifierProvider(
-        create: (context) => getIt<AuthViewModel>()..checkAuth(),
-        child: const AuthWrapper(),
+    return ChangeNotifierProvider(
+      create: (context) => getIt<AuthViewModel>()..checkAuth(),
+      child: ShadcnApp(
+        title: 'Snap Notes',
+        theme: ThemeData(
+          radius: 0.5,
+          typography: const Typography.geist().scale(0.85),
+        ),
+        home: const AuthWrapper(),
       ),
     );
   }

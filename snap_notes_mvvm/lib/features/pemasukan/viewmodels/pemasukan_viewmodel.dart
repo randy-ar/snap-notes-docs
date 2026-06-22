@@ -24,15 +24,47 @@ class PemasukanViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  double _totalCurrentMonth = 0;
+  double get totalCurrentMonth => _totalCurrentMonth;
+
+  double _totalPreviousMonth = 0;
+  double get totalPreviousMonth => _totalPreviousMonth;
+
+  double get percentageChange {
+    if (_totalPreviousMonth == 0) {
+      if (_totalCurrentMonth == 0) return 0.0;
+      return 100.0;
+    }
+    return ((_totalCurrentMonth - _totalPreviousMonth) / _totalPreviousMonth) * 100;
+  }
+
   Future<void> loadPemasukan({int? bulan, int? tahun}) async {
     _setLoading(true);
     _errorMessage = null;
     try {
+      final now = DateTime.now();
+      final targetBulan = bulan ?? now.month;
+      final targetTahun = tahun ?? now.year;
+
       final list = await _pemasukanService.getDaftarPemasukan(
-        bulan: bulan,
-        tahun: tahun,
+        bulan: targetBulan,
+        tahun: targetTahun,
       );
       _pemasukanList = list;
+      _totalCurrentMonth = _pemasukanList.fold(0, (sum, item) => sum + item.jumlah);
+
+      int prevBulan = targetBulan - 1;
+      int prevTahun = targetTahun;
+      if (prevBulan == 0) {
+        prevBulan = 12;
+        prevTahun -= 1;
+      }
+      final prevList = await _pemasukanService.getDaftarPemasukan(
+        bulan: prevBulan,
+        tahun: prevTahun,
+      );
+      _totalPreviousMonth = prevList.fold(0, (sum, item) => sum + item.jumlah);
+
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

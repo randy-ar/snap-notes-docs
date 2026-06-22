@@ -5,16 +5,25 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:snap_notes_mvvm/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 
 const Color colorGreen = Color(0xFF22C55E); // Tailwind Green 500
-const Color colorRed = Color(0xFFEF4444);   // Tailwind Red 500
-
+const Color colorRed = Color(0xFFEF4444); // Tailwind Red 500
 
 class ExpenseLineChartWidget extends StatelessWidget {
   const ExpenseLineChartWidget({super.key});
 
   String _getMonthName(int month) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'Mei',
+      'Jun',
+      'Jul',
+      'Agt',
+      'Sep',
+      'Okt',
+      'Nov',
+      'Des',
     ];
     if (month >= 1 && month <= 12) {
       return months[month - 1];
@@ -40,12 +49,21 @@ class ExpenseLineChartWidget extends StatelessWidget {
     if (isTrendLoading) {
       return Card(
         padding: const EdgeInsets.all(16),
-        child: const SizedBox(
-          height: 300,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Icon(LucideIcons.chevronLeft, size: 16),
+                const Text('Periode').small().semiBold(),
+                const Icon(LucideIcons.chevronRight, size: 16),
+              ],
+            ),
+            const Gap(24),
+            const SizedBox(height: 220),
+          ],
+        ).asSkeleton(),
       );
     }
 
@@ -55,7 +73,9 @@ class ExpenseLineChartWidget extends StatelessWidget {
         child: const SizedBox(
           height: 300,
           child: Center(
-            child: Text('Gagal memuat grafik atau data kosong. Coba muat ulang.'),
+            child: Text(
+              'Gagal memuat grafik atau data kosong. Coba muat ulang.',
+            ),
           ),
         ),
       );
@@ -77,11 +97,19 @@ class ExpenseLineChartWidget extends StatelessWidget {
     final List<FlSpot> spotsPengeluaran = [];
 
     for (int i = 0; i < trendData.length; i++) {
-      spotsPemasukan.add(FlSpot(i.toDouble(), trendData[i]['totalPemasukan'] as double));
-      spotsPengeluaran.add(FlSpot(i.toDouble(), trendData[i]['totalPengeluaran'] as double));
+      spotsPemasukan.add(
+        FlSpot(i.toDouble(), trendData[i]['totalPemasukan'] as double),
+      );
+      spotsPengeluaran.add(
+        FlSpot(i.toDouble(), trendData[i]['totalPengeluaran'] as double),
+      );
     }
 
-    final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
+    final currencyFormat = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
+    );
 
     return Card(
       padding: const EdgeInsets.all(16),
@@ -92,42 +120,19 @@ class ExpenseLineChartWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Tren Transaksi').small().semiBold(),
-                  const Gap(2),
-                  const Text('6 Bulan Terakhir').xSmall().muted(),
-                ],
+              IconButton.ghost(
+                density: ButtonDensity.compact,
+                icon: const Icon(LucideIcons.chevronLeft, size: 16),
+                onPressed: () => viewModel.prevSixMonths(),
               ),
-              Row(
-                children: [
-                  IconButton.ghost(
-                    density: ButtonDensity.compact,
-                    icon: const Icon(LucideIcons.chevronLeft, size: 16),
-                    onPressed: () => viewModel.prevSixMonths(),
-                  ),
-                  const Gap(8),
-                  Text(
-                    '${_getMonthName(trendData.first['bulan'])} ${trendData.first['tahun']} - ${_getMonthName(trendData.last['bulan'])} ${trendData.last['tahun']}',
-                  ).xSmall().semiBold(),
-                  const Gap(8),
-                  IconButton.ghost(
-                    density: ButtonDensity.compact,
-                    icon: const Icon(LucideIcons.chevronRight, size: 16),
-                    onPressed: () => viewModel.nextSixMonths(),
-                  ),
-                ],
+              Text(
+                '${trendData.last['tahun']} Periode ${trendData.last['bulan'] <= 6 ? 1 : 2}',
+              ).small().semiBold(),
+              IconButton.ghost(
+                density: ButtonDensity.compact,
+                icon: const Icon(LucideIcons.chevronRight, size: 16),
+                onPressed: () => viewModel.nextSixMonths(),
               ),
-            ],
-          ),
-          const Gap(8),
-          // Legend
-          Row(
-            children: [
-              _buildLegendItem(context, 'Pemasukan', colorGreen),
-              const Gap(16),
-              _buildLegendItem(context, 'Pengeluaran', colorRed),
             ],
           ),
           const Gap(24),
@@ -136,14 +141,7 @@ class ExpenseLineChartWidget extends StatelessWidget {
             height: 220,
             child: LineChart(
               LineChartData(
-                gridData: FlGridData(
-                  show: true,
-                  drawVerticalLine: false,
-                  getDrawingHorizontalLine: (value) => FlLine(
-                    color: Theme.of(context).colorScheme.border.withOpacity(0.5),
-                    strokeWidth: 1,
-                  ),
-                ),
+                gridData: const FlGridData(show: false),
                 titlesData: FlTitlesData(
                   show: true,
                   rightTitles: const AxisTitles(
@@ -160,7 +158,9 @@ class ExpenseLineChartWidget extends StatelessWidget {
                       getTitlesWidget: (value, meta) {
                         final index = value.toInt();
                         if (index >= 0 && index < trendData.length) {
-                          final label = _getMonthName(trendData[index]['bulan']);
+                          final label = _getMonthName(
+                            trendData[index]['bulan'],
+                          );
                           return SideTitleWidget(
                             axisSide: meta.axisSide,
                             child: Text(label).xSmall().muted(),
@@ -176,7 +176,9 @@ class ExpenseLineChartWidget extends StatelessWidget {
                       reservedSize: 45,
                       getTitlesWidget: (value, meta) {
                         // Hanya tampilkan 5 pembagian sumbu Y
-                        if (value == 0 || value == meta.max || (value - (meta.max / 2)).abs() < (meta.max / 4)) {
+                        if (value == 0 ||
+                            value == meta.max ||
+                            (value - (meta.max / 2)).abs() < (meta.max / 4)) {
                           return SideTitleWidget(
                             axisSide: meta.axisSide,
                             child: Text(_formatYAxis(value)).xSmall().muted(),
@@ -197,8 +199,11 @@ class ExpenseLineChartWidget extends StatelessWidget {
                 maxY: maxVal,
                 lineTouchData: LineTouchData(
                   touchTooltipData: LineTouchTooltipData(
-                    getTooltipColor: (touchedSpot) => Theme.of(context).colorScheme.card,
-                    tooltipBorder: BorderSide(color: Theme.of(context).colorScheme.border),
+                    getTooltipColor: (touchedSpot) =>
+                        Theme.of(context).colorScheme.card,
+                    tooltipBorder: BorderSide(
+                      color: Theme.of(context).colorScheme.border,
+                    ),
                     getTooltipItems: (touchedSpots) {
                       return touchedSpots.map((spot) {
                         final isPemasukan = spot.barIndex == 0;
@@ -229,26 +234,40 @@ class ExpenseLineChartWidget extends StatelessWidget {
                   LineChartBarData(
                     spots: spotsPemasukan,
                     isCurved: true,
-                    color: colorGreen,
-                    barWidth: 3,
+                    color: colorGreen.withValues(alpha: 0.8),
+                    barWidth: 2,
                     isStrokeCapRound: true,
-                    dotData: const FlDotData(show: true),
+                    dotData: const FlDotData(show: false),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: colorGreen.withOpacity(0.08),
+                      gradient: LinearGradient(
+                        colors: [
+                          colorGreen.withValues(alpha: 0.4),
+                          colorGreen.withValues(alpha: 0.0),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
                     ),
                   ),
                   // Line Pengeluaran (Garis Merah)
                   LineChartBarData(
                     spots: spotsPengeluaran,
                     isCurved: true,
-                    color: colorRed,
-                    barWidth: 3,
+                    color: colorRed.withValues(alpha: 0.8),
+                    barWidth: 2,
                     isStrokeCapRound: true,
-                    dotData: const FlDotData(show: true),
+                    dotData: const FlDotData(show: false),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: colorRed.withOpacity(0.08),
+                      gradient: LinearGradient(
+                        colors: [
+                          colorRed.withValues(alpha: 0.4),
+                          colorRed.withValues(alpha: 0.0),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
                     ),
                   ),
                 ],
@@ -266,10 +285,7 @@ class ExpenseLineChartWidget extends StatelessWidget {
         Container(
           width: 12,
           height: 12,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const Gap(6),
         Text(label).xSmall().muted(),

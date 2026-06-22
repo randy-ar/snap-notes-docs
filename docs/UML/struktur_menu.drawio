@@ -1,0 +1,99 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="e9-L-hBq9Kpju3ppsX2S">
+    <mxGraphModel dx="1152" dy="754" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="nLogin" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Masuk" vertex="1">
+          <mxGeometry height="60" width="120" x="460" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="nRegister" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Daftar" vertex="1">
+          <mxGeometry height="60" width="120" x="660" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="SoanADcVSa1UHAsjBCA2-2" edge="1" parent="1" source="nMain" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nPeng">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nMain" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Navigasi Utama" vertex="1">
+          <mxGeometry height="60" width="160" x="440" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="nPeng" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Daftar Pengeluaran" vertex="1">
+          <mxGeometry height="60" width="120" x="460" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="nScan" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Scan Struk" vertex="1">
+          <mxGeometry height="60" width="120" x="310" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="nDash" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Dashboard" vertex="1">
+          <mxGeometry height="60" width="120" x="160" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="SoanADcVSa1UHAsjBCA2-3" edge="1" parent="1" source="nPem" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="nPemDetail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SoanADcVSa1UHAsjBCA2-4" edge="1" parent="1" source="nPem" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="nPemForm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nPem" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Daftar Pemasukan" vertex="1">
+          <mxGeometry height="60" width="120" x="670" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="nNotif" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Pengaturan Notifikasi" vertex="1">
+          <mxGeometry height="60" width="140" x="220" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="SoanADcVSa1UHAsjBCA2-5" edge="1" parent="1" source="nLogout" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="nLogin">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="60" y="380" />
+              <mxPoint x="60" y="40" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nLogout" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Keluar" vertex="1">
+          <mxGeometry height="60" width="120" x="80" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="nNotifForm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Form Notifikasi" vertex="1">
+          <mxGeometry height="60" width="120" x="230" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="nPengDetail" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Detail Pengeluaran" vertex="1">
+          <mxGeometry height="60" width="120" x="460" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="nPengForm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Form Pengeluaran" vertex="1">
+          <mxGeometry height="60" width="120" x="460" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="nPemDetail" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Detail Pemasukan" vertex="1">
+          <mxGeometry height="60" width="120" x="600" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="nPemForm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Form Pemasukan" vertex="1">
+          <mxGeometry height="60" width="120" x="740" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="nLogin" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nRegister">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="nLogin" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nMain">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="nMain" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nScan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="nMain" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nDash">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="nMain" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nPem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="nDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nNotif">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="nDash" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nLogout">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="nNotif" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nNotifForm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="nPeng" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nPengDetail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="nPengDetail" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" target="nPengForm" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
