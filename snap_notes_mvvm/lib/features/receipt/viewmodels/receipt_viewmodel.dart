@@ -137,7 +137,7 @@ class ReceiptViewModel extends ChangeNotifier {
   }
 
   /// Upload gambar dan kirim rawText hasil OCR ke backend REST API (Gemini AI)
-  Future<void> uploadToServer() async {
+  Future<void> uploadToServer([String? customPrompt]) async {
     if (_selectedImage == null || _recognizedText == null) return;
     _setLoading(true);
     _errorMessage = null;
@@ -148,6 +148,7 @@ class ReceiptViewModel extends ChangeNotifier {
         _recognizedText!.lines,
         _recognizedText!.imageWidth,
         _recognizedText!.imageHeight,
+        customPrompt,
       );
       _receiptDetail = receipt;
       _setStep(ReceiptScanStep.responsePreview);
@@ -160,6 +161,27 @@ class ReceiptViewModel extends ChangeNotifier {
           // parse properties jika dilemparkan oleh Exception
         } catch (_) {}
       }
+      _setStep(ReceiptScanStep.error);
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Melakukan reparsing (koreksi) dengan memberikan konteks tambahan ke AI
+  Future<void> reparseReceipt(String prompt) async {
+    if (_receiptDetail == null) return;
+    _setLoading(true);
+    _errorMessage = null;
+    try {
+      final updatedReceipt = await _receiptService.reparseReceipt(
+        _receiptDetail!.id!,
+        prompt,
+      );
+      _receiptDetail = updatedReceipt;
+    } catch (e, stack) {
+      _errorMessage = e.toString();
+      _stackTrace = stack.toString();
+      // Tetap di responsePreview, tapi bisa tampilkan error melalui UI jika butuh
       _setStep(ReceiptScanStep.error);
     } finally {
       _setLoading(false);

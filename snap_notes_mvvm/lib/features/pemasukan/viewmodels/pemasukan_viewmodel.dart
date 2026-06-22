@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/models/pemasukan_service.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/models/pemasukan.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
 
 class PemasukanViewModel extends ChangeNotifier {
   final PemasukanService _pemasukanService;
@@ -18,6 +19,9 @@ class PemasukanViewModel extends ChangeNotifier {
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
+
+  List<Kategori> _categories = [];
+  List<Kategori> get categories => _categories;
 
   void _setLoading(bool value) {
     _isLoading = value;
@@ -69,6 +73,18 @@ class PemasukanViewModel extends ChangeNotifier {
       _errorMessage = e.toString();
     } finally {
       _setLoading(false);
+    }
+  }
+
+  Future<void> loadCategories({String? jenis}) async {
+    _errorMessage = null;
+    try {
+      final list = await _pemasukanService.getDaftarKategori(jenis: jenis);
+      _categories = list;
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
     }
   }
 

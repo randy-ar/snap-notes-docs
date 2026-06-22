@@ -9,12 +9,14 @@ class PayloadPreviewPage extends StatefulWidget {
   final File image;
   final String rawText;
   final Map<String, dynamic> payload;
+  final bool useScaffold;
 
   const PayloadPreviewPage({
     super.key,
     required this.image,
     required this.rawText,
     required this.payload,
+    this.useScaffold = true,
   });
 
   @override
@@ -29,6 +31,76 @@ class _PayloadPreviewPageState extends State<PayloadPreviewPage> {
     final viewModel = context.watch<ReceiptViewModel>();
     final jsonPayload = const JsonEncoder.withIndent('  ').convert(widget.payload);
 
+    final mainContent = Column(
+      children: [
+        // Tab Selector
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: _buildTabButton(0, 'JSON', LucideIcons.code),
+              ),
+              const Gap(8),
+              Expanded(
+                child: _buildTabButton(1, 'Raw Text', LucideIcons.text),
+              ),
+              const Gap(8),
+              Expanded(
+                child: _buildTabButton(2, 'Image', LucideIcons.image),
+              ),
+            ],
+          ),
+        ),
+
+        // Content
+        Expanded(
+          child: _buildTabContent(_selectedTab, jsonPayload),
+        ),
+
+        // Action Buttons
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: SecondaryButton(
+                  onPressed: () => viewModel.cancelScan(),
+                  child: const Text('Batal'),
+                ),
+              ),
+              const Gap(16),
+              Expanded(
+                child: PrimaryButton(
+                  onPressed: viewModel.isLoading
+                      ? null
+                      : () => viewModel.uploadToServer(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.upload, size: 18),
+                      const Gap(6),
+                      Flexible(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(viewModel.isLoading ? 'Mengupload...' : 'Upload ke Server'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+
+    if (!widget.useScaffold) {
+      return mainContent;
+    }
+
     return Scaffold(
       headers: [
         AppBar(
@@ -41,71 +113,7 @@ class _PayloadPreviewPageState extends State<PayloadPreviewPage> {
           ],
         ),
       ],
-      child: Column(
-        children: [
-          // Tab Selector
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _buildTabButton(0, 'JSON', LucideIcons.code),
-                ),
-                const Gap(8),
-                Expanded(
-                  child: _buildTabButton(1, 'Raw Text', LucideIcons.text),
-                ),
-                const Gap(8),
-                Expanded(
-                  child: _buildTabButton(2, 'Image', LucideIcons.image),
-                ),
-              ],
-            ),
-          ),
-
-          // Content
-          Expanded(
-            child: _buildTabContent(_selectedTab, jsonPayload),
-          ),
-
-          // Action Buttons
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: SecondaryButton(
-                    onPressed: () => viewModel.cancelScan(),
-                    child: const Text('Batal'),
-                  ),
-                ),
-                const Gap(16),
-                Expanded(
-                  child: PrimaryButton(
-                    onPressed: viewModel.isLoading
-                        ? null
-                        : () => viewModel.uploadToServer(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.upload, size: 18),
-                        const Gap(6),
-                        Flexible(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(viewModel.isLoading ? 'Mengupload...' : 'Upload ke Server'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      child: mainContent,
     );
   }
 

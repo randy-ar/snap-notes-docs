@@ -3,20 +3,207 @@ import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/recognized_text.dart';
 import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.dart';
+import 'package:snap_notes_mvvm/features/receipt/views/widgets/scan_animation_overlay.dart';
 
-class TextRecognitionPreviewPage extends StatelessWidget {
+class TextRecognitionPreviewPage extends StatefulWidget {
   final File image;
-  final RecognizedText recognizedText;
+  final RecognizedText? recognizedText;
+  final bool useScaffold;
 
   const TextRecognitionPreviewPage({
     super.key,
     required this.image,
-    required this.recognizedText,
+    this.recognizedText,
+    this.useScaffold = true,
   });
+
+  @override
+  State<TextRecognitionPreviewPage> createState() => _TextRecognitionPreviewPageState();
+}
+
+class _TextRecognitionPreviewPageState extends State<TextRecognitionPreviewPage> {
+  String? _selectedCategory;
+  String? _customPrompt;
+
+  final List<String> categories = [
+    'Makanan', 'Minuman', 'Sembako', 'Transportasi', 'Komunikasi',
+    'Edukasi', 'Perawatan', 'Pakaian', 'Hiburan', 'Kesehatan',
+    'Elektronik', 'Otomotif', 'Lainnya'
+  ];
+
+  void _showKonteksDrawer(BuildContext context) {
+    final promptController = TextEditingController(text: _customPrompt);
+    String? tempCategory = _selectedCategory;
+
+    openDrawer(
+      context: context,
+      position: OverlayPosition.bottom,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text('Beri Konteks AI').large().semiBold(),
+                  const Gap(8),
+                  const Text('Pilih kategori dan/atau berikan instruksi tambahan sebelum AI menganalisis struk.').muted(),
+                  const Gap(16),
+                  
+                  const Text('Kategori (Opsional)').medium(),
+                  const Gap(4),
+                  Select<String>(
+                    itemBuilder: (context, item) => Text(item),
+                    popup: SelectPopup.builder(
+                      searchPlaceholder: const Text('Cari kategori'),
+                      builder: (context, searchQuery) {
+                        final filtered = searchQuery == null 
+                            ? categories 
+                            : categories.where((c) => c.toLowerCase().contains(searchQuery.toLowerCase())).toList();
+                        return SelectItemList(
+                          children: [
+                            for (final c in filtered)
+                              SelectItemButton(value: c, child: Text(c))
+                          ],
+                        );
+                      },
+                    ),
+                    onChanged: (value) {
+                      setSheetState(() {
+                        tempCategory = value;
+                      });
+                    },
+                    value: tempCategory,
+                    placeholder: const Text('Pilih Kategori'),
+                  ),
+                  const Gap(16),
+
+                  const Text('Instruksi Tambahan (Opsional)').medium(),
+                  const Gap(4),
+                  TextField(
+                    controller: promptController,
+                    placeholder: const Text('Contoh: "Ini adalah struk tagihan internet bulanan"'),
+                    minLines: 3,
+                    maxLines: 5,
+                  ),
+                  const Gap(24),
+                  
+                  PrimaryButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedCategory = tempCategory;
+                        _customPrompt = promptController.text;
+                      });
+                      closeOverlay(context);
+                    },
+                    child: const Text('Simpan Konteks'),
+                  ),
+                ],
+              ),
+            );
+          }
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<ReceiptViewModel>();
+
+    final mainContent = Stack(
+      children: [
+        Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Center(
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.file(
+                          widget.image,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      if (widget.recognizedText != null)
+                        Positioned.fill(
+                          child: CustomPaint(
+                            painter: BoundingBoxPainter(
+                              lines: widget.recognizedText!.lines,
+                              imageWidth: widget.recognizedText!.imageWidth,
+                              imageHeight: widget.recognizedText!.imageHeight,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Builder(
+                      builder: (innerContext) {
+                        return SecondaryButton(
+                          onPressed: viewModel.isLoading ? null : () => _showKonteksDrawer(innerContext),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(LucideIcons.messageSquarePlus),
+                              Gap(8),
+                              Text('Beri Konteks'),
+                            ],
+                          ),
+                        );
+                      }
+                    ),
+                  ),
+                  const Gap(16),
+                  Expanded(
+                    child: PrimaryButton(
+                      onPressed: viewModel.isLoading
+                          ? null
+                          : () {
+                              String combinedPrompt = '';
+                              if (_selectedCategory != null && _selectedCategory!.isNotEmpty) {
+                                combinedPrompt += 'Kategori yang disarankan: $_selectedCategory.\n';
+                              }
+                              if (_customPrompt != null && _customPrompt!.isNotEmpty) {
+                                combinedPrompt += _customPrompt!;
+                              }
+                              viewModel.uploadToServer(combinedPrompt.isEmpty ? null : combinedPrompt.trim());
+                            },
+                      child: const Text('Analisis dengan AI'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        if (viewModel.isLoading)
+          Positioned.fill(
+            child: ScanAnimationOverlay(
+              text: widget.recognizedText == null
+                  ? 'Menjalankan OCR lokal (ML Kit)...'
+                  : 'Menganalisis dengan Gemini AI...',
+            ),
+          ),
+      ],
+    );
+
+    if (!widget.useScaffold) {
+      return mainContent;
+    }
 
     return Scaffold(
       headers: [
@@ -30,135 +217,7 @@ class TextRecognitionPreviewPage extends StatelessWidget {
           ],
         ),
       ],
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Gambar dengan bounding box
-                  Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.file(
-                          image,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: CustomPaint(
-                          painter: BoundingBoxPainter(
-                            lines: recognizedText.lines,
-                            imageWidth: recognizedText.imageWidth,
-                            imageHeight: recognizedText.imageHeight,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Gap(16),
-
-                  // Statistik deteksi
-                  Card(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildStat(context, 'Baris Terdeteksi', recognizedText.lines.length.toString()),
-                        _buildStat(context, 'Karakter', recognizedText.text.length.toString()),
-                        _buildStat(context, 'Ukuran', '${recognizedText.imageWidth.toInt()}x${recognizedText.imageHeight.toInt()}'),
-                      ],
-                    ),
-                  ),
-                  const Gap(16),
-
-                  // Teks Terdeteksi
-                  const Text('Teks Terdeteksi:').small().semiBold(),
-                  const Gap(8),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.muted,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Theme.of(context).colorScheme.border),
-                    ),
-                    child: Text(
-                      recognizedText.text.isEmpty
-                          ? '(Tidak ada teks terdeteksi)'
-                          : recognizedText.text,
-                      style: const TextStyle(
-                        fontFamily: 'monospace',
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  const Gap(16),
-
-                  // Detail baris
-                  Text('Detail Baris (${recognizedText.lines.length}):').small().semiBold(),
-                  const Gap(8),
-                  ...recognizedText.lines.map((line) {
-                    return Card(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Baris #${line.lineIndex + 1}').small().bold(),
-                          const Gap(4),
-                          Text(line.text).small(),
-                          const Gap(4),
-                          Text('Box: (${line.boundingBox.left.toInt()}, ${line.boundingBox.top.toInt()}) - (${line.boundingBox.right.toInt()}, ${line.boundingBox.bottom.toInt()})').xSmall().muted(),
-                        ],
-                      ),
-                    );
-                  }),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: SecondaryButton(
-                    onPressed: viewModel.isLoading ? null : () => viewModel.cancelScan(),
-                    child: const Text('Batal'),
-                  ),
-                ),
-                const Gap(16),
-                Expanded(
-                  child: PrimaryButton(
-                    onPressed: viewModel.isLoading
-                        ? null
-                        : () => viewModel.uploadToServer(),
-                    child: const Text('Analisis dengan AI'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      if (viewModel.isLoading) const Positioned.fill(child: ScanAnimationOverlay()),
-      ],
-      ),
-    );
-  }
-
-  Widget _buildStat(BuildContext context, String label, String value) {
-    return Column(
-      children: [
-        Text(value).large().bold(),
-        Text(label).xSmall().muted(),
-      ],
+      child: mainContent,
     );
   }
 }
@@ -228,77 +287,4 @@ class BoundingBoxPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-class ScanAnimationOverlay extends StatefulWidget {
-  const ScanAnimationOverlay({super.key});
-
-  @override
-  State<ScanAnimationOverlay> createState() => _ScanAnimationOverlayState();
-}
-
-class _ScanAnimationOverlayState extends State<ScanAnimationOverlay> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return Stack(
-          children: [
-            // Gelap semi transparan
-            Container(color: Colors.black.withValues(alpha: 0.5)),
-            // Garis scan bergerak
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.8 * _controller.value,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
-                      blurRadius: 12,
-                      spreadRadius: 4,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // Teks loading di tengah
-            Center(
-              child: Card(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const CircularProgressIndicator(),
-                    const Gap(16),
-                    const Text('Menganalisis dengan Gemini AI...').small().semiBold(),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
 

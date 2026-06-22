@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:snap_notes_mvvm/core/error/exceptions.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/models/pemasukan.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
 
 /// Service untuk mengelola data pemasukan
 class PemasukanService {
@@ -48,8 +49,8 @@ class PemasukanService {
           'deskripsi': deskripsi,
           'jumlah': jumlah,
           'tanggal': DateTime.utc(tanggal.year, tanggal.month, tanggal.day).toIso8601String(),
-          'kategoriId': ?kategoriId,
-          'catatan': ?catatan,
+          'kategoriId': kategoriId,
+          'catatan': catatan,
         },
       );
       final envelope = response.data as Map<String, dynamic>;
@@ -107,12 +108,12 @@ class PemasukanService {
       final response = await _dio.patch(
         '/api/pemasukan/$id',
         data: {
-          'deskripsi': ?deskripsi,
-          'jumlah': ?jumlah,
+          if (deskripsi != null) 'deskripsi': deskripsi,
+          if (jumlah != null) 'jumlah': jumlah,
           if (tanggal != null)
             'tanggal': DateTime.utc(tanggal.year, tanggal.month, tanggal.day).toIso8601String(),
-          'kategoriId': ?kategoriId,
-          'catatan': ?catatan,
+          'kategoriId': kategoriId,
+          'catatan': catatan,
         },
       );
       final envelope = response.data as Map<String, dynamic>;
@@ -126,6 +127,26 @@ class PemasukanService {
   Future<void> hapusPemasukan(String id) async {
     try {
       await _dio.delete('/api/pemasukan/$id');
+    } on DioException catch (e) {
+      throw ServerException(_handleDioError(e));
+    }
+  }
+
+  /// Ambil daftar kategori dari API
+  Future<List<Kategori>> getDaftarKategori({String? jenis}) async {
+    try {
+      final queryParameters = <String, dynamic>{};
+      if (jenis != null) queryParameters['jenis'] = jenis;
+
+      final response = await _dio.get(
+        '/api/kategori',
+        queryParameters: queryParameters,
+      );
+      final envelope = response.data as Map<String, dynamic>;
+      final list = envelope['data'] as List;
+      return list
+          .map((e) => Kategori.fromJson(e as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e) {
       throw ServerException(_handleDioError(e));
     }

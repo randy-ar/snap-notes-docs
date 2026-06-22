@@ -7,7 +7,7 @@ import 'package:snap_notes_mvvm/features/pengeluaran/views/pages/pengeluaran_det
 import 'package:snap_notes_mvvm/features/pengeluaran/views/pages/pengeluaran_form_page.dart';
 import 'package:snap_notes_mvvm/features/receipt/views/pages/receipt_detail_page.dart';
 import 'package:snap_notes_mvvm/features/auth/viewmodels/auth_viewmodel.dart';
-import 'package:intl/intl.dart';
+import 'package:snap_notes_mvvm/utils/format_utils.dart';
 
 class PengeluaranPage extends StatelessWidget {
   const PengeluaranPage({super.key});
@@ -299,11 +299,6 @@ class PengeluaranView extends StatelessWidget {
                     final isGoodTrending = viewModel.percentageChange <= 0;
                     final percentageText =
                         '${viewModel.percentageChange > 0 ? '+' : ''}${viewModel.percentageChange.toStringAsFixed(1)}%';
-                    final currencyFormat = NumberFormat.currency(
-                      locale: 'id_ID',
-                      symbol: 'Rp ',
-                      decimalDigits: 0,
-                    );
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8),
@@ -350,7 +345,7 @@ class PengeluaranView extends StatelessWidget {
                             ),
                             const Gap(16),
                             Text(
-                              currencyFormat.format(
+                              FormatUtils.formatRupiah(
                                 viewModel.totalCurrentMonth,
                               ),
                             ).h3(),
@@ -392,11 +387,6 @@ class PengeluaranView extends StatelessWidget {
 
                   final pengeluaran = viewModel.pengeluaranList[index - 1];
                   final bool fromOcr = pengeluaran.strukId != null;
-                  final currencyFormat = NumberFormat.currency(
-                    locale: 'id_ID',
-                    symbol: 'Rp ',
-                    decimalDigits: 0,
-                  );
 
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
@@ -448,7 +438,7 @@ class PengeluaranView extends StatelessWidget {
                                   ).muted(),
                                   const Gap(8),
                                   Text(
-                                    '${pengeluaran.tanggal.day}/${pengeluaran.tanggal.month}/${pengeluaran.tanggal.year}',
+                                    FormatUtils.formatIndonesianDate(pengeluaran.tanggal),
                                   ).small(),
                                 ],
                               ),
@@ -457,7 +447,7 @@ class PengeluaranView extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  currencyFormat.format(pengeluaran.jumlah),
+                                  FormatUtils.formatRupiah(pengeluaran.jumlah),
                                 ).base(),
                                 const Gap(12),
                                 Icon(

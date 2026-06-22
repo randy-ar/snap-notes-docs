@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/pengeluaran.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
 
 /// Service untuk mengelola data pengeluaran
 class PengeluaranService {
@@ -21,8 +22,8 @@ class PengeluaranService {
         'deskripsi': deskripsi,
         'jumlah': jumlah,
         'tanggal': DateTime.utc(tanggal.year, tanggal.month, tanggal.day).toIso8601String(),
-        'kategoriId': ?kategoriId,
-        'catatan': ?catatan,
+        'kategoriId': kategoriId,
+        'catatan': catatan,
       },
     );
     final envelope = response.data as Map<String, dynamic>;
@@ -68,12 +69,12 @@ class PengeluaranService {
     final response = await _dio.patch(
       '/api/pengeluaran/$id',
       data: {
-        'deskripsi': ?deskripsi,
-        'jumlah': ?jumlah,
+        if (deskripsi != null) 'deskripsi': deskripsi,
+        if (jumlah != null) 'jumlah': jumlah,
         if (tanggal != null)
           'tanggal': DateTime.utc(tanggal.year, tanggal.month, tanggal.day).toIso8601String(),
-        'kategoriId': ?kategoriId,
-        'catatan': ?catatan,
+        'kategoriId': kategoriId,
+        'catatan': catatan,
       },
     );
     final envelope = response.data as Map<String, dynamic>;
@@ -83,5 +84,21 @@ class PengeluaranService {
   /// Hapus pengeluaran
   Future<void> hapusPengeluaran(String id) async {
     await _dio.delete('/api/pengeluaran/$id');
+  }
+
+  /// Ambil daftar kategori dari API
+  Future<List<Kategori>> getDaftarKategori({String? jenis}) async {
+    final queryParameters = <String, dynamic>{};
+    if (jenis != null) queryParameters['jenis'] = jenis;
+
+    final response = await _dio.get(
+      '/api/kategori',
+      queryParameters: queryParameters,
+    );
+    final envelope = response.data as Map<String, dynamic>;
+    final list = envelope['data'] as List;
+    return list
+        .map((e) => Kategori.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }

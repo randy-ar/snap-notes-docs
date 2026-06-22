@@ -94,9 +94,10 @@ class ReceiptService {
     List<local.TextLine> lines,
     double imageWidth,
     double imageHeight,
+    [String? customPrompt]
   ) async {
     try {
-      final ocrData = jsonEncode({
+      final Map<String, dynamic> ocrDataMap = {
         'rawText': rawText,
         'imageSize': {
           'width': imageWidth,
@@ -112,7 +113,13 @@ class ReceiptService {
             'bottom': line.boundingBox.bottom,
           },
         }).toList(),
-      });
+      };
+      
+      if (customPrompt != null && customPrompt.isNotEmpty) {
+        ocrDataMap['customPrompt'] = customPrompt;
+      }
+
+      final ocrData = jsonEncode(ocrDataMap);
 
       final formData = FormData.fromMap({
         'ocrData': ocrData,
@@ -140,6 +147,33 @@ class ReceiptService {
     } on DioException catch (e) {
       _handleDioException(e);
       rethrow;
+    }
+  }
+
+  Future<Receipt> reparseReceipt(String strukId, String prompt) async {
+    try {
+      final response = await _dio.post(
+        '/api/struk/$strukId/reparse',
+        data: {
+          'prompt': prompt,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseData = response.data as Map<String, dynamic>;
+        final receiptData = responseData['data'] as Map<String, dynamic>;
+        return Receipt.fromJson(receiptData);
+      } else {
+        throw ServerException('Failed to reparse receipt: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 422 || e.response?.statusCode == 503) {
+        final errorMessage = e.response?.data?['message'] ?? e.message;
+        throw ServerException('AI Processing Error: $errorMessage');
+      }
+      throw ServerException('Failed to communicate with server: ${e.message}');
+    } catch (e) {
+      throw ServerException('An unexpected error occurred: $e');
     }
   }
 

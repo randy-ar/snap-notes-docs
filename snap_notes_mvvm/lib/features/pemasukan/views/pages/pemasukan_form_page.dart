@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:snap_notes_mvvm/core/di/injection.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/models/pemasukan.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/viewmodels/pemasukan_viewmodel.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
+import 'package:snap_notes_mvvm/utils/format_utils.dart';
+import 'package:snap_notes_mvvm/utils/rupiah_input_formatter.dart';
 
 class PemasukanFormPage extends StatefulWidget {
   final Pemasukan? pemasukan;
@@ -17,6 +20,7 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
   final _jumlahController = TextEditingController();
   final _catatanController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
+  String? _selectedCategoryId;
 
   bool get isEdit => widget.pemasukan != null;
 
@@ -25,10 +29,17 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
     super.initState();
     if (isEdit) {
       _deskripsiController.text = widget.pemasukan!.deskripsi;
-      _jumlahController.text = widget.pemasukan!.jumlah.toStringAsFixed(0);
+      // Memformat nominal awal dengan separator ribuan (misal: 5.000.000)
+      _jumlahController.text = FormatUtils.formatRupiah(widget.pemasukan!.jumlah).replaceAll('Rp ', '');
       _catatanController.text = widget.pemasukan!.catatan ?? '';
       _selectedDate = widget.pemasukan!.tanggal;
+      _selectedCategoryId = widget.pemasukan!.kategoriId;
     }
+
+    // Muat daftar kategori dari backend
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PemasukanViewModel>().loadCategories(jenis: 'PEMASUKAN');
+    });
   }
 
   @override
@@ -48,8 +59,9 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
       return;
     }
 
-    final jumlah = double.tryParse(jumlahStr);
-    if (jumlah == null || jumlah <= 0) {
+    // Mem-parse string nominal terformat kembali ke double secara aman
+    final jumlah = FormatUtils.parseRupiahToDouble(jumlahStr);
+    if (jumlah <= 0) {
       _showToast('Error', 'Jumlah tidak valid');
       return;
     }
@@ -62,6 +74,7 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
         deskripsi: deskripsi,
         jumlah: jumlah,
         tanggal: _selectedDate,
+        kategoriId: _selectedCategoryId,
         catatan: _catatanController.text.trim().isNotEmpty ? _catatanController.text.trim() : null,
       );
     } else {
@@ -69,6 +82,7 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
         deskripsi: deskripsi,
         jumlah: jumlah,
         tanggal: _selectedDate,
+        kategoriId: _selectedCategoryId,
         catatan: _catatanController.text.trim().isNotEmpty ? _catatanController.text.trim() : null,
       );
     }
@@ -128,10 +142,50 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
               TextField(
                 controller: _jumlahController,
                 keyboardType: TextInputType.number,
-                placeholder: const Text('Contoh: 5000000'),
+                placeholder: const Text('Contoh: 5.000.000'),
+                inputFormatters: [RupiahInputFormatter()],
                 features: const [
                   InputFeature.leading(Text('Rp ')),
                 ],
+              ),
+              const Gap(20),
+
+              const Text('Kategori').medium(),
+              const Gap(8),
+              Select<String>(
+                value: _selectedCategoryId,
+                placeholder: const Text('Pilih Kategori'),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedCategoryId = value;
+                  });
+                },
+                itemBuilder: (context, itemValue) {
+                  final category = viewModel.categories.firstWhere(
+                    (c) => c.id == itemValue,
+                    orElse: () => Kategori(id: '', nama: 'Lainnya', jenis: 'PEMASUKAN', adalahPreset: true),
+                  );
+                  return Text(category.nama);
+                },
+                popup: SelectPopup<String>.builder(
+                  searchPlaceholder: const Text('Cari kategori...'),
+                  builder: (context, searchQuery) {
+                    final filtered = searchQuery == null
+                        ? viewModel.categories
+                        : viewModel.categories
+                            .where((c) => c.nama.toLowerCase().contains(searchQuery.toLowerCase()))
+                            .toList();
+                    return SelectItemList(
+                      children: [
+                        for (final category in filtered)
+                          SelectItemButton(
+                            value: category.id,
+                            child: Text(category.nama),
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ),
               const Gap(20),
 

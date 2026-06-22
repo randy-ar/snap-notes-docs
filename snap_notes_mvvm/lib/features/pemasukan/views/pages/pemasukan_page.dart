@@ -6,7 +6,7 @@ import 'package:snap_notes_mvvm/features/pemasukan/viewmodels/pemasukan_viewmode
 import 'package:snap_notes_mvvm/features/pemasukan/views/pages/pemasukan_detail_page.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/views/pages/pemasukan_form_page.dart';
 import 'package:snap_notes_mvvm/features/auth/viewmodels/auth_viewmodel.dart';
-import 'package:intl/intl.dart';
+import 'package:snap_notes_mvvm/utils/format_utils.dart';
 
 class PemasukanPage extends StatelessWidget {
   const PemasukanPage({super.key});
@@ -295,7 +295,6 @@ class PemasukanView extends StatelessWidget {
                   if (index == 0) {
                     final isGoodTrending = viewModel.percentageChange >= 0;
                     final percentageText = '${viewModel.percentageChange > 0 ? '+' : ''}${viewModel.percentageChange.toStringAsFixed(1)}%';
-                    final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 24),
@@ -332,7 +331,7 @@ class PemasukanView extends StatelessWidget {
                               ],
                             ),
                             const Gap(16),
-                            Text(currencyFormat.format(viewModel.totalCurrentMonth)).h3(),
+                            Text(FormatUtils.formatRupiah(viewModel.totalCurrentMonth)).h3(),
                             const Gap(12),
                             Row(
                               children: [
@@ -362,7 +361,6 @@ class PemasukanView extends StatelessWidget {
                   }
 
                   final pemasukan = viewModel.pemasukanList[index - 1];
-                  final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
 
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
@@ -396,7 +394,7 @@ class PemasukanView extends StatelessWidget {
                                   Text(pemasukan.kategoriNama ?? 'Lainnya').muted(),
                                   const Gap(8),
                                   Text(
-                                    '${pemasukan.tanggal.day}/${pemasukan.tanggal.month}/${pemasukan.tanggal.year}',
+                                    FormatUtils.formatIndonesianDate(pemasukan.tanggal),
                                   ).small(),
                                 ],
                               ),
@@ -404,7 +402,7 @@ class PemasukanView extends StatelessWidget {
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(currencyFormat.format(pemasukan.jumlah)).base(),
+                                Text(FormatUtils.formatRupiah(pemasukan.jumlah)).base(),
                                 const Gap(12),
                                 Icon(
                                   LucideIcons.chevronRight, 

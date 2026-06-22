@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:snap_notes_mvvm/core/network/dio_client.dart';
 import 'package:snap_notes_mvvm/features/auth/models/auth_service.dart';
@@ -23,6 +24,9 @@ import 'package:snap_notes_mvvm/features/notifikasi/viewmodels/notifikasi_viewmo
 final GetIt getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
+  // Inisialisasi lokalisasi tanggal Indonesia
+  await initializeDateFormatting('id_ID', null);
+
   // External dependencies
   await dotenv.load(fileName: '.env');
 

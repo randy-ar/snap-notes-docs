@@ -2,6 +2,9 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/pengeluaran.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/viewmodels/pengeluaran_viewmodel.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
+import 'package:snap_notes_mvvm/utils/format_utils.dart';
+import 'package:snap_notes_mvvm/utils/rupiah_input_formatter.dart';
 
 class PengeluaranFormPage extends StatefulWidget {
   final Pengeluaran? pengeluaran;
@@ -16,6 +19,7 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
   final _jumlahController = TextEditingController();
   final _catatanController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
+  String? _selectedCategoryId;
 
   bool get isEdit => widget.pengeluaran != null;
 
@@ -24,10 +28,17 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
     super.initState();
     if (isEdit) {
       _deskripsiController.text = widget.pengeluaran!.deskripsi;
-      _jumlahController.text = widget.pengeluaran!.jumlah.toStringAsFixed(0);
+      // Memformat nominal awal dengan separator ribuan (misal: 25.000)
+      _jumlahController.text = FormatUtils.formatRupiah(widget.pengeluaran!.jumlah).replaceAll('Rp ', '');
       _catatanController.text = widget.pengeluaran!.catatan ?? '';
       _selectedDate = widget.pengeluaran!.tanggal;
+      _selectedCategoryId = widget.pengeluaran!.kategoriId;
     }
+
+    // Muat daftar kategori dari backend
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PengeluaranViewModel>().loadCategories(jenis: 'PENGELUARAN');
+    });
   }
 
   @override
@@ -53,8 +64,9 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
       return;
     }
 
-    final jumlah = double.tryParse(jumlahStr);
-    if (jumlah == null || jumlah <= 0) {
+    // Mem-parse string nominal terformat kembali ke double secara aman
+    final jumlah = FormatUtils.parseRupiahToDouble(jumlahStr);
+    if (jumlah <= 0) {
       showToast(
         context: context,
         builder: (context, overlay) => const SurfaceCard(
@@ -73,6 +85,7 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
         deskripsi: deskripsi,
         jumlah: jumlah,
         tanggal: _selectedDate,
+        kategoriId: _selectedCategoryId,
         catatan: _catatanController.text.trim().isNotEmpty ? _catatanController.text.trim() : null,
       );
     } else {
@@ -80,6 +93,7 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
         deskripsi: deskripsi,
         jumlah: jumlah,
         tanggal: _selectedDate,
+        kategoriId: _selectedCategoryId,
         catatan: _catatanController.text.trim().isNotEmpty ? _catatanController.text.trim() : null,
       );
     }
@@ -148,10 +162,50 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
               TextField(
                 controller: _jumlahController,
                 keyboardType: TextInputType.number,
-                placeholder: const Text('Contoh: 25000'),
+                placeholder: const Text('Contoh: 25.000'),
+                inputFormatters: [RupiahInputFormatter()],
                 features: const [
                   InputFeature.leading(Text('Rp ')),
                 ],
+              ),
+              const Gap(20),
+
+              const Text('Kategori').medium(),
+              const Gap(8),
+              Select<String>(
+                value: _selectedCategoryId,
+                placeholder: const Text('Pilih Kategori'),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedCategoryId = value;
+                  });
+                },
+                itemBuilder: (context, itemValue) {
+                  final category = viewModel.categories.firstWhere(
+                    (c) => c.id == itemValue,
+                    orElse: () => Kategori(id: '', nama: 'Lainnya', jenis: 'PENGELUARAN', adalahPreset: true),
+                  );
+                  return Text(category.nama);
+                },
+                popup: SelectPopup<String>.builder(
+                  searchPlaceholder: const Text('Cari kategori...'),
+                  builder: (context, searchQuery) {
+                    final filtered = searchQuery == null
+                        ? viewModel.categories
+                        : viewModel.categories
+                            .where((c) => c.nama.toLowerCase().contains(searchQuery.toLowerCase()))
+                            .toList();
+                    return SelectItemList(
+                      children: [
+                        for (final category in filtered)
+                          SelectItemButton(
+                            value: category.id,
+                            child: Text(category.nama),
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ),
               const Gap(20),
 
