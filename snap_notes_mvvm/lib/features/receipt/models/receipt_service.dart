@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart' show decodeImageFromList;
+import 'package:flutter/material.dart' show decodeImageFromList, Rect;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart' hide TextLine;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart' as mlkit show RecognizedText;
 import 'package:snap_notes_mvvm/core/error/exceptions.dart';
@@ -28,18 +28,56 @@ class ReceiptService {
       final imageWidth = decodedImage.width.toDouble();
       final imageHeight = decodedImage.height.toDouble();
 
+      final allMlkitLines = mlkitText.blocks.expand((block) => block.lines).toList();
+      allMlkitLines.sort((a, b) => a.boundingBox.top.compareTo(b.boundingBox.top));
+
+      final List<List<dynamic>> groupedLines = [];
+      for (var mlkitLine in allMlkitLines) {
+        if (groupedLines.isEmpty) {
+          groupedLines.add([mlkitLine]);
+        } else {
+          final currentGroup = groupedLines.last;
+          
+          double groupTop = currentGroup.map((l) => l.boundingBox.top as double).reduce((a, b) => a < b ? a : b);
+          double groupBottom = currentGroup.map((l) => l.boundingBox.bottom as double).reduce((a, b) => a > b ? a : b);
+          
+          double lineCenter = (mlkitLine.boundingBox.top + mlkitLine.boundingBox.bottom) / 2;
+          double lineHeight = mlkitLine.boundingBox.bottom - mlkitLine.boundingBox.top;
+          
+          double threshold = lineHeight * 0.5;
+
+          if (lineCenter >= (groupTop - threshold) && lineCenter <= (groupBottom + threshold)) {
+            currentGroup.add(mlkitLine);
+          } else {
+            groupedLines.add([mlkitLine]);
+          }
+        }
+      }
+
       int lineIndex = 0;
-      final lines = mlkitText.blocks
-          .expand((block) => block.lines)
-          .map((line) => local.TextLine(
-                lineIndex: lineIndex++,
-                text: line.text,
-                boundingBox: line.boundingBox,
-              ))
-          .toList();
+      final List<local.TextLine> lines = [];
+
+      for (var group in groupedLines) {
+        group.sort((a, b) => (a.boundingBox.left as double).compareTo(b.boundingBox.left as double));
+
+        final mergedText = group.map((l) => l.text).join('   '); // Gunakan 3 spasi untuk menandakan jeda/gap
+
+        double left = group.map((l) => l.boundingBox.left as double).reduce((a, b) => a < b ? a : b);
+        double top = group.map((l) => l.boundingBox.top as double).reduce((a, b) => a < b ? a : b);
+        double right = group.map((l) => l.boundingBox.right as double).reduce((a, b) => a > b ? a : b);
+        double bottom = group.map((l) => l.boundingBox.bottom as double).reduce((a, b) => a > b ? a : b);
+
+        lines.add(local.TextLine(
+          lineIndex: lineIndex++,
+          text: mergedText,
+          boundingBox: Rect.fromLTRB(left, top, right, bottom),
+        ));
+      }
+
+      final fullReconstructedText = lines.map((l) => l.text).join('\n');
 
       return local.RecognizedText(
-        text: mlkitText.text,
+        text: fullReconstructedText,
         lines: lines,
         imageWidth: imageWidth,
         imageHeight: imageHeight,

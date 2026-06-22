@@ -94,28 +94,23 @@ class _ScannerViewState extends State<ScannerView> {
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false,
           aspectRatioPresets: [
-            CropAspectRatioPreset.square,
-            CropAspectRatioPreset.ratio3x2,
             CropAspectRatioPreset.original,
-            CropAspectRatioPreset.ratio4x3,
-            CropAspectRatioPreset.ratio16x9,
           ],
         ),
         IOSUiSettings(
           title: 'Crop Receipt',
+          aspectRatioPickerButtonHidden: true,
           aspectRatioPresets: [
-            CropAspectRatioPreset.square,
-            CropAspectRatioPreset.ratio3x2,
             CropAspectRatioPreset.original,
-            CropAspectRatioPreset.ratio4x3,
-            CropAspectRatioPreset.ratio16x9,
           ],
         ),
       ],
     );
 
     if (croppedFile != null && mounted) {
-      context.read<ReceiptViewModel>().selectImage(File(croppedFile.path));
+      final viewModel = context.read<ReceiptViewModel>();
+      viewModel.selectImage(File(croppedFile.path));
+      viewModel.runOCR();
     }
   }
 
@@ -146,7 +141,7 @@ class _ScannerViewState extends State<ScannerView> {
             children: [
               const CircularProgressIndicator(),
               const Gap(16),
-              Text('Mengirim dan memproses struk dengan Gemini AI...'),
+              const Text('Mengirim dan memproses struk dengan Gemini AI...'),
               if (viewModel.selectedImage != null) ...[
                 const Gap(24),
                 ClipRRect(
