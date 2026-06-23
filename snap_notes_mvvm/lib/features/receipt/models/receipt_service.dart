@@ -7,6 +7,7 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'package:snap_notes_mvvm/core/error/exceptions.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/recognized_text.dart' as local;
+import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
 
 /// Service untuk scan dan mengelola struk
 class ReceiptService {
@@ -201,6 +202,52 @@ class ReceiptService {
     }
   }
 
+  /// Get daftar kategori
+  Future<List<Kategori>> getDaftarKategori({String? jenis}) async {
+    try {
+      final response = await _dio.get(
+        '/api/kategori',
+        queryParameters: {
+          if (jenis != null) 'jenis': jenis,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = response.data as Map<String, dynamic>;
+        final data = responseData['data'] as List<dynamic>? ?? [];
+        return data.map((json) => Kategori.fromJson(json as Map<String, dynamic>)).toList();
+      } else {
+        throw ServerException('Failed to fetch categories: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      _handleDioException(e);
+      rethrow;
+    }
+  }
+
+  /// Update kategori struk
+  Future<Receipt> updateReceiptCategory(String id, String kategoriId) async {
+    try {
+      final response = await _dio.patch(
+        '/api/struk/$id',
+        data: {
+          'kategoriId': kategoriId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = response.data as Map<String, dynamic>;
+        final data = responseData['data'] as Map<String, dynamic>;
+        return Receipt.fromJson(data);
+      } else {
+        throw ServerException('Failed to update receipt category: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      _handleDioException(e);
+      rethrow;
+    }
+  }
+
   /// Get detail struk
   Future<Receipt> getReceiptDetail(String id) async {
     try {
@@ -234,10 +281,7 @@ class ReceiptService {
           statusCode = responseData['statusCode'] as int?;
 
           if (serverMessage != null) {
-            errorMessage = 'Server Error ($statusCode): $serverMessage';
-            if (path != null) {
-              errorMessage += '\nPath: $path';
-            }
+            errorMessage = serverMessage;
           }
         }
       } catch (_) {

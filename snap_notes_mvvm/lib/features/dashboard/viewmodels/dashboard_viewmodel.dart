@@ -17,8 +17,23 @@ class DashboardViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   // State untuk Tren Bulanan (Line Chart)
-  List<Map<String, dynamic>> _monthlyTrend = [];
-  List<Map<String, dynamic>> get monthlyTrend => _monthlyTrend;
+  List<Map<String, dynamic>> _trendCache = [];
+  List<Map<String, dynamic>> get trendCache => _trendCache;
+  
+  List<Map<String, dynamic>> get monthlyTrend {
+    if (_trendCache.isEmpty) return [];
+    
+    int centroidIdx = _trendCache.indexWhere((t) => t['bulan'] == _focusMonth.month && t['tahun'] == _focusMonth.year);
+    if (centroidIdx == -1) return [];
+
+    int startIdx = centroidIdx - 2;
+    int endIdx = centroidIdx + 3;
+
+    if (startIdx < 0) startIdx = 0;
+    if (endIdx >= _trendCache.length) endIdx = _trendCache.length - 1;
+
+    return _trendCache.sublist(startIdx, endIdx + 1);
+  }
 
   DateTime _focusMonth = DateTime.now();
   DateTime get focusMonth => _focusMonth;
@@ -47,9 +62,17 @@ class DashboardViewModel extends ChangeNotifier {
     }
   }
 
-  /// Memuat tren data transaksi (pemasukan & pengeluaran) 6 bulan berturut-turut
-  Future<void> loadMonthlyTrend() async {
-    _isTrendLoading = true;
+  /// Memuat tren data transaksi (pemasukan & pengeluaran) 37 bulan berturut-turut
+  Future<void> loadMonthlyTrend({bool force = false, bool isBackground = false}) async {
+    if (!force) {
+      int centroidIdx = _trendCache.indexWhere((t) => t['bulan'] == _focusMonth.month && t['tahun'] == _focusMonth.year);
+      if (centroidIdx != -1 && centroidIdx - 2 >= 0 && centroidIdx + 3 < _trendCache.length) {
+        notifyListeners();
+        return;
+      }
+    }
+
+    if (!isBackground) _isTrendLoading = true;
     _errorMessage = null;
     notifyListeners();
 
@@ -59,7 +82,7 @@ class DashboardViewModel extends ChangeNotifier {
         tahun: _focusMonth.year,
       );
 
-      _monthlyTrend = trendData.map((res) {
+      _trendCache = trendData.map((res) {
         return {
           'bulan': res['bulan'],
           'tahun': res['tahun'],
@@ -71,20 +94,40 @@ class DashboardViewModel extends ChangeNotifier {
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
-      _isTrendLoading = false;
+      if (!isBackground) _isTrendLoading = false;
       notifyListeners();
     }
   }
 
-  /// Geser grafik 6 bulan ke depan
-  void nextSixMonths() {
-    _focusMonth = DateTime(_focusMonth.year, _focusMonth.month + 6, 1);
-    loadMonthlyTrend();
+  /// Geser grafik 1 bulan ke depan
+  void nextMonth() {
+    _focusMonth = DateTime(_focusMonth.year, _focusMonth.month + 1, 1);
+    
+    int centroidIdx = _trendCache.indexWhere((t) => t['bulan'] == _focusMonth.month && t['tahun'] == _focusMonth.year);
+    if (centroidIdx != -1 && centroidIdx - 2 >= 0 && centroidIdx + 3 < _trendCache.length) {
+      notifyListeners();
+      // Preload background fetch jika mendekati tepi cache (margin 6 bulan)
+      if (centroidIdx - 2 <= 5 || centroidIdx + 3 >= _trendCache.length - 6) {
+         loadMonthlyTrend(force: true, isBackground: true);
+      }
+    } else {
+      loadMonthlyTrend();
+    }
   }
 
-  /// Geser grafik 6 bulan ke belakang
-  void prevSixMonths() {
-    _focusMonth = DateTime(_focusMonth.year, _focusMonth.month - 6, 1);
-    loadMonthlyTrend();
+  /// Geser grafik 1 bulan ke belakang
+  void prevMonth() {
+    _focusMonth = DateTime(_focusMonth.year, _focusMonth.month - 1, 1);
+    
+    int centroidIdx = _trendCache.indexWhere((t) => t['bulan'] == _focusMonth.month && t['tahun'] == _focusMonth.year);
+    if (centroidIdx != -1 && centroidIdx - 2 >= 0 && centroidIdx + 3 < _trendCache.length) {
+      notifyListeners();
+      // Preload background fetch jika mendekati tepi cache (margin 6 bulan)
+      if (centroidIdx - 2 <= 5 || centroidIdx + 3 >= _trendCache.length - 6) {
+         loadMonthlyTrend(force: true, isBackground: true);
+      }
+    } else {
+      loadMonthlyTrend();
+    }
   }
 }

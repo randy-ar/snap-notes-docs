@@ -140,6 +140,10 @@ Aturan WAJIB:
         throw new UnprocessableEntityException('Format JSON dari AI tidak lengkap');
       }
 
+      if ((parsed as any).items && Array.isArray((parsed as any).items) && !parsed.item) {
+        parsed.item = (parsed as any).items;
+      }
+
       if (!Array.isArray(parsed.item) || parsed.item.length === 0) {
         throw new UnprocessableEntityException('JSON tidak memiliki array item yang valid');
       }

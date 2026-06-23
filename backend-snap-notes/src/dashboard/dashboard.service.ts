@@ -74,8 +74,8 @@ export class DashboardService {
     const focusDate = new Date(focusTahun, focusBulan - 1, 1);
 
     const months: { bulan: number; tahun: number; date: Date }[] = [];
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date(focusDate.getFullYear(), focusDate.getMonth() - i, 1);
+    for (let i = -18; i <= 18; i++) {
+      const d = new Date(focusDate.getFullYear(), focusDate.getMonth() + i, 1);
       months.push({ bulan: d.getMonth() + 1, tahun: d.getFullYear(), date: d });
     }
 

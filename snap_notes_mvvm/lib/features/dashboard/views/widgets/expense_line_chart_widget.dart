@@ -46,7 +46,8 @@ class ExpenseLineChartWidget extends StatelessWidget {
     final trendData = viewModel.monthlyTrend;
     final isTrendLoading = viewModel.isTrendLoading;
 
-    if (isTrendLoading) {
+    // Hanya tampilkan skeleton jika grafik benar-benar kosong (awal load)
+    if (isTrendLoading && trendData.isEmpty) {
       return Card(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -67,7 +68,7 @@ class ExpenseLineChartWidget extends StatelessWidget {
       );
     }
 
-    if (trendData.isEmpty) {
+    if (!isTrendLoading && trendData.isEmpty) {
       return Card(
         padding: const EdgeInsets.all(16),
         child: const SizedBox(
@@ -81,16 +82,30 @@ class ExpenseLineChartWidget extends StatelessWidget {
       );
     }
 
-    // Hitung nilai maksimum Y untuk autoscaling chart
-    double maxVal = 100000; // nilai default minimal
-    for (final item in trendData) {
+    // Hitung nilai maksimum Y secara global (dari seluruh cache tahun tersebut)
+    double maxPemasukan = 0;
+    double maxPengeluaran = 0;
+
+    for (final item in viewModel.trendCache) {
       final double pem = item['totalPemasukan'] as double;
       final double peng = item['totalPengeluaran'] as double;
-      if (pem > maxVal) maxVal = pem;
-      if (peng > maxVal) maxVal = peng;
+      if (pem > maxPemasukan) maxPemasukan = pem;
+      if (peng > maxPengeluaran) maxPengeluaran = peng;
     }
-    // Berikan ruang/padding atas 15% pada Y axis
-    maxVal = maxVal * 1.15;
+
+    // Minimal tinggi sumbu y adalah pemasukan tertinggi + 25%
+    // agar tinggi chart pengeluaran proporsional dengan skala pemasukan
+    double maxVal = maxPemasukan * 1.25;
+
+    // Fallback keamanan jika pengeluaran > (pemasukan + 25%) agar grafik tidak terpotong
+    if (maxPengeluaran > maxVal) {
+      maxVal = maxPengeluaran * 1.15;
+    }
+
+    // Default view jika belum ada transaksi sama sekali
+    if (maxVal == 0) {
+      maxVal = 100000;
+    }
 
     // Persiapkan data spot untuk fl_chart
     final List<FlSpot> spotsPemasukan = [];
@@ -123,15 +138,17 @@ class ExpenseLineChartWidget extends StatelessWidget {
               IconButton.ghost(
                 density: ButtonDensity.compact,
                 icon: const Icon(LucideIcons.chevronLeft, size: 16),
-                onPressed: () => viewModel.prevSixMonths(),
+                onPressed: () => viewModel.prevMonth(),
               ),
               Text(
-                '${trendData.last['tahun']} Periode ${trendData.last['bulan'] <= 6 ? 1 : 2}',
+                trendData.first['tahun'] != trendData.last['tahun']
+                    ? '${trendData.first['tahun']} - ${trendData.last['tahun']}'
+                    : '${trendData.first['tahun']}',
               ).small().semiBold(),
               IconButton.ghost(
                 density: ButtonDensity.compact,
                 icon: const Icon(LucideIcons.chevronRight, size: 16),
-                onPressed: () => viewModel.nextSixMonths(),
+                onPressed: () => viewModel.nextMonth(),
               ),
             ],
           ),
@@ -234,6 +251,7 @@ class ExpenseLineChartWidget extends StatelessWidget {
                   LineChartBarData(
                     spots: spotsPemasukan,
                     isCurved: true,
+                    preventCurveOverShooting: true,
                     color: colorGreen.withValues(alpha: 0.8),
                     barWidth: 2,
                     isStrokeCapRound: true,
@@ -254,6 +272,7 @@ class ExpenseLineChartWidget extends StatelessWidget {
                   LineChartBarData(
                     spots: spotsPengeluaran,
                     isCurved: true,
+                    preventCurveOverShooting: true,
                     color: colorRed.withValues(alpha: 0.8),
                     barWidth: 2,
                     isStrokeCapRound: true,

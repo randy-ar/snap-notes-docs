@@ -188,6 +188,10 @@ Aturan WAJIB:
         throw new UnprocessableEntityException('Response AI tidak lengkap: nama_toko, tanggal, dan total wajib ada');
       }
 
+      if (parsed.items && Array.isArray(parsed.items) && !parsed.item) {
+        parsed.item = parsed.items;
+      }
+
       if (!Array.isArray(parsed.item) || parsed.item.length === 0) {
         throw new UnprocessableEntityException('Response AI tidak valid: item harus berupa array tidak kosong');
       }

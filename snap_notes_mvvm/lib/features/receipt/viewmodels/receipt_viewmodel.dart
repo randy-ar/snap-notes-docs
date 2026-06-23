@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt_service.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/recognized_text.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
 
 enum ReceiptScanStep {
   camera,          // Tampilan kamera / gallery picker
@@ -30,6 +31,9 @@ class ReceiptViewModel extends ChangeNotifier {
 
   Receipt? _receiptDetail;
   Receipt? get receiptDetail => _receiptDetail;
+
+  List<Kategori> _categories = [];
+  List<Kategori> get categories => _categories;
 
   File? _selectedImage;
   File? get selectedImage => _selectedImage;
@@ -167,17 +171,24 @@ class ReceiptViewModel extends ChangeNotifier {
     }
   }
 
-  /// Melakukan reparsing (koreksi) dengan memberikan konteks tambahan ke AI
-  Future<void> reparseReceipt(String prompt) async {
+  /// Melakukan reparsing (koreksi) atau update manual kategori struk
+  Future<void> koreksiReceipt({String? prompt, String? kategoriId}) async {
     if (_receiptDetail == null) return;
     _setLoading(true);
     _errorMessage = null;
     try {
-      final updatedReceipt = await _receiptService.reparseReceipt(
-        _receiptDetail!.id!,
-        prompt,
-      );
-      _receiptDetail = updatedReceipt;
+      if (prompt != null && prompt.trim().isNotEmpty) {
+        _receiptDetail = await _receiptService.reparseReceipt(
+          _receiptDetail!.id!,
+          prompt.trim(),
+        );
+      }
+      if (kategoriId != null && kategoriId.isNotEmpty) {
+        _receiptDetail = await _receiptService.updateReceiptCategory(
+          _receiptDetail!.id!,
+          kategoriId,
+        );
+      }
     } catch (e, stack) {
       _errorMessage = e.toString();
       _stackTrace = stack.toString();
@@ -185,6 +196,17 @@ class ReceiptViewModel extends ChangeNotifier {
       _setStep(ReceiptScanStep.error);
     } finally {
       _setLoading(false);
+    }
+  }
+
+  /// Memuat daftar kategori pengeluaran
+  Future<void> loadCategories() async {
+    try {
+      final list = await _receiptService.getDaftarKategori(jenis: 'PENGELUARAN');
+      _categories = list;
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = e.toString();
     }
   }
 

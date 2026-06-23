@@ -5,8 +5,22 @@ import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
 
 class PemasukanViewModel extends ChangeNotifier {
   final PemasukanService _pemasukanService;
+  bool _isDisposed = false;
 
   PemasukanViewModel({required this._pemasukanService});
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) {
+      super.notifyListeners();
+    }
+  }
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;

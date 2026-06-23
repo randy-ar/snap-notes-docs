@@ -6,6 +6,7 @@ import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/receipt/views/pages/full_screen_image_page.dart';
 import 'package:snap_notes_mvvm/features/receipt/views/widgets/scan_animation_overlay.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
 
 class ResponsePreviewPage extends StatefulWidget {
   final File image;
@@ -25,6 +26,14 @@ class ResponsePreviewPage extends StatefulWidget {
 
 class _ResponsePreviewPageState extends State<ResponsePreviewPage> {
   int _tabIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ReceiptViewModel>().loadCategories();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,49 +183,101 @@ class _ResponsePreviewPageState extends State<ResponsePreviewPage> {
 
   void _showKoreksiDrawer(BuildContext context, ReceiptViewModel viewModel) {
     final promptController = TextEditingController();
+    String? selectedCategoryId = viewModel.receiptDetail?.categoryId;
 
     openDrawer(
       context: context,
       position: OverlayPosition.bottom,
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text('Beri Konteks AI').large().semiBold(),
-              const Gap(8),
-              const Text('Berikan instruksi tambahan jika hasil ekstraksi dari AI kurang tepat. Contoh: "Ini adalah struk tagihan internet bulanan"').muted(),
-              const Gap(16),
-              TextField(
-                controller: promptController,
-                maxLines: 3,
-                placeholder: const Text('Masukkan konteks atau koreksi Anda di sini...'),
-              ),
-              const Gap(24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SecondaryButton(
-                    onPressed: () => closeOverlay(context),
-                    child: const Text('Tutup'),
-                  ),
-                  const Gap(12),
-                  PrimaryButton(
-                    onPressed: () {
-                      final prompt = promptController.text.trim();
-                      if (prompt.isNotEmpty) {
-                        closeOverlay(context);
-                        viewModel.reparseReceipt(prompt);
-                      }
+                  const Text('Ubah Data Struk').large().semiBold(),
+                  const Gap(8),
+                  const Text('Koreksi kategori atau berikan konteks tambahan ke AI agar struk diproses ulang.').muted(),
+                  const Gap(16),
+                  
+                  const Text('Kategori').medium(),
+                  const Gap(8),
+                  Select<String>(
+                    value: selectedCategoryId,
+                    placeholder: const Text('Pilih Kategori'),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCategoryId = value;
+                      });
                     },
-                    child: const Text('Proses Ulang'),
+                    itemBuilder: (context, itemValue) {
+                      final category = viewModel.categories.firstWhere(
+                        (c) => c.id == itemValue,
+                        orElse: () => Kategori(id: '', nama: 'Lainnya', jenis: 'PENGELUARAN', adalahPreset: true),
+                      );
+                      return Text(category.nama);
+                    },
+                    popup: SelectPopup<String>.builder(
+                      searchPlaceholder: const Text('Cari kategori...'),
+                      builder: (context, searchQuery) {
+                        final filtered = searchQuery == null
+                            ? viewModel.categories
+                            : viewModel.categories
+                                .where((c) => c.nama.toLowerCase().contains(searchQuery.toLowerCase()))
+                                .toList();
+                        return SelectItemList(
+                          children: [
+                            for (final category in filtered)
+                              SelectItemButton(
+                                value: category.id,
+                                child: Text(category.nama),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  const Gap(16),
+
+                  const Text('Konteks AI (Opsional)').medium(),
+                  const Gap(8),
+                  TextField(
+                    controller: promptController,
+                    maxLines: 3,
+                    placeholder: const Text('Contoh: "Ini struk tagihan internet"'),
+                  ),
+                  const Gap(24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SecondaryButton(
+                        onPressed: () => closeOverlay(context),
+                        child: const Text('Tutup'),
+                      ),
+                      const Gap(12),
+                      PrimaryButton(
+                        onPressed: () {
+                          final prompt = promptController.text.trim();
+                          if (prompt.isNotEmpty || (selectedCategoryId != null && selectedCategoryId != viewModel.receiptDetail?.categoryId)) {
+                            closeOverlay(context);
+                            viewModel.koreksiReceipt(
+                              prompt: prompt.isNotEmpty ? prompt : null,
+                              kategoriId: selectedCategoryId,
+                            );
+                          } else {
+                            closeOverlay(context); // TIdak ada perubahan
+                          }
+                        },
+                        child: const Text('Simpan Perubahan'),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            );
+          }
         );
       },
     );
