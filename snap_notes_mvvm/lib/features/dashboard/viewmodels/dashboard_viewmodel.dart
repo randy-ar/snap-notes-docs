@@ -54,26 +54,20 @@ class DashboardViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final List<DateTime> months = [];
-      for (int i = 5; i >= 0; i--) {
-        final date = DateTime(_focusMonth.year, _focusMonth.month - i, 1);
-        months.add(date);
-      }
+      final trendData = await _dashboardService.getTrend(
+        bulan: _focusMonth.month,
+        tahun: _focusMonth.year,
+      );
 
-      final futures = months.map((m) => _dashboardService.getRingkasan(bulan: m.month, tahun: m.year));
-      final results = await Future.wait(futures);
-
-      _monthlyTrend = List.generate(months.length, (index) {
-        final m = months[index];
-        final res = results[index];
+      _monthlyTrend = trendData.map((res) {
         return {
-          'bulan': m.month,
-          'tahun': m.year,
-          'totalPemasukan': res.totalPemasukan,
-          'totalPengeluaran': res.totalPengeluaran,
-          'dateTime': m,
+          'bulan': res['bulan'],
+          'tahun': res['tahun'],
+          'totalPemasukan': (res['totalPemasukan'] as num).toDouble(),
+          'totalPengeluaran': (res['totalPengeluaran'] as num).toDouble(),
+          'dateTime': DateTime.parse(res['dateTime']),
         };
-      });
+      }).toList();
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

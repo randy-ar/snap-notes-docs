@@ -21,4 +21,20 @@ class DashboardService {
       throw Exception('Gagal memuat ringkasan dashboard');
     }
   }
+
+  /// Get tren 6 bulan
+  Future<List<Map<String, dynamic>>> getTrend({int? bulan, int? tahun}) async {
+    final Map<String, dynamic> queryParams = {};
+    if (bulan != null) queryParams['bulan'] = bulan.toString();
+    if (tahun != null) queryParams['tahun'] = tahun.toString();
+
+    final response = await _dio.get('/api/dashboard/trend', queryParameters: queryParams);
+
+    if (response.statusCode == 200) {
+      final list = response.data['data'] as List;
+      return list.map((e) => e as Map<String, dynamic>).toList();
+    } else {
+      throw Exception('Gagal memuat tren dashboard');
+    }
+  }
 }

@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:flutter/material.dart' show MaterialPageRoute;
 import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.dart';
+import 'package:snap_notes_mvvm/features/receipt/views/pages/full_screen_image_page.dart';
 import 'package:snap_notes_mvvm/features/receipt/views/widgets/scan_animation_overlay.dart';
 
 class ResponsePreviewPage extends StatefulWidget {
@@ -58,18 +60,34 @@ class _ResponsePreviewPageState extends State<ResponsePreviewPage> {
                   index: _tabIndex,
                   children: [
                     // Tab 0: Gambar Struk
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.muted,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.file(
-                          widget.image,
-                          width: double.infinity,
-                          fit: BoxFit.fitWidth,
-                          alignment: Alignment.center,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FullScreenImagePage(
+                              imageFile: widget.image,
+                              title: 'Foto Struk',
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.muted,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Hero(
+                            tag: widget.image.path,
+                            child: Image.file(
+                              widget.image,
+                              width: double.infinity,
+                              fit: BoxFit.fitWidth,
+                              alignment: Alignment.center,
+                            ),
+                          ),
                         ),
                       ),
                     ),

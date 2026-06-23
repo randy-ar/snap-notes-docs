@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:snap_notes_mvvm/core/di/injection.dart';
+import 'package:snap_notes_mvvm/features/auth/viewmodels/auth_viewmodel.dart';
 /// Interceptor yang otomatis menyisipkan Bearer token ke setiap request.
 /// Token diambil dari FlutterSecureStorage dengan key 'access_token'.
 class AuthInterceptor extends Interceptor {
@@ -24,6 +25,9 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
+    if (err.response?.statusCode == 401) {
+      getIt<AuthViewModel>().logout();
+    }
     handler.next(err);
   }
 }

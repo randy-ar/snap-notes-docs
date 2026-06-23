@@ -63,4 +63,40 @@ export class DashboardService {
       saldo,
     };
   }
+
+  async getTrend(
+    penggunaId: string,
+    query: QueryDashboardDto,
+  ): Promise<any[]> {
+    const now = new Date();
+    const focusBulan = query.bulan ? parseInt(query.bulan, 10) : now.getMonth() + 1;
+    const focusTahun = query.tahun ? parseInt(query.tahun, 10) : now.getFullYear();
+    const focusDate = new Date(focusTahun, focusBulan - 1, 1);
+
+    const months: { bulan: number; tahun: number; date: Date }[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(focusDate.getFullYear(), focusDate.getMonth() - i, 1);
+      months.push({ bulan: d.getMonth() + 1, tahun: d.getFullYear(), date: d });
+    }
+
+    const results = await Promise.all(
+      months.map((m) => {
+        const dto = new QueryDashboardDto();
+        dto.bulan = m.bulan.toString();
+        dto.tahun = m.tahun.toString();
+        return this.getRingkasan(penggunaId, dto);
+      }),
+    );
+
+    return months.map((m, index) => {
+      const res = results[index];
+      return {
+        bulan: m.bulan,
+        tahun: m.tahun,
+        totalPemasukan: res.totalPemasukan,
+        totalPengeluaran: res.totalPengeluaran,
+        dateTime: m.date.toISOString(),
+      };
+    });
+  }
 }

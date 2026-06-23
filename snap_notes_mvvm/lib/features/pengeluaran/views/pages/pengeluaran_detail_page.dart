@@ -4,28 +4,37 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:snap_notes_mvvm/core/di/injection.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/viewmodels/pengeluaran_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/views/pages/pengeluaran_form_page.dart';
+import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
+import 'package:snap_notes_mvvm/features/receipt/views/pages/full_screen_image_page.dart';
 
 class PengeluaranDetailPage extends StatelessWidget {
   final String pengeluaranId;
+  final bool? isOcr;
 
   const PengeluaranDetailPage({
     super.key,
     required this.pengeluaranId,
+    this.isOcr,
   });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => getIt<PengeluaranViewModel>()..loadPengeluaranDetail(pengeluaranId),
-      child: PengeluaranDetailView(pengeluaranId: pengeluaranId),
+      child: PengeluaranDetailView(pengeluaranId: pengeluaranId, isOcr: isOcr),
     );
   }
 }
 
 class PengeluaranDetailView extends StatelessWidget {
   final String pengeluaranId;
+  final bool? isOcr;
 
-  const PengeluaranDetailView({super.key, required this.pengeluaranId});
+  const PengeluaranDetailView({
+    super.key,
+    required this.pengeluaranId,
+    this.isOcr,
+  });
 
   Future<void> _handleDelete(BuildContext context, PengeluaranViewModel viewModel) async {
     await viewModel.hapusPengeluaran(pengeluaranId);
@@ -123,7 +132,136 @@ class PengeluaranDetailView extends StatelessWidget {
       child: Builder(
         builder: (context) {
           if (viewModel.isLoading && viewModel.pengeluaranDetail == null) {
-            return const Center(child: CircularProgressIndicator());
+            final showOcrSkeleton = isOcr ?? true;
+            if (showOcrSkeleton) {
+              return SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Card(
+                        padding: EdgeInsets.zero,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            height: 300,
+                            color: Theme.of(context).colorScheme.muted,
+                          ).asSkeleton(),
+                        ),
+                      ).asSkeleton(),
+                      const Gap(24),
+                      Card(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: const Text('Nama Toko Belanja').large().bold(),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.muted,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: const Text('Kategori'),
+                                ),
+                              ],
+                            ),
+                            const Gap(8),
+                            Row(
+                              children: [
+                                const Icon(LucideIcons.calendar, size: 16),
+                                const Gap(8),
+                                const Text('DD/MM/YYYY').small(),
+                              ],
+                            ),
+                            const Gap(24),
+                            const Divider(),
+                            const Gap(16),
+                            const Text('Item Belanja').small().semiBold(),
+                            const Gap(12),
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: 2,
+                              separatorBuilder: (_, _) => const Gap(8),
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text('Nama barang belanjaan').small().medium(),
+                                          const Text('1 x Rp 10.000').xSmall().muted(),
+                                        ],
+                                      ),
+                                    ),
+                                    const Text('Rp 10.000').small().semiBold(),
+                                  ],
+                                );
+                              },
+                            ),
+                            const Gap(16),
+                            const Divider(),
+                            const Gap(16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Total').small().semiBold(),
+                                const Text('Rp 100.000').small().semiBold(),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ).asSkeleton(),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Text('Deskripsi Pengeluaran yang Sangat Panjang Sekali').large().bold(),
+                          const Gap(4),
+                          const Text('23 June 2026').small().muted(),
+                          const Gap(8),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: const PrimaryBadge(child: Text('Kategori Pengeluaran')),
+                          ),
+                        ],
+                      ).asSkeleton(),
+                      const Gap(24),
+                      Card(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Total').large().bold(),
+                            const Text('Rp 100.000').large().bold(),
+                          ],
+                        ),
+                      ).asSkeleton(),
+                    ],
+                  ),
+                ),
+              );
+            }
           }
 
           if (viewModel.errorMessage != null && viewModel.pengeluaranDetail == null) {
@@ -135,8 +273,117 @@ class PengeluaranDetailView extends StatelessWidget {
             return const Center(child: Text('Data pengeluaran tidak ditemukan'));
           }
 
-          final isOcr = p.struk != null;
+          final hasImage = p.struk?.imageUrl != null && p.struk!.imageUrl!.isNotEmpty;
 
+          if (hasImage) {
+            return RefreshIndicator(
+              onRefresh: () => context.read<PengeluaranViewModel>().loadPengeluaranDetail(pengeluaranId),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FullScreenImagePage(
+                              imageUrl: p.struk!.imageUrl!,
+                              title: 'Foto Struk',
+                            ),
+                          ),
+                        );
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Hero(
+                          tag: p.struk!.imageUrl!,
+                          child: Image.network(
+                            p.struk!.imageUrl!,
+                            height: 300,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => Container(
+                              height: 200,
+                              color: Theme.of(context).colorScheme.muted,
+                              child: Center(
+                                child: Icon(LucideIcons.imageOff, color: Theme.of(context).colorScheme.mutedForeground, size: 48),
+                              ),
+                            ),
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                height: 300,
+                                color: Theme.of(context).colorScheme.muted,
+                                child: const Center(child: CircularProgressIndicator()),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Gap(24),
+                    Card(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(p.deskripsi).large().bold(),
+                              ),
+                              if (p.kategoriNama != null)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.muted,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(p.kategoriNama!).xSmall(),
+                                ),
+                            ],
+                          ),
+                          const Gap(8),
+                          Row(
+                            children: [
+                              Icon(LucideIcons.calendar, size: 16, color: Theme.of(context).colorScheme.mutedForeground),
+                              const Gap(8),
+                              Text('${p.tanggal.day}/${p.tanggal.month}/${p.tanggal.year}').small().muted(),
+                            ],
+                          ),
+                          const Gap(24),
+                          const Divider(),
+                          const Gap(16),
+                          const Text('Item Belanja').small().semiBold(),
+                          const Gap(12),
+                          if (p.struk != null && p.struk!.items.isNotEmpty)
+                            ...p.struk!.items.map((item) => _buildItemRow(context, item))
+                          else
+                            const Text('Tidak ada item belanja').italic().muted().small(),
+                          const Gap(16),
+                          const Divider(),
+                          const Gap(16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Total').small().semiBold(),
+                              Text('Rp ${p.jumlah.toStringAsFixed(0)}').small().semiBold(),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          // Layout Pengeluaran Biasa (Input Manual)
           return RefreshIndicator(
             onRefresh: () => context.read<PengeluaranViewModel>().loadPengeluaranDetail(pengeluaranId),
             child: SingleChildScrollView(
@@ -158,7 +405,7 @@ class PengeluaranDetailView extends StatelessWidget {
                     ],
                     const Gap(24),
 
-                    if (!isOcr && p.catatan != null && p.catatan!.isNotEmpty) ...[
+                    if (p.catatan != null && p.catatan!.isNotEmpty) ...[
                       Card(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,48 +413,6 @@ class PengeluaranDetailView extends StatelessWidget {
                             const Text('Catatan').small().bold(),
                             const Gap(8),
                             Text(p.catatan!),
-                          ],
-                        ),
-                      ),
-                      const Gap(16),
-                    ],
-
-                    if (isOcr) ...[
-                      Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Item Belanja').small().bold(),
-                            const Gap(16),
-                            if (p.struk!.items.isNotEmpty)
-                              ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: p.struk!.items.length,
-                                separatorBuilder: (_, _) => const Gap(8),
-                                itemBuilder: (context, index) {
-                                  final item = p.struk!.items[index];
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(item.name).small().medium(),
-                                            Text(
-                                              '${item.quantity} x Rp ${item.price.toStringAsFixed(0)}',
-                                            ).xSmall().muted(),
-                                          ],
-                                        ),
-                                      ),
-                                      Text('Rp ${item.totalPrice.toStringAsFixed(0)}').small().semiBold(),
-                                    ],
-                                  );
-                                },
-                              )
-                            else
-                              const Text('Tidak ada item belanja').italic().muted(),
                           ],
                         ),
                       ),
@@ -223,34 +428,52 @@ class PengeluaranDetailView extends StatelessWidget {
                         ],
                       ),
                     ),
-
-                    if (isOcr && p.struk!.imageUrl != null) ...[
-                      const Gap(24),
-                      const Text('Gambar Struk').large().bold(),
-                      const Gap(16),
-                      Card(
-                        padding: EdgeInsets.zero,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            p.struk!.imageUrl!,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(16.0),
-                                child: Text('Gagal memuat gambar'),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ]
                   ],
                 ),
               ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildItemRow(BuildContext context, ReceiptItem item) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item.name).small().medium(),
+                if (item.categoryName != null)
+                  Text(item.categoryName!).xSmall().muted(),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              '${item.quantity} x ${item.price.toStringAsFixed(0)}',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).typography.small.copyWith(
+                color: Theme.of(context).colorScheme.mutedForeground,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Rp ${item.totalPrice.toStringAsFixed(0)}',
+              textAlign: TextAlign.right,
+              style: Theme.of(context).typography.small.copyWith(fontWeight: FontWeight.w500),
+            ),
+          ),
+        ],
       ),
     );
   }

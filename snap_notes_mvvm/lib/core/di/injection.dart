@@ -84,7 +84,7 @@ Future<void> initDependencies() async {
   );
 
   // ViewModels
-  getIt.registerFactory<AuthViewModel>(
+  getIt.registerLazySingleton<AuthViewModel>(
     () => AuthViewModel(authService: getIt()),
   );
 

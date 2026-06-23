@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
 
 class Pengeluaran extends Equatable {
   final String id;
@@ -14,6 +15,7 @@ class Pengeluaran extends Equatable {
   final DateTime createdAt;
   final DateTime updatedAt;
   final Receipt? struk;
+  final Kategori? kategori;
 
   const Pengeluaran({
     required this.id,
@@ -28,6 +30,7 @@ class Pengeluaran extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     this.struk,
+    this.kategori,
   });
 
   factory Pengeluaran.fromJson(Map<String, dynamic> json) {
@@ -46,6 +49,9 @@ class Pengeluaran extends Equatable {
       struk: json['struk'] != null
           ? Receipt.fromJson(json['struk'] as Map<String, dynamic>)
           : null,
+      kategori: json['kategori'] != null
+          ? Kategori.fromJson(json['kategori'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -63,6 +69,7 @@ class Pengeluaran extends Equatable {
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       'struk': struk?.toJson(),
+      'kategori': kategori?.toJson(),
     };
   }
 
@@ -80,5 +87,6 @@ class Pengeluaran extends Equatable {
         createdAt,
         updatedAt,
         struk,
+        kategori,
       ];
 }

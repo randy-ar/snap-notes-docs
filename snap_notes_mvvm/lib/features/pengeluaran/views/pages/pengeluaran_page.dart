@@ -5,9 +5,9 @@ import 'package:snap_notes_mvvm/core/di/injection.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/viewmodels/pengeluaran_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/views/pages/pengeluaran_detail_page.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/views/pages/pengeluaran_form_page.dart';
-import 'package:snap_notes_mvvm/features/receipt/views/pages/receipt_detail_page.dart';
 import 'package:snap_notes_mvvm/features/auth/viewmodels/auth_viewmodel.dart';
 import 'package:snap_notes_mvvm/utils/format_utils.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/models/pengeluaran.dart';
 
 class PengeluaranPage extends StatelessWidget {
   const PengeluaranPage({super.key});
@@ -18,7 +18,8 @@ class PengeluaranPage extends StatelessWidget {
       create: (_) {
         final now = DateTime.now();
         return getIt<PengeluaranViewModel>()
-          ..loadPengeluaran(bulan: now.month, tahun: now.year);
+          ..loadOverview(bulan: now.month, tahun: now.year)
+          ..loadPengeluaran(isRefresh: true);
       },
       child: const PengeluaranView(),
     );
@@ -168,10 +169,11 @@ class PengeluaranView extends StatelessWidget {
                 );
                 if (result == true && context.mounted) {
                   final now = DateTime.now();
-                  context.read<PengeluaranViewModel>().loadPengeluaran(
+                  context.read<PengeluaranViewModel>().loadOverview(
                     bulan: now.month,
                     tahun: now.year,
                   );
+                  context.read<PengeluaranViewModel>().loadPengeluaran(isRefresh: true);
                 }
               },
               icon: const Icon(LucideIcons.plus),
@@ -270,10 +272,11 @@ class PengeluaranView extends StatelessWidget {
                   PrimaryButton(
                     onPressed: () {
                       final now = DateTime.now();
-                      context.read<PengeluaranViewModel>().loadPengeluaran(
+                      context.read<PengeluaranViewModel>().loadOverview(
                         bulan: now.month,
                         tahun: now.year,
                       );
+                      context.read<PengeluaranViewModel>().loadPengeluaran(isRefresh: true);
                     },
                     child: const Text('Coba Lagi'),
                   ),
@@ -281,149 +284,181 @@ class PengeluaranView extends StatelessWidget {
               ),
             );
           } else {
-            return RefreshIndicator(
-              onRefresh: () async {
-                final now = DateTime.now();
-                context.read<PengeluaranViewModel>().loadPengeluaran(
-                  bulan: now.month,
-                  tahun: now.year,
-                );
+            final flattenedItems = <dynamic>[];
+            flattenedItems.add('OVERVIEW');
+
+            int? currentMonth;
+            int? currentYear;
+
+            for (var p in viewModel.pengeluaranList) {
+              if (currentMonth != p.tanggal.month || currentYear != p.tanggal.year) {
+                currentMonth = p.tanggal.month;
+                currentYear = p.tanggal.year;
+                flattenedItems.add({'month': currentMonth, 'year': currentYear});
+              }
+              flattenedItems.add(p);
+            }
+
+            return NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification scrollInfo) {
+                if (!viewModel.isLoadingMore &&
+                    viewModel.hasMoreData &&
+                    scrollInfo.metrics.pixels >=
+                        scrollInfo.metrics.maxScrollExtent - 200) {
+                  viewModel.loadMorePengeluaran();
+                }
+                return false;
               },
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: viewModel.pengeluaranList.isEmpty
-                    ? 2
-                    : viewModel.pengeluaranList.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    final isGoodTrending = viewModel.percentageChange <= 0;
-                    final percentageText =
-                        '${viewModel.percentageChange > 0 ? '+' : ''}${viewModel.percentageChange.toStringAsFixed(1)}%';
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  final now = DateTime.now();
+                  context.read<PengeluaranViewModel>().loadOverview(
+                    bulan: now.month,
+                    tahun: now.year,
+                  );
+                  await context.read<PengeluaranViewModel>().loadPengeluaran(isRefresh: true);
+                },
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: flattenedItems.length + (viewModel.hasMoreData ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == flattenedItems.length) {
+                      return const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    }
+
+                    final item = flattenedItems[index];
+
+                    if (item == 'OVERVIEW') {
+                      final overview = viewModel.overviewData;
+                      if (overview == null) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: const Card(
+                            padding: EdgeInsets.all(16),
+                            child: SizedBox(height: 120),
+                          ).asSkeleton(),
+                        );
+                      }
+
+                      final totalCurrentMonth = (overview['totalCurrentMonth'] as num).toDouble();
+                      final percentageChange = (overview['percentageChange'] as num).toDouble();
+                      final isGoodTrending = overview['isTrendingGood'] as bool;
+                      final percentageText = '${percentageChange > 0 ? '+' : ''}${percentageChange.toStringAsFixed(1)}%';
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Card(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Total Pengeluaran').muted(),
+                                  isGoodTrending
+                                      ? SecondaryBadge(
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                LucideIcons.trendingDown,
+                                                size: 14,
+                                                color: Theme.of(context).colorScheme.primary,
+                                              ),
+                                              const Gap(4),
+                                              Text(percentageText),
+                                            ],
+                                          ),
+                                        )
+                                      : DestructiveBadge(
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(
+                                                LucideIcons.trendingUp,
+                                                size: 14,
+                                              ),
+                                              const Gap(4),
+                                              Text(percentageText),
+                                            ],
+                                          ),
+                                        ),
+                                ],
+                              ),
+                              const Gap(16),
+                              Text(
+                                FormatUtils.formatRupiah(totalCurrentMonth),
+                              ).h3(),
+                              const Gap(12),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Tren pengeluaran ${isGoodTrending ? 'membaik' : 'memburuk'} bulan ini',
+                                  ).small(),
+                                  const Gap(8),
+                                  Icon(
+                                    isGoodTrending ? LucideIcons.trendingDown : LucideIcons.trendingUp,
+                                    size: 16,
+                                  ),
+                                ],
+                              ),
+                              const Gap(4),
+                              Text(
+                                '$percentageText dibanding bulan lalu',
+                              ).small().muted(),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (item is Map<String, int?>) {
+                      final monthNames = [
+                        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                      ];
+                      final monthName = monthNames[(item['month'] ?? 1) - 1];
+                      final year = item['year'];
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 8.0, left: 4.0),
+                        child: Text('$monthName $year').small().muted().bold(),
+                      );
+                    }
+
+                    final pengeluaran = item as Pengeluaran;
+                    final bool fromOcr = pengeluaran.strukId != null;
 
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.only(bottom: 8.0),
                       child: Card(
                         padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text('Total Spending').muted(),
-                                isGoodTrending
-                                    ? SecondaryBadge(
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(
-                                              LucideIcons.trendingDown,
-                                              size: 14,
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.primary,
-                                            ),
-                                            const Gap(4),
-                                            Text(percentageText),
-                                          ],
-                                        ),
-                                      )
-                                    : DestructiveBadge(
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Icon(
-                                              LucideIcons.trendingUp,
-                                              size: 14,
-                                            ),
-                                            const Gap(4),
-                                            Text(percentageText),
-                                          ],
-                                        ),
-                                      ),
-                              ],
-                            ),
-                            const Gap(16),
-                            Text(
-                              FormatUtils.formatRupiah(
-                                viewModel.totalCurrentMonth,
-                              ),
-                            ).h3(),
-                            const Gap(12),
-                            Row(
-                              children: [
-                                Text(
-                                  'Trending ${isGoodTrending ? 'good' : 'bad'} this month',
-                                ).small(),
-                                const Gap(8),
-                                Icon(
-                                  isGoodTrending
-                                      ? LucideIcons.trendingDown
-                                      : LucideIcons.trendingUp,
-                                  size: 16,
-                                ),
-                              ],
-                            ),
-                            const Gap(4),
-                            Text(
-                              '$percentageText since last month',
-                            ).small().muted(),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            final vm = context.read<PengeluaranViewModel>();
+                            bool? result;
 
-                  if (viewModel.pengeluaranList.isEmpty) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 48),
-                      child: Center(
-                        child: const Text(
-                          'Belum ada riwayat pengeluaran untuk bulan ini.',
-                        ).muted().small(),
-                      ),
-                    );
-                  }
-
-                  final pengeluaran = viewModel.pengeluaranList[index - 1];
-                  final bool fromOcr = pengeluaran.strukId != null;
-
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Card(
-                      padding: const EdgeInsets.all(16),
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () async {
-                          final vm = context.read<PengeluaranViewModel>();
-                          bool? result;
-
-                          if (fromOcr) {
                             result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ReceiptDetailPage(
-                                  receiptId: pengeluaran.strukId!,
-                                ),
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PengeluaranDetailPage(
+                                pengeluaranId: pengeluaran.id,
+                                isOcr: fromOcr,
                               ),
-                            );
-                          } else {
-                            result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PengeluaranDetailPage(
-                                  pengeluaranId: pengeluaran.id,
-                                ),
-                              ),
-                            );
-                          }
+                            ),
+                          );
 
                           if (result == true && context.mounted) {
                             final now = DateTime.now();
-                            vm.loadPengeluaran(
+                            vm.loadOverview(
                               bulan: now.month,
                               tahun: now.year,
                             );
+                            vm.loadPengeluaran(isRefresh: true);
                           }
                         },
                         child: Row(
@@ -466,7 +501,8 @@ class PengeluaranView extends StatelessWidget {
                   );
                 },
               ),
-            );
+            ),
+          );
           }
         },
       ),

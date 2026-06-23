@@ -165,24 +165,23 @@ export class StrukService {
         },
       });
 
-      const items = [];
-      for (const resolvedItem of resolvedItems) {
-        const createdItem = await tx.itemStruk.create({
-          data: {
-            strukId: createdStruk.id,
-            kategoriId: resolvedItem.kategoriId,
-            namaItem: resolvedItem.nama,
-            jumlah: resolvedItem.jumlah,
-            hargaSatuan: resolvedItem.hargaSatuan,
-            subtotal: resolvedItem.subtotal,
-          },
-          include: {
-            kategori: true,
-          },
-        });
-        
-        items.push(createdItem);
-      }
+      const items = await Promise.all(
+        resolvedItems.map(resolvedItem => 
+          tx.itemStruk.create({
+            data: {
+              strukId: createdStruk.id,
+              kategoriId: resolvedItem.kategoriId,
+              namaItem: resolvedItem.nama,
+              jumlah: resolvedItem.jumlah,
+              hargaSatuan: resolvedItem.hargaSatuan,
+              subtotal: resolvedItem.subtotal,
+            },
+            include: {
+              kategori: true,
+            },
+          })
+        )
+      );
 
       await tx.pengeluaran.create({
         data: {
@@ -196,7 +195,7 @@ export class StrukService {
       });
 
       return { ...createdStruk, itemStruks: items };
-    });
+    }, { timeout: 15000 });
 
     const endTime = Date.now();
     console.log(`[scanStruk] Completed in ${endTime - startTime}ms for penggunaId: ${penggunaId}`);
@@ -345,25 +344,23 @@ export class StrukService {
         },
       });
 
-      // Create new ItemStruks
-      const items = [];
-      for (const resolvedItem of resolvedItems) {
-        const createdItem = await tx.itemStruk.create({
-          data: {
-            strukId: id,
-            kategoriId: resolvedItem.kategoriId,
-            namaItem: resolvedItem.nama,
-            jumlah: resolvedItem.jumlah,
-            hargaSatuan: resolvedItem.hargaSatuan,
-            subtotal: resolvedItem.subtotal,
-          },
-          include: {
-            kategori: true,
-          },
-        });
-        
-        items.push(createdItem);
-      }
+      const items = await Promise.all(
+        resolvedItems.map(resolvedItem => 
+          tx.itemStruk.create({
+            data: {
+              strukId: id,
+              kategoriId: resolvedItem.kategoriId,
+              namaItem: resolvedItem.nama,
+              jumlah: resolvedItem.jumlah,
+              hargaSatuan: resolvedItem.hargaSatuan,
+              subtotal: resolvedItem.subtotal,
+            },
+            include: {
+              kategori: true,
+            },
+          })
+        )
+      );
 
       // Update Pengeluaran
       await tx.pengeluaran.updateMany({
@@ -377,7 +374,7 @@ export class StrukService {
       });
 
       return { ...strukResult, itemStruks: items };
-    });
+    }, { timeout: 15000 });
 
     const endTime = Date.now();
     console.log(`[reparseStruk] Completed in ${endTime - startTime}ms for penggunaId: ${penggunaId}, strukId: ${id}`);
