@@ -44,7 +44,10 @@ class _MainPageState extends State<MainPage> {
       ],
       child: Stack(
         children: [
-          _pages[_currentIndex],
+          IndexedStack(
+            index: _currentIndex,
+            children: _pages,
+          ),
           Positioned(
             bottom: 24,
             right: 24,

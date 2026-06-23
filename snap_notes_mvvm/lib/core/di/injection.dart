@@ -80,6 +80,7 @@ Future<void> initDependencies() async {
     () => NotifikasiService(
       dio: getIt(),
       notificationsPlugin: getIt(),
+      storage: getIt(),
     ),
   );
 

@@ -26,13 +26,28 @@ class NotifikasiViewModel extends ChangeNotifier {
   }
 
   Future<void> loadPreferensi() async {
-    _setLoading(true);
     _errorMessage = null;
+    
+    // 1. Ambil data dari cache terlebih dahulu secara lokal
+    final cachedList = await _notifikasiService.getCachedPreferensiList();
+    if (cachedList.isNotEmpty) {
+      _preferensiList = cachedList;
+      notifyListeners();
+    }
+
+    // 2. Set loading hanya jika list masih kosong (agar skeleton muncul)
+    if (_preferensiList.isEmpty) {
+      _setLoading(true);
+    }
+
     try {
+      // 3. Ambil data terbaru dari server
       final list = await _notifikasiService.getPreferensiList();
       _preferensiList = list;
     } catch (e) {
-      _errorMessage = e.toString();
+      if (_preferensiList.isEmpty) {
+        _errorMessage = e.toString();
+      }
     } finally {
       _setLoading(false);
     }
@@ -44,6 +59,7 @@ class NotifikasiViewModel extends ChangeNotifier {
     try {
       final result = await _notifikasiService.createPreferensi(preferensi);
       _preferensiList.add(result);
+      await _notifikasiService.cachePreferensiList(_preferensiList);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
@@ -60,6 +76,7 @@ class NotifikasiViewModel extends ChangeNotifier {
       if (index != -1) {
         _preferensiList[index] = result;
       }
+      await _notifikasiService.cachePreferensiList(_preferensiList);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
@@ -73,6 +90,7 @@ class NotifikasiViewModel extends ChangeNotifier {
     try {
       await _notifikasiService.deletePreferensi(id);
       _preferensiList.removeWhere((p) => p.id == id);
+      await _notifikasiService.cachePreferensiList(_preferensiList);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

@@ -134,7 +134,54 @@ class _NotifikasiSettingsPageState extends State<NotifikasiSettingsPage> {
       child: Builder(
         builder: (context) {
           if (viewModel.isLoading && viewModel.preferensiList.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: 3,
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                return Card(
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '19:00',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              'Setiap Hari',
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Switch(
+                            value: true,
+                            onChanged: (_) {},
+                          ),
+                          const SizedBox(width: 8),
+                          IconButton.ghost(
+                            icon: const Icon(Icons.more_vert),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ).asSkeleton();
+              },
+            );
           }
 
           final list = viewModel.preferensiList;

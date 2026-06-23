@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:snap_notes_mvvm/core/error/exceptions.dart';
 import 'package:snap_notes_mvvm/features/notifikasi/models/preferensi_notifikasi.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -9,11 +11,41 @@ import 'package:timezone/timezone.dart' as tz;
 class NotifikasiService {
   final Dio _dio;
   final FlutterLocalNotificationsPlugin _notificationsPlugin;
+  final FlutterSecureStorage _storage;
+
+  static const _cacheKey = 'preferensi_notifikasi_cache';
 
   NotifikasiService({
     required this._dio,
     required this._notificationsPlugin,
+    required this._storage,
   });
+
+  /// Simpan daftar preferensi ke cache local
+  Future<void> cachePreferensiList(List<PreferensiNotifikasi> list) async {
+    try {
+      final jsonList = list.map((item) => item.toJson()).toList();
+      await _storage.write(key: _cacheKey, value: json.encode(jsonList));
+    } catch (_) {
+      // Abaikan error caching agar tidak mengganggu flow utama
+    }
+  }
+
+  /// Ambil daftar preferensi dari cache local
+  Future<List<PreferensiNotifikasi>> getCachedPreferensiList() async {
+    try {
+      final jsonStr = await _storage.read(key: _cacheKey);
+      if (jsonStr == null || jsonStr.isEmpty) {
+        return [];
+      }
+      final decoded = json.decode(jsonStr) as List;
+      return decoded
+          .map((item) => PreferensiNotifikasi.fromJson(item as Map<String, dynamic>))
+          .toList();
+    } catch (_) {
+      return [];
+    }
+  }
 
   /// Init local notifications
   Future<void> init() async {
@@ -52,7 +84,9 @@ class NotifikasiService {
       final response = await _dio.get('/api/notifikasi/preferensi');
       final envelope = response.data as Map<String, dynamic>;
       final data = envelope['data'] as List;
-      return data.map((json) => PreferensiNotifikasi.fromJson(json)).toList();
+      final list = data.map((json) => PreferensiNotifikasi.fromJson(json)).toList();
+      await cachePreferensiList(list);
+      return list;
     } on DioException catch (e) {
       throw ServerException(e.message ?? 'Terjadi kesalahan server');
     } catch (e) {
