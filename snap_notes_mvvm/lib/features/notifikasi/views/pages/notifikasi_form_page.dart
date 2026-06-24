@@ -1,5 +1,6 @@
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/notifikasi/models/preferensi_notifikasi.dart';
 import 'package:snap_notes_mvvm/features/notifikasi/viewmodels/notifikasi_viewmodel.dart';
 
@@ -44,30 +45,9 @@ class _NotifikasiFormPageState extends State<NotifikasiFormPage> {
     }
   }
 
-  void _showToast(String title, String message) {
-    showToast(
-      context: context,
-      builder: (context, overlay) {
-        return SurfaceCard(
-          child: Basic(
-            title: Text(title),
-            subtitle: Text(message),
-            trailing: PrimaryButton(
-              size: ButtonSize.small,
-              onPressed: () => overlay.close(),
-              child: const Text('Tutup'),
-            ),
-            trailingAlignment: Alignment.center,
-          ),
-        );
-      },
-      location: ToastLocation.bottomRight,
-    );
-  }
-
   Future<void> _save() async {
     if (_selectedDays.isEmpty) {
-      _showToast('Error', 'Pilih minimal satu hari');
+      _showToastValidation('Pilih minimal satu hari');
       return;
     }
 
@@ -93,11 +73,35 @@ class _NotifikasiFormPageState extends State<NotifikasiFormPage> {
     setState(() => _isSaving = false);
 
     if (viewModel.errorMessage != null) {
-      _showToast('Error', viewModel.errorMessage!);
+      _showToastError('Gagal menyimpan pengingat', viewModel.errorMessage!);
     } else {
-      _showToast('Berhasil', widget.preferensiToEdit != null ? 'Pengingat diperbarui' : 'Pengingat ditambahkan');
+      _showToastSuccess(widget.preferensiToEdit != null ? 'Pengingat diperbarui' : 'Pengingat ditambahkan');
       Navigator.of(context).pop();
     }
+  }
+
+  void _showToastValidation(String message) {
+    showToast(
+      context: context,
+      builder: (context, overlay) => ToastFormatter.validation(message),
+      location: ToastLocation.bottomRight,
+    );
+  }
+
+  void _showToastError(String message, String description) {
+    showToast(
+      context: context,
+      builder: (context, overlay) => ToastFormatter.error(message, description),
+      location: ToastLocation.bottomRight,
+    );
+  }
+
+  void _showToastSuccess(String message) {
+    showToast(
+      context: context,
+      builder: (context, overlay) => ToastFormatter.success(message),
+      location: ToastLocation.bottomRight,
+    );
   }
 
   @override

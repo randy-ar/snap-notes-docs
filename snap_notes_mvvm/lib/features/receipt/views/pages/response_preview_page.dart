@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/material.dart' show MaterialPageRoute;
 import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';

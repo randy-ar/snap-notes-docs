@@ -1,5 +1,6 @@
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/auth/viewmodels/register_viewmodel.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -28,10 +29,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _onDaftar() async {
     if (_passwordController.text != _konfirmasiPasswordController.text) {
-      _showToastError('Password dan konfirmasi password tidak cocok');
+      _showToastValidation('Password dan konfirmasi password tidak cocok');
       return;
     }
-    
+
     final viewModel = context.read<RegisterViewModel>();
     await viewModel.register(
       email: _emailController.text.trim(),
@@ -44,28 +45,25 @@ class _RegisterPageState extends State<RegisterPage> {
     if (viewModel.errorMessage != null) {
       _showToastError(viewModel.errorMessage!);
     } else if (viewModel.pengguna != null) {
-      _showToastSuccess('Akun berhasil dibuat! Selamat datang, ${viewModel.pengguna!.namaLengkap}');
+      _showToastSuccess(
+        'Akun berhasil dibuat! Selamat datang, ${viewModel.pengguna!.namaLengkap}',
+      );
       Navigator.of(context).pop();
     }
+  }
+
+  void _showToastValidation(String message) {
+    showToast(
+      context: context,
+      builder: (context, overlay) => ToastFormatter.validation(message),
+      location: ToastLocation.bottomRight,
+    );
   }
 
   void _showToastError(String message) {
     showToast(
       context: context,
-      builder: (context, overlay) {
-        return SurfaceCard(
-          child: Basic(
-            title: const Text('Error'),
-            subtitle: Text(message),
-            trailing: PrimaryButton(
-              size: ButtonSize.small,
-              onPressed: () => overlay.close(),
-              child: const Text('Tutup'),
-            ),
-            trailingAlignment: Alignment.center,
-          ),
-        );
-      },
+      builder: (context, overlay) => ToastFormatter.error('Gagal Mendaftar', message),
       location: ToastLocation.bottomRight,
     );
   }
@@ -73,20 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void _showToastSuccess(String message) {
     showToast(
       context: context,
-      builder: (context, overlay) {
-        return SurfaceCard(
-          child: Basic(
-            title: const Text('Berhasil'),
-            subtitle: Text(message),
-            trailing: PrimaryButton(
-              size: ButtonSize.small,
-              onPressed: () => overlay.close(),
-              child: const Text('Tutup'),
-            ),
-            trailingAlignment: Alignment.center,
-          ),
-        );
-      },
+      builder: (context, overlay) => ToastFormatter.success('Akun berhasil dibuat', message),
       location: ToastLocation.bottomRight,
     );
   }
@@ -94,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<RegisterViewModel>();
-    
+
     return Scaffold(
       child: SafeArea(
         child: Center(
@@ -110,7 +95,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     const Text('Daftar').h2(),
                     const Gap(8),
-                    const Text('Isi data berikut untuk membuat akun baru').muted(),
+                    const Text(
+                      'Isi data berikut untuk membuat akun baru',
+                    ).muted(),
                     const Gap(32),
                     _buildField(
                       label: 'Nama Lengkap',
@@ -131,14 +118,17 @@ class _RegisterPageState extends State<RegisterPage> {
                       label: 'Password',
                       controller: _passwordController,
                       obscure: _obscurePassword,
-                      onToggle: () => setState(() => _obscurePassword = !_obscurePassword),
+                      onToggle: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
                     ),
                     const Gap(16),
                     _buildPasswordField(
                       label: 'Konfirmasi Password',
                       controller: _konfirmasiPasswordController,
                       obscure: _obscureKonfirmasi,
-                      onToggle: () => setState(() => _obscureKonfirmasi = !_obscureKonfirmasi),
+                      onToggle: () => setState(
+                        () => _obscureKonfirmasi = !_obscureKonfirmasi,
+                      ),
                     ),
                     const Gap(32),
                     PrimaryButton(
@@ -162,9 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Sudah punya akun? ',
-                        ).muted(),
+                        const Text('Sudah punya akun? ').muted(),
                         LinkButton(
                           onPressed: () => Navigator.of(context).pop(),
                           child: const Text('Masuk'),
@@ -197,9 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
           controller: controller,
           keyboardType: keyboardType,
           placeholder: Text(hint),
-          features: [
-            InputFeature.leading(Icon(icon)),
-          ],
+          features: [InputFeature.leading(Icon(icon))],
         ),
       ],
     );
@@ -225,9 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
             InputFeature.trailing(
               IconButton.ghost(
                 density: ButtonDensity.compact,
-                icon: Icon(
-                  obscure ? LucideIcons.eyeOff : LucideIcons.eye,
-                ),
+                icon: Icon(obscure ? LucideIcons.eyeOff : LucideIcons.eye),
                 onPressed: onToggle,
               ),
             ),
@@ -237,4 +221,3 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
-

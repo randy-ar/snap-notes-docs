@@ -1,10 +1,10 @@
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:snap_notes_mvvm/core/di/injection.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/auth/viewmodels/login_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/auth/viewmodels/register_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/auth/views/pages/register_page.dart';
-import 'package:snap_notes_mvvm/features/main/views/pages/main_page.dart';
 import 'package:snap_notes_mvvm/features/auth/viewmodels/auth_viewmodel.dart';
 
 class LoginPage extends StatefulWidget {
@@ -38,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     if (viewModel.errorMessage != null) {
       _showErrorToast(viewModel.errorMessage!);
     } else if (viewModel.token != null) {
+      _showSuccessToast('Berhasil login');
       await context.read<AuthViewModel>().checkAuth();
     }
   }
@@ -51,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
     if (viewModel.errorMessage != null) {
       _showErrorToast(viewModel.errorMessage!);
     } else if (viewModel.token != null) {
+      _showSuccessToast('Berhasil login dengan Google');
       await context.read<AuthViewModel>().checkAuth();
     }
   }
@@ -58,20 +60,15 @@ class _LoginPageState extends State<LoginPage> {
   void _showErrorToast(String message) {
     showToast(
       context: context,
-      builder: (context, overlay) {
-        return SurfaceCard(
-          child: Basic(
-            title: const Text('Gagal Masuk'),
-            subtitle: Text(message),
-            trailing: PrimaryButton(
-              size: ButtonSize.small,
-              onPressed: () => overlay.close(),
-              child: const Text('Tutup'),
-            ),
-            trailingAlignment: Alignment.center,
-          ),
-        );
-      },
+      builder: (context, overlay) => ToastFormatter.error('Gagal Masuk', message),
+      location: ToastLocation.bottomRight,
+    );
+  }
+
+  void _showSuccessToast(String message) {
+    showToast(
+      context: context,
+      builder: (context, overlay) => ToastFormatter.success(message),
       location: ToastLocation.bottomRight,
     );
   }
@@ -79,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<LoginViewModel>();
-    
+
     return Scaffold(
       child: SafeArea(
         child: Center(
@@ -137,9 +134,7 @@ class _LoginPageState extends State<LoginPage> {
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
           placeholder: const Text('contoh@email.com'),
-          features: const [
-            InputFeature.leading(Icon(LucideIcons.mail)),
-          ],
+          features: const [InputFeature.leading(Icon(LucideIcons.mail))],
         ),
       ],
     );
@@ -163,7 +158,8 @@ class _LoginPageState extends State<LoginPage> {
                 icon: Icon(
                   _obscurePassword ? LucideIcons.eyeOff : LucideIcons.eye,
                 ),
-                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                onPressed: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
               ),
             ),
           ],
@@ -218,10 +214,13 @@ class _LoginPageState extends State<LoginPage> {
               'https://www.google.com/favicon.ico',
               width: 20,
               height: 20,
-              errorBuilder: (context, error, stackTrace) => const Icon(LucideIcons.chrome),
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(LucideIcons.chrome),
             ),
       child: Text(
-        viewModel.isGoogleLoading ? 'Menghubungi Google...' : 'Masuk dengan Google',
+        viewModel.isGoogleLoading
+            ? 'Menghubungi Google...'
+            : 'Masuk dengan Google',
       ),
     );
   }
@@ -248,4 +247,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-

@@ -1,6 +1,7 @@
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:snap_notes_mvvm/core/di/injection.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/viewmodels/pemasukan_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/views/pages/pemasukan_form_page.dart';
 import 'package:snap_notes_mvvm/utils/format_utils.dart';
@@ -70,12 +71,7 @@ class _PemasukanDetailPageState extends State<PemasukanDetailPage> {
   void _showErrorToast(String message) {
     showToast(
       context: context,
-      builder: (context, overlay) => SurfaceCard(
-        child: Basic(
-          title: const Text('Gagal'),
-          subtitle: Text(message),
-        ),
-      ),
+      builder: (context, overlay) => ToastFormatter.error('Gagal', message),
       location: ToastLocation.bottomRight,
     );
   }
@@ -83,12 +79,7 @@ class _PemasukanDetailPageState extends State<PemasukanDetailPage> {
   void _showSuccessToast(String message) {
     showToast(
       context: context,
-      builder: (context, overlay) => SurfaceCard(
-        child: Basic(
-          title: const Text('Berhasil'),
-          subtitle: Text(message),
-        ),
-      ),
+      builder: (context, overlay) => ToastFormatter.success(message),
       location: ToastLocation.bottomRight,
     );
   }

@@ -6,6 +6,7 @@ import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
 import 'package:snap_notes_mvvm/utils/format_utils.dart';
 import 'package:snap_notes_mvvm/utils/rupiah_input_formatter.dart';
 import 'package:snap_notes_mvvm/features/receipt/views/pages/full_screen_image_page.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 
 
 class PengeluaranFormPage extends StatefulWidget {
@@ -70,9 +71,7 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
       if (_selectedCategoryId == null && prompt.isEmpty) {
         showToast(
           context: context,
-          builder: (context, overlay) => const SurfaceCard(
-            child: Basic(title: Text('Error'), subtitle: Text('Kategori atau prompt koreksi harus diisi')),
-          ),
+          builder: (context, overlay) => ToastFormatter.validation('Kategori atau prompt koreksi harus diisi'),
           location: ToastLocation.bottomRight,
         );
         return;
@@ -94,23 +93,13 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
         if (viewModel.errorMessage != null) {
           showToast(
             context: context,
-            builder: (context, overlay) => SurfaceCard(
-              child: Basic(
-                title: const Text('Gagal'),
-                subtitle: Text(viewModel.errorMessage!),
-              ),
-            ),
+            builder: (context, overlay) => ToastFormatter.error('Gagal', viewModel.errorMessage!),
             location: ToastLocation.bottomRight,
           );
         } else {
           showToast(
             context: context,
-            builder: (context, overlay) => const SurfaceCard(
-              child: Basic(
-                title: Text('Berhasil'),
-                subtitle: Text('Struk berhasil diproses ulang dengan AI'),
-              ),
-            ),
+            builder: (context, overlay) => ToastFormatter.success('Struk berhasil diproses ulang dengan AI'),
             location: ToastLocation.bottomRight,
           );
           Navigator.pop(context, true);
@@ -125,9 +114,7 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
     if (deskripsi.isEmpty) {
       showToast(
         context: context,
-        builder: (context, overlay) => const SurfaceCard(
-          child: Basic(title: Text('Error'), subtitle: Text('Deskripsi tidak boleh kosong')),
-        ),
+        builder: (context, overlay) => ToastFormatter.validation('Deskripsi tidak boleh kosong'),
         location: ToastLocation.bottomRight,
       );
       return;
@@ -138,9 +125,7 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
     if (jumlah <= 0) {
       showToast(
         context: context,
-        builder: (context, overlay) => const SurfaceCard(
-          child: Basic(title: Text('Error'), subtitle: Text('Jumlah tidak valid')),
-        ),
+        builder: (context, overlay) => ToastFormatter.validation('Jumlah tidak valid'),
         location: ToastLocation.bottomRight,
       );
       return;
@@ -169,23 +154,13 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
       if (viewModel.errorMessage != null) {
         showToast(
           context: context,
-          builder: (context, overlay) => SurfaceCard(
-            child: Basic(
-              title: const Text('Gagal'),
-              subtitle: Text(viewModel.errorMessage!),
-            ),
-          ),
+          builder: (context, overlay) => ToastFormatter.error('Gagal menyimpan pengeluaran', viewModel.errorMessage!),
           location: ToastLocation.bottomRight,
         );
       } else {
         showToast(
           context: context,
-          builder: (context, overlay) => SurfaceCard(
-            child: Basic(
-              title: const Text('Berhasil'),
-              subtitle: Text(isEdit ? 'Berhasil mengubah pengeluaran' : 'Berhasil menambahkan pengeluaran'),
-            ),
-          ),
+          builder: (context, overlay) => ToastFormatter.success(isEdit ? 'Pengeluaran berhasil diubah' : 'Pengeluaran berhasil disimpan'),
           location: ToastLocation.bottomRight,
         );
         Navigator.pop(context, true);

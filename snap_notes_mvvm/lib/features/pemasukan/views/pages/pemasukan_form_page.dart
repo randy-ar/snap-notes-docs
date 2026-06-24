@@ -1,6 +1,7 @@
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:snap_notes_mvvm/core/di/injection.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/models/pemasukan.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/viewmodels/pemasukan_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
@@ -55,14 +56,14 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
     final jumlahStr = _jumlahController.text.trim();
 
     if (deskripsi.isEmpty) {
-      _showToast('Error', 'Deskripsi tidak boleh kosong');
+      _showToastValidation('Deskripsi tidak boleh kosong');
       return;
     }
 
     // Mem-parse string nominal terformat kembali ke double secara aman
     final jumlah = FormatUtils.parseRupiahToDouble(jumlahStr);
     if (jumlah <= 0) {
-      _showToast('Error', 'Jumlah tidak valid');
+      _showToastValidation('Jumlah tidak valid');
       return;
     }
 
@@ -90,19 +91,33 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
     if (!mounted) return;
 
     if (viewModel.errorMessage != null) {
-      _showToast('Gagal', viewModel.errorMessage!);
+      _showToastError('Gagal menyimpan pemasukan', viewModel.errorMessage!);
     } else {
-      _showToast('Berhasil', isEdit ? 'Berhasil mengubah pemasukan' : 'Berhasil menambahkan pemasukan');
+      _showToastSuccess(isEdit ? 'Pemasukan berhasil diubah' : 'Pemasukan berhasil disimpan');
       Navigator.pop(context, true);
     }
   }
 
-  void _showToast(String title, String message) {
+  void _showToastValidation(String message) {
     showToast(
       context: context,
-      builder: (context, overlay) => SurfaceCard(
-        child: Basic(title: Text(title), subtitle: Text(message)),
-      ),
+      builder: (context, overlay) => ToastFormatter.validation(message),
+      location: ToastLocation.bottomRight,
+    );
+  }
+
+  void _showToastError(String message, String description) {
+    showToast(
+      context: context,
+      builder: (context, overlay) => ToastFormatter.error(message, description),
+      location: ToastLocation.bottomRight,
+    );
+  }
+
+  void _showToastSuccess(String message) {
+    showToast(
+      context: context,
+      builder: (context, overlay) => ToastFormatter.success(message),
       location: ToastLocation.bottomRight,
     );
   }

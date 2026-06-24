@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' show RefreshIndicator, MaterialPageRoute;
 import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:snap_notes_mvvm/core/di/injection.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/viewmodels/pengeluaran_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/views/pages/pengeluaran_form_page.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
@@ -43,23 +44,13 @@ class PengeluaranDetailView extends StatelessWidget {
       if (viewModel.errorMessage != null) {
         showToast(
           context: context,
-          builder: (context, overlay) => SurfaceCard(
-            child: Basic(
-              title: const Text('Gagal'),
-              subtitle: Text(viewModel.errorMessage!),
-            ),
-          ),
+          builder: (context, overlay) => ToastFormatter.error('Gagal menghapus pengeluaran', viewModel.errorMessage!),
           location: ToastLocation.bottomRight,
         );
       } else {
         showToast(
           context: context,
-          builder: (context, overlay) => const SurfaceCard(
-            child: Basic(
-              title: Text('Berhasil'),
-              subtitle: Text('Pengeluaran berhasil dihapus'),
-            ),
-          ),
+          builder: (context, overlay) => ToastFormatter.success('Pengeluaran berhasil dihapus'),
           location: ToastLocation.bottomRight,
         );
         Navigator.pop(context, true);

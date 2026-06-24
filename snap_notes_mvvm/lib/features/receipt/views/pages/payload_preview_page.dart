@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.dart';
 
 class PayloadPreviewPage extends StatefulWidget {
@@ -173,11 +174,8 @@ class _PayloadPreviewPageState extends State<PayloadPreviewPage> {
                   Clipboard.setData(ClipboardData(text: jsonPayload));
                   showToast(
                     context: context,
-                    builder: (context, overlay) {
-                      return const SurfaceCard(
-                        child: Text('JSON copied to clipboard'),
-                      );
-                    },
+                    builder: (context, overlay) => ToastFormatter.success('JSON disalin ke clipboard'),
+                    location: ToastLocation.bottomRight,
                   );
                 },
                 child: const Icon(LucideIcons.copy),
@@ -224,11 +222,8 @@ class _PayloadPreviewPageState extends State<PayloadPreviewPage> {
                   Clipboard.setData(ClipboardData(text: widget.rawText));
                   showToast(
                     context: context,
-                    builder: (context, overlay) {
-                      return const SurfaceCard(
-                        child: Text('Raw text copied to clipboard'),
-                      );
-                    },
+                    builder: (context, overlay) => ToastFormatter.success('Raw text disalin ke clipboard'),
+                    location: ToastLocation.bottomRight,
                   );
                 },
                 child: const Icon(LucideIcons.copy),

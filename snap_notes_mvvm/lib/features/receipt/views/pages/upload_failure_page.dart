@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.dart';
 
 class UploadFailurePage extends StatelessWidget {
@@ -86,11 +87,8 @@ class UploadFailurePage extends StatelessWidget {
                                 Clipboard.setData(ClipboardData(text: jsonStr));
                                 showToast(
                                   context: context,
-                                  builder: (context, overlay) {
-                                    return const SurfaceCard(
-                                      child: Text('Error details copied'),
-                                    );
-                                  },
+                                  builder: (context, overlay) => ToastFormatter.success('Detail error disalin ke clipboard'),
+                                  location: ToastLocation.bottomRight,
                                 );
                               },
                               child: const Icon(LucideIcons.copy),

@@ -1,5 +1,6 @@
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/notifikasi/models/preferensi_notifikasi.dart';
 import 'package:snap_notes_mvvm/features/notifikasi/viewmodels/notifikasi_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/notifikasi/views/pages/notifikasi_form_page.dart';
@@ -56,9 +57,9 @@ class _NotifikasiSettingsPageState extends State<NotifikasiSettingsPage> {
     if (!mounted) return;
 
     if (viewModel.errorMessage != null) {
-      _showToast("Gagal", viewModel.errorMessage!);
+      _showToastError('Gagal menghapus preferensi', viewModel.errorMessage!);
     } else {
-      _showToast("Berhasil", "Preferensi dihapus");
+      _showToastSuccess('Preferensi berhasil dihapus');
       // Reschedule after delete
       if (viewModel.preferensiList.isNotEmpty) {
         await viewModel.scheduleNotifications(viewModel.preferensiList);
@@ -89,23 +90,18 @@ class _NotifikasiSettingsPageState extends State<NotifikasiSettingsPage> {
     );
   }
 
-  void _showToast(String title, String message) {
+  void _showToastError(String message, String description) {
     showToast(
       context: context,
-      builder: (context, overlay) {
-        return SurfaceCard(
-          child: Basic(
-            title: Text(title),
-            subtitle: Text(message),
-            trailing: PrimaryButton(
-              size: ButtonSize.small,
-              onPressed: () => overlay.close(),
-              child: const Text('Tutup'),
-            ),
-            trailingAlignment: Alignment.center,
-          ),
-        );
-      },
+      builder: (context, overlay) => ToastFormatter.error(message, description),
+      location: ToastLocation.bottomRight,
+    );
+  }
+
+  void _showToastSuccess(String message) {
+    showToast(
+      context: context,
+      builder: (context, overlay) => ToastFormatter.success(message),
       location: ToastLocation.bottomRight,
     );
   }
