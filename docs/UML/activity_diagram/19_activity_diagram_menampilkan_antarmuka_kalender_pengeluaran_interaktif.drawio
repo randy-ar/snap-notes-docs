@@ -1,0 +1,85 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="act-19">
+    <mxGraphModel dx="3024" dy="1700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="main_cont" parent="1" style="swimlane;html=1;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;startSize=30;whiteSpace=wrap;" value="&lt;span style=&quot;font-weight:700;font-size:12pt;&quot;&gt;Activity Diagram Menampilkan Antarmuka Kalender Pengeluaran Interaktif&lt;/span&gt;" vertex="1">
+          <mxGeometry height="660" width="840" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_0" parent="main_cont" style="swimlane;html=1;startSize=30;" value="Masyarakat" vertex="1">
+          <mxGeometry height="630" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="node_start" parent="lane_0" style="ellipse;fillColor=strokeColor;html=1;" vertex="1">
+          <mxGeometry height="30" width="30" x="125" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_1" parent="lane_0" style="rounded=1;whiteSpace=wrap;html=1;" value="Memilih mode tampilan Kalender pada menu Analisis" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="lLsZDAbQ8CpX_D9azNmY-5" edge="1" parent="lane_0" source="node_e_4_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="lLsZDAbQ8CpX_D9azNmY-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="node_e_4_1" parent="lane_0" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengetuk sel tanpa transaksi menampilkan status riwayat kosong" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="lLsZDAbQ8CpX_D9azNmY-6" edge="1" parent="lane_0" source="node_m_6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="node_end_main">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_6" parent="lane_0" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengetuk tanggal spesifik untuk memunculkan daftar transaksi" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="node_end_main" parent="lane_0" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" vertex="1">
+          <mxGeometry height="30" width="30" x="125" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="lLsZDAbQ8CpX_D9azNmY-3" parent="lane_0" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" vertex="1">
+          <mxGeometry height="30" width="30" x="125" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_1" parent="main_cont" style="swimlane;html=1;startSize=30;" value="Sistem" vertex="1">
+          <mxGeometry height="630" width="280" x="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_2" parent="lane_1" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengidentifikasi bulan dan tahun, lalu meminta data akumulasi ke Web Service" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_5" parent="lane_1" style="rounded=1;whiteSpace=wrap;html=1;" value="Merender visualisasi kalender berdasarkan intensitas pengeluaran" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_2" parent="main_cont" style="swimlane;html=1;startSize=30;" value="Web Service" vertex="1">
+          <mxGeometry height="630" width="280" x="560" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_3" parent="lane_2" style="rounded=1;whiteSpace=wrap;html=1;" value="Menarik akumulasi transaksi harian dari basis data untuk bulan tersebut" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_4" parent="lane_2" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengembalikan hasil data riwayat harian" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="node_dec_4" parent="lane_2" style="rhombus;whiteSpace=wrap;html=1;" value="Valid?" vertex="1">
+          <mxGeometry height="80" width="80" x="100" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_1" edge="1" parent="1" source="node_start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_2" edge="1" parent="1" source="node_m_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_3" edge="1" parent="1" source="node_m_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_4" edge="1" parent="1" source="node_m_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_5" edge="1" parent="1" source="node_m_4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_dec_4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_6" edge="1" parent="1" source="node_dec_4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_e_4_1" value="Tidak/Kosong">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_8" edge="1" parent="1" source="node_dec_4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="node_m_5" value="Iya/Tersedia">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_9" edge="1" parent="1" source="node_m_5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

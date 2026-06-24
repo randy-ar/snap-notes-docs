@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="act-14">
+    <mxGraphModel dx="1701" dy="956" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="main_cont" parent="1" style="swimlane;html=1;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;startSize=30;whiteSpace=wrap;" value="&lt;span style=&quot;font-weight:700;font-size:12pt;&quot;&gt;Activity Diagram Menambah Data Pengeluaran Secara Manual&lt;/span&gt;" vertex="1">
+          <mxGeometry height="680" width="960" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_0" parent="main_cont" style="swimlane;html=1;startSize=30;" value="Masyarakat" vertex="1">
+          <mxGeometry height="650" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="node_start" parent="lane_0" style="ellipse;fillColor=strokeColor;html=1;" vertex="1">
+          <mxGeometry height="30" width="30" x="125" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_1" parent="lane_0" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengisi nominal, tanggal, memilih kategori, serta mengisi catatan terkait pengeluaran" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_2" parent="lane_0" style="rounded=1;whiteSpace=wrap;html=1;" value="Menekan tombol &quot;Simpan&quot; pada antarmuka" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_1" parent="main_cont" style="swimlane;html=1;startSize=30;" value="Sistem" vertex="1">
+          <mxGeometry height="650" width="400" x="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_3" parent="lane_1" style="rounded=1;whiteSpace=wrap;html=1;" value="Memvalidasi keabsahan data secara lokal (seperti nominal lebih dari nol)" vertex="1">
+          <mxGeometry height="60" width="180" x="105" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="node_dec_3" parent="lane_1" style="rhombus;whiteSpace=wrap;html=1;" value="Valid?" vertex="1">
+          <mxGeometry height="80" width="80" x="155" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_4" parent="lane_1" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengirimkan payload inputan ke Web Service" vertex="1">
+          <mxGeometry height="60" width="180" x="200" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_6" parent="lane_1" style="rounded=1;whiteSpace=wrap;html=1;" value="Menampilkan Toaster bahwa transaksi berhasil ditambahkan dan pengguna diarahkan ke riwayat" vertex="1">
+          <mxGeometry height="60" width="180" x="110" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="node_end_main" parent="lane_1" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" vertex="1">
+          <mxGeometry height="30" width="30" x="185" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="node_e_3_1" parent="lane_1" style="rounded=1;whiteSpace=wrap;html=1;" value="aplikasi memunculkan pesan validasi agar pengguna segera memperbaikinya" vertex="1">
+          <mxGeometry height="60" width="180" x="10" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_5" edge="1" parent="lane_1" source="node_dec_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="node_e_3_1" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_2" parent="main_cont" style="swimlane;html=1;startSize=30;" value="Web Service" vertex="1">
+          <mxGeometry height="650" width="280" x="680" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_5" parent="lane_2" style="rounded=1;whiteSpace=wrap;html=1;" value="Memasukkan entitas data pengeluaran baru ke dalam tabel PostgreSQL" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="nneMRgrWbcJ_Sdp2TAgf-1" edge="1" parent="main_cont" source="node_e_3_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="node_m_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_1" edge="1" parent="1" source="node_start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_2" edge="1" parent="1" source="node_m_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_3" edge="1" parent="1" source="node_m_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_4" edge="1" parent="1" source="node_m_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_dec_3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_7" edge="1" parent="1" source="node_dec_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="node_m_4" value="Iya">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_8" edge="1" parent="1" source="node_m_4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_9" edge="1" parent="1" source="node_m_5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="node_m_6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_10" edge="1" parent="1" source="node_m_6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_end_main" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

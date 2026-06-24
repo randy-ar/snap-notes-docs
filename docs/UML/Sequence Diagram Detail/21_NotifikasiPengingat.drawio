@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="Page-1">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bg" value="&lt;&lt;Worker&gt;&gt;&#10;BackgroundService" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="60" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="db" value="&lt;&lt;Storage&gt;&gt;&#10;LocalSecureDB" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="280" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="plugin" value="&lt;&lt;Plugin&gt;&gt;&#10;LocalNotification" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="500" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="os" value="&lt;&lt;OS&gt;&gt;&#10;SistemAndroid" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="720" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="user" value="&lt;&lt;actor&gt;&gt;&#10;Masyarakat" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="940" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="100" value="1: Waktu tercapai" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="bg" target="bg">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="120" />
+              <mxPoint x="110" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="101" value="2: Cek status harian" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="bg" target="db">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="160" />
+              <mxPoint x="330" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="102" value="3: Return belum mencatat" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="db" target="bg">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="200" />
+              <mxPoint x="110" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="103" value="4: show(pesan)" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="bg" target="plugin">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="240" />
+              <mxPoint x="550" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="104" value="5: Trigger push alert" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="plugin" target="os">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550" y="280" />
+              <mxPoint x="770" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="105" value="6: Tampilkan pesan di layar" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="os" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="770" y="320" />
+              <mxPoint x="990" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="106" value="7: Melihat notifikasi" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="user" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="990" y="360" />
+              <mxPoint x="990" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

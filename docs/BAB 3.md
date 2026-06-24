@@ -229,9 +229,9 @@ Tahapan proses pada flowchart tersebut dijelaskan sebagai berikut:
 
    3. ##### **Analisis Integrasi Supabase dengan NestJS** {#analisis-integrasi-supabase-dengan-nestjs}
 
-Analisis ini bertujuan untuk memahami kapabilitas NestJS dalam mengelola persistensi data pengguna melalui integrasi dengan ekosistem layanan Supabase. NestJS mengemban tugas ganda dalam tahap ini, yaitu melakukan sinkronisasi berkas gambar fisik ke layanan Cloud Storage dan melakukan pencatatan rekaman pengeluaran ke dalam basis data relasional PostgreSQL. Dengan kapabilitas dukungan Prisma ORM dan SDK Supabase, NestJS mampu menjalankan operasi yang presisi untuk menjamin keutuhan data finansial. Flowchart alur integrasi Supabase dengan NestJS dapat dilihat pada Gambar 3.8.  
+Analisis ini bertujuan untuk memahami kapabilitas NestJS dalam mengelola persistensi data pengguna melalui integrasi dengan ekosistem layanan Supabase. NestJS mengemban tugas ganda dalam tahap ini, yaitu melakukan sinkronisasi berkas gambar fisik ke layanan Cloud Storage dan melakukan pencatatan rekaman pengeluaran ke dalam basis data relasional PostgreSQL. Dengan kapabilitas dukungan Prisma ORM dan SDK Supabase, NestJS mampu menjalankan operasi yang presisi untuk menjamin keutuhan data finansial. Flowchart alur integrasi Supabase dengan NestJS dapat dilihat pada Gambar 3.30.  
 ![][image8]  
-Gambar 3.8 Flowchart Integrasi Database Supabase NestJS  
+Gambar 3.30 Flowchart Integrasi Database Supabase NestJS  
 Tahapan proses pada flowchart tersebut dijelaskan sebagai berikut:
 
 1. Proses penyimpanan data keuangan dimulai ketika server NestJS membaca variabel parameter koneksi dari berkas .env. Konfigurasi ini mencakup URL basis data (DATABASE\_URL) untuk ruang PostgreSQL, serta kredensial antarmuka layanan (SUPABASE\_URL dan API Key) untuk penyimpanan berkas Cloud Storage.  
@@ -374,16 +374,19 @@ Tabel 3.4 Spesifikasi Kebutuhan Fungsional
 | SKPL-F-007 | Sistem menyediakan fitur untuk merestrukturisasi teks mentah hasil pemindaian menjadi data keuangan yang rapi menggunakan Gemini AI. |
 | SKPL-F-008 | Sistem dapat menyediakan antarmuka untuk meninjau dan mengubah data hasil ekstraksi sebelum disimpan ke basis data. |
 | SKPL-F-009 | Sistem dapat menyimpan data pengeluaran hasil pemindaian struk belanja secara permanen ke basis data. |
-| SKPL-F-010 | Sistem dapat menyediakn antarmuka riwayat pengeluaran yang telah dicatat oleh pengguna. |
-| SKPL-F-011 | Sistem dapat menyediakan pengelolaan struk belanja meliputi operasi ubah dan hapus data. |
-| SKPL-F-012 | Sistem dapat menampilkan detail data struk belanja yang telah berhasil disimpan oleh sistem. |
-| SKPL-F-013 | Sistem dapat menyediakan antarmuka riwayat pemasukan yang telah dicatat oleh pengguna. |
-| SKPL-F-014 | Sistem dapat menyediakan pengelolaan data pemasukan meliputi operasi tambah, ubah, dan hapus. |
-| SKPL-F-015 | Sistem dapat menampilkan antarmuka tren pengeluaran per bulan dalam bentuk grafik. |
-| SKPL-F-016 | Sistem dapat menampilkan antarmuka kalender pengeluaran interaktif berdasarkan data transaksi harian. |
-| SKPL-F-017 | Sistem dapat menampilkan visualisasi persentase pengeluaran per kategori dalam bentuk diagram. |
-| SKPL-F-018 | Sistem dapat mengirimkan notifikasi pengingat pencatatan keuangan secara otomatis kepada pengguna. |
-| SKPL-F-018 | Sistem dapat menyediakan pengaturan preferensi notifikasi pengingat sesuai kebutuhan pengguna. |
+| SKPL-F-010 | Sistem dapat menyediakan antarmuka riwayat pengeluaran yang telah dicatat oleh pengguna. |
+| SKPL-F-011 | Sistem dapat menyediakan antarmuka detail pengeluaran yang telah disimpan ke database. |
+| SKPL-F-012 | Sistem dapat menyediakan fitur untuk mengubah data struk, dengan cara merestrukturisasi data teks OCR menjadi data struk yang diperbaiki menggunakan Gemini AI. |
+| SKPL-F-013 | Sistem dapat menyediakan fitur untuk menghapus data pengeluaran yang telah tersimpan di database. |
+| SKPL-F-014 | Sistem dapat menyediakan fitur untuk menambah data pengeluaran secara mandiri melalui input manual dari user. |
+| SKPL-F-015 | Sistem dapat menyediakan fitur untuk mengubah data pengeluaran secara mandiri melalui input manual dari user. |
+| SKPL-F-016 | Sistem dapat menyediakan antarmuka riwayat pemasukan yang telah dicatat oleh pengguna. |
+| SKPL-F-017 | Sistem dapat menyediakan pengelolaan data pemasukan meliputi operasi tambah, ubah, dan hapus. |
+| SKPL-F-018 | Sistem dapat menampilkan antarmuka tren pengeluaran per bulan dalam bentuk grafik. |
+| SKPL-F-019 | Sistem dapat menampilkan antarmuka kalender pengeluaran interaktif berdasarkan data transaksi harian. |
+| SKPL-F-020 | Sistem dapat menampilkan visualisasi persentase pengeluaran per kategori dalam bentuk diagram. |
+| SKPL-F-021 | Sistem dapat mengirimkan notifikasi pengingat pencatatan keuangan secara otomatis kepada pengguna. |
+| SKPL-F-022 | Sistem dapat menyediakan pengaturan preferensi notifikasi pengingat sesuai kebutuhan pengguna. |
 
 1. #### **Use Case Diagram** {#use-case-diagram}
 
@@ -405,7 +408,7 @@ Tabel 3.5 Definisi Aktor Pada Use Case
 
 2. **Definisi Use Case**
 
-Definisi use case menjabarkan rincian fungsi dari setiap lingkaran aktivitas yang terdapat di dalam Use Case Diagram secara atomik. Pendekatan ini memastikan bahwa setiap poin kebutuhan fungsional yang telah diidentifikasi sebelumnya terwakili secara akurat oleh satu skenario penggunaan yang unik. Spesifikasi lengkap mengenai fungsi, keterlibatan aktor, serta tujuan dari kedelapan belas use case pada sistem Snap Notes dirinci melalui Tabel 3.6.  
+Definisi use case menjabarkan rincian fungsi dari setiap lingkaran aktivitas yang terdapat di dalam Use Case Diagram secara atomik. Pendekatan ini memastikan bahwa setiap poin kebutuhan fungsional yang telah diidentifikasi sebelumnya terwakili secara akurat oleh satu skenario penggunaan yang unik. Spesifikasi lengkap mengenai fungsi, keterlibatan aktor, serta tujuan dari kedua puluh dua use case pada sistem Snap Notes dirinci melalui Tabel 3.6.  
 Tabel 3.6 Matriks Definisi dan Deskripsi Fungsi Use Case
 
 | No. | Use Case | Deskripsi |
@@ -420,14 +423,18 @@ Tabel 3.6 Matriks Definisi dan Deskripsi Fungsi Use Case
 | 8 | Menyediakan Formulir Tinjauan Data Ekstraksi | Fungsi koreksi antarmuka yang mengizinkan masyarakat melakukan penyuntingan data hasil parsing kecerdasan buatan apabila ditemukan kesalahan nominal. |
 | 9 | Menyimpan Data Pengeluaran Hasil Scan | Proses persistensi data di mana Web Service merekam entitas pengeluaran beserta rincian item belanjaan ke dalam tabel relasional PostgreSQL. |
 | 10 | Menyediakan Antarmuka Riwayat Pengeluaran | Fitur penjelajah arsip yang menampilkan kumpulan daftar transaksi pengeluaran masa lalu yang dicatat oleh pengguna. |
-| 11 | Menyediakan Fitur Pengelolaan Struk Belanja | Fitur manipulasi data yang memberikan hak kepada pengguna untuk memperbarui atau melenyapkan catatan struk belanja yang sudah tidak valid. |
-| 12 | Menyediakan Akses Gambar Struk Tersimpan | Proses penarikan file gambar dari storage bucket cloud untuk menampilkan kembali visualisasi struk belanja asli sebagai alat bukti pencatatan sah. |
-| 13 | Menyediakan Antarmuka Riwayat Pemasukan | Penyajian antarmuka daftar riwayat pemasukan yang sebelumnya telah didaftarkan oleh pengguna ke dalam sistem. |
-| 14 | Menyediakan Fitur Pengelolaan Pemasukan | Skenario manipulasi data yang memfasilitasi pengguna untuk mengelola data pemasukan yang meliputi operasi tambah, ubah, dan hapus transaksi. |
-| 15 | Menampilkan Antarmuka Tren Pengeluaran Per bulan | Fungsi statistik untuk menggambarkan fluktuasi grafik garis pengeluaran pengguna dalam kurun waktu tertentu guna bahan evaluasi. |
-| 16 | Menampilkan Antarmuka Kalender Pengeluaran Interaktif | Penyajian data spasial di mana aplikasi memetakan riwayat pengeluaran harian ke dalam bentuk kalender interaktif dengan indikator khusus. |
-| 17 | Menampilkan Visualisasi Persentase per Kategori | Modul visualisasi diagram lingkaran yang memecah total pengeluaran pengguna ke dalam beberapa persentase kategori alokasi dana belanja. |
-| 18 | Mengirimkan Notifikasi Pengingat Otomatis | Fungsi latar belakang yang dipicu untuk memunculkan pesan pengingat secara otomatis agar pengguna konsisten mencatat pengeluaran harian. |
+| 11 | Menyediakan Antarmuka Detail Pengeluaran | Menyajikan rincian data pengeluaran yang telah dicatat, termasuk rincian tiap item struk belanja jika tersedia. |
+| 12 | Mengubah Data Struk dengan Gemini AI | Fasilitas pemrosesan ulang teks OCR menggunakan Gemini AI untuk merestrukturisasi dan memperbaiki data struk yang keliru. |
+| 13 | Menghapus Data Pengeluaran | Fitur untuk menghapus rekaman data pengeluaran yang telah tersimpan di basis data secara permanen. |
+| 14 | Menambah Data Pengeluaran Secara Manual | Fasilitas bagi pengguna untuk menambahkan data transaksi pengeluaran secara mandiri tanpa melalui proses pindai struk. |
+| 15 | Mengubah Data Pengeluaran Secara Manual | Fitur untuk melakukan penyuntingan data transaksi pengeluaran secara mandiri guna memperbaiki kesalahan pencatatan. |
+| 16 | Menyediakan Antarmuka Riwayat Pemasukan | Penyajian antarmuka daftar riwayat pemasukan yang sebelumnya telah didaftarkan oleh pengguna ke dalam sistem. |
+| 17 | Menyediakan Fitur Pengelolaan Pemasukan | Skenario manipulasi data yang memfasilitasi pengguna untuk mengelola data pemasukan yang meliputi operasi tambah, ubah, dan hapus transaksi. |
+| 18 | Menampilkan Antarmuka Tren Pengeluaran Per bulan | Fungsi statistik untuk menggambarkan fluktuasi grafik garis pengeluaran pengguna dalam kurun waktu tertentu guna bahan evaluasi. |
+| 19 | Menampilkan Antarmuka Kalender Pengeluaran Interaktif | Penyajian data spasial di mana aplikasi memetakan riwayat pengeluaran harian ke dalam bentuk kalender interaktif dengan indikator khusus. |
+| 20 | Menampilkan Visualisasi Persentase per Kategori | Modul visualisasi diagram lingkaran yang memecah total pengeluaran pengguna ke dalam beberapa persentase kategori alokasi dana belanja. |
+| 21 | Mengirimkan Notifikasi Pengingat Otomatis | Fungsi latar belakang yang dipicu untuk memunculkan pesan pengingat secara otomatis agar pengguna konsisten mencatat pengeluaran harian. |
+| 22 | Mengelola Preferensi Notifikasi Pengingat | Memberikan kendali kepada pengguna untuk mengaktifkan, menonaktifkan, serta mengatur waktu spesifik untuk notifikasi pengingat. |
 
 3. **Use Case Skenario**
 
@@ -640,16 +647,19 @@ Skenario use case digunakan untuk menggambarkan interaksi antara aktor (baik man
 | ***Trigger*** | Aplikasi berhasil merender form data hasil strukturisasi ke antarmuka masyarakat. |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Aplikasi menampilkan formulir data transaksi keuangan yang berisi nama toko, tanggal transaksi, kategori toko, daftar item belanja (nama barang, jumlah, harga satuan, subtotal, kategori item), dan total nominal. |
+|  | 1 | Aplikasi menampilkan antarmuka tinjauan hasil ekstraksi yang terdiri dari tab "Gambar Struk" dan "Data Ekstraksi". |
 |  |  |  |
-|  | 2 | Masyarakat memeriksa kecocokan data transaksi dengan fisik struk belanja. |
-|  | 3 | Masyarakat menyunting data yang tidak sesuai. |
-|  | 4 | Aplikasi memvalidasi kebenaran rekapitulasi matematis transaksi secara lokal. |
-|  | 5 | Masyarakat menekan tombol "Simpan" untuk menyetujui data. |
+|  | 2 | Masyarakat memeriksa rincian data transaksi seperti nama toko, tanggal, item belanja, kategori, dan total nominal. |
+|  | 3 | Masyarakat menekan tombol "Simpan Data" untuk mengonfirmasi hasil ekstraksi. |
+|  | 4 | Aplikasi menandai status pemindaian struk sebagai selesai. |
+|  | 5 | Aplikasi mengarahkan masyarakat ke halaman penyelesaian unggahan. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
-|  | 3.1 | Aplikasi memberikan konfirmasi pembatalan. Jika ya, data dibuang dan kembali ke halaman dashboard utama. |
+|  | 2.1 | Masyarakat menekan tombol "Ubah Data" untuk memodifikasi hasil ekstraksi. |
 |  |  |  |
-|  | 4.1 | Aplikasi menampilkan peringatan selisih perhitungan dan meminta Masyarakat meninjau kembali kolom harga/total. |
+|  | 2.2 | Aplikasi menampilkan formulir koreksi kategori struk dan penambahan Konteks AI opsional. |
+|  | 2.3 | Masyarakat mengisi koreksi yang dibutuhkan lalu menekan tombol "Simpan Perubahan". |
+|  | 2.4 | Sistem mengirimkan pembaruan data struk ke Web Service. |
+|  | 2.5 | Aplikasi memuat ulang data ekstraksi yang telah diperbarui dan kembali ke langkah 2. |
 
 9. Skenario Use Case Menyimpan Data Pengeluaran Hasil Scan  
    Tabel 3.15 Skenario Menyimpan Data Pengeluaran Hasil Scan
@@ -691,93 +701,174 @@ Skenario use case digunakan untuk menggambarkan interaksi antara aktor (baik man
 | ***Trigger*** | Masyarakat membuka halaman Tab Riwayat Pengeluaran |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Aplikasi mengirim request HTTP GET ke Web Service untuk menarik data pengeluaran. |
+|  | 1 | Masyarakat membuka antarmuka riwayat pengeluaran pada aplikasi. |
 |  |  |  |
-|  | 2 | Web Service memverifikasi token dan melakukan kueri penarikan entitas Pengeluaran ke database. |
-|  | 3 | Web Service mengembalikan daftar transaksi pengeluaran berformat JSON. |
-|  | 4 | Aplikasi merender data ke dalam antarmuka riwayat transaksi secara urut. |
-|  | 5 | Aplikasi mengirimkan data transaksi ke Nest JS. |
+|  | 2 | Aplikasi mengirimkan permintaan pengambilan daftar pengeluaran ke Web Service beserta parameter paginasi data. |
+|  | 3 | Web Service memvalidasi akses dan mengambil data riwayat pengeluaran dari basis data. |
+|  | 4 | Web Service mengembalikan senarai transaksi riwayat pengeluaran. |
+|  | 5 | Aplikasi merender senarai riwayat pengeluaran ke layar Masyarakat. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
-|  | 2.1 | Jika belum ada transaksi sama sekali, Web Service mengembalikan daftar kosong, dan aplikasi menampilkan ilustrasi "Riwayat masih kosong". |
+|  | 4.1 | Jika tidak ada data transaksi yang ditemukan, Web Service mengembalikan senarai kosong dan Aplikasi menampilkan ilustrasi status kosong. |
 |  |  |  |
 
-11. Skenario Use Case Menyediakan Fitur Pengelolaan Struk Belanja  
-    Tabel 3.17 Skenario Menyediakan Fitur Pengelolaan Struk Belanja
 
-| *Nama Use Case* | *Menyediakan Fitur Pengelolaan Struk Belanja* |  |
+11. Skenario Use Case Menyediakan Antarmuka Detail Pengeluaran  
+    Tabel 3.17 Skenario Menyediakan Antarmuka Detail Pengeluaran
+
+| *Nama Use Case* | *Menyediakan Antarmuka Detail Pengeluaran* |  |
 | :---: | ----- | ----- |
 | ***Related Requirement*** | SKPL-F-011 |  |
-| ***Goal in Context*** | Masyarakat dapat memperbarui rincian transaksi struk belanja atau menghapus data struk yang sudah tidak valid. |  |
-| ***Precondition*** | Masyarakat membuka halaman detail dari sebuah struk belanja di dalam daftar riwayat. |  |
-| ***Successful End Condition*** | Perubahan detail struk atau penghapusan data struk berhasil dieksekusi di database. |  |
-| ***Failed End Condition*** | Operasi gagal dijalankan akibat kegagalan sinkronisasi. |  |
+| ***Goal in Context*** | Masyarakat dapat melihat informasi terperinci dari suatu transaksi pengeluaran beserta rincian item belanja. |  |
+| ***Precondition*** | Masyarakat berada pada antarmuka riwayat pengeluaran dan memilih salah satu transaksi. |  |
+| ***Successful End Condition*** | Sistem berhasil menampilkan halaman detail transaksi yang memuat total pengeluaran, tanggal, kategori, nama struk, serta rincian tiap item belanja. |  |
+| ***Failed End Condition*** | Gagal memuat detail transaksi karena masalah koneksi atau data tidak ditemukan. |  |
 | ***Actors*** | Masyarakat, Web Service |  |
-| ***Trigger*** | Masyarakat memilih opsi Ubah/Hapus pada antarmuka detail transaksi struk. |  |
+| ***Trigger*** | Masyarakat menekan salah satu entri pada daftar riwayat pengeluaran. |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Masyarakat menekan tombol "Ubah" atau "Hapus" pada struk belanja tertentu. |
+|  | 1 | Masyarakat menekan salah satu entri pada daftar riwayat pengeluaran. |
 |  |  |  |
-|  | 2 | Jika Hapus: Sistem memunculkan dialog peringatan penghapusan data permanen. |
-|  | 3 | Jika Ubah: Sistem menampilkan form edit detail struk belanja. Masyarakat mengubah data lalu menekan "Simpan". |
-|  | 4 | Aplikasi mengirimkan request mutasi/penghapusan ke Web Service. |
-|  | 5 | Web Service menjalankan kueri mutasi entitas pada PostgreSQL. |
-|  | 6 | Sistem mengembalikan respons sukses dan antarmuka aplikasi memperbarui daftar tampilan terbaru. |
+|  | 2 | Aplikasi mengirimkan permintaan pengambilan data detail pengeluaran kepada Web Service berdasarkan ID transaksi. |
+|  | 3 | Web Service memvalidasi permintaan dan mengeksekusi kueri pada PostgreSQL untuk mengambil entitas pengeluaran beserta relasi item struk belanja. |
+|  | 4 | Web Service mengembalikan respons berisi data struktur JSON detail pengeluaran yang memuat atribut terkait. |
+|  | 5 | Aplikasi memproses respons data tersebut dan merender tampilan antarmuka detail pengeluaran secara lengkap ke layar pengguna. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
-|  | 2.1 | Masyarakat membatalkan penghapusan, proses dihentikan. |
-|  |  |  |
+|  | 3.1 | Jika data tidak ditemukan di database, Web Service mengembalikan status error *Not Found*. |
+|  | 3.2 | Sistem memunculkan pesan peringatan *Toaster* bahwa data tidak tersedia dan membatalkan proses navigasi. |
 
-12. Skenario Use Case Menyediakan Akses Gambar Struk Tersimpan  
-    Tabel 3.18 Skenario Menyediakan Akses Gambar Struk Tersimpan
+12. Skenario Use Case Mengubah Data Struk dengan Gemini AI  
+    Tabel 3.18 Skenario Mengubah Data Struk dengan Gemini AI
 
-| *Nama Use Case* | *Menyediakan Akses Gambar Struk Tersimpan* |  |
+| *Nama Use Case* | *Mengubah Data Struk dengan Gemini AI* |  |
 | :---: | ----- | ----- |
 | ***Related Requirement*** | SKPL-F-012 |  |
-| ***Goal in Context*** | Menyajikan visualisasi gambar asli struk belanja dari arsip penyimpanan cloud. |  |
-| ***Precondition*** | Masyarakat membuka detail transaksi struk belanja. |  |
-| ***Successful End Condition*** | Gambar struk belanja ditarik dari storage dan tertampil jelas pada layar ponsel. |  |
-| ***Failed End Condition*** | Gambar gagal ditampilkan akibat URL rusak atau timeout internet. |  |
-| ***Actors*** | Masyarakat, Web Service |  |
-| ***Trigger*** | Masyarakat mengetuk gambar pratinjau struk belanja di halaman detail. |  |
+| ***Goal in Context*** | Masyarakat dapat merevisi struktur data struk belanja yang keliru secara presisi menggunakan pemrosesan ulang Gemini AI tanpa harus mengetik manual rincian item. |  |
+| ***Precondition*** | Masyarakat berada pada antarmuka detail transaksi struk belanja. |  |
+| ***Successful End Condition*** | Entitas data struk belanja berhasil diperbarui di basis data sesuai dengan hasil restrukturisasi AI terbaru. |  |
+| ***Failed End Condition*** | Pemrosesan ulang gagal karena format teks OCR tidak valid atau masalah konektivitas API. |  |
+| ***Actors*** | Masyarakat, Web Service, Gemini AI |  |
+| ***Trigger*** | Masyarakat menekan opsi perbaikan cerdas (AI) pada antarmuka detail transaksi struk. |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Aplikasi mengambil referensi URL path dari gambar struk belanja terkait. |
+|  | 1 | Masyarakat menekan opsi perbaiki dengan AI pada tampilan antarmuka detail struk belanja. |
 |  |  |  |
-|  | 2 | Aplikasi mengirimkan request penarikan aset gambar ke layanan penyimpanan Supabase melalui endpoint Web Service. |
-|  | 3 | Gambar diunduh sementara ke memori (cache) device. |
-|  | 4 | Sistem menampilkan visualisasi struktur gambar penuh di dalam aplikasi. |
+|  | 2 | Aplikasi menarik kembali data raw text OCR dari riwayat transaksi tersebut. |
+|  | 3 | Aplikasi mengirimkan request pemrosesan ulang teks OCR kepada Web Service. |
+|  | 4 | Web Service meneruskan payload teks mentah tersebut ke Gemini AI dengan prompt penyesuaian instruksi. |
+|  | 5 | Gemini AI merestrukturisasi ulang teks tersebut ke dalam format JSON objek keuangan yang valid. |
+|  | 6 | Web Service menerima respons JSON dari Gemini AI, memvalidasinya, lalu mengirimkan hasilnya ke aplikasi. |
+|  | 7 | Aplikasi menampilkan pratinjau data revisi; masyarakat menyetujuinya dengan menekan tombol "Simpan Perubahan". |
+|  | 8 | Web Service menjalankan kueri pembaruan data pada PostgreSQL dan aplikasi menampilkan Toaster pesan sukses. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
-|  | 3.1 | Gagal mengambil aset, aplikasi menampilkan ilustrasi "Gambar Tidak Dapat Dimuat". |
+|  | 4.1 | Gagal mengambil aset, aplikasi menampilkan ilustrasi "Gambar Tidak Dapat Dimuat". |
+|  |  |  |
+|  | 4.2 | Sistem menampilkan Toaster pesan kegagalan. |
+
+13. Skenario Use Case Menghapus Data Pengeluaran  
+    Tabel 3.19 Skenario Menghapus Data Pengeluaran
+
+| *Nama Use Case* | *Menghapus Data Pengeluaran* |  |
+| :---: | ----- | ----- |
+| ***Related Requirement*** | SKPL-F-013 |  |
+| ***Goal in Context*** | Masyarakat dapat melenyapkan data transaksi pengeluaran beserta rinciannya secara permanen jika tidak lagi dibutuhkan. |  |
+| ***Precondition*** | Masyarakat berada pada antarmuka detail transaksi pengeluaran. |  |
+| ***Successful End Condition*** | Entitas data pengeluaran dan seluruh item belanjaannya terhapus sepenuhnya dari basis data. |  |
+| ***Failed End Condition*** | Penghapusan gagal dieksekusi karena masalah sinkronisasi dengan Web Service. |  |
+| ***Actors*** | Masyarakat, Web Service |  |
+| ***Trigger*** | Masyarakat menekan opsi hapus (ikon tempat sampah) pada antarmuka detail pengeluaran. |  |
+| ***Include Cases*** | \- |  |
+| ***Main Flow*** | ***Step*** |  ***Action*** |
+|  | 1 | Masyarakat mengetuk opsi "Hapus" pada struk pengeluaran tertentu. |
+|  |  |  |
+|  | 2 | Sistem memunculkan *dialog box* konfirmasi penghapusan data permanen. |
+|  | 3 | Masyarakat mengonfirmasi persetujuan penghapusan. |
+|  | 4 | Aplikasi mengirimkan permintaan HTTP DELETE menuju *endpoint* Web Service. |
+|  | 5 | Web Service menjalankan kueri penghapusan data *cascade* pada relasi PostgreSQL. |
+|  | 6 | Sistem mengembalikan pengguna ke halaman riwayat dan menampilkan *Toaster* pesan sukses. |
+| ***Extension*** | ***Step*** | ***Branch Action*** |
+|  | 2.1 | Masyarakat mengetuk "Batal" pada *dialog box*, sehingga sistem kembali ke halaman detail tanpa mengeksekusi apapun. |
 |  |  |  |
 
-13. Skenario Use Case Menyediakan Antarmuka Riwayat Pemasukan  
-    Tabel 3.19 Skenario Menyediakan Antarmuka Riwayat Pemasukan
+14. Skenario Use Case Menambah Data Pengeluaran Secara Manual  
+    Tabel 3.20 Skenario Menambah Data Pengeluaran Secara Manual
+
+| *Nama Use Case* | *Menambah Data Pengeluaran Secara Manual* |  |
+| :---: | ----- | ----- |
+| ***Related Requirement*** | SKPL-F-014 |  |
+| ***Goal in Context*** | Masyarakat dapat merekam data transaksi pengeluaran baru dengan mengisi kolom formulir secara mandiri tanpa menggunakan fasilitas *scan* struk. |  |
+| ***Precondition*** | Masyarakat membuka formulir tambah pengeluaran dari halaman menu aplikasi. |  |
+| ***Successful End Condition*** | Data transaksi baru tersimpan di dalam basis data pengeluaran dengan valid. |  |
+| ***Failed End Condition*** | Proses simpan gagal karena input kosong atau ketidakstabilan koneksi. |  |
+| ***Actors*** | Masyarakat, Web Service |  |
+| ***Trigger*** | Masyarakat menekan tombol simpan sesudah mengisi data di formulir pengeluaran manual. |  |
+| ***Include Cases*** | \- |  |
+| ***Main Flow*** | ***Step*** |  ***Action*** |
+|  | 1 | Masyarakat mengisi nominal, tanggal, memilih kategori, serta mengisi catatan terkait pengeluaran. |
+|  |  |  |
+|  | 2 | Masyarakat menekan tombol "Simpan" pada antarmuka. |
+|  | 3 | Aplikasi memvalidasi keabsahan data secara lokal (seperti nominal lebih dari nol). |
+|  | 4 | Aplikasi mengirimkan *payload* inputan ke Web Service. |
+|  | 5 | Web Service memasukkan entitas data pengeluaran baru ke dalam tabel PostgreSQL. |
+|  | 6 | Aplikasi menampilkan *Toaster* bahwa transaksi berhasil ditambahkan dan pengguna diarahkan ke riwayat. |
+| ***Extension*** | ***Step*** | ***Branch Action*** |
+|  | 3.1 | Jika terdapat isian (*field*) wajib yang masih kosong, aplikasi memunculkan pesan validasi (PP03) agar pengguna segera memperbaikinya. |
+|  |  |  |
+
+15. Skenario Use Case Mengubah Data Pengeluaran Secara Manual  
+    Tabel 3.21 Skenario Mengubah Data Pengeluaran Secara Manual
+
+| *Nama Use Case* | *Mengubah Data Pengeluaran Secara Manual* |  |
+| :---: | ----- | ----- |
+| ***Related Requirement*** | SKPL-F-015 |  |
+| ***Goal in Context*** | Masyarakat dapat menyunting atribut data dari riwayat transaksi pengeluaran guna merevisi inputan nominal, tanggal, maupun kategori secara langsung. |  |
+| ***Precondition*** | Masyarakat membuka halaman penyuntingan dari suatu detail pengeluaran. |  |
+| ***Successful End Condition*** | Basis data berhasil diperbarui dengan rincian transaksi terbaru. |  |
+| ***Failed End Condition*** | Perubahan tidak tersimpan akibat parameter yang diinput tidak sesuai kriteria. |  |
+| ***Actors*** | Masyarakat, Web Service |  |
+| ***Trigger*** | Masyarakat menekan tombol simpan perubahan pada halaman edit. |  |
+| ***Include Cases*** | \- |  |
+| ***Main Flow*** | ***Step*** |  ***Action*** |
+|  | 1 | Masyarakat menyunting data seperti nominal, kategori, maupun catatan di dalam formulir edit. |
+|  |  |  |
+|  | 2 | Masyarakat menekan tombol "Simpan Perubahan". |
+|  | 3 | Aplikasi memvalidasi inputan form secara lokal sebelum melakukan proses jaringan. |
+|  | 4 | Aplikasi meneruskan *payload* yang telah diperbarui menuju Web Service. |
+|  | 5 | Web Service memperbarui entitas terkait di dalam PostgreSQL menggunakan metode *update*. |
+|  | 6 | Aplikasi menampilkan *Toaster* pemberitahuan sukses (PP01) bahwa data telah direvisi. |
+| ***Extension*** | ***Step*** | ***Branch Action*** |
+|  | 3.1 | Apabila angka nominal dijadikan Rp0, sistem merespons dengan pesan validasi input (PP03) dan menahan operasi penyimpanan. |
+|  |  |  |
+
+16. Skenario Use Case Menyediakan Antarmuka Riwayat Pemasukan  
+    Tabel 3.22 Skenario Menyediakan Antarmuka Riwayat Pemasukan
 
 | *Nama Use Case* | *Menyediakan Antarmuka Riwayat Pemasukan* |  |
 | :---: | ----- | ----- |
-| ***Related Requirement*** | SKPL-F-013 |  |
+| ***Related Requirement*** | SKPL-F-016 |  |
 | ***Goal in Context*** | Masyarakat dapat melihat daftar transaksi riwayat pemasukan yang pernah dikelola oleh sistem. |  |
 | ***Precondition*** | Masyarakat dalam keadaan masuk (login) di aplikasi. |  |
 | ***Successful End Condition*** | Daftar transaksi pemasukan berhasil disajikan di layar secara kronologis. |  |
-| ***Failed End Condition*** | Transaksi gagal dimuat dari Web Service |  |
+| ***Failed End Condition*** | Transaksi gagal dimuat dari Web Service. |  |
 | ***Actors*** | Masyarakat, Web Service |  |
 | ***Trigger*** | Masyarakat memilih Tab Pemasukan pada aplikasi. |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Aplikasi mengirim request pengambilan data spesifik untuk tipe transaksi Pemasukan. |
+|  | 1 | Masyarakat membuka antarmuka riwayat pemasukan pada aplikasi. |
 |  |  |  |
-|  | 2 | Web Service melakukan fetch entitas Pemasukan dari PostgreSQL. |
-|  | 3 | Web Service memberikan balasan data berformat JSON. |
-|  | 4 | Aplikasi memuat data tersebut ke dalam komponen list antarmuka. |
+|  | 2 | Aplikasi mengirimkan permintaan pengambilan daftar pemasukan ke Web Service beserta parameter paginasi data. |
+|  | 3 | Web Service memvalidasi akses dan mengambil data riwayat pemasukan dari basis data. |
+|  | 4 | Web Service mengembalikan senarai transaksi riwayat pemasukan. |
+|  | 5 | Aplikasi merender senarai riwayat pemasukan ke layar Masyarakat. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
-|  | 2.1 | Jika Pemasukan belum pernah dicatat, aplikasi memunculkan teks "Data Pemasukan Anda Kosong". |
+|  | 4.1 | Jika tidak ada data transaksi yang ditemukan, Web Service mengembalikan senarai kosong dan Aplikasi menampilkan ilustrasi status kosong. |
 |  |  |  |
 
-14. Skenario Use Case Menyediakan Fitur Pengelolaan Pemasukan  
-    Tabel 3.20 Skenario Menyediakan Fitur Pengelolaan Pemasukan
+17. Skenario Use Case Menyediakan Fitur Pengelolaan Pemasukan  
+    Tabel 3.23 Skenario Menyediakan Fitur Pengelolaan Pemasukan
 
-| *Nama Use Case* | *Menampilkan Grafik Tren Pengeluaran* |  |
+| *Nama Use Case* | *Menyediakan Fitur Pengelolaan Pemasukan* |  |
 | :---: | ----- | ----- |
-| ***Related Requirement*** | SKPL-F-014 |  |
+| ***Related Requirement*** | SKPL-F-017 |  |
 | ***Goal in Context*** | Masyarakat dapat melakukan siklus operasi Tambah, Ubah, atau Hapus terhadap entitas data Pemasukan. |  |
 | ***Precondition*** | Masyarakat berada di menu Pemasukan. |  |
 | ***Successful End Condition*** | Operasi mutasi data Pemasukan berhasil direkam atau dihilangkan dari basis data secara permanen. |  |
@@ -788,68 +879,71 @@ Skenario use case digunakan untuk menggambarkan interaksi antara aktor (baik man
 | ***Main Flow*** | ***Step*** |  ***Action*** |
 |  | 1 | Masyarakat memilih aksi: Tambah baru, Ubah data lama, atau Hapus riwayat. |
 |  |  |  |
-|  | 2 | Sistem menampilkan form input yang meminta detail Nominal Pemasukan, Tanggal, dan Kategori. |
+|  | 2 | Sistem menampilkan form input yang meminta detail Nominal Pemasukan, Tanggal, dan Kategori (atau memunculkan *dialog* konfirmasi jika Hapus). |
 |  | 3 | Masyarakat menekan tombol Eksekusi (Simpan/Hapus). |
 |  | 4 | Aplikasi memvalidasi nominal tidak boleh nol secara lokal. |
-|  | 5 | Web Service menjalankan eksekusi CRUD entitas Pemasukan di PostgreSQL menggunakan Prisma ORM. |
-|  | 6 | Aplikasi menampilkan umpan balik sukses (toast) kepada Masyarakat. |
+|  | 5 | Web Service menjalankan eksekusi CRUD entitas Pemasukan di PostgreSQL. |
+|  | 6 | Aplikasi menampilkan umpan balik pesan sukses (*Toaster*) kepada Masyarakat. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
 |  | 4.1 | Validasi form tidak lolos, aplikasi meminta masyarakat melengkapi data yang wajib diisi. |
 |  |  |  |
 
-15. Skenario Use Case Menampilkan Antarmuka Tren Pengeluaran Per bulan  
-    Tabel 3.21 Skenario Menampilkan Antarmuka Tren Pengeluaran Per bulan
+18. Skenario Use Case Menampilkan Antarmuka Tren Pengeluaran Per bulan  
+    Tabel 3.24 Skenario Menampilkan Antarmuka Tren Pengeluaran Per bulan
 
 | *Nama Use Case* | *Menampilkan Antarmuka Tren Pengeluaran Per bulan* |  |
 | :---: | ----- | ----- |
-| ***Related Requirement*** | SKPL-F-015 |  |
+| ***Related Requirement*** | SKPL-F-018 |  |
 | ***Goal in Context*** | Menghasilkan grafik garis yang dapat dievaluasi secara statistik mengenai pergerakan belanja bulanan. |  |
 | ***Precondition*** | Masyarakat mengakses halaman Analisis / Statistik. |  |
-| ***Successful End Condition*** | Modul grafik tren (bar/line chart) berhasil digambar di layar menggunakan agregasi data transaksi. |  |
+| ***Successful End Condition*** | Modul grafik tren (*bar/line chart*) berhasil digambar di layar menggunakan agregasi data transaksi. |  |
 | ***Failed End Condition*** | Modul grafik rusak akibat balasan format JSON tidak sesuai. |  |
 | ***Actors*** | Masyarakat, Web Service |  |
 | ***Trigger*** | Sistem otomatis memuat bagian statistik saat tab terkait ditekan. |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Aplikasi meminta agregat data bulanan tren pengeluaran kepada Web Service. |
+|  | 1 | Masyarakat membuka antarmuka Analisis pada tab Tren Pengeluaran. |
 |  |  |  |
-|  | 2 | Web Service mengalkulasi sum pengeluaran setiap bulannya dari PostgreSQL. |
-|  | 3 | Web Service mengembalikan titik data teragregasi bulanan secara berurutan. |
-|  | 4 | Aplikasi mem- parsing data ke dalam pustaka grafik visual dan merender chart. |
+|  | 2 | Aplikasi meminta agregat data bulanan tren pengeluaran kepada Web Service. |
+|  | 3 | Web Service mengalkulasi total pengeluaran bulanan dari basis data. |
+|  | 4 | Web Service mengembalikan titik data teragregasi secara berurutan. |
+|  | 5 | Aplikasi merender data tersebut ke dalam visualisasi grafik garis (*line chart*). |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
-|  | 3.1 | Data bulan-bulan tertentu tidak ada, titik grafik dirender sebagai angka nol (0). |
+|  | 3.1 | Jika data bulan-bulan tertentu tidak ada, titik grafik dirender sebagai angka nol (0). |
 |  |  |  |
 
-16. Skenario Use Case Menampilkan Antarmuka Kalender Pengeluaran Interaktif  
-    Tabel 3.22 Skenario Menampilkan Antarmuka Kalender Pengeluaran 
+19. Skenario Use Case Menampilkan Antarmuka Kalender Pengeluaran Interaktif  
+    Tabel 3.25 Skenario Menampilkan Antarmuka Kalender Pengeluaran Interaktif
 
 | *Nama Use Case* | *Menampilkan Antarmuka Kalender Pengeluaran Interaktif* |  |
 | :---: | ----- | ----- |
-| ***Related Requirement*** | SKPL-F-016 |  |
+| ***Related Requirement*** | SKPL-F-019 |  |
 | ***Goal in Context*** | Memberikan tinjauan spasial hari per hari berbasis antarmuka kalender bulanan kepada Masyarakat. |  |
 | ***Precondition*** | Masyarakat memilih mode tampilan Kalender di menu Analisis. |  |
 | ***Successful End Condition*** | Angka akumulasi pengeluaran harian ditanamkan di sel-sel tanggal yang relevan. |  |
-| ***Failed End Condition*** | Kalender gagal di generate oleh aplikasi klien. |  |
+| ***Failed End Condition*** | Kalender gagal di-*generate* oleh aplikasi klien. |  |
 | ***Actors*** | Masyarakat, Web Service |  |
 | ***Trigger*** | Tampilan antarmuka Kalender dimuat aktif. |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Aplikasi mengidentifikasi bulan dan tahun pada tampilan kalender, lalu meminta datanya ke Web Service. |
+|  | 1 | Masyarakat memilih mode tampilan Kalender pada menu Analisis. |
 |  |  |  |
-|  | 2 | Web Service menarik akumulasi transaksi harian untuk bulan yang diminta. |
-|  | 3 | Aplikasi menerima respons dan merender visualisasi heatmap calendar berdasarkan intensitas pengeluaran harian. |
-|  | 4 | Masyarakat dapat mengetuk tanggal spesifik untuk memunculkan pop-up yang berisi daftar transaksi pengeluaran pada hari tersebut. |
+|  | 2 | Aplikasi mengidentifikasi bulan dan tahun, lalu meminta data akumulasi ke Web Service. |
+|  | 3 | Web Service menarik akumulasi transaksi harian dari basis data untuk bulan tersebut. |
+|  | 4 | Web Service mengembalikan hasil data riwayat harian. |
+|  | 5 | Aplikasi merender visualisasi kalender berdasarkan intensitas pengeluaran. |
+|  | 6 | Masyarakat mengetuk tanggal spesifik untuk memunculkan daftar transaksi. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
-|  | 4.1 | Mengetuk sel tanpa transaksi menampilkan status kosong. |
+|  | 4.1 | Mengetuk sel tanpa transaksi menampilkan status riwayat kosong. |
 |  |  |  |
 
-17. Skenario Use Case Menampilkan Visualisasi Persentase per Kategori  
-    Tabel 3.23 Skenario Menampilkan Visualisasi Persentase per Kategori
+20. Skenario Use Case Menampilkan Visualisasi Persentase per Kategori  
+    Tabel 3.26 Skenario Menampilkan Visualisasi Persentase per Kategori
 
 | *Nama Use Case* | *Menampilkan Visualisasi Persentase per Kategori* |  |
 | :---: | ----- | ----- |
-| ***Related Requirement*** | SKPL-F-017 |  |
-| ***Goal in Context*** | Menyajikan alokasi segmentasi pengeluaran ke dalam diagram Pie Chart atau Donut Chart. |  |
+| ***Related Requirement*** | SKPL-F-020 |  |
+| ***Goal in Context*** | Menyajikan alokasi segmentasi pengeluaran ke dalam diagram *Pie Chart* atau *Donut Chart*. |  |
 | ***Precondition*** | Masyarakat berada di modul analisis Kategori. |  |
 | ***Successful End Condition*** | Visualisasi diagram lingkaran terbagi rata berdasarkan kontribusi perhitungan masing-masing kategori pengeluaran. |  |
 | ***Failed End Condition*** | Gagal merender diagram warna karena data yang diterima tidak utuh. |  |
@@ -857,22 +951,23 @@ Skenario use case digunakan untuk menggambarkan interaksi antara aktor (baik man
 | ***Trigger*** | Filter analisis kategori diaktifkan oleh masyarakat. |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Web Service menerima permintaan kueri kelompok pengeluaran dari aplikasi klien berdasarkan parameter kategori (*Group By Category*). |
+|  | 1 | Masyarakat mengaktifkan filter analisis Kategori pada aplikasi. |
 |  |  |  |
-|  | 2 | Web Service menjumlahkan besaran per kategori dan merumuskannya dalam bentuk metrik persentase. |
-|  | 3 | Web Service menyuplai array objek tersebut. |
-|  | 4 | Aplikasi memutar dan mewarnai irisan visual diagram kategori sesuai dengan besaran persentasenya. |
+|  | 2 | Aplikasi mengirimkan permintaan kueri kelompok pengeluaran berdasarkan kategori ke Web Service. |
+|  | 3 | Web Service menjumlahkan besaran pengeluaran per kategori dan mengubahnya menjadi metrik persentase. |
+|  | 4 | Web Service mengembalikan data array persentase kategori ke aplikasi. |
+|  | 5 | Aplikasi merender visualisasi diagram lingkaran (*Pie/Donut Chart*) sesuai dengan besaran persentasenya. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
 |  | 2.1 | Data kategori kosong, Web Service membalas dengan status null, dan grafis dirender menjadi satu warna abu-abu bertuliskan "Belum Ada Data". |
 |  |  |  |
 
-18. Skenario Use Case Mengirimkan Notifikasi Pengingat Otomatis  
-    Tabel 3.24 Skenario Mengirimkan Notifikasi Pengingat Otomatis
+21. Skenario Use Case Mengirimkan Notifikasi Pengingat Otomatis  
+    Tabel 3.27 Skenario Mengirimkan Notifikasi Pengingat Otomatis
 
-| *Nama Use Case* | *Menampilkan Gambar Struk Asli* |  |
+| *Nama Use Case* | *Mengirimkan Notifikasi Pengingat Otomatis* |  |
 | :---: | ----- | ----- |
-| ***Related Requirement*** | SKPL-F-018 |  |
-| ***Goal in Context*** | Memunculkan notifikasi pengingat secara lokal (*Local Notification*) pada smartphone masyarakat untuk rutin mencatat keuangan. |  |
+| ***Related Requirement*** | SKPL-F-021 |  |
+| ***Goal in Context*** | Memunculkan notifikasi pengingat secara lokal (*Local Notification*) pada perangkat masyarakat untuk rutin mencatat keuangan. |  |
 | ***Precondition*** | Aplikasi terpasang dan izin notifikasi diberikan pada sistem operasi ponsel. |  |
 | ***Successful End Condition*** | Pesan pengingat berhasil dipicu secara lokal dan dimunculkan oleh perangkat seluler di jam terjadwal. |  |
 | ***Failed End Condition*** | Ponsel mati atau izin notifikasi sistem ditolak. |  |
@@ -880,41 +975,197 @@ Skenario use case digunakan untuk menggambarkan interaksi antara aktor (baik man
 | ***Trigger*** | Waktu pada sistem perangkat lokal telah mencapai pukul penjadwalan. |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Layanan latar belakang (*background service*) pada perangkat mendeteksi waktu telah mencapai jadwal pengingat masyarakat. |
+|  | 1 | Layanan latar belakang mendeteksi waktu telah mencapai jadwal pengingat. |
 |  |  |  |
-|  | 2 | Aplikasi memverifikasi secara lokal apakah masyarakat belum melakukan pencatatan transaksi harian. |
-|  | 3 | Aplikasi memicu layanan notifikasi lokal (*Local Notification*) ke sistem operasi perangkat. |
-|  | 4 | Sistem operasi ponsel meluncurkan dan menampilkan pesan pengingat di layar masyarakat. |
+|  | 2 | Aplikasi memverifikasi secara lokal apakah belum ada pencatatan harian hari ini. |
+|  | 3 | Aplikasi memicu layanan notifikasi lokal ke sistem operasi perangkat. |
+|  | 4 | Sistem operasi menampilkan pesan pengingat di layar ponsel. |
+|  | 5 | Masyarakat menerima dan melihat pesan pengingat dari aplikasi. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
-|  | 2.1 | Jika sistem mendeteksi aktivitas pencatatan sudah ada di hari ini, jadwal notifikasi diabaikan. |
+|  | 2.1 | Jika sistem mendeteksi aktivitas pencatatan sudah ada di hari ini, pengiriman notifikasi pengingat dibatalkan/diabaikan. |
 |  |  |  |
 
-19. Skenario Use Case Menyediakan Pengaturan Preferensi Notifikasi  
-    Tabel 3.24 Skenario Menyediakan Pengaturan Preferensi Notifikasi
+22. Skenario Use Case Mengelola Preferensi Notifikasi Pengingat  
+    Tabel 3.28 Skenario Mengelola Preferensi Notifikasi Pengingat
 
-| *Nama Use Case* | *Menampilkan Gambar Struk Asli* |  |
+| *Nama Use Case* | *Mengelola Preferensi Notifikasi Pengingat* |  |
 | :---: | ----- | ----- |
-|  |  |  |
-| ***Related Requirement*** | SKPL-F-018 |  |
-| ***Goal in Context*** | Masyarakat bebas menyesuaikan setelan hari dan jam kapan notifikasi pengingat otomatis boleh dikirimkan. |  |
-| ***Precondition*** | Masyarakat masuk ke halaman menu Setelan (*Settings*). |  |
-| ***Successful End Condition*** | Data preferensi hari dan jam terbaru tersimpan dengan sinkronisasi Web Service. |  |
-| ***Failed End Condition*** | Kegagalan penyimpanan form preferensi karena kendala komunikasi jaringan. |  |
-| ***Actors*** | Masyarakat, Web Service	 |  |
-| ***Trigger*** | Masyarakat mengganti nilai pada panel pengaturan jadwal notifikasi. |  |
+| ***Related Requirement*** | SKPL-F-022 |  |
+| ***Goal in Context*** | Masyarakat bebas menyesuaikan setelan status aktif dan waktu kapan notifikasi pengingat otomatis boleh dikirimkan. |  |
+| ***Precondition*** | Masyarakat masuk ke halaman menu Notifikasi (Pengaturan). |  |
+| ***Successful End Condition*** | Data preferensi pengingat terbaru tersimpan dengan valid. |  |
+| ***Failed End Condition*** | Kegagalan penyimpanan akibat kendala operasi lokal (*shared preferences*). |  |
+| ***Actors*** | Masyarakat |  |
+| ***Trigger*** | Masyarakat mengganti setelan waktu (jam dan menit) pada panel pengaturan pengingat. |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Masyarakat memilih opsi konfigurasi pengaturan "Jadwal Notifikasi Pengingat" pada aplikasi. |
+|  | 1 | Masyarakat membuka antarmuka "Pengingat Harian" (*Daily Reminder*) pada aplikasi. |
 |  |  |  |
-|  | 2 | Sistem memunculkan antarmuka pemilihan hari (misalnya: Senin-Minggu) dan waktu (*Time Picker*). |
-|  | 3 | Masyarakat menetapkan hari pengingat dan pukul tertentu (misalnya 20:00), lalu menekan "Terapkan". |
-|  | 4 | Aplikasi mencatat preferensi di memori lokal lalu mengirim mutasi setelan profil ke Web Service. |
-|  | 5 | Web Service memperbarui tabel *PreferensiNotifikasi* pada basis data masyarakat. |
+|  | 2 | Sistem memunculkan antarmuka untuk menentukan waktu pengingat (*Time Picker*). |
+|  | 3 | Masyarakat menetapkan jam tertentu (misalnya 20:00). |
+|  | 4 | Masyarakat menekan tombol simpan atau menyalakan sakelar (*switch*) pengingat. |
+|  | 5 | Aplikasi mencatat preferensi tersebut ke dalam *secure storage*/*shared preferences* secara lokal. |
+|  | 6 | Aplikasi menampilkan *Toaster* bahwa notifikasi berhasil diperbarui dan mendaftarkan jadwal (*schedule*) baru ke layanan OS Android. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
-|  | 3.1 | Masyarakat memilih mode "Nonaktifkan Notifikasi", sehingga sistem tidak akan lagi menembakkan pengingat di masa mendatang. |
+|  | 4.1 | Masyarakat mematikan sakelar notifikasi, sehingga sistem membatalkan semua jadwal pengingat (*cancel all*) di masa mendatang. |
 |  |  |  |
 
     2. #### **Activity Diagram** {#activity-diagram}
+
+1. **Activity Diagram Menyediakan Fitur Pendaftaran Akun**
+
+   Visualisasi dari alur kerja untuk skenario menyediakan fitur pendaftaran akun dapat dilihat pada Gambar 3.8.
+
+   ![][image_act_1]
+   Gambar 3.8 Activity Diagram Menyediakan Fitur Pendaftaran Akun
+
+2. **Activity Diagram Menyediakan Fitur Autentikasi Masuk**
+
+   Visualisasi dari alur kerja untuk skenario menyediakan fitur autentikasi masuk dapat dilihat pada Gambar 3.9.
+
+   ![][image_act_2]
+   Gambar 3.9 Activity Diagram Menyediakan Fitur Autentikasi Masuk
+
+3. **Activity Diagram Menyediakan Fitur Keluar dari Sistem**
+
+   Visualisasi dari alur kerja untuk skenario menyediakan fitur keluar dari sistem dapat dilihat pada Gambar 3.10.
+
+   ![][image_act_3]
+   Gambar 3.10 Activity Diagram Menyediakan Fitur Keluar dari Sistem
+
+4. **Activity Diagram Mengambil Foto Struk Belanja**
+
+   Visualisasi dari alur kerja untuk skenario mengambil foto struk belanja dapat dilihat pada Gambar 3.11.
+
+   ![][image_act_4]
+   Gambar 3.11 Activity Diagram Mengambil Foto Struk Belanja
+
+5. **Activity Diagram Menyediakan Fitur Unggah Gambar Struk**
+
+   Visualisasi dari alur kerja untuk skenario menyediakan fitur unggah gambar struk dapat dilihat pada Gambar 3.12.
+
+   ![][image_act_5]
+   Gambar 3.12 Activity Diagram Menyediakan Fitur Unggah Gambar Struk
+
+6. **Activity Diagram Memindai Teks Pada Struk Belanja**
+
+   Visualisasi dari alur kerja untuk skenario memindai teks pada struk belanja dapat dilihat pada Gambar 3.13.
+
+   ![][image_act_6]
+   Gambar 3.13 Activity Diagram Memindai Teks Pada Struk Belanja
+
+7. **Activity Diagram Melakukan Strukturisasi Data Struk Belanja**
+
+   Visualisasi dari alur kerja untuk skenario melakukan strukturisasi data struk belanja dapat dilihat pada Gambar 3.14.
+
+   ![][image_act_7]
+   Gambar 3.14 Activity Diagram Melakukan Strukturisasi Data Struk Belanja
+
+8. **Activity Diagram Menyediakan Formulir Tinjauan Data Ekstraksi**
+
+   Visualisasi dari alur kerja untuk skenario menyediakan formulir tinjauan data ekstraksi dapat dilihat pada Gambar 3.15.
+
+   ![][image_act_8]
+   Gambar 3.15 Activity Diagram Menyediakan Formulir Tinjauan Data Ekstraksi
+
+9. **Activity Diagram Menyimpan Data Pengeluaran Hasil Scan**
+
+   Visualisasi dari alur kerja untuk skenario menyimpan data pengeluaran hasil scan dapat dilihat pada Gambar 3.16.
+
+   ![][image_act_9]
+   Gambar 3.16 Activity Diagram Menyimpan Data Pengeluaran Hasil Scan
+
+10. **Activity Diagram Menyediakan Antarmuka Riwayat Pengeluaran**
+
+   Visualisasi dari alur kerja untuk skenario menyediakan antarmuka riwayat pengeluaran dapat dilihat pada Gambar 3.17.
+
+   ![][image_act_10]
+   Gambar 3.17 Activity Diagram Menyediakan Antarmuka Riwayat Pengeluaran
+
+11. **Activity Diagram Menyediakan Antarmuka Detail Pengeluaran**
+
+   Visualisasi dari alur kerja untuk skenario menyediakan antarmuka detail pengeluaran dapat dilihat pada Gambar 3.18.
+
+   ![][image_act_11]
+   Gambar 3.18 Activity Diagram Menyediakan Antarmuka Detail Pengeluaran
+
+12. **Activity Diagram Mengubah Data Struk dengan Gemini AI**
+
+   Visualisasi dari alur kerja untuk skenario mengubah data struk dengan gemini ai dapat dilihat pada Gambar 3.19.
+
+   ![][image_act_12]
+   Gambar 3.19 Activity Diagram Mengubah Data Struk dengan Gemini AI
+
+13. **Activity Diagram Menghapus Data Pengeluaran**
+
+   Visualisasi dari alur kerja untuk skenario menghapus data pengeluaran dapat dilihat pada Gambar 3.20.
+
+   ![][image_act_13]
+   Gambar 3.20 Activity Diagram Menghapus Data Pengeluaran
+
+14. **Activity Diagram Menambah Data Pengeluaran Secara Manual**
+
+   Visualisasi dari alur kerja untuk skenario menambah data pengeluaran secara manual dapat dilihat pada Gambar 3.21.
+
+   ![][image_act_14]
+   Gambar 3.21 Activity Diagram Menambah Data Pengeluaran Secara Manual
+
+15. **Activity Diagram Mengubah Data Pengeluaran Secara Manual**
+
+   Visualisasi dari alur kerja untuk skenario mengubah data pengeluaran secara manual dapat dilihat pada Gambar 3.22.
+
+   ![][image_act_15]
+   Gambar 3.22 Activity Diagram Mengubah Data Pengeluaran Secara Manual
+
+16. **Activity Diagram Menyediakan Antarmuka Riwayat Pemasukan**
+
+   Visualisasi dari alur kerja untuk skenario menyediakan antarmuka riwayat pemasukan dapat dilihat pada Gambar 3.23.
+
+   ![][image_act_16]
+   Gambar 3.23 Activity Diagram Menyediakan Antarmuka Riwayat Pemasukan
+
+17. **Activity Diagram Menyediakan Fitur Pengelolaan Pemasukan**
+
+   Visualisasi dari alur kerja untuk skenario menyediakan fitur pengelolaan pemasukan dapat dilihat pada Gambar 3.24.
+
+   ![][image_act_17]
+   Gambar 3.24 Activity Diagram Menyediakan Fitur Pengelolaan Pemasukan
+
+18. **Activity Diagram Menampilkan Antarmuka Tren Pengeluaran Per bulan**
+
+   Visualisasi dari alur kerja untuk skenario menampilkan antarmuka tren pengeluaran per bulan dapat dilihat pada Gambar 3.25.
+
+   ![][image_act_18]
+   Gambar 3.25 Activity Diagram Menampilkan Antarmuka Tren Pengeluaran Per bulan
+
+19. **Activity Diagram Menampilkan Antarmuka Kalender Pengeluaran Interaktif**
+
+   Visualisasi dari alur kerja untuk skenario menampilkan antarmuka kalender pengeluaran interaktif dapat dilihat pada Gambar 3.26.
+
+   ![][image_act_19]
+   Gambar 3.26 Activity Diagram Menampilkan Antarmuka Kalender Pengeluaran Interaktif
+
+20. **Activity Diagram Menampilkan Visualisasi Persentase per Kategori**
+
+   Visualisasi dari alur kerja untuk skenario menampilkan visualisasi persentase per kategori dapat dilihat pada Gambar 3.27.
+
+   ![][image_act_20]
+   Gambar 3.27 Activity Diagram Menampilkan Visualisasi Persentase per Kategori
+
+21. **Activity Diagram Mengirimkan Notifikasi Pengingat Otomatis**
+
+   Visualisasi dari alur kerja untuk skenario mengirimkan notifikasi pengingat otomatis dapat dilihat pada Gambar 3.28.
+
+   ![][image_act_21]
+   Gambar 3.28 Activity Diagram Mengirimkan Notifikasi Pengingat Otomatis
+
+22. **Activity Diagram Mengelola Preferensi Notifikasi Pengingat**
+
+   Visualisasi dari alur kerja untuk skenario mengelola preferensi notifikasi pengingat dapat dilihat pada Gambar 3.29.
+
+   ![][image_act_22]
+   Gambar 3.29 Activity Diagram Mengelola Preferensi Notifikasi Pengingat
+
 
     3. #### **Class Diagram** {#class-diagram}
 
@@ -922,9 +1173,9 @@ Class diagram merupakan diagram UML yang digunakan untuk memodelkan struktur kel
 
 1. **Struktur Class Diagram**
 
-Struktur class diagram untuk aplikasi client Snap Notes menggambarkan hubungan antar komponen yang membangun aplikasi mobile client secara global. Hubungan tersebut meliputi pewarisan (inheritance), realisasi interface (realization), ketergantungan (dependency), dan komposisi (composition). Visualisasi dari struktur class diagram aplikasi client secara menyeluruh dapat dilihat pada Gambar 3.8.  
+Struktur class diagram untuk aplikasi client Snap Notes menggambarkan hubungan antar komponen yang membangun aplikasi mobile client secara global. Hubungan tersebut meliputi pewarisan (inheritance), realisasi interface (realization), ketergantungan (dependency), dan komposisi (composition). Visualisasi dari struktur class diagram aplikasi client secara menyeluruh dapat dilihat pada Gambar 3.30.  
 ![][image10]  
-Gambar 3.8 Struktur Class Diagram Client Apps
+Gambar 3.30 Struktur Class Diagram Client Apps
 
 2. **Rancangan Class Diagram**
 
@@ -933,119 +1184,119 @@ Pendetailan rancangan class diagram terdiri dari kelas-kelas mandiri yang mendef
 1. Class Pengguna  
    Class Pengguna merupakan entitas pada lapisan Domain yang bertugas merepresentasikan informasi profil data pengguna yang terautentikasi di dalam sistem aplikasi client.  
    ![][image11]  
-   Gambar 3.9 Class Diagram Pengguna   
+   Gambar 3.31 Class Diagram Pengguna   
 2. Class PreferensiNotifikasi   
    Class PreferensiNotifikasi merupakan entitas pada lapisan Domain yang menyimpan konfigurasi pengingat pencatatan harian yang ditentukan dan dipersonalisasi oleh pengguna.  
    ![][image12]  
-   Gambar 3.10 Class Diagram PreferensiNotifikasi  
+   Gambar 3.32 Class Diagram PreferensiNotifikasi  
 3. Class AuthToken  
    Class AuthToken merupakan entitas pada lapisan Domain yang menyimpan token autentikasi JWT (JSON Web Token) yang terdiri dari access token dan refresh token untuk mengotorisasi sesi pengguna dengan server.  
    ![][image13]  
-   Gambar 3.11 Class Diagram AuthToken  
+   Gambar 3.33 Class Diagram AuthToken  
 4. Class Receipt  
    Class Receipt merupakan entitas pada lapisan Domain yang memodelkan informasi struk belanja hasil pemindaian OCR dan ekstraksi AI, mencakup nama toko, tanggal belanja, daftar barang belanjaan, total nominal belanja, kategori toko, dan status konfirmasi.  
    ![][image14]  
-   Gambar 3.12 Class Diagram Receipt  
+   Gambar 3.34 Class Diagram Receipt  
 5. Class ReceiptItem   
    Class ReceiptItem merupakan entitas pada lapisan Domain yang merepresentasikan rincian baris barang yang tercantum pada struk belanja, mencakup nama barang, jumlah barang (quantity), harga satuan, subtotal harga, dan kategori barang.  
    ![][image15]  
-   Gambar 3.13 Class Diagram ReceiptItem  
+   Gambar 3.35 Class Diagram ReceiptItem  
 6. Class Pemasukan  
    Class Pemasukan merupakan entitas pada lapisan Domain yang merepresentasikan transaksi pemasukan uang pengguna, mencakup nominal pemasukan, deskripsi, tanggal transaksi, catatan tambahan, dan relasi kategori.  
    ![][image16]  
-   Gambar 3.14 Class Diagram Pemasukan  
+   Gambar 3.36 Class Diagram Pemasukan  
 7. Class Pengeluaran   
    Class Pengeluaran merupakan entitas pada lapisan Domain yang merepresentasikan transaksi pengeluaran uang pengguna, mencakup nominal pengeluaran, deskripsi, tanggal transaksi, catatan tambahan, relasi kategori, dan relasi opsional ke struk belanja.  
    ![][image17]  
-   Gambar 3.15 Class Diagram Pengeluaran  
+   Gambar 3.37 Class Diagram Pengeluaran  
 8. Class Ringkasan   
    Class Ringkasan merupakan entitas pada lapisan Domain yang merepresentasikan ikhtisar finansial pengguna untuk visualisasi dashboard, mencakup total pemasukan, total pengeluaran, dan saldo bersih saat ini.  
    ![][image18]  
-   Gambar 3.16 Class Diagram Ringkasan  
+   Gambar 3.38 Class Diagram Ringkasan  
 9. Class AuthInterceptor   
    Class AuthInterceptor merupakan interseptor HTTP pada lapisan Data yang berfungsi menyisipkan token JWT secara otomatis pada header permintaan (request headers) dan menangani pembaruan token (token refresh) jika sesi autentikasi kedaluwarsa.  
    ![][image19]  
-   Gambar 3.17 Class Diagram AuthInterceptor  
+   Gambar 3.39 Class Diagram AuthInterceptor  
 10. Class DioClient  
     Class DioClient merupakan pembungkus (wrapper) HTTP client berbasis pustaka Dio yang menangani konfigurasi dasar REST API seperti base URL, batas waktu koneksi (timeout), interseptor, dan penanganan error jaringan global.  
     ![][image20]  
-    Gambar 3.18 Class Diagram DioClient  
+    Gambar 3.40 Class Diagram DioClient  
 11. Class AuthService   
     Class AuthService merupakan kelas layanan repositori pada lapisan Data yang bertugas mengimplementasikan logika interaksi autentikasi ke Supabase Auth dan API server NestJS.  
     ![][image21]  
-    Gambar 3.19 Class Diagram AuthService  
+    Gambar 3.41 Class Diagram AuthService  
 12. Class ReceiptService   
     Class ReceiptService merupakan kelas layanan repositori yang mengimplementasikan logika pemindaian struk belanja (melalui pemanggilan API server NestJS), pengambilan riwayat struk, konfirmasi transaksi, dan penghapusan data struk.  
     ![][image22]  
-    Gambar 3.20 Class Diagram ReceiptService  
+    Gambar 3.42 Class Diagram ReceiptService  
 13. Class PemasukanService   
     Class PemasukanService merupakan kelas layanan repositori yang menangani operasi CRUD transaksi pemasukan ke basis data melalui interaksi HTTP REST API.  
     ![][image23]  
-    Gambar 3.21 Class Diagram PemasukanService  
+    Gambar 3.43 Class Diagram PemasukanService  
 14. Class PengeluaranService   
     Class PengeluaranService merupakan kelas layanan repositori yang menangani operasi CRUD transaksi pengeluaran ke basis data melalui interaksi HTTP REST API.  
     ![][image24]  
-    Gambar 3.22 Class Diagram PengeluaranService  
+    Gambar 3.44 Class Diagram PengeluaranService  
 15. Class DashboardService   
     Class DashboardService merupakan kelas layanan repositori yang bertugas mengambil data ikhtisar keuangan, data statistik tren pengeluaran, dan visualisasi diagram kalender untuk dashboard.  
     ![][image25]  
-    Gambar 3.23 Class Diagram DashboardService  
+    Gambar 3.45 Class Diagram DashboardService  
 16. Class NotifikasiService  
     Class NotifikasiService merupakan kelas layanan repositori yang menangani manajemen preferensi notifikasi pengingat lokal dan sinkronisasi data jadwal ke API server.  
     ![][image26]  
-    Gambar 3.24 Class Diagram NotifikasiService  
+    Gambar 3.46 Class Diagram NotifikasiService  
 17. Class AuthViewModel  
     Class AuthViewModel merupakan kelas pengelola status (state management) berbasis arsitektur MVVM yang menengahi interaksi UI autentikasi dengan UseCase dan mengontrol transisi status sesi masuk/daftar/keluar.  
     ![][image27]  
-    Gambar 3.25 Class Diagram AuthViewModel   
+    Gambar 3.47 Class Diagram AuthViewModel   
 18. Class LoginViewModel   
     Class LoginViewModel merupakan kelas pengelola status khusus untuk antarmuka masuk (login screen), memproses validasi masukan kredensial pengguna dan mengendalikan status pemrosesan masuk.  
     ![][image28]  
-    Gambar 3.26 Class Diagram LoginViewModel  
+    Gambar 3.48 Class Diagram LoginViewModel  
 19. Class ReceiptViewModel   
     Class ReceiptViewModel merupakan kelas pengelola status yang mengendalikan alur pemrosesan foto struk belanja, memicu pembacaan OCR, mengarahkan navigasi ke tinjauan hasil ekstraksi AI, dan mengelola konfirmasi penyimpanan.  
     ![][image29]  
-    Gambar 3.27 Class Diagram ReceiptViewModel  
+    Gambar 3.49 Class Diagram ReceiptViewModel  
 20. Class PemasukanViewModel  
     Class PemasukanViewModel merupakan kelas pengelola status yang mengontrol daftar transaksi pemasukan dan pemrosesan formulir penambahan atau perubahan data pemasukan.  
     ![][image30]  
-    Gambar 3.28 Class Diagram PemasukanViewModel  
+    Gambar 3.50 Class Diagram PemasukanViewModel  
 21. Class PengeluaranViewModel  
     Class PengeluaranViewModel merupakan kelas pengelola status yang mengontrol daftar transaksi pengeluaran dan pemrosesan formulir penambahan atau perubahan data pengeluaran.  
     ![][image31]  
-    Gambar 3.29 Class Diagram PengeluaranViewModel  
+    Gambar 3.51 Class Diagram PengeluaranViewModel  
 22. Class DashboardViewModel  
     Class DashboardViewModel merupakan kelas pengelola status yang bertugas memicu pengambilan data ringkasan finansial dan statistik bulanan untuk disajikan ke halaman dashboard utama.  
     ![][image32]  
-    Gambar 3.30 Class Diagram DashboardViewModel  
+    Gambar 3.52 Class Diagram DashboardViewModel  
 23. Class NotifikasiViewModel  
     Class NotifikasiViewModel merupakan kelas pengelola status yang bertugas memuat dan memperbarui preferensi waktu notifikasi pengingat pada halaman pengaturan aplikasi.  
     ![][image33]  
-    Gambar 3.31 Class Diagram NotifikasiViewModel  
+    Gambar 3.53 Class Diagram NotifikasiViewModel  
 24. Class LoginPage   
     Class LoginPage merupakan kelas representasi antarmuka (view) halaman masuk bagi pengguna untuk menginput surel dan kata sandi guna memulai sesi aplikasi.  
     ![][image34]  
-    Gambar 3.32 Class Diagram LoginPage  
+    Gambar 3.54 Class Diagram LoginPage  
 25. Class ReceiptScanPage   
     Class ReceiptScanPage merupakan kelas representasi antarmuka (view) halaman pemindaian struk belanja yang menyediakan tombol kamera dan galeri untuk memproses gambar struk.  
     ![][image35]  
-    Gambar 3.33 Class Diagram ReceiptScanPage  
+    Gambar 3.55 Class Diagram ReceiptScanPage  
 26. Class PemasukanPage   
     Class PemasukanPage merupakan kelas representasi antarmuka (view) yang menyajikan daftar riwayat pemasukan uang beserta tombol akses menuju formulir pengelolaan pemasukan.  
     ![][image36]  
-    Gambar 3.34 Class Diagram PemasukanPage  
+    Gambar 3.56 Class Diagram PemasukanPage  
 27. Class PengeluaranPage  
     Class PengeluaranPage merupakan kelas representasi antarmuka (view) yang menyajikan daftar riwayat pengeluaran uang beserta rincian item belanja dan tombol akses menuju formulir pengelolaan pengeluaran.  
     ![][image37]  
-    Gambar 3.35 Class Diagram PengeluaranPage  
+    Gambar 3.57 Class Diagram PengeluaranPage  
 28. Class DashboardPage  
     Class DashboardPage merupakan kelas representasi antarmuka (view) halaman utama yang menyajikan ringkasan finansial, grafik tren bulanan, kalender transaksi harian, dan diagram lingkaran persentase pengeluaran per kategori.  
     ![][image38]  
-    Gambar 3.36 Class Diagram DashboardPage  
+    Gambar 3.58 Class Diagram DashboardPage  
 29. Class NotifikasiSettingsPage   
     Class NotifikasiSettingsPage merupakan kelas representasi antarmuka (view) halaman pengaturan aplikasi yang menyajikan kontrol toggle notifikasi, pemilihan hari, dan komponen time picker untuk menjadwalkan notifikasi pengingat harian.  
     ![][image39]  
-    Gambar 3.37 Class Diagram NotifikasiSettingsPage
+    Gambar 3.59 Class Diagram NotifikasiSettingsPage
 
     4. #### **Sequence Diagram**  {#sequence-diagram}
 
@@ -1053,61 +1304,70 @@ Sequence diagram menggambarkan interaksi antara objek-objek dalam urutan waktu t
 
 1. Sequence Diagram Pendaftaran Akun   
    ![][image40]  
-   Gambar 3.38 Sequence Diagram Pendaftaran Akun  
+   Gambar 3.60 Sequence Diagram Pendaftaran Akun  
 2. Sequence Diagram Autentikasi Masuk   
    ![][image41]  
-   Gambar 3.39 Sequence Diagram Autentikasi Masuk  
+   Gambar 3.61 Sequence Diagram Autentikasi Masuk  
 3. Sequence Diagram Keluar dari Sistem   
      
-   ![][image42]Gambar 3.40 Sequence Diagram Keluar dari Sistem  
+   ![][image42]Gambar 3.62 Sequence Diagram Keluar dari Sistem  
 4. Sequence Diagram Pengambilan Foto Struk Belanja  
    ![][image43]  
-   Gambar 3.41 Sequence Diagram Pengambilan Foto Struk Belanja Tautan  
+   Gambar 3.63 Sequence Diagram Pengambilan Foto Struk Belanja Tautan  
 5. Sequence Diagram Unggah Gambar Struk Belanja   
    ![][image44]  
-   Gambar 3.42 Sequence Diagram Unggah Gambar Struk Belanja  
+   Gambar 3.64 Sequence Diagram Unggah Gambar Struk Belanja  
 6. Sequence Diagram Memindai Teks Struk Belanja  
    ![][image45]  
-   Gambar 3.43 Sequence Diagram Memindai Teks Struk Belanja  
+   Gambar 3.65 Sequence Diagram Memindai Teks Struk Belanja  
 7. Sequence Diagram Melakukan Strukturisasi Data Struk Belanja  
    ![][image46]  
-   Gambar 3.44 Sequence Diagram Strukturisasi Data Struk Belanja  
+   Gambar 3.66 Sequence Diagram Strukturisasi Data Struk Belanja  
 8. Sequence Diagram Tinjau Hasil Ekstraksi Struk Belanja  
    ![][image47]  
-   Gambar 3.45 Sequence Diagram Tinjau Hasil Ekstraksi Struk Belanja  
+   Gambar 3.67 Sequence Diagram Tinjau Hasil Ekstraksi Struk Belanja  
 9. Sequence Diagram Penyimpanan Data Pengeluaran  
    ![][image48]  
-   Gambar 3.46 Sequence Diagram Penyimpanan Data Pengeluaran  
+   Gambar 3.68 Sequence Diagram Penyimpanan Data Pengeluaran  
 10. Sequence Diagram Riwayat Pengeluaran  
     ![][image49]  
-    Gambar 3.47 Sequence Diagram Riwayat Pengeluaran  
-11. Sequence Diagram Pengelolaan Struk Belanja  
-    ![][image50]  
-    Gambar 3.48 Sequence Diagram Pengelolaan Struk Belanja  
-12. Sequence Diagram Detail Struk Belanja  
+    Gambar 3.69 Sequence Diagram Riwayat Pengeluaran  
+11. Sequence Diagram Detail Pengeluaran  
     ![][image51]  
-    Gambar 3.49 Sequence Diagram Detail Struk Belanja  
-13. Sequence Diagram Riwayat Pemasukan  
+    Gambar 3.70 Sequence Diagram Detail Pengeluaran  
+12. Sequence Diagram Mengubah Data Struk dengan Gemini AI  
+    ![][image_seq_ai]  
+    Gambar 3.71 Sequence Diagram Mengubah Data Struk dengan Gemini AI  
+13. Sequence Diagram Menghapus Data Pengeluaran  
+    ![][image_seq_hapus]  
+    Gambar 3.72 Sequence Diagram Menghapus Data Pengeluaran  
+14. Sequence Diagram Menambah Data Pengeluaran Secara Manual  
+    ![][image_seq_tmb_mnl]  
+    Gambar 3.73 Sequence Diagram Menambah Data Pengeluaran Secara Manual  
+15. Sequence Diagram Mengubah Data Pengeluaran Secara Manual  
+    ![][image_seq_ubah_mnl]  
+    Gambar 3.74 Sequence Diagram Mengubah Data Pengeluaran Secara Manual  
+16. Sequence Diagram Riwayat Pemasukan  
     ![][image52]  
-    Gambar 3.50 Sequence Diagram Riwayat Pemasukan  
-14. Sequence Diagram Pengelolaan Data Pemasukan  
+    Gambar 3.75 Sequence Diagram Riwayat Pemasukan  
+17. Sequence Diagram Pengelolaan Data Pemasukan  
     ![][image53]  
-    Gambar 3.51 Sequence Diagram Pengelolaan Data Pemasukan  
-15. Sequence Diagram Tren Pengeluaran  
+    Gambar 3.76 Sequence Diagram Pengelolaan Data Pemasukan  
+18. Sequence Diagram Tren Pengeluaran  
     ![][image54]  
-    Gambar 3.52 Sequence Diagram Tren Pengeluaran  
-16. Sequence Diagram Kalender Pengeluaran  
+    Gambar 3.77 Sequence Diagram Tren Pengeluaran  
+19. Sequence Diagram Kalender Pengeluaran  
     ![][image55]  
-    Gambar 3.53 Sequence Diagram Kalender Pengeluaran  
-17. Sequence Diagram Persentase Pengeluaran per Kategori  
+    Gambar 3.78 Sequence Diagram Kalender Pengeluaran  
+20. Sequence Diagram Persentase Pengeluaran per Kategori  
     ![][image56]  
-    Gambar 3.54 Sequence Diagram Persentase Pengeluaran per Kategori   
-18. Sequence Diagram Mengirimkan Notifikasi Pengingat Otomatis  
+    Gambar 3.79 Sequence Diagram Persentase Pengeluaran per Kategori   
+21. Sequence Diagram Mengirimkan Notifikasi Pengingat Otomatis  
     ![][image57]  
-    Gambar 3.55 Sequence Diagram Notifikasi Pengingat Otomatis  
-19. Sequence Diagram Pengaturan Preferensi Notifikasi   
+    Gambar 3.80 Sequence Diagram Notifikasi Pengingat Otomatis  
+22. Sequence Diagram Pengaturan Preferensi Notifikasi   
     ![][image58]  
-    Gambar 3.56 Sequence Diagram Pengaturan Preferensi Notifikasi
+    Gambar 3.81 Sequence Diagram Pengaturan Preferensi Notifikasi
 
 6. ### **Perancangan Sistem** {#perancangan-sistem}
 
@@ -1119,9 +1379,9 @@ Perancangan basis data difokuskan untuk mengatur strategi penyimpanan data penca
 
 1. **Skema Relasi**
 
-Perancangan skema relasi digunakan untuk menggambarkan bagaimana satu tabel data terhubung dengan tabel data lainnya di dalam sistem. Keterhubungan ini bisa berupa relasi tunggal maupun majemuk, seperti hubungan *one-to-one*, *one-to-many*, atau *many-to-many*. Dengan adanya pemetaan ini, aliran data akan terlihat lebih rapi dan jelas, sehingga sistem dapat mengelola dan melacak informasi transaksi secara akurat. Rancangan skema relasi dapat dilihat pada Gambar 3.57.  
+Perancangan skema relasi digunakan untuk menggambarkan bagaimana satu tabel data terhubung dengan tabel data lainnya di dalam sistem. Keterhubungan ini bisa berupa relasi tunggal maupun majemuk, seperti hubungan *one-to-one*, *one-to-many*, atau *many-to-many*. Dengan adanya pemetaan ini, aliran data akan terlihat lebih rapi dan jelas, sehingga sistem dapat mengelola dan melacak informasi transaksi secara akurat. Rancangan skema relasi dapat dilihat pada Gambar 3.79.  
 ![][image59]  
-Gambar 3.57 Skema Relasi
+Gambar 3.79 Skema Relasi
 
 2. **Struktur Tabel**
 
@@ -1240,112 +1500,112 @@ Berikut adalah penjabaran detail mengenai struktur dari masing-masing tabel yang
 
 Perancangan struktur menu bertujuan untuk memetakan hierarki navigasi dan antarmuka pada aplikasi Snap Notes. Struktur menu dirancang untuk memudahkan masyarakat dalam mengakses fitur-fitur utama aplikasi secara efisien dan logis. Pada implementasinya, aplikasi menggunakan bottom navigation bar sebagai navigasi utama yang mencakup halaman dashboard, daftar pengeluaran, dan daftar pemasukan. Fitur utama pemindaian struk diakses secara cepat melalui *floating action button*. Selain itu, fitur pendukung seperti pengaturan notifikasi dan proses keluar akun (*logout*) ditempatkan secara terpusat pada *header* halaman dashboard. Adapun rancangan struktur menu pada aplikasi pencatatan keuangan pribadi dapat dilihat secara visual pada diagram berikut:  
 ![][image60]  
-Gambar 3.56 Struktur Menu
+Gambar 3.78 Struktur Menu
 
 3. #### **Perancangan Antarmuka Pengguna** {#perancangan-antarmuka-pengguna}
 
 Perancangan antarmuka adalah tahap penting yang digunakan untuk memvisualisasikan alur pembuatan tampilan serta interaksi antara pengguna dengan aplikasi yang dirancang. Dalam tahapan ini, setiap elemen antarmuka mulai dari tata letak (layout), ikon, tombol, hingga navigasi didesain agar selaras dengan kebutuhan pengguna dan tujuan aplikasi. Perhatian khusus diberikan pada aspek usability (kemudahan penggunaan) dan konsistensi tampilan, sehingga pengguna dapat berinteraksi dengan aplikasi secara nyaman dan efisien. Berikut ini adalah rancangan antarmuka pada aplikasi yang dibangun, yang disajikan secara berurutan:
 
 T01. Masuk  
-   T01 merupakan antarmuka masuk untuk memfasilitasi pengguna melakukan autentikasi ke dalam aplikasi. Pengguna dapat masuk menggunakan email dan kata sandi atau melalui akun Google, yang selanjutnya akan diarahkan ke halaman Dashboard. Perancangan antarmuka Masuk dapat dilihat dari Gambar 3.57 T01 - Masuk berikut.  
+   T01 merupakan antarmuka masuk untuk memfasilitasi pengguna melakukan autentikasi ke dalam aplikasi. Pengguna dapat masuk menggunakan email dan kata sandi atau melalui akun Google, yang selanjutnya akan diarahkan ke halaman Dashboard. Perancangan antarmuka Masuk dapat dilihat dari Gambar 3.79 T01 - Masuk berikut.  
    ![T01 - Masuk](Perancangan/tampilan_antarmuka/T01-Login.png)  
-   Gambar 3.57 Masuk   
+   Gambar 3.79 Masuk   
 T02. Daftar  
-   T02 adalah antarmuka pendaftaran untuk memfasilitasi pembuatan akun baru bagi pengguna aplikasi. Setelah berhasil mendaftar, pengguna akan diarahkan kembali ke halaman Masuk untuk melakukan autentikasi. Perancangan antarmuka Daftar dapat dilihat dari Gambar 3.58 T02 - Daftar berikut.  
+   T02 adalah antarmuka pendaftaran untuk memfasilitasi pembuatan akun baru bagi pengguna aplikasi. Setelah berhasil mendaftar, pengguna akan diarahkan kembali ke halaman Masuk untuk melakukan autentikasi. Perancangan antarmuka Daftar dapat dilihat dari Gambar 3.80 T02 - Daftar berikut.  
    ![T02 - Daftar](Perancangan/tampilan_antarmuka/T02-Daftar.png)  
-   Gambar 3.58 Daftar   
+   Gambar 3.80 Daftar   
 T03. Dashboard  
-   T03 merupakan halaman utama yang menampilkan ringkasan informasi keuangan pengguna secara interaktif. Halaman ini menyediakan navigasi cepat ke berbagai fitur utama seperti pemindaian struk, riwayat transaksi, dan notifikasi. Perancangan antarmuka Dashboard dapat dilihat dari Gambar 3.59 T03 - Dashboard berikut.  
+   T03 merupakan halaman utama yang menampilkan ringkasan informasi keuangan pengguna secara interaktif. Halaman ini menyediakan navigasi cepat ke berbagai fitur utama seperti pemindaian struk, riwayat transaksi, dan notifikasi. Perancangan antarmuka Dashboard dapat dilihat dari Gambar 3.81 T03 - Dashboard berikut.  
    ![T03 - Dashboard](Perancangan/tampilan_antarmuka/T03-Dashboard.png)  
-   Gambar 3.59 Dashboard   
+   Gambar 3.81 Dashboard   
 T04. Ambil Foto  
-   T04 adalah antarmuka untuk mengambil gambar struk belanja menggunakan kamera perangkat atau galeri. Tampilan ini merupakan langkah pertama dari serangkaian proses pemindaian struk berbasis OCR. Perancangan antarmuka Ambil Foto dapat dilihat dari Gambar 3.60 T04 - Ambil Foto berikut.  
+   T04 adalah antarmuka untuk mengambil gambar struk belanja menggunakan kamera perangkat atau galeri. Tampilan ini merupakan langkah pertama dari serangkaian proses pemindaian struk berbasis OCR. Perancangan antarmuka Ambil Foto dapat dilihat dari Gambar 3.82 T04 - Ambil Foto berikut.  
    ![T04 - Ambil Foto](Perancangan/tampilan_antarmuka/T04-AmbilFoto.png)  
-   Gambar 3.60 Ambil Foto   
+   Gambar 3.82 Ambil Foto   
 T05. Scan Struk  
-   T05 menampilkan animasi pemrosesan saat aplikasi mengekstraksi teks dari gambar struk menggunakan teknologi AI. Halaman ini bertindak sebagai status tunggu sebelum hasil ekstraksi ditampilkan kepada pengguna. Perancangan antarmuka Scan Struk dapat dilihat dari Gambar 3.61 T05 - Scan Struk berikut.  
+   T05 menampilkan animasi pemrosesan saat aplikasi mengekstraksi teks dari gambar struk menggunakan teknologi AI. Halaman ini bertindak sebagai status tunggu sebelum hasil ekstraksi ditampilkan kepada pengguna. Perancangan antarmuka Scan Struk dapat dilihat dari Gambar 3.83 T05 - Scan Struk berikut.  
    ![T05 - Scan Struk](Perancangan/tampilan_antarmuka/T05-ScanStruk.png)  
-   Gambar 3.61 Scan Struk   
+   Gambar 3.83 Scan Struk   
 T06. Review Struk  
-   T06 menampilkan hasil ekstraksi data struk oleh sistem AI untuk ditinjau dan diverifikasi oleh pengguna. Pengguna dapat langsung menyimpan data tersebut atau melakukan koreksi manual jika terdapat ketidakakuratan. Perancangan antarmuka Review Struk dapat dilihat dari Gambar 3.62 T06 - Review Struk berikut.  
+   T06 menampilkan hasil ekstraksi data struk oleh sistem AI untuk ditinjau dan diverifikasi oleh pengguna. Pengguna dapat langsung menyimpan data tersebut atau melakukan koreksi manual jika terdapat ketidakakuratan. Perancangan antarmuka Review Struk dapat dilihat dari Gambar 3.84 T06 - Review Struk berikut.  
    ![T06 - Review Struk](Perancangan/tampilan_antarmuka/T06-ReviewStruk.png)  
-   Gambar 3.62 Review Struk   
+   Gambar 3.84 Review Struk   
 T07. Edit Review Struk  
-   T07 menyediakan formulir untuk memperbaiki atau menambahkan konteks spesifik pada hasil ekstraksi teks yang kurang akurat. Pengguna dapat mengirimkan instruksi pembaharuan ke AI agar hasil pembacaan item belanja menjadi lebih tepat. Perancangan antarmuka Edit Review Struk dapat dilihat dari Gambar 3.63 T07 - Edit Review Struk berikut.  
+   T07 menyediakan formulir untuk memperbaiki atau menambahkan konteks spesifik pada hasil ekstraksi teks yang kurang akurat. Pengguna dapat mengirimkan instruksi pembaharuan ke AI agar hasil pembacaan item belanja menjadi lebih tepat. Perancangan antarmuka Edit Review Struk dapat dilihat dari Gambar 3.85 T07 - Edit Review Struk berikut.  
    ![T07 - Edit Review Struk](Perancangan/tampilan_antarmuka/T07-EditReviewStruk.png)  
-   Gambar 3.63 Edit Review Struk   
+   Gambar 3.85 Edit Review Struk   
 T08. Simpan Struk  
-   T08 merupakan tampilan konfirmasi saat data hasil pemindaian struk berhasil direkam ke dalam basis data. Setelah proses penyimpanan selesai, sistem akan otomatis mengarahkan pengguna ke daftar riwayat pengeluaran. Perancangan antarmuka Simpan Struk dapat dilihat dari Gambar 3.64 T08 - Simpan Struk berikut.  
+   T08 merupakan tampilan konfirmasi saat data hasil pemindaian struk berhasil direkam ke dalam basis data. Setelah proses penyimpanan selesai, sistem akan otomatis mengarahkan pengguna ke daftar riwayat pengeluaran. Perancangan antarmuka Simpan Struk dapat dilihat dari Gambar 3.86 T08 - Simpan Struk berikut.  
    ![T08 - Simpan Struk](Perancangan/tampilan_antarmuka/T08-SimpanStruk.png)  
-   Gambar 3.64 Simpan Struk   
+   Gambar 3.86 Simpan Struk   
 T09. Pengeluaran  
-   T09 adalah antarmuka yang menampilkan seluruh riwayat transaksi pengeluaran pengguna. Pada halaman ini, pengguna dapat melihat detail masing-masing transaksi, menggunakan filter, atau mencatat pengeluaran baru secara manual. Perancangan antarmuka Pengeluaran dapat dilihat dari Gambar 3.65 T09 - Pengeluaran berikut.  
+   T09 adalah antarmuka yang menampilkan seluruh riwayat transaksi pengeluaran pengguna. Pada halaman ini, pengguna dapat melihat detail masing-masing transaksi, menggunakan filter, atau mencatat pengeluaran baru secara manual. Perancangan antarmuka Pengeluaran dapat dilihat dari Gambar 3.87 T09 - Pengeluaran berikut.  
    ![T09 - Pengeluaran](Perancangan/tampilan_antarmuka/T09-Pengeluaran.png)  
-   Gambar 3.65 Pengeluaran   
+   Gambar 3.87 Pengeluaran   
 T10. Tambah Pengeluaran Manual  
-   T10 memfasilitasi pengguna untuk mencatat transaksi pengeluaran baru secara manual tanpa melalui proses pemindaian struk. Formulir ini mencakup kolom isian untuk nominal, kategori, tanggal, dan catatan tambahan. Perancangan antarmuka Tambah Pengeluaran Manual dapat dilihat dari Gambar 3.66 T10 - Tambah Pengeluaran Manual berikut.  
+   T10 memfasilitasi pengguna untuk mencatat transaksi pengeluaran baru secara manual tanpa melalui proses pemindaian struk. Formulir ini mencakup kolom isian untuk nominal, kategori, tanggal, dan catatan tambahan. Perancangan antarmuka Tambah Pengeluaran Manual dapat dilihat dari Gambar 3.88 T10 - Tambah Pengeluaran Manual berikut.  
    ![T10 - Tambah Pengeluaran Manual](Perancangan/tampilan_antarmuka/T10-TambahPengeluaranManual.png)  
-   Gambar 3.66 Tambah Pengeluaran Manual   
+   Gambar 3.88 Tambah Pengeluaran Manual   
 T11. Detail Pengeluaran (Struk)  
-   T11 menyajikan informasi lengkap mengenai sebuah transaksi pengeluaran yang datanya bersumber dari pemindaian struk. Pengguna dapat meninjau rincian item belanja, mengedit data, atau menghapus riwayat transaksi tersebut. Perancangan antarmuka Detail Pengeluaran dapat dilihat dari Gambar 3.67 T11 - Detail Pengeluaran (Struk) berikut.  
+   T11 menyajikan informasi lengkap mengenai sebuah transaksi pengeluaran yang datanya bersumber dari pemindaian struk. Pengguna dapat meninjau rincian item belanja, mengedit data, atau menghapus riwayat transaksi tersebut. Perancangan antarmuka Detail Pengeluaran dapat dilihat dari Gambar 3.89 T11 - Detail Pengeluaran (Struk) berikut.  
    ![T11 - Detail Pengeluaran (Struk)](Perancangan/tampilan_antarmuka/T11-DetailPengeluaranStruk.png)  
-   Gambar 3.67 Detail Pengeluaran (Struk)   
+   Gambar 3.89 Detail Pengeluaran (Struk)   
 T12. Detail Pengeluaran (Manual)  
-   T12 menampilkan rincian informasi dari sebuah transaksi pengeluaran yang telah dicatat secara manual. Melalui layar ini, pengguna juga diberikan opsi untuk memperbarui informasi transaksi atau menghapusnya. Perancangan antarmuka Detail Pengeluaran dapat dilihat dari Gambar 3.68 T12 - Detail Pengeluaran (Manual) berikut.  
+   T12 menampilkan rincian informasi dari sebuah transaksi pengeluaran yang telah dicatat secara manual. Melalui layar ini, pengguna juga diberikan opsi untuk memperbarui informasi transaksi atau menghapusnya. Perancangan antarmuka Detail Pengeluaran dapat dilihat dari Gambar 3.90 T12 - Detail Pengeluaran (Manual) berikut.  
    ![T12 - Detail Pengeluaran (Manual)](Perancangan/tampilan_antarmuka/T12-DetailPengeluaranManual.png)  
-   Gambar 3.68 Detail Pengeluaran (Manual)   
+   Gambar 3.90 Detail Pengeluaran (Manual)   
 T13. Hapus Pengeluaran (Alert)  
-   T13 adalah dialog peringatan yang muncul untuk mengonfirmasi tindakan penghapusan data riwayat pengeluaran. Hal ini bertujuan untuk mencegah kehilangan data secara tidak sengaja oleh pengguna. Perancangan antarmuka Hapus Pengeluaran dapat dilihat dari Gambar 3.69 T13 - Hapus Pengeluaran (Alert) berikut.  
+   T13 adalah dialog peringatan yang muncul untuk mengonfirmasi tindakan penghapusan data riwayat pengeluaran. Hal ini bertujuan untuk mencegah kehilangan data secara tidak sengaja oleh pengguna. Perancangan antarmuka Hapus Pengeluaran dapat dilihat dari Gambar 3.91 T13 - Hapus Pengeluaran (Alert) berikut.  
    ![T13 - Hapus Pengeluaran (Alert)](Perancangan/tampilan_antarmuka/T13-HapusPengeluaran.png)  
-   Gambar 3.69 Hapus Pengeluaran (Alert)   
+   Gambar 3.91 Hapus Pengeluaran (Alert)   
 T14. Edit Struk  
-   T14 menyediakan formulir untuk mengubah informasi utama dari sebuah catatan pengeluaran yang berbasis struk. Pengguna dapat menyesuaikan nama merchant, kategori, maupun tanggal transaksi sesuai kebutuhan. Perancangan antarmuka Edit Struk dapat dilihat dari Gambar 3.70 T14 - Edit Struk berikut.  
+   T14 menyediakan formulir untuk mengubah informasi utama dari sebuah catatan pengeluaran yang berbasis struk. Pengguna dapat menyesuaikan nama merchant, kategori, maupun tanggal transaksi sesuai kebutuhan. Perancangan antarmuka Edit Struk dapat dilihat dari Gambar 3.92 T14 - Edit Struk berikut.  
    ![T14 - Edit Struk](Perancangan/tampilan_antarmuka/T14-EditStruk.png)  
-   Gambar 3.70 Edit Struk   
+   Gambar 3.92 Edit Struk   
 T15. Ubah Pengeluaran Manual  
-   T15 merupakan formulir yang digunakan untuk memperbarui rincian data pada transaksi pengeluaran manual yang telah tersimpan. Pengguna dapat mengoreksi nominal, tanggal, maupun deskripsi transaksi dengan mudah. Perancangan antarmuka Ubah Pengeluaran Manual dapat dilihat dari Gambar 3.71 T15 - Ubah Pengeluaran Manual berikut.  
+   T15 merupakan formulir yang digunakan untuk memperbarui rincian data pada transaksi pengeluaran manual yang telah tersimpan. Pengguna dapat mengoreksi nominal, tanggal, maupun deskripsi transaksi dengan mudah. Perancangan antarmuka Ubah Pengeluaran Manual dapat dilihat dari Gambar 3.93 T15 - Ubah Pengeluaran Manual berikut.  
    ![T15 - Ubah Pengeluaran Manual](Perancangan/tampilan_antarmuka/T15-UbahPengeluaranManual.png)  
-   Gambar 3.71 Ubah Pengeluaran Manual   
+   Gambar 3.93 Ubah Pengeluaran Manual   
 T16. Pemasukan  
-   T16 adalah antarmuka yang merangkum seluruh daftar riwayat transaksi pemasukan pengguna. Halaman ini menyediakan fitur bagi pengguna untuk melihat ringkasan dana masuk serta mencatat pemasukan baru. Perancangan antarmuka Pemasukan dapat dilihat dari Gambar 3.72 T16 - Pemasukan berikut.  
+   T16 adalah antarmuka yang merangkum seluruh daftar riwayat transaksi pemasukan pengguna. Halaman ini menyediakan fitur bagi pengguna untuk melihat ringkasan dana masuk serta mencatat pemasukan baru. Perancangan antarmuka Pemasukan dapat dilihat dari Gambar 3.94 T16 - Pemasukan berikut.  
    ![T16 - Pemasukan](Perancangan/tampilan_antarmuka/T16-Pemasukan.png)  
-   Gambar 3.72 Pemasukan   
+   Gambar 3.94 Pemasukan   
 T17. Tambah Pemasukan  
-   T17 menyediakan formulir bagi pengguna untuk mencatat perolehan dana atau pemasukan baru ke dalam sistem. Pengguna diminta untuk mengisi jumlah nominal, sumber dana, serta waktu penerimaan. Perancangan antarmuka Tambah Pemasukan dapat dilihat dari Gambar 3.73 T17 - Tambah Pemasukan berikut.  
+   T17 menyediakan formulir bagi pengguna untuk mencatat perolehan dana atau pemasukan baru ke dalam sistem. Pengguna diminta untuk mengisi jumlah nominal, sumber dana, serta waktu penerimaan. Perancangan antarmuka Tambah Pemasukan dapat dilihat dari Gambar 3.95 T17 - Tambah Pemasukan berikut.  
    ![T17 - Tambah Pemasukan](Perancangan/tampilan_antarmuka/T17-TambahPemasukan.png)  
-   Gambar 3.73 Tambah Pemasukan   
+   Gambar 3.95 Tambah Pemasukan   
 T18. Detail Pemasukan  
-   T18 menampilkan informasi terperinci dari suatu catatan transaksi pemasukan. Antarmuka ini memberikan opsi lebih lanjut bagi pengguna untuk memodifikasi atau menghapus data tersebut. Perancangan antarmuka Detail Pemasukan dapat dilihat dari Gambar 3.74 T18 - Detail Pemasukan berikut.  
+   T18 menampilkan informasi terperinci dari suatu catatan transaksi pemasukan. Antarmuka ini memberikan opsi lebih lanjut bagi pengguna untuk memodifikasi atau menghapus data tersebut. Perancangan antarmuka Detail Pemasukan dapat dilihat dari Gambar 3.96 T18 - Detail Pemasukan berikut.  
    ![T18 - Detail Pemasukan](Perancangan/tampilan_antarmuka/T18-DetailPemasukan.png)  
-   Gambar 3.74 Detail Pemasukan   
+   Gambar 3.96 Detail Pemasukan   
 T19. Ubah Pemasukan  
-   T19 adalah formulir yang memungkinkan pengguna untuk mengoreksi rincian informasi dari data pemasukan yang sudah ada. Setiap perubahan yang dilakukan akan langsung memperbarui catatan keuangan pada sistem. Perancangan antarmuka Ubah Pemasukan dapat dilihat dari Gambar 3.75 T19 - Ubah Pemasukan berikut.  
+   T19 adalah formulir yang memungkinkan pengguna untuk mengoreksi rincian informasi dari data pemasukan yang sudah ada. Setiap perubahan yang dilakukan akan langsung memperbarui catatan keuangan pada sistem. Perancangan antarmuka Ubah Pemasukan dapat dilihat dari Gambar 3.97 T19 - Ubah Pemasukan berikut.  
    ![T19 - Ubah Pemasukan](Perancangan/tampilan_antarmuka/T19-UbahPemasukan.png)  
-   Gambar 3.75 Ubah Pemasukan   
+   Gambar 3.97 Ubah Pemasukan   
 T20. Hapus Pemasukan (Alert)  
-   T20 merupakan pop-up peringatan konfirmasi sebelum pengguna menghapus sebuah catatan riwayat pemasukan. Peringatan ini memastikan bahwa pengguna memang bermaksud menghapus data secara permanen. Perancangan antarmuka Hapus Pemasukan dapat dilihat dari Gambar 3.76 T20 - Hapus Pemasukan (Alert) berikut.  
+   T20 merupakan pop-up peringatan konfirmasi sebelum pengguna menghapus sebuah catatan riwayat pemasukan. Peringatan ini memastikan bahwa pengguna memang bermaksud menghapus data secara permanen. Perancangan antarmuka Hapus Pemasukan dapat dilihat dari Gambar 3.98 T20 - Hapus Pemasukan (Alert) berikut.  
    ![T20 - Hapus Pemasukan (Alert)](Perancangan/tampilan_antarmuka/T20-HapusPemasukan.png)  
-   Gambar 3.76 Hapus Pemasukan (Alert)   
+   Gambar 3.98 Hapus Pemasukan (Alert)   
 T21. Notifikasi  
-   T21 adalah pusat manajemen preferensi untuk mengatur pengingat pencatatan keuangan rutin. Pengguna dapat melihat daftar jadwal pengingat yang aktif, menambah jadwal baru, atau mengubah setelan yang ada. Perancangan antarmuka Notifikasi dapat dilihat dari Gambar 3.77 T21 - Notifikasi berikut.  
+   T21 adalah pusat manajemen preferensi untuk mengatur pengingat pencatatan keuangan rutin. Pengguna dapat melihat daftar jadwal pengingat yang aktif, menambah jadwal baru, atau mengubah setelan yang ada. Perancangan antarmuka Notifikasi dapat dilihat dari Gambar 3.99 T21 - Notifikasi berikut.  
    ![T21 - Notifikasi](Perancangan/tampilan_antarmuka/T21-Notifikasi.png)  
-   Gambar 3.77 Notifikasi   
+   Gambar 3.99 Notifikasi   
 T22. Tambah Notifikasi  
-   T22 menyediakan formulir untuk menjadwalkan pengingat baru bagi pengguna agar rutin mencatat keuangannya. Pengguna dapat menentukan waktu spesifik dan frekuensi kemunculan notifikasi tersebut. Perancangan antarmuka Tambah Notifikasi dapat dilihat dari Gambar 3.78 T22 - Tambah Notifikasi berikut.  
+   T22 menyediakan formulir untuk menjadwalkan pengingat baru bagi pengguna agar rutin mencatat keuangannya. Pengguna dapat menentukan waktu spesifik dan frekuensi kemunculan notifikasi tersebut. Perancangan antarmuka Tambah Notifikasi dapat dilihat dari Gambar 3.100 T22 - Tambah Notifikasi berikut.  
    ![T22 - Tambah Notifikasi](Perancangan/tampilan_antarmuka/T22-TambahNotifikasi.png)  
-   Gambar 3.78 Tambah Notifikasi   
+   Gambar 3.100 Tambah Notifikasi   
 T23. Ubah Notifikasi  
-   T23 merupakan formulir untuk menyesuaikan kembali waktu atau frekuensi dari pengingat notifikasi yang telah dibuat sebelumnya. Melalui antarmuka ini, pengguna juga dapat memilih untuk menghapus jadwal pengingat tersebut. Perancangan antarmuka Ubah Notifikasi dapat dilihat dari Gambar 3.79 T23 - Ubah Notifikasi berikut.  
+   T23 merupakan formulir untuk menyesuaikan kembali waktu atau frekuensi dari pengingat notifikasi yang telah dibuat sebelumnya. Melalui antarmuka ini, pengguna juga dapat memilih untuk menghapus jadwal pengingat tersebut. Perancangan antarmuka Ubah Notifikasi dapat dilihat dari Gambar 3.101 T23 - Ubah Notifikasi berikut.  
    ![T23 - Ubah Notifikasi](Perancangan/tampilan_antarmuka/T23-UbahNotifikasi.png)  
-   Gambar 3.79 Ubah Notifikasi   
+   Gambar 3.101 Ubah Notifikasi   
 T24. Hapus Notifikasi (Alert)  
-   T24 adalah dialog konfirmasi yang memastikan persetujuan pengguna untuk mematikan jadwal pengingat secara permanen. Setelah dikonfirmasi, sistem akan menghapus preferensi notifikasi tersebut dari aplikasi. Perancangan antarmuka Hapus Notifikasi dapat dilihat dari Gambar 3.80 T24 - Hapus Notifikasi (Alert) berikut.  
+   T24 adalah dialog konfirmasi yang memastikan persetujuan pengguna untuk mematikan jadwal pengingat secara permanen. Setelah dikonfirmasi, sistem akan menghapus preferensi notifikasi tersebut dari aplikasi. Perancangan antarmuka Hapus Notifikasi dapat dilihat dari Gambar 3.102 T24 - Hapus Notifikasi (Alert) berikut.  
    ![T24 - Hapus Notifikasi (Alert)](Perancangan/tampilan_antarmuka/T24-HapusNotifikasi.png)  
-   Gambar 3.80 Hapus Notifikasi (Alert)   
+   Gambar 3.102 Hapus Notifikasi (Alert)   
 T25. Keluar
-   T25 adalah dialog konfirmasi untuk memastikan persetujuan pengguna sebelum mengakhiri sesi aktif mereka di aplikasi. Setelah pengguna menekan tombol Keluar, sistem akan menghapus data sesi dan mengarahkannya kembali ke antarmuka Masuk. Perancangan antarmuka Keluar dapat dilihat dari Gambar 3.81 T25 - Keluar berikut.  
+   T25 adalah dialog konfirmasi untuk memastikan persetujuan pengguna sebelum mengakhiri sesi aktif mereka di aplikasi. Setelah pengguna menekan tombol Keluar, sistem akan menghapus data sesi dan mengarahkannya kembali ke antarmuka Masuk. Perancangan antarmuka Keluar dapat dilihat dari Gambar 3.103 T25 - Keluar berikut.  
    ![T25 - Keluar](Perancangan/tampilan_antarmuka/T25-Keluar.png)  
-   Gambar 3.81 Keluar   
+   Gambar 3.103 Keluar   
 
    4. #### **Perancangan Pesan** {#perancangan-pesan}
 
@@ -1513,3 +1773,25 @@ T25. Keluar
 [image65]: <data:image/png;base64,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>
 
 [image66]: <data:image/png;base64,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>
+[image_act_1]: UML/activity_diagram/01_activity_diagram_daftar.drawio
+[image_act_2]: UML/activity_diagram/02_activity_diagram_menyediakan_fitur_autentikasi_masuk.drawio
+[image_act_3]: UML/activity_diagram/03_activity_diagram_menyediakan_fitur_keluar_dari_sistem.drawio
+[image_act_4]: UML/activity_diagram/04_activity_diagram_mengambil_foto_struk_belanja.drawio
+[image_act_5]: UML/activity_diagram/05_activity_diagram_menyediakan_fitur_unggah_gambar_struk.drawio
+[image_act_6]: UML/activity_diagram/06_activity_diagram_memindai_teks_pada_struk_belanja.drawio
+[image_act_7]: UML/activity_diagram/07_activity_diagram_melakukan_strukturisasi_data_struk_belanja.drawio
+[image_act_8]: UML/activity_diagram/08_activity_diagram_menyediakan_formulir_tinjauan_data_ekstraksi.drawio
+[image_act_9]: UML/activity_diagram/09_activity_diagram_menyimpan_data_pengeluaran_hasil_scan.drawio
+[image_act_10]: UML/activity_diagram/10_activity_diagram_menyediakan_antarmuka_riwayat_pengeluaran.drawio
+[image_act_11]: UML/activity_diagram/11_activity_diagram_menyediakan_antarmuka_detail_pengeluaran.drawio
+[image_act_12]: UML/activity_diagram/12_activity_diagram_mengubah_data_struk_dengan_gemini_ai.drawio
+[image_act_13]: UML/activity_diagram/13_activity_diagram_menghapus_data_pengeluaran.drawio
+[image_act_14]: UML/activity_diagram/14_activity_diagram_menambah_data_pengeluaran_secara_manual.drawio
+[image_act_15]: UML/activity_diagram/15_activity_diagram_mengubah_data_pengeluaran_secara_manual.drawio
+[image_act_16]: UML/activity_diagram/16_activity_diagram_menyediakan_antarmuka_riwayat_pemasukan.drawio
+[image_act_17]: UML/activity_diagram/17_activity_diagram_menyediakan_fitur_pengelolaan_pemasukan.drawio
+[image_act_18]: UML/activity_diagram/18_activity_diagram_menampilkan_antarmuka_tren_pengeluaran_per_bulan.drawio
+[image_act_19]: UML/activity_diagram/19_activity_diagram_menampilkan_antarmuka_kalender_pengeluaran_interaktif.drawio
+[image_act_20]: UML/activity_diagram/20_activity_diagram_menampilkan_visualisasi_persentase_per_kategori.drawio
+[image_act_21]: UML/activity_diagram/21_activity_diagram_mengirimkan_notifikasi_pengingat_otomatis.drawio
+[image_act_22]: UML/activity_diagram/22_activity_diagram_mengelola_preferensi_notifikasi_pengingat.drawio

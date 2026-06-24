@@ -1,0 +1,123 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="act-7">
+    <mxGraphModel dx="2462" dy="1177" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="main_cont" parent="1" style="swimlane;html=1;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;startSize=30;whiteSpace=wrap;" value="&lt;span style=&quot;font-weight:700;font-size:12pt;&quot;&gt;Activity Diagram Melakukan Strukturisasi Data Struk Belanja&lt;/span&gt;" vertex="1">
+          <mxGeometry height="1030" width="960" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_1" parent="main_cont" style="swimlane;html=1;startSize=30;" value="Sistem" vertex="1">
+          <mxGeometry height="1000" width="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="node_e_2_2" parent="lane_1" style="rounded=1;whiteSpace=wrap;html=1;" value="Menampilkan pesan bahwa layanan analisis AI sedang tidak tersedia" vertex="1">
+          <mxGeometry height="60" width="180" x="40" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="end_ext_2_2" parent="lane_1" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" vertex="1">
+          <mxGeometry height="30" width="30" x="115" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_2" parent="main_cont" style="swimlane;html=1;startSize=30;" value=" " vertex="1">
+          <mxGeometry height="1000" width="400" x="280" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_1" parent="lane_2" style="rounded=1;whiteSpace=wrap;html=1;" value="Menyusun prompt khusus yang mengintegrasikan data teks OCR beserta koordinat spasialnya" vertex="1">
+          <mxGeometry height="60" width="180" x="110" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_2" parent="lane_2" style="rounded=1;whiteSpace=wrap;html=1;" value="Mengirimkan request HTTP POST ke endpoint Gemini API menggunakan library Generative AI SDK" vertex="1">
+          <mxGeometry height="60" width="180" x="110" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="node_dec_2" parent="lane_2" style="rhombus;whiteSpace=wrap;html=1;" value="Valid?" vertex="1">
+          <mxGeometry height="80" width="80" x="160" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="node_e_2_1" parent="lane_2" style="rounded=1;whiteSpace=wrap;html=1;" value="Mencatat log error dan mengembalikan kode status kegagalan API" vertex="1">
+          <mxGeometry height="60" width="180" x="110" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_6" parent="lane_2" style="rounded=1;whiteSpace=wrap;html=1;" value="Web Servicemenerima respons JSON dari Gemini API" vertex="1">
+          <mxGeometry height="60" width="180" x="110" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_7" parent="lane_2" style="rounded=1;whiteSpace=wrap;html=1;" value="Web Service melakukan validasi kelengkapan data JSON hasil ekstraksi" vertex="1">
+          <mxGeometry height="60" width="180" x="110" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="node_dec_7" parent="lane_2" style="rhombus;whiteSpace=wrap;html=1;" value="Valid?" vertex="1">
+          <mxGeometry height="80" width="80" x="160" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="node_e_7_2" parent="lane_2" style="rounded=1;whiteSpace=wrap;html=1;" value="Jika tetap gagal, Web Service mengembalikan pesan kesalahan ke aplikasi" vertex="1">
+          <mxGeometry height="60" width="180" x="215" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="end_ext_7_2" parent="lane_2" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" vertex="1">
+          <mxGeometry height="30" width="30" x="290" y="950" as="geometry" />
+        </mxCell>
+        <mxCell id="node_end_main" parent="lane_2" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" vertex="1">
+          <mxGeometry height="30" width="30" x="95" y="950" as="geometry" />
+        </mxCell>
+        <mxCell id="node_start" parent="lane_2" style="ellipse;fillColor=strokeColor;html=1;" vertex="1">
+          <mxGeometry height="30" width="30" x="185" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_1" edge="1" parent="lane_2" source="node_start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UbvNFb_NICVOMQrye-OE-4" edge="1" parent="lane_2" source="UbvNFb_NICVOMQrye-OE-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_end_main">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UbvNFb_NICVOMQrye-OE-3" parent="lane_2" style="rounded=1;whiteSpace=wrap;html=1;" value="Menampilkan data JSON yang telah berhasil distrukturisasi&amp;nbsp;" vertex="1">
+          <mxGeometry height="60" width="180" x="20" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_18" edge="1" parent="lane_2" source="node_dec_7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="UbvNFb_NICVOMQrye-OE-3" value="Iya">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="70" y="950" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lane_3" parent="main_cont" style="swimlane;html=1;startSize=30;" value="Gemini AI" vertex="1">
+          <mxGeometry height="1000" width="280" x="680" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_3" parent="lane_3" style="rounded=1;whiteSpace=wrap;html=1;" value="Menerima request dan menganalisis payload teks dengan model gemini-2.5-flash" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_4" parent="lane_3" style="rounded=1;whiteSpace=wrap;html=1;" value="Memetakan dan mengklasifikasikan data berdasarkan konteks spasial" vertex="1">
+          <mxGeometry height="70" width="180" x="50" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="node_m_5" parent="lane_3" style="rounded=1;whiteSpace=wrap;html=1;" value="Menghasilkan luaran berupa data terstruktur berformat JSON sesuai skema yang diminta" vertex="1">
+          <mxGeometry height="60" width="180" x="50" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_6" edge="1" parent="main_cont" source="node_e_2_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_e_2_2" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_2" edge="1" parent="1" source="node_m_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_3" edge="1" parent="1" source="node_m_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_dec_2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_4" edge="1" parent="1" source="node_dec_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_e_2_1" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_7" edge="1" parent="1" source="node_e_2_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="end_ext_2_2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_8" edge="1" parent="1" source="node_dec_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_3" value="Iya">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_9" edge="1" parent="1" source="node_m_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_10" edge="1" parent="1" source="node_m_4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_11" edge="1" parent="1" source="node_m_5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_12" edge="1" parent="1" source="node_m_6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_m_7" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_13" edge="1" parent="1" source="node_m_7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="node_dec_7" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_16" edge="1" parent="1" source="node_dec_7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="node_e_7_2" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_17" edge="1" parent="1" source="node_e_7_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="end_ext_7_2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

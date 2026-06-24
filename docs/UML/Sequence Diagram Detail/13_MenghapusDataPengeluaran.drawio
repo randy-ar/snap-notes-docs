@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="Page-1">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="user" value="Masyarakat" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="60" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="view" value="&lt;&lt;View&gt;&gt;&#10;PengeluaranDetail" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="280" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="vm" value="&lt;&lt;ViewModel&gt;&gt;&#10;PengeluaranVM" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="500" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="svc_m" value="&lt;&lt;Service&gt;&gt;&#10;PengeluaranService" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="720" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="ctrl" value="&lt;&lt;Controller&gt;&gt;&#10;PengeluaranController" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="940" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="svc_b" value="&lt;&lt;Service&gt;&gt;&#10;PengeluaranService" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="1160" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="db" value="&lt;&lt;Database&gt;&gt;&#10;PrismaService" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="1380" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="100" value="1: Hapus &amp; Konfirmasi" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="user" target="view">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="120" />
+              <mxPoint x="330" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="101" value="2: hapusPengeluaran(id)" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="view" target="vm">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="160" />
+              <mxPoint x="550" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="102" value="3: hapusPengeluaran(id)" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="vm" target="svc_m">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550" y="200" />
+              <mxPoint x="770" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="103" value="4: DELETE /api/pengeluaran/:id" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="svc_m" target="ctrl">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="770" y="240" />
+              <mxPoint x="990" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="104" value="5: remove(id)" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="ctrl" target="svc_b">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="990" y="280" />
+              <mxPoint x="1210" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="105" value="6: delete(pengeluaran)" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="svc_b" target="db">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1210" y="320" />
+              <mxPoint x="1430" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="106" value="7: Return OK" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="db" target="svc_b">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1430" y="360" />
+              <mxPoint x="1210" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="107" value="8: Return OK" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="svc_b" target="ctrl">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1210" y="400" />
+              <mxPoint x="990" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="108" value="9: 200 OK" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="ctrl" target="svc_m">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="990" y="440" />
+              <mxPoint x="770" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="109" value="10: Return OK" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="svc_m" target="vm">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="770" y="480" />
+              <mxPoint x="550" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="110" value="11: show Toaster Success, navBack()" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="vm" target="view">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550" y="520" />
+              <mxPoint x="330" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="111" value="12: Kembali ke riwayat" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="view" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="560" />
+              <mxPoint x="110" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="Page-1">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="user" value="&lt;&lt;actor&gt;&gt;&#10;Masyarakat" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="60" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="view" value="&lt;&lt;View&gt;&gt;&#10;PengaturanPage" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="280" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="vm" value="&lt;&lt;ViewModel&gt;&gt;&#10;PreferensiVM" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="500" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="storage" value="&lt;&lt;Storage&gt;&gt;&#10;SecureStorage" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="720" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="plugin" value="&lt;&lt;Plugin&gt;&gt;&#10;LocalNotification" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+          <mxGeometry x="940" y="50" width="100" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="100" value="1: Buka menu Pengingat" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="user" target="view">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="120" />
+              <mxPoint x="330" y="120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="101" value="2: Tampilkan Time Picker" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="view" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="160" />
+              <mxPoint x="110" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="102" value="3: Pilih waktu &amp; Simpan" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="user" target="view">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="200" />
+              <mxPoint x="330" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="103" value="4: saveWaktu(time)" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="view" target="vm">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="240" />
+              <mxPoint x="550" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="104" value="5: write('time', time)" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="vm" target="storage">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550" y="280" />
+              <mxPoint x="770" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="105" value="6: Success" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="storage" target="vm">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="770" y="320" />
+              <mxPoint x="550" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="106" value="7: schedule(time)" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="vm" target="plugin">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550" y="360" />
+              <mxPoint x="990" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="107" value="8: Scheduled" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="plugin" target="vm">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="990" y="400" />
+              <mxPoint x="550" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="108" value="9: notifyListeners()" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="vm" target="view">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="550" y="440" />
+              <mxPoint x="330" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="109" value="10: Tampilkan Toaster sukses" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="view" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="480" />
+              <mxPoint x="110" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
