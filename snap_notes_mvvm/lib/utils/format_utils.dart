@@ -25,6 +25,9 @@ class FormatUtils {
     return formatter.format(date);
   }
 
+  /// Formatter DateFormat untuk keperluan widget seperti DatePicker.
+  static DateFormat get indonesianDateFormat => DateFormat('d MMMM yyyy', 'id_ID');
+
   /// Mem-parse string nominal Rupiah (misal: "Rp 12.345" atau "12.345") menjadi double.
   /// Fungsi ini menghapus semua karakter non-angka sehingga aman dari tanda minus atau simbol mata uang.
   static double parseRupiahToDouble(String? formattedString) {

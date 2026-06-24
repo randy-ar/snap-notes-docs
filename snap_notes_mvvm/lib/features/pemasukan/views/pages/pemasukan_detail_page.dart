@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:snap_notes_mvvm/core/di/injection.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/viewmodels/pemasukan_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/views/pages/pemasukan_form_page.dart';
+import 'package:snap_notes_mvvm/utils/format_utils.dart';
 
 class PemasukanDetailPage extends StatefulWidget {
   final String pemasukanId;
@@ -181,7 +182,7 @@ class _PemasukanDetailPageState extends State<PemasukanDetailPage> {
                     children: [
                       Text(p.deskripsi).large().bold(),
                       const Gap(4),
-                      Text('${p.tanggal.day}/${p.tanggal.month}/${p.tanggal.year}')
+                      Text(FormatUtils.formatIndonesianDate(p.tanggal))
                           .small()
                           .muted(),
                       if (p.kategoriNama != null) ...[
@@ -210,7 +211,7 @@ class _PemasukanDetailPageState extends State<PemasukanDetailPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Total').large().bold(),
-                            Text('Rp ${p.jumlah.toStringAsFixed(0)}').large().bold(),
+                            Text(FormatUtils.formatRupiah(p.jumlah)).large().bold(),
                           ],
                         ),
                       ),

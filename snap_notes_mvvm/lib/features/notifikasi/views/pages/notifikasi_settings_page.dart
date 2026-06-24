@@ -66,6 +66,29 @@ class _NotifikasiSettingsPageState extends State<NotifikasiSettingsPage> {
     }
   }
 
+  void _showDeleteConfirmation(BuildContext context, PreferensiNotifikasi item) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Hapus Preferensi'),
+        content: Text('Apakah Anda yakin ingin menghapus jadwal jam ${item.jamNotifikasi}?'),
+        actions: [
+          OutlineButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Batal'),
+          ),
+          DestructiveButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              _deletePreferensi(item.id!);
+            },
+            child: const Text('Hapus'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showToast(String title, String message) {
     showToast(
       context: context,
@@ -264,7 +287,7 @@ class _NotifikasiSettingsPageState extends State<NotifikasiSettingsPage> {
                                           ),
                                           MenuButton(
                                             onPressed: (context) {
-                                              _deletePreferensi(item.id!);
+                                              _showDeleteConfirmation(context, item);
                                             },
                                             child: const Text('Hapus'),
                                           ),

@@ -6,6 +6,7 @@ import 'package:snap_notes_mvvm/features/pengeluaran/viewmodels/pengeluaran_view
 import 'package:snap_notes_mvvm/features/pengeluaran/views/pages/pengeluaran_form_page.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 import 'package:snap_notes_mvvm/features/receipt/views/pages/full_screen_image_page.dart';
+import 'package:snap_notes_mvvm/utils/format_utils.dart';
 
 class PengeluaranDetailPage extends StatelessWidget {
   final String pengeluaranId;
@@ -352,7 +353,7 @@ class PengeluaranDetailView extends StatelessWidget {
                             children: [
                               Icon(LucideIcons.calendar, size: 16, color: Theme.of(context).colorScheme.mutedForeground),
                               const Gap(8),
-                              Text('${p.tanggal.day}/${p.tanggal.month}/${p.tanggal.year}').small().muted(),
+                              Text(FormatUtils.formatIndonesianDate(p.tanggal)).small().muted(),
                             ],
                           ),
                           const Gap(24),
@@ -371,7 +372,7 @@ class PengeluaranDetailView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text('Total').small().semiBold(),
-                              Text('Rp ${p.jumlah.toStringAsFixed(0)}').small().semiBold(),
+                              Text(FormatUtils.formatRupiah(p.jumlah)).small().semiBold(),
                             ],
                           ),
                         ],
@@ -395,7 +396,7 @@ class PengeluaranDetailView extends StatelessWidget {
                   children: [
                     Text(p.deskripsi).large().bold(),
                     const Gap(4),
-                    Text('${p.tanggal.day}/${p.tanggal.month}/${p.tanggal.year}').small().muted(),
+                    Text(FormatUtils.formatIndonesianDate(p.tanggal)).small().muted(),
                     if (p.kategoriNama != null) ...[
                       const Gap(8),
                       Align(
@@ -424,7 +425,7 @@ class PengeluaranDetailView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text('Total').large().bold(),
-                          Text('Rp ${p.jumlah.toStringAsFixed(0)}').large().bold(),
+                          Text(FormatUtils.formatRupiah(p.jumlah)).large().bold(),
                         ],
                       ),
                     ),
@@ -458,9 +459,9 @@ class PengeluaranDetailView extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              '${item.quantity} x ${item.price.toStringAsFixed(0)}',
+              '${item.quantity} x ${FormatUtils.formatRupiah(item.price)}',
               textAlign: TextAlign.center,
-              style: Theme.of(context).typography.small.copyWith(
+              style: Theme.of(context).typography.xSmall.copyWith(
                 color: Theme.of(context).colorScheme.mutedForeground,
               ),
             ),
@@ -468,7 +469,7 @@ class PengeluaranDetailView extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              'Rp ${item.totalPrice.toStringAsFixed(0)}',
+              FormatUtils.formatRupiah(item.totalPrice),
               textAlign: TextAlign.right,
               style: Theme.of(context).typography.small.copyWith(fontWeight: FontWeight.w500),
             ),
