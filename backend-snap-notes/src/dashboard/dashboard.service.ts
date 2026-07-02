@@ -17,9 +17,9 @@ export class DashboardService {
     const bulan = query.bulan ? parseInt(query.bulan, 10) : now.getMonth() + 1;
     const tahun = query.tahun ? parseInt(query.tahun, 10) : now.getFullYear();
 
-    // Buat range tanggal untuk filter
-    const startDate = new Date(Date.UTC(tahun, bulan - 1, 1, 0, 0, 0, 0));
-    const endDate = new Date(Date.UTC(tahun, bulan, 0, 23, 59, 59, 999));
+    // Buat range tanggal untuk filter dengan penyesuaian zona waktu WIB (UTC+7)
+    const startDate = new Date(Date.UTC(tahun, bulan - 1, 1, -7, 0, 0, 0));
+    const endDate = new Date(Date.UTC(tahun, bulan, 0, 16, 59, 59, 999));
 
     this.logger.debug(
       `Menghitung ringkasan untuk pengguna ${penggunaId} periode ${bulan}/${tahun} (${startDate.toISOString()} - ${endDate.toISOString()})`,

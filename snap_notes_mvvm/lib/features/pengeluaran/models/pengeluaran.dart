@@ -42,10 +42,10 @@ class Pengeluaran extends Equatable {
       kategoriNama: json['kategoriNama'] as String?,
       deskripsi: json['deskripsi'] as String,
       jumlah: (json['jumlah'] as num).toDouble(),
-      tanggal: DateTime.parse(json['tanggal'] as String),
+      tanggal: DateTime.parse(json['tanggal'] as String).toLocal(),
       catatan: json['catatan'] as String?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
+      updatedAt: DateTime.parse(json['updatedAt'] as String).toLocal(),
       struk: json['struk'] != null
           ? Receipt.fromJson(json['struk'] as Map<String, dynamic>)
           : null,

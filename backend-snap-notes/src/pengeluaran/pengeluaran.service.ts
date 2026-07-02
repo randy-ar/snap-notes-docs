@@ -43,8 +43,8 @@ export class PengeluaranService {
     const where: any = { penggunaId };
 
     if (query.bulan && query.tahun) {
-      const startDate = new Date(Date.UTC(query.tahun, query.bulan - 1, 1, 0, 0, 0, 0));
-      const endDate = new Date(Date.UTC(query.tahun, query.bulan, 0, 23, 59, 59, 999));
+      const startDate = new Date(Date.UTC(query.tahun, query.bulan - 1, 1, -7, 0, 0, 0));
+      const endDate = new Date(Date.UTC(query.tahun, query.bulan, 0, 16, 59, 59, 999));
       where.tanggal = {
         gte: startDate,
         lte: endDate,
@@ -84,8 +84,8 @@ export class PengeluaranService {
     const bulan = query.bulan ? Number(query.bulan) : now.getMonth() + 1;
     const tahun = query.tahun ? Number(query.tahun) : now.getFullYear();
 
-    const currStartDate = new Date(Date.UTC(tahun, bulan - 1, 1, 0, 0, 0, 0));
-    const currEndDate = new Date(Date.UTC(tahun, bulan, 0, 23, 59, 59, 999));
+    const currStartDate = new Date(Date.UTC(tahun, bulan - 1, 1, -7, 0, 0, 0));
+    const currEndDate = new Date(Date.UTC(tahun, bulan, 0, 16, 59, 59, 999));
 
     let prevBulan = bulan - 1;
     let prevTahun = tahun;
@@ -93,8 +93,8 @@ export class PengeluaranService {
       prevBulan = 12;
       prevTahun -= 1;
     }
-    const prevStartDate = new Date(Date.UTC(prevTahun, prevBulan - 1, 1, 0, 0, 0, 0));
-    const prevEndDate = new Date(Date.UTC(prevTahun, prevBulan, 0, 23, 59, 59, 999));
+    const prevStartDate = new Date(Date.UTC(prevTahun, prevBulan - 1, 1, -7, 0, 0, 0));
+    const prevEndDate = new Date(Date.UTC(prevTahun, prevBulan, 0, 16, 59, 59, 999));
 
     const [currAgg, prevAgg] = await Promise.all([
       this.prisma.pengeluaran.aggregate({

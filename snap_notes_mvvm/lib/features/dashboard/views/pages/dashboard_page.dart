@@ -266,8 +266,8 @@ class DashboardView extends StatelessWidget {
                   bulan: now.month,
                   tahun: now.year,
                 );
-                context.read<DashboardViewModel>().loadMonthlyTrend();
-                context.read<PengeluaranViewModel>().loadPengeluaran();
+                context.read<DashboardViewModel>().loadMonthlyTrend(force: true);
+                context.read<PengeluaranViewModel>().loadPengeluaran(isRefresh: true);
               },
               child: ListView(
                 padding: const EdgeInsets.all(16.0),

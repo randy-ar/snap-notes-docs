@@ -88,7 +88,7 @@ class DashboardViewModel extends ChangeNotifier {
           'tahun': res['tahun'],
           'totalPemasukan': (res['totalPemasukan'] as num).toDouble(),
           'totalPengeluaran': (res['totalPengeluaran'] as num).toDouble(),
-          'dateTime': DateTime.parse(res['dateTime']),
+          'dateTime': DateTime.parse(res['dateTime']).toLocal(),
         };
       }).toList();
     } catch (e) {

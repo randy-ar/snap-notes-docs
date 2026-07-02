@@ -1,0 +1,84 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="0">
+    <mxGraphModel dx="1361" dy="731" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="container" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Flowchart Analisis Piechart" vertex="1">
+          <mxGeometry height="430" width="320" x="250" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="start_node" parent="container" style="ellipse;fillColor=strokeColor;html=1;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="65" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="step_0" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Sistem menerima instruksi pengambilan statistik kategori pengeluaran" vertex="1">
+          <mxGeometry height="60" width="140" x="10" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_0" edge="1" parent="container" source="start_node" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="step_0" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="step_1" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Sistem memfilter entitas pengeluaran pada rentang waktu yang aktif" vertex="1">
+          <mxGeometry height="60" width="140" x="10" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_1" edge="1" parent="container" source="step_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="step_1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="step_2" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Sistem mengelompokkan transaksi (Group By) berdasarkan id kategori" vertex="1">
+          <mxGeometry height="60" width="140" x="10" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_2" edge="1" parent="container" source="step_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="step_2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_3" edge="1" parent="container" source="step_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_4" edge="1" parent="container" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="step_4" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="440" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_5" edge="1" parent="container" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="step_5" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="530" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_end" edge="1" parent="container" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="end_node" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="620" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QGPWicUTrEWwp-avCDr--8" edge="1" parent="container" source="QGPWicUTrEWwp-avCDr--1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="QGPWicUTrEWwp-avCDr--2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QGPWicUTrEWwp-avCDr--1" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Sistem menjumlahkan besaran pengeluaran lalu menghitung persentasenya" vertex="1">
+          <mxGeometry height="60" width="140" x="170" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="QGPWicUTrEWwp-avCDr--7" edge="1" parent="container" source="QGPWicUTrEWwp-avCDr--2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="QGPWicUTrEWwp-avCDr--3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QGPWicUTrEWwp-avCDr--2" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Sistem mengalokasikan sudut irisan pie sebanding dengan persentase" vertex="1">
+          <mxGeometry height="60" width="140" x="170" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="QGPWicUTrEWwp-avCDr--6" edge="1" parent="container" source="QGPWicUTrEWwp-avCDr--3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="QGPWicUTrEWwp-avCDr--4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QGPWicUTrEWwp-avCDr--3" parent="container" style="rounded=1;whiteSpace=wrap;html=1;" value="Aplikasi merender bentuk Pie Chart beserta label legendanya" vertex="1">
+          <mxGeometry height="60" width="140" x="170" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="QGPWicUTrEWwp-avCDr--4" parent="container" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="225" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="QGPWicUTrEWwp-avCDr--5" parent="container" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="65" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="QGPWicUTrEWwp-avCDr--10" edge="1" parent="container" source="QGPWicUTrEWwp-avCDr--9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="QGPWicUTrEWwp-avCDr--1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QGPWicUTrEWwp-avCDr--9" parent="container" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="225" y="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

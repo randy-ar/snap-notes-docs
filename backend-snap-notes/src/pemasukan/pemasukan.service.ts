@@ -43,8 +43,8 @@ export class PemasukanService {
     const where: any = { penggunaId };
 
     if (query.bulan && query.tahun) {
-      const startDate = new Date(Date.UTC(query.tahun, query.bulan - 1, 1, 0, 0, 0, 0));
-      const endDate = new Date(Date.UTC(query.tahun, query.bulan, 0, 23, 59, 59, 999));
+      const startDate = new Date(Date.UTC(query.tahun, query.bulan - 1, 1, -7, 0, 0, 0));
+      const endDate = new Date(Date.UTC(query.tahun, query.bulan, 0, 16, 59, 59, 999));
       where.tanggal = {
         gte: startDate,
         lte: endDate,

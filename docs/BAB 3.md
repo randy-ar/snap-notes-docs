@@ -242,11 +242,53 @@ Tahapan proses pada flowchart tersebut dijelaskan sebagai berikut:
 6. Selanjutnya, modul service memerintahkan Prisma ORM untuk memasukkan objek kumpulan transaksi tersebut ke dalam PostgreSQL, yang secara teknis diproteksi menggunakan fitur database transaction.  
 7. Implementasi proteksi dari *database transaction* bertujuan untuk menjamin terpenuhinya prinsip keutuhan data. Apabila terjadi kegagalan perekaman parsial ke dalam tabel basis data, Prisma ORM secara terprogram akan membatalkan seluruh komit perubahan sistem (*rollback*) demi menghindari inkonsistensi data, lantas meneruskan sinyal pengecualian *error* ke aplikasi *client*. Sebaliknya, bila tahapan penyimpanan basis data berjalan sukses, server menyegel keseluruhan rangkaian interaksi penyelesaian transaksi.
 
-   6. #### **Analisis Dashboard**
+   6. #### **Analisis Dashboard** {#analisis-dashboard}
 
-   7. **Analisis Kalendar Heatmap**  
-   8. **Analisis Linechart**  
-   9. **Analisis Piechart**
+Analisis *dashboard* bertujuan untuk merumuskan bagaimana antarmuka utama aplikasi dapat memberikan wawasan dan kesimpulan visual mengenai pola serta tren pengeluaran belanja masyarakat. Guna memenuhi kebutuhan informasi yang komprehensif, *dashboard* dirancang untuk menampilkan tiga buah metrik spasial: representasi pengeluaran per hari dalam sebulan menggunakan antarmuka *Calendar Heatmap*, pemetaan tren pengeluaran per bulan dalam setahun melalui grafik garis (*Line Chart*), serta penjabaran komposisi pengeluaran yang dominan melalui diagram lingkaran (*Pie Chart*) untuk analisis kategori belanja.
+
+      1. ##### **Analisis Kalendar Heatmap** {#analisis-kalendar-heatmap}
+
+Analisis Kalendar Heatmap menjelaskan mekanisme perumusan data pengeluaran hingga disajikan menjadi tampilan *calendar heatmap*. Tujuan dari *heatmap* ini adalah memudahkan pengguna mendeteksi kepadatan transaksi atau anomali pengeluaran harian melalui spektrum intensitas warna secara sekilas tanpa harus memeriksa angka satu per satu. Visualisasi *flowchart* untuk analisis pembentukan *heatmap* dapat dilihat pada Gambar 3.31.
+
+![][image_heatmap]
+Gambar 3.31 Flowchart Analisis Kalendar Heatmap
+
+Langkah-langkah operasional berdasarkan visualisasi algoritma tersebut dapat dipaparkan secara berurutan sebagai berikut.
+1. Alur komputasi dimulai ketika sistem menerima parameter masukan berupa bulan dan tahun dari antarmuka klien guna menetapkan jendela pengamatan waktu yang akan dianalisis.
+2. Sistem kemudian mengirimkan perintah kueri kepada basis data untuk mengekstraksi dan menyaring seluruh riwayat entitas pengeluaran yang tanggal transaksinya beririsan dengan parameter waktu tersebut.
+3. Setelah himpunan data mentah berhasil ditarik sistem mengeksekusi blok iterasi untuk mengelompokkan dan menjumlahkan total keseluruhan nominal pengeluaran secara spesifik pada masing-masing hari.
+4. Nilai akumulasi harian yang didapatkan lantas dikonversi menjadi indeks metrik intensitas warna dengan sebuah ketentuan logis bahwa semakin besar lonjakan pengeluaran harian maka sistem akan memproyeksikannya dengan tingkat gradasi warna yang semakin pekat.
+5. Sebagai penutup tahapan algoritma aplikasi merangkai kalkulasi indeks warna tersebut ke dalam komponen antarmuka kalender lalu menggambarkannya secara visual kepada masyarakat dalam bentuk matriks sel tanggal yang interaktif.
+
+      2. ##### **Analisis Linechart** {#analisis-linechart}
+
+Analisis *Linechart* menguraikan tahapan ekstraksi data pengeluaran periodik hingga tervisualisasikan menjadi tren pengeluaran per bulan di dalam rentang waktu tahunan. Grafik garis ini diimplementasikan dengan tujuan agar masyarakat dapat mengevaluasi dan mengenali pola naik-turun perilaku keuangannya lintas kuartal secara akurat. Visualisasi *flowchart* untuk analisis algoritma *line chart* disajikan pada Gambar 3.32.
+
+![][image_linechart]
+Gambar 3.32 Flowchart Analisis Linechart
+
+Prosedur pengolahan tren data pada flowchart tersebut dapat diuraikan secara deskriptif melalui urutan langkah operasional berikut.
+1. Tahap pertama diawali dengan aktivitas sistem yang menerima argumen batas rentang waktu komprehensif dari aplikasi (sebagai contoh rentang satu tahun berjalan).
+2. Sistem selanjutnya menginstruksikan basis data untuk mengevaluasi setiap rekam jejak pengeluaran serta menyaring riwayat transaksi agar secara eksklusif hanya mengambil data yang tercatat dalam koridor waktu tersebut.
+3. Berbekal himpunan data yang telah tersaring rapi sistem melangsungkan fungsi pengelompokan yang merangkum keseluruhan transaksi ke dalam ember-ember interval bulanan.
+4. Pada setiap kelompok bulan tersebut algoritma menjumlahkan besaran nominal belanja masyarakat secara akumulatif untuk menetapkan titik-titik pasti dari agregat pengeluaran bulanan.
+5. Koordinat dari titik-titik observasi tersebut lantas dinormalisasikan ke dalam kanvas dua dimensi dengan meletakkan skala bilangan nominal finansial pada sumbu tegak vertikal Y dan menderetkan label urutan bulan pada sumbu mendatar X.
+6. Keseluruhan proses diakhiri oleh tindakan aplikasi yang memplot titik-titik data tadi di atas kanvas dan menghubungkannya dengan sebuah garis kontinu (*Line Chart*) untuk memvisualisasikan grafik tren secara utuh.
+
+      3. ##### **Analisis Piechart** {#analisis-piechart}
+
+Analisis *Piechart* menerangkan pendekatan logis dalam menyarikan rekaman data pengeluaran menjadi komposisi diagram irisan lingkaran. Diagram ini bertujuan spesifik untuk membedah kategori-kategori pengeluaran apa saja yang paling mendominasi, seperti porsi belanja makanan, transportasi, hingga pendidikan. Visualisasi *flowchart* untuk perakitan antarmuka *pie chart* dapat ditinjau pada Gambar 3.33.
+
+![][image_piechart]
+Gambar 3.33 Flowchart Analisis Piechart
+
+Rangkaian proses komputasi yang tergambar pada alur flowchart pembentukan pie chart tersebut dapat ditelusuri melalui tahapan algoritma penjabaran berikut.
+1. Sistem mengambil langkah inisiasi dengan menerima instruksi parameter untuk menyusun rumusan statistik kategori pengeluaran milik masyarakat.
+2. Operasi komputasi dilanjutkan dengan penyortiran data transaksi secara presisi untuk membuang seluruh rekam jejak yang tidak memenuhi kriteria filter batas periode waktu yang diamati.
+3. Entitas data yang masih relevan lantas diatur ulang secara otomatis oleh mesin basis data melalui kueri agregasi untuk mengelompokkan tiap-tiap transaksi berdasarkan entitas kelas kategorinya.
+4. Sistem kemudian melangsungkan fungsi kalkulator untuk mendapatkan akumulasi total nominal absolut pada tiap tipe kategori lalu merumuskan perbandingannya menjadi nilai metrik persentase proporsional jika disandingkan dengan total keseluruhan belanja masyarakat di bulan tersebut.
+5. Dengan mempedomani hitungan persentase yang telah terukur sistem mendistribusikan bentangan sudut kerucut secara proporsional untuk membagi keadilan dimensi irisan ruang (*slice*) pada area kanvas lingkaran penuh tiga ratus enam puluh derajat.
+6. Fase pamungkas dieksekusi oleh aplikasi antarmuka dengan merender potongan-potongan visual diagram lingkaran tersebut yang dipadukan secara apik bersama blok-blok pelabelan legenda rasionya agar dapat diinterpretasikan secara tajam oleh pembaca.
 
 4. ### **Analisis Kebutuhan Non Fungsional** {#analisis-kebutuhan-non-fungsional}
 
@@ -275,7 +317,7 @@ Tabel 3.19 Spesifikasi Kebutuhan Perangkat Pikir Pengguna
 
 | Stakeholder | Tanggung Jawab | Tingkat Keterampilan | Keterampilan Menggunakan Perangkat |
 | :---: | ----- | ----- | ----- |
-| Masyarakat | Mengakses aplikasi pencatatan keuangan pada perangkat *smartphone* Android, memindai struk belanja menggunakan kamera, mengelola data transaksi pemasukan dan pengeluaran secara manual maupun otomatis, serta memantau laporan keuangan pada *dashboard* interaktif. | Mampu mengoperasikan *smartphone* Android, menggunakan aplikasi *mobile*, menavigasi antarmuka digital, dan memahami konsep dasar internet serta manajemen file pada perangkat. | Umumnya menggunakan *smartphone* untuk keperluan sehari-hari seperti bertransaksi digital, berkomunikasi, dan mengakses informasi. Terbiasa mengunduh serta menggunakan berbagai aplikasi dari *Play Store* dan membuka kamera perangkat. |
+| Masyarakat | Memiliki dan menggunakan sebuah perangkat *smartphone* bersistem operasi Android yang sudah dibekali dengan fasilitas perangkat keras berupa modul kamera yang berfungsi dengan baik. | Didasari oleh sebuah fakta kondisi bahwa mayoritas dari lapisan masyarakat ini secara mandiri telah memiliki dan mengoperasikan perangkat *mobile* dengan sistem operasi Android yang secara inheren terintegrasi dengan perangkat keras modul kamera. | Berdasarkan pengalaman harian mereka di era digital, pengguna terbukti sangat terampil dalam pengoperasian dasar lensa piranti seluler. Mereka sudah terbiasa dan fasih dalam melakukan aktivitas pengambilan gambar secara presisi melalui antarmuka kamera perangkat gawai mereka. |
 
 Selanjutnya, analisis spesifikasi kebutuhan perangkat pikir pengguna terhadap sistem aplikasi yang akan dibangun dapat dilihat pada Tabel 3.20:  
 Tabel 3.20 Spesifikasi Kebutuhan Perangkat Pikir Pengguna Terhadap Sistem
@@ -286,77 +328,59 @@ Tabel 3.20 Spesifikasi Kebutuhan Perangkat Pikir Pengguna Terhadap Sistem
 
 Berdasarkan hasil analisis terhadap spesifikasi kebutuhan perangkat pikir, dapat disimpulkan bahwa masyarakat sebagai pengguna utama memiliki tingkat literasi digital dan kemampuan dasar penggunaan smartphone yang memadai untuk mengoperasikan aplikasi Snap Notes. Fitur-fitur aplikasi dirancang agar intuitif dan *user-friendly* sesuai dengan pengalaman pengguna mobile pada umumnya. Pelatihan yang diperlukan bersifat minimal dan berfokus pada alur penggunaan fitur spesifik aplikasi seperti pemindaian struk, input manual transaksi, dan pemantauan dashboard, sehingga dapat mempermudah masyarakat dalam memanfaatkan sistem secara efisien dan efektif.
 
-2. #### **Analisis Kebutuhan Perangkat Lunak** {#analisis-kebutuhan-perangkat-lunak}
+   2. #### **Analisis Kebutuhan Perangkat Lunak** {#analisis-kebutuhan-perangkat-lunak}
 
-Analisis kebutuhan perangkat lunak merupakan bagian penting dalam perencanaan dan pengembangan aplikasi. Proses analisis ini mencakup perangkat lunak yang diperlukan untuk pembangunan dan pemeliharaan sistem di masa depan. Ketiadaan pemahaman yang mendalam terhadap kebutuhan perangkat lunak dapat berujung pada produk yang tidak relevan dan sulit digunakan. Oleh karena itu, analisis kebutuhan perangkat lunak yang komprehensif sangat penting untuk keberhasilan dan keberlanjutan sistem perangkat lunak, karena dapat memastikan bahwa sistem yang dibangun berfungsi dengan baik dan sesuai dengan alur sistem yang akan diterapkan. Dalam hal ini, kebutuhan perangkat lunak untuk aplikasi pencatatan keuangan pribadi Snap Notes meliputi sistem operasi dan berbagai library serta framework yang diperlukan untuk mendukung kelancaran operasional.  
-Berikut adalah spesifikasi minimum yang tersedia untuk kebutuhan perangkat lunak yang bertujuan untuk memastikan perangkat lunak yang sedang dipakai untuk kelancaran proses analisis kebutuhan perangkat lunak dapat dilihat pada Tabel 3.21:  
+Analisis kebutuhan perangkat lunak ditujukan untuk meninjau prasyarat spesifikasi peranti lunak yang beroperasi pada perangkat *smartphone* milik pengguna. Pemahaman yang spesifik terhadap ketersediaan versi sistem operasi di tengah masyarakat sangat esensial agar aplikasi Snap Notes dapat digunakan secara masif dan optimal. Dari sudut pandang masyarakat, kondisi empiris saat ini menunjukkan fakta bahwa mayoritas pengguna *smartphone* telah mengadopsi dan menjalankan sistem operasi Android versi 10 atau yang lebih baru. Ketersediaan versi Android yang mutakhir ini memastikan bahwa fitur-fitur sentral dari aplikasi, khususnya eksekusi *library* Google ML Kit secara *on-device* untuk pemindaian teks, dapat berjalan lancar tanpa terbentur masalah kompatibilitas.
+
+Berikut adalah spesifikasi minimum perangkat lunak pada perangkat pengguna agar aplikasi dapat dipasang dan dioperasikan dengan baik, ditunjukkan pada Tabel 3.21:
+
 Tabel 3.21 Spesifikasi Minimum Kebutuhan Perangkat Lunak
 
 | Komponen | Spesifikasi Minimum |
 | ----- | ----- |
-| Sistem Operasi Perangkat | Android 9 (Pie) atau lebih |
-| Flutter SDK | Versi 3.x yang mendukung Dart 3.x |
-| Dart | Versi 3.0.0 atau lebih |
-| Android Studio | Versi terbaru yang mendukung Flutter Plugin |
-| Java Development Kit (JDK) | Versi 17 atau lebih |
-| Node.js | Versi 18.x (LTS) atau lebih |
-| NestJS | Versi 10.x atau lebih |
-| Prisma ORM | Versi 5.x atau lebih |
-| PostgreSQL (Supabase) | Versi 15 atau lebih |
+| Sistem Operasi Perangkat | Android 10 (Q) |
+| Komponen Web | Android System WebView (mutakhir) |
+| Layanan API | Google Play Services |
 
-Adapun spesifikasi yang direkomendasikan untuk kebutuhan perangkat lunak yang bertujuan untuk memastikan kinerja optimal dan kelancaran proses pembangunan sistem dapat dilihat pada Tabel 3.22:  
+Adapun spesifikasi perangkat lunak yang direkomendasikan agar masyarakat mendapatkan pengalaman penggunaan, animasi antarmuka, dan performa pemrosesan kamera yang paling optimal dapat dilihat pada Tabel 3.22:
+
 Tabel 3.22 Spesifikasi Rekomendasi Kebutuhan Perangkat Lunak
 
 | Komponen | Spesifikasi Rekomendasi |
 | ----- | ----- |
-| Sistem Operasi Perangkat | Android 12 (Snow Cone) atau lebih |
-| Flutter SDK | Versi terbaru stabil (3.x atau lebih baru) |
-| Dart | Versi terbaru stabil (3.x atau lebih baru) |
-| Android Studio | Versi terbaru stabil dengan Flutter dan Dart Plugin |
-| Java Development Kit (JDK) | Versi 17 atau lebih |
-| Node.js | Versi 20.x (LTS) atau lebih |
-| NestJS | Versi terbaru stabil |
-| Prisma ORM | Versi terbaru stabil |
-| PostgreSQL (Supabase) | Versi terbaru yang tersedia pada platform Supabase |
+| Sistem Operasi Perangkat | Android 12 (Snow Cone) atau versi lebih baru |
+| Komponen Web | Android System WebView (mutakhir) |
+| Layanan API | Google Play Services |
 
-Kesimpulannya adalah seluruh kebutuhan sistem yang akan dibangun dapat dipenuhi oleh analisis kebutuhan perangkat lunak yang tersedia untuk smartphone dan komputer pengembang. Meskipun smartphone Android yang digunakan mungkin masih menjalankan Android 10 atau 11, sistem operasi tersebut tetap mendukung teknologi inti yang dibutuhkan oleh aplikasi Snap Notes, termasuk Google ML Kit on-device dan koneksi API ke layanan Gemini serta Supabase. Oleh karena itu, pembangunan sistem dapat dilaksanakan tanpa perlu adanya peningkatan yang berarti pada perangkat lunak yang digunakan saat ini.
+Kesimpulannya, spesifikasi perangkat lunak yang disyaratkan untuk menjalankan aplikasi Snap Notes sangat sejalan dengan realita distribusi teknologi di masyarakat. Dengan fakta bahwa masyarakat saat ini mayoritas telah menggunakan perangkat dengan sistem operasi minimal Android 10, mereka sudah dipastikan dapat melakukan pemindaian struk belanja fisik berbasis AI dengan lancar. Secara spesifik, direkomendasikan bagi masyarakat untuk menggunakan sistem operasi Android 12 demi menjamin perenderan grafis interaktif pada halaman analisis *dashboard* dan akurasi OCR yang paling memuaskan. Oleh karena itu, aplikasi ini dinilai sangat inklusif dan siap diimplementasikan untuk kalangan umum tanpa memerlukan pembaruan peranti lunak yang memberatkan.
 
-3. #### **Analisis Kebutuhan Perangkat Keras** {#analisis-kebutuhan-perangkat-keras}
+   3. #### **Analisis Kebutuhan Perangkat Keras** {#analisis-kebutuhan-perangkat-keras}
 
-Analisis kebutuhan perangkat keras adalah tahap analisis yang bertujuan untuk menentukan spesifikasi perangkat keras yang diperlukan untuk mendukung proses implementasi dan operasional sistem. Perangkat keras yang memadai menjadi pondasi penting dalam menjamin kestabilan sistem, terutama untuk aplikasi pencatatan keuangan berbasis Android yang mengandalkan konektivitas internet, pemrosesan gambar struk belanja menggunakan OCR *on-device*, dan interaksi dengan layanan kecerdasan buatan Gemini AI. Untuk memastikan bahwa spesifikasi ini memenuhi kebutuhan sistem, detail spesifikasi akan dijelaskan lebih lanjut.  
-Berikut adalah spesifikasi minimum yang tersedia untuk kebutuhan perangkat keras yang bertujuan untuk memastikan perangkat keras yang sedang dipakai untuk kelancaran proses analisis kebutuhan perangkat keras dapat dilihat pada Tabel 3.23:  
+Analisis kebutuhan perangkat keras ditujukan untuk meninjau prasyarat spesifikasi peranti keras (*hardware*) seluler yang beredar dan secara aktual dimiliki oleh masyarakat luas saat ini. Perangkat keras yang memadai menjadi pondasi esensial guna menjamin stabilitas sistem, khususnya untuk aplikasi Snap Notes yang banyak mengandalkan pemrosesan sensor kamera, ekstraksi *Optical Character Recognition* (OCR) secara *on-device*, serta perenderan grafis laporan *dashboard*. Dari sudut pandang pengguna, penentuan spesifikasi perangkat keras ini diselaraskan dengan fakta kondisi mayoritas perangkat *smartphone* kelas menengah ke bawah (*entry-to-mid level*) yang beredar di masyarakat saat ini agar aplikasi tetap inklusif dan ramah diakses oleh semua kalangan.
+
+Berikut adalah spesifikasi perangkat keras minimum yang mencerminkan fakta kepemilikan perangkat yang paling umum digunakan masyarakat saat ini, sehingga dipastikan sudah cukup andal untuk mengoperasikan fungsi-fungsi vital aplikasi. Spesifikasi tersebut dapat dilihat pada Tabel 3.23:
+
 Tabel 3.23 Spesifikasi Minimum Kebutuhan Perangkat Keras
 
-| Nama Perangkat Keras | Komponen | Spesifikasi |
-| ----- | ----- | ----- |
-| *Smartphone* | OS (*Operating System*) | Android 9 atau lebih |
-|  | RAM (*Random Access Memory*) | 3 GB (*Gigabyte*) |
-|  | *Storage* | 32 GB (*Gigabyte*) |
-|  | Kamera | 8 MP dengan kemampuan *autofocus* |
-|  | Konektivitas | 4G LTE, Wi-Fi |
-| Komputer/Laptop (untuk pengembangan) | OS (*Operating System*) | Windows 10 atau lebih |
-|  | CPU (*Central Processing Unit*) | Intel Core i3 Generasi ke-8 atau setara |
-|  | RAM (*Random Access Memory*) | 8 GB (*Gigabyte*) |
-|  | *Storage* | 256 GB SSD (*Solid State Drive*) |
-|  | Konektivitas | Kabel LAN atau Wi-Fi |
+| Komponen | Spesifikasi Minimum |
+| ----- | ----- |
+| RAM (*Random Access Memory*) | 3 GB (*Gigabytes*) |
+| *Storage* (Penyimpanan Internal) | 32 GB (*Gigabytes*) |
+| Kamera Belakang | 8 MP (*Megapixels*) dengan dukungan fitur *autofocus* |
+| Konektivitas Jaringan | 4G LTE dan Wi-Fi dasar |
 
-Adapun spesifikasi yang direkomendasikan untuk kebutuhan perangkat keras mempertimbangkan keseimbangan antara performa, efisiensi daya, dan daya tahan dalam penggunaan sehari-hari. Serta mendukung fitur-fitur canggih seperti pemrosesan OCR *on-device,* rendering antarmuka Flutter yang mulus, dan tampilan dashboard laporan keuangan dengan akurat dan efisien dapat dilihat pada Tabel 3.24:  
+Adapun spesifikasi perangkat keras yang direkomendasikan bagi masyarakat untuk menjamin kelancaran navigasi antarmuka, kecepatan tangkapan kamera (*shutter speed*), dan kelincahan perenderan grafik laporan keuangan secara optimal dapat dilihat pada Tabel 3.24:
+
 Tabel 3.24 Spesifikasi Rekomendasi Kebutuhan Perangkat Keras
 
-| Nama Perangkat Keras | Komponen | Spesifikasi |
-| ----- | ----- | ----- |
-| *Smartphone* | OS (*Operating System*) | Android 12 atau lebih |
-|  | RAM (*Random Access Memory*) | 6 GB (*Gigabyte*) atau lebih |
-|  | *Storage* | 128 GB (*Gigabyte*) atau lebih |
-|  | Kamera | 12 MP atau lebih dengan *autofocus* dan *OIS* |
-|  | Konektivitas | 5G, Wi-Fi *Dual Band* |
-| Komputer/Laptop (untuk pengembangan) | OS (*Operating System*) | Windows 10/11 atau macOS terbaru |
-|  | CPU (*Central Processing Unit*) | Intel Core i5 Generasi ke-10 atau AMD Ryzen 5 generasi setara atau lebih |
-|  | RAM (*Random Access Memory*) | 16 GB (*Gigabyte*) atau lebih |
-|  | *Storage* | 512 GB SSD (*Solid State Drive*) atau lebih |
-|  | Konektivitas | *Gigabit Ethernet* \+ Wi-Fi 6 |
+| Komponen | Spesifikasi Rekomendasi |
+| ----- | ----- |
+| RAM (*Random Access Memory*) | 6 GB (*Gigabytes*) atau lebih besar |
+| *Storage* (Penyimpanan Internal) | 128 GB (*Gigabytes*) atau lebih besar |
+| Kamera Belakang | 12 MP (*Megapixels*) atau lebih dengan *autofocus* dan *OIS* |
+| Konektivitas Jaringan | 5G atau Wi-Fi *Dual Band* |
 
-Kesimpulannya adalah perangkat keras pada smartphone dan komputer saat ini umumnya cukup untuk menjalankan sistem aplikasi pencatatan keuangan Snap Notes dengan baik. Pemrosesan OCR on-device menggunakan Google ML Kit tidak memerlukan koneksi internet dan bekerja secara efisien pada perangkat dengan spesifikasi diatas minimum. Memori, penyimpanan yang tersedia, kualitas kamera, serta konektivitas internet telah mencukupi untuk mengoperasikan seluruh teknologi yang digunakan, seperti ekstraksi teks Google ML Kit, pemrosesan kecerdasan buatan Gemini AI, dan penyimpanan data pada Supabase. Kondisi ini juga memberikan landasan yang kuat untuk pengembangan dan implementasi teknologi yang lebih kompleks di masa depan. Dengan spesifikasi saat ini, diharapkan sistem berjalan dengan lancar dan tanpa kendala.
+Kesimpulannya, spesifikasi perangkat keras minimum yang ditetapkan sangat mewakili kondisi riil peranti seluler mayoritas masyarakat. Hanya dengan bermodalkan RAM 3 GB dan kamera 8 MP, teknologi ekstraksi visual Google ML Kit terbukti sudah dapat memproses data teks struk secara mandiri (*on-device*) tanpa memonopoli sumber daya sistem secara berlebihan. Fakta ini membuktikan bahwa operasional aplikasi tidak memaksa masyarakat untuk beralih ke perangkat berteknologi mahal. Kendati demikian, pemakaian perangkat di taraf rekomendasi dijamin akan secara signifikan mendongkrak pengalaman pemrosesan kecerdasan buatan Gemini AI dan penelusuran riwayat keuangan secara lebih mulus. Dengan demikian, adopsi aplikasi ini dinilai sangat realistis untuk diterapkan secara luas.
 
 5. ### **Analisis Kebutuhan Fungsional** {#analisis-kebutuhan-fungsional}
 
@@ -1795,3 +1819,6 @@ T25. Keluar
 [image_act_20]: UML/activity_diagram/20_activity_diagram_menampilkan_visualisasi_persentase_per_kategori.drawio
 [image_act_21]: UML/activity_diagram/21_activity_diagram_mengirimkan_notifikasi_pengingat_otomatis.drawio
 [image_act_22]: UML/activity_diagram/22_activity_diagram_mengelola_preferensi_notifikasi_pengingat.drawio
+[image_heatmap]: UML/flowchart_kalender_heatmap.drawio
+[image_linechart]: UML/flowchart_linechart.drawio
+[image_piechart]: UML/flowchart_piechart.drawio
