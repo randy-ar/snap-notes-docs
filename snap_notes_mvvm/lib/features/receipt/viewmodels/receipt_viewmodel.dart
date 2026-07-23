@@ -98,6 +98,9 @@ class ReceiptViewModel extends ChangeNotifier {
     _errorMessage = null;
     try {
       final textResult = await _receiptService.extractTextFromImage(_selectedImage!);
+      print('=== HASIL TEXT OCR (runOCR) ===');
+      print(textResult.text);
+      print('===============================');
       _recognizedText = textResult;
       _setStep(ReceiptScanStep.ocrPreview);
     } catch (e, stack) {

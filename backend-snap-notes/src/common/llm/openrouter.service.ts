@@ -154,10 +154,23 @@ Ekstrak informasi berikut dalam format JSON:
       "jumlah": 1,
       "harga_satuan": 0,
       "subtotal": 0,
-      "kategori": "Kategori item (opsional)"
+      "kategori": "Pilihan dari 10 kategori di bawah"
     }
   ]
 }
+
+Aturan Kategori Pengeluaran:
+Kamu HANYA diizinkan mengklasifikasikan item ke dalam salah satu dari 10 kategori persis berikut (jangan membuat kategori baru):
+1. "Makanan & Minuman" -> Segala jenis sembako, makanan restoran, minuman, kopi, snack, air galon, bahan makanan mentah, bumbu, rokok.
+2. "Perumahan & Utilitas" -> Tagihan listrik, air (PAM), gas elpiji/LPG, atau utilitas rumah tangga pokok.
+3. "Komunikasi" -> Pulsa HP, kuota internet, paket data, tagihan telepon.
+4. "Transportasi" -> Bensin, solar, biaya parkir, karcis tol, tiket transportasi, tarif ojek online.
+5. "Kesehatan" -> Obat-obatan, biaya rumah sakit/klinik, dokter, iuran BPJS, vitamin.
+6. "Pendidikan" -> Buku pelajaran, alat tulis kantor (ATK), uang sekolah/kuliah, kursus.
+7. "Hiburan" -> Tiket bioskop, top-up game, langganan streaming (Netflix dll), hotel/penginapan, rekreasi.
+8. "Perawatan Pribadi" -> Sabun mandi, sampo, pasta gigi, kosmetik, skincare, parfum, tisu, pembalut.
+9. "Pakaian" -> Baju, celana, jaket, sepatu, sandal, topi, jilbab, atau produk sandang lainnya.
+10. "Lain-lain" -> Pajak, keperluan pesta/kondangan, kantong plastik, atau item yang sama sekali tidak cocok masuk ke 9 kategori di atas.
 
 Aturan WAJIB:
 1. SELALU kembalikan semua field yang dibutuhkan, jangan biarkan kosong
@@ -168,7 +181,7 @@ Aturan WAJIB:
 6. Tanggal harus dalam format YYYY-MM-DD (konversi dari format Indonesia DD-MM-YYYY atau DD/MM/YYYY)
 7. Total adalah angka total keseluruhan struk (bukan subtotal item)
 8. Harga dalam format number tanpa pemisah ribuan (contoh: 10500 bukan 10.500)
-9. ${kategoriContext ? `Gunakan kategori berikut jika sesuai:\n${kategoriContext}` : `Kategori bisa: Makanan, Minuman, Transportasi, Kesehatan, Edukasi, Hiburan, Hunian, Pakaian, Belanja, Lainnya`}
+9. Kategori harus dipilih dari daftar kategori pengeluaran di atas. Jika singkatan aneh di struk minimarket (misal: "SBN MDI LFB"), tebak barang aslinya sebelum klasifikasi (masuk "Perawatan Pribadi").
 10. Pastikan jumlah * harga_satuan = subtotal untuk setiap item
 11. Gunakan info posisi X untuk membedakan kolom: kiri=item, tengah=qty, kanan=harga
 12. Jika ada teks seperti "1 5,000" di posisi tengah+kanan, interpretasikan sebagai qty=1, harga=5000
