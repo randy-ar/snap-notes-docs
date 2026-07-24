@@ -23,13 +23,13 @@
         <mxCell id="svc_b" value="&lt;&lt;Service&gt;&gt;&#10;StrukService" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
           <mxGeometry x="1160" y="50" width="100" height="800" as="geometry" />
         </mxCell>
-        <mxCell id="gemini" value="&lt;&lt;Service&gt;&gt;&#10;GeminiService" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
+        <mxCell id="manual" value="&lt;&lt;Service&gt;&gt;&#10;ManualService" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
           <mxGeometry x="1380" y="50" width="100" height="800" as="geometry" />
         </mxCell>
         <mxCell id="db" value="&lt;&lt;Database&gt;&gt;&#10;PrismaService" parent="1" vertex="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;">
           <mxGeometry x="1600" y="50" width="100" height="800" as="geometry" />
         </mxCell>
-        <mxCell id="100" value="1: Tekan Perbaiki AI" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="user" target="view">
+        <mxCell id="100" value="1: Tekan Edit Field Manual" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="user" target="view">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="110" y="120" />
@@ -85,7 +85,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="107" value="8: parseReceiptText(text, prompt)" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="svc_b" target="gemini">
+        <mxCell id="107" value="8: parseReceiptText(text, prompt)" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=block;" edge="1" parent="1" source="svc_b" target="manual">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1210" y="400" />
@@ -93,7 +93,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="108" value="9: Return JSON Struk" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="gemini" target="svc_b">
+        <mxCell id="108" value="9: Return JSON Struk" style="html=1;verticalAlign=bottom;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;endArrow=open;dashed=1;strokeColor=#999999;" edge="1" parent="1" source="manual" target="svc_b">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1430" y="440" />

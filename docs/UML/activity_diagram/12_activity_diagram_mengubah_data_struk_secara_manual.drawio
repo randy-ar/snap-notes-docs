@@ -4,7 +4,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="main_cont" parent="1" style="swimlane;html=1;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;startSize=30;whiteSpace=wrap;" value="&lt;span style=&quot;font-weight:700;font-size:12pt;&quot;&gt;Activity Diagram Mengubah Data Struk dengan Gemini AI&lt;/span&gt;" vertex="1">
+        <mxCell id="main_cont" parent="1" style="swimlane;html=1;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;startSize=30;whiteSpace=wrap;" value="&lt;span style=&quot;font-weight:700;font-size:12pt;&quot;&gt;Activity Diagram Mengubah Data Struk secara Manual&lt;/span&gt;" vertex="1">
           <mxGeometry height="840" width="1120" x="40" y="20" as="geometry" />
         </mxCell>
         <mxCell id="lane_0" parent="main_cont" style="swimlane;html=1;startSize=30;" value="Masyarakat" vertex="1">

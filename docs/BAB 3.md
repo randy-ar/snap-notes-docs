@@ -400,7 +400,7 @@ Tabel 3.4 Spesifikasi Kebutuhan Fungsional
 | SKPL-F-009 | Sistem dapat menyimpan data pengeluaran hasil pemindaian struk belanja secara permanen ke basis data. |
 | SKPL-F-010 | Sistem dapat menyediakan antarmuka riwayat pengeluaran yang telah dicatat oleh pengguna. |
 | SKPL-F-011 | Sistem dapat menyediakan antarmuka detail pengeluaran yang telah disimpan ke database. |
-| SKPL-F-012 | Sistem dapat menyediakan fitur untuk mengubah data struk, dengan cara merestrukturisasi data teks OCR menjadi data struk yang diperbaiki menggunakan Gemini AI. |
+| SKPL-F-012 | Sistem dapat menyediakan fitur untuk mengubah data struk secara manual sebelum diunggah ke server. |
 | SKPL-F-013 | Sistem dapat menyediakan fitur untuk menghapus data pengeluaran yang telah tersimpan di database. |
 | SKPL-F-014 | Sistem dapat menyediakan fitur untuk menambah data pengeluaran secara mandiri melalui input manual dari user. |
 | SKPL-F-015 | Sistem dapat menyediakan fitur untuk mengubah data pengeluaran secara mandiri melalui input manual dari user. |
@@ -448,7 +448,7 @@ Tabel 3.6 Matriks Definisi dan Deskripsi Fungsi Use Case
 | 9 | Menyimpan Data Pengeluaran Hasil Scan | Proses persistensi data di mana Web Service merekam entitas pengeluaran beserta rincian item belanjaan ke dalam tabel relasional PostgreSQL. |
 | 10 | Menyediakan Antarmuka Riwayat Pengeluaran | Fitur penjelajah arsip yang menampilkan kumpulan daftar transaksi pengeluaran masa lalu yang dicatat oleh pengguna. |
 | 11 | Menyediakan Antarmuka Detail Pengeluaran | Menyajikan rincian data pengeluaran yang telah dicatat, termasuk rincian tiap item struk belanja jika tersedia. |
-| 12 | Mengubah Data Struk dengan Gemini AI | Fasilitas pemrosesan ulang teks OCR menggunakan Gemini AI untuk merestrukturisasi dan memperbaiki data struk yang keliru. |
+| 12 | Mengubah Data Struk secara Manual | Fasilitas bagi pengguna untuk mengubah data struk secara manual jika terdapat kesalahan pada hasil *parsing* OCR. |
 | 13 | Menghapus Data Pengeluaran | Fitur untuk menghapus rekaman data pengeluaran yang telah tersimpan di basis data secara permanen. |
 | 14 | Menambah Data Pengeluaran Secara Manual | Fasilitas bagi pengguna untuk menambahkan data transaksi pengeluaran secara mandiri tanpa melalui proses pindai struk. |
 | 15 | Mengubah Data Pengeluaran Secara Manual | Fitur untuk melakukan penyuntingan data transaksi pengeluaran secara mandiri guna memperbaiki kesalahan pencatatan. |
@@ -760,33 +760,28 @@ Skenario use case digunakan untuk menggambarkan interaksi antara aktor (baik man
 |  | 3.1 | Jika data tidak ditemukan di database, Web Service mengembalikan status error *Not Found*. |
 |  | 3.2 | Sistem memunculkan pesan peringatan *Toaster* bahwa data tidak tersedia dan membatalkan proses navigasi. |
 
-12. Skenario Use Case Mengubah Data Struk dengan Gemini AI  
-    Tabel 3.18 Skenario Mengubah Data Struk dengan Gemini AI
+12. Skenario Use Case Mengubah Data Struk secara Manual  
+    Tabel 3.18 Skenario Mengubah Data Struk secara Manual
 
-| *Nama Use Case* | *Mengubah Data Struk dengan Gemini AI* |  |
+| *Nama Use Case* | *Mengubah Data Struk secara Manual* |  |
 | :---: | ----- | ----- |
 | ***Related Requirement*** | SKPL-F-012 |  |
-| ***Goal in Context*** | Masyarakat dapat merevisi struktur data struk belanja yang keliru secara presisi menggunakan pemrosesan ulang Gemini AI tanpa harus mengetik manual rincian item. |  |
-| ***Precondition*** | Masyarakat berada pada antarmuka detail transaksi struk belanja. |  |
-| ***Successful End Condition*** | Entitas data struk belanja berhasil diperbarui di basis data sesuai dengan hasil restrukturisasi AI terbaru. |  |
-| ***Failed End Condition*** | Pemrosesan ulang gagal karena format teks OCR tidak valid atau masalah konektivitas API. |  |
-| ***Actors*** | Masyarakat, Web Service, Gemini AI |  |
-| ***Trigger*** | Masyarakat menekan opsi perbaikan cerdas (AI) pada antarmuka detail transaksi struk. |  |
+| ***Goal in Context*** | Masyarakat dapat merevisi struktur data struk belanja yang keliru secara manual sebelum disimpan. |  |
+| ***Precondition*** | Masyarakat berada pada antarmuka pratinjau data hasil *parsing* OCR. |  |
+| ***Successful End Condition*** | Data struk belanja berhasil diperbarui secara lokal. |  |
+| ***Failed End Condition*** | Data gagal diubah. |  |
+| ***Actors*** | Masyarakat |  |
+| ***Trigger*** | Masyarakat menekan *field* data yang ingin diubah. |  |
 | ***Include Cases*** | \- |  |
 | ***Main Flow*** | ***Step*** |  ***Action*** |
-|  | 1 | Masyarakat menekan opsi perbaiki dengan AI pada tampilan antarmuka detail struk belanja. |
-|  |  |  |
-|  | 2 | Aplikasi menarik kembali data raw text OCR dari riwayat transaksi tersebut. |
-|  | 3 | Aplikasi mengirimkan request pemrosesan ulang teks OCR kepada Web Service. |
-|  | 4 | Web Service meneruskan payload teks mentah tersebut ke Gemini AI dengan prompt penyesuaian instruksi. |
-|  | 5 | Gemini AI merestrukturisasi ulang teks tersebut ke dalam format JSON objek keuangan yang valid. |
-|  | 6 | Web Service menerima respons JSON dari Gemini AI, memvalidasinya, lalu mengirimkan hasilnya ke aplikasi. |
-|  | 7 | Aplikasi menampilkan pratinjau data revisi; masyarakat menyetujuinya dengan menekan tombol "Simpan Perubahan". |
-|  | 8 | Web Service menjalankan kueri pembaruan data pada PostgreSQL dan aplikasi menampilkan Toaster pesan sukses. |
+|  | 1 | Masyarakat menekan *field* data pada pratinjau hasil *parsing* yang ingin diubah. |
+|  | 2 | Sistem menampilkan antarmuka input (*keyboard*). |
+|  | 3 | Masyarakat memasukkan data yang benar. |
+|  | 4 | Masyarakat menekan tombol simpan atau selesai pada *keyboard*. |
+|  | 5 | Sistem memperbarui data yang ditampilkan pada antarmuka pratinjau. |
 | ***Extension*** | ***Step*** | ***Branch Action*** |
-|  | 4.1 | Gagal mengambil aset, aplikasi menampilkan ilustrasi "Gambar Tidak Dapat Dimuat". |
-|  |  |  |
-|  | 4.2 | Sistem menampilkan Toaster pesan kegagalan. |
+|  | 3.1 | Input tidak valid (misal: memasukkan huruf pada *field* angka). |
+|  | 3.2 | Sistem tidak menyimpan input dan menampilkan pesan peringatan. |
 
 13. Skenario Use Case Menghapus Data Pengeluaran  
     Tabel 3.19 Skenario Menghapus Data Pengeluaran
@@ -1113,12 +1108,12 @@ Skenario use case digunakan untuk menggambarkan interaksi antara aktor (baik man
    ![][image_act_11]
    Gambar 3.18 Activity Diagram Menyediakan Antarmuka Detail Pengeluaran
 
-12. **Activity Diagram Mengubah Data Struk dengan Gemini AI**
+12. **Activity Diagram Mengubah Data Struk secara Manual**
 
-   Visualisasi dari alur kerja untuk skenario mengubah data struk dengan gemini ai dapat dilihat pada Gambar 3.19.
+   Visualisasi dari alur kerja untuk skenario mengubah data struk secara manual dapat dilihat pada Gambar 3.19.
 
    ![][image_act_12]
-   Gambar 3.19 Activity Diagram Mengubah Data Struk dengan Gemini AI
+   Gambar 3.19 Activity Diagram Mengubah Data Struk secara Manual
 
 13. **Activity Diagram Menghapus Data Pengeluaran**
 
@@ -1359,9 +1354,9 @@ Sequence diagram menggambarkan interaksi antara objek-objek dalam urutan waktu t
 11. Sequence Diagram Detail Pengeluaran  
     ![][image51]  
     Gambar 3.70 Sequence Diagram Detail Pengeluaran  
-12. Sequence Diagram Mengubah Data Struk dengan Gemini AI  
+12. Sequence Diagram Mengubah Data Struk secara Manual  
     ![][image_seq_ai]  
-    Gambar 3.71 Sequence Diagram Mengubah Data Struk dengan Gemini AI  
+    Gambar 3.71 Sequence Diagram Mengubah Data Struk secara Manual  
 13. Sequence Diagram Menghapus Data Pengeluaran  
     ![][image_seq_hapus]  
     Gambar 3.72 Sequence Diagram Menghapus Data Pengeluaran  
