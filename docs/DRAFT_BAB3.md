@@ -1484,9 +1484,18 @@ Sequence diagram menggambarkan interaksi antara objek-objek dalam urutan waktu t
 
     6. ## **Perancangan Sistem**
 
-Tahap perancangan sistem dilakukan untuk merumuskan rancangan teknis aplikasi pencatatan keuangan pribadi sebelum mulai dikembangkan. Pada tahap ini, seluruh kebutuhan aplikasi yang telah dianalisis sebelumnya akan diterjemahkan ke dalam bentuk *blueprint* yang terstruktur. Perancangan ini mencakup beberapa bagian penting, mulai dari bagaimana data akan disimpan melalui perancangan basis data, bagaimana tampilan visual layar aplikasi melalui perancangan antarmuka, bagaimana sistem berkomunikasi dengan pengguna melalui perancangan pesan, hingga bagaimana pola informasi kecerdasan buatan dibentuk melalui perancangan jaringan semantik.
+Tahap perancangan sistem dilakukan untuk merumuskan rancangan teknis aplikasi pencatatan keuangan pribadi sebelum mulai dikembangkan. Pada tahap ini, seluruh kebutuhan aplikasi yang telah dianalisis sebelumnya akan diterjemahkan ke dalam bentuk *blueprint* yang terstruktur. Perancangan ini mencakup beberapa bagian penting, mulai dari rancangan struktur program dan orientasi objek, rancangan basis data, rancangan antarmuka pengguna, rancangan pesan, hingga rancangan jaringan semantik untuk kecerdasan buatan.
 
-1. ### **Perancangan Basis Data**
+1. ### **Perancangan Class Diagram**
+
+Perancangan class diagram disusun untuk menggambarkan struktur dan hubungan antar class yang membangun aplikasi Snap Notes. Rancangan ini berpedoman pada arsitektur MVVM (Model-View-ViewModel) yang digunakan, memisahkan logika bisnis, struktur data, dan antarmuka pengguna agar kode lebih modular dan mudah dipelihara.
+
+**Gambar 3.87 Class Diagram Aplikasi Pencatatan Keuangan**
+
+![Combined Class Diagram](UML/class_diagram/combined_class_diagram.png)
+*(Catatan: Gambar hasil ekspor dari file combined_class_diagram.drawio)*
+
+2. ### **Perancangan Basis Data**
 
 Perancangan basis data difokuskan untuk mengatur strategi penyimpanan data pencatatan uang pribadi di dalam sistem. Bagian ini bertujuan untuk memberikan gambaran yang utuh mengenai di mana dan bagaimana setiap data seperti profil pengguna, daftar pengeluaran, dan detail barang akan ditempatkan. Untuk mempermudah pengembangannya, perancangan ini membaginya ke dalam dua penjabaran utama, yaitu skema relasi antar tabel dan detail struktur dari masing-masing tabel itu sendiri.
 
@@ -1617,14 +1626,14 @@ Berikut adalah penjabaran detail mengenai struktur dari masing-masing tabel yang
 | created\_at | TIMESTAMP | *Default* (waktu saat ini) |
 | updated\_at | TIMESTAMP | Diperbarui otomatis |
 
-   2. ### **Perancangan Struktur Menu**
+   3. ### **Perancangan Struktur Menu**
 
 Perancangan struktur menu bertujuan untuk memetakan hierarki navigasi dan antarmuka pada aplikasi. Struktur menu dirancang untuk memudahkan masyarakat dalam mengakses fitur-fitur utama aplikasi secara efisien dan logis. Pada implementasinya, aplikasi menggunakan bottom navigation bar sebagai navigasi utama yang mencakup halaman dashboard, daftar pengeluaran, dan daftar pemasukan. Fitur utama pemindaian struk diakses secara cepat melalui *floating action button*. Selain itu, fitur pendukung seperti pengaturan notifikasi dan proses keluar akun (*logout*) ditempatkan secara terpusat pada *header* halaman dashboard. Adapun rancangan struktur menu pada aplikasi pencatatan keuangan pribadi dapat dilihat secara visual pada diagram berikut:  
 ![][image90]
 
 #### Gambar 3.88 Struktur Menu
 
-3. ### **Perancangan Antarmuka Pengguna**
+4. ### **Perancangan Antarmuka Pengguna**
 
 Perancangan antarmuka adalah tahap penting yang digunakan untuk memvisualisasikan alur pembuatan tampilan serta interaksi antara pengguna dengan aplikasi yang dirancang. Dalam tahapan ini, setiap elemen antarmuka mulai dari tata letak (layout), ikon, tombol, hingga navigasi didesain agar selaras dengan kebutuhan pengguna dan tujuan aplikasi. Perhatian khusus diberikan pada aspek usability (kemudahan penggunaan) dan konsistensi tampilan, sehingga pengguna dapat berinteraksi dengan aplikasi secara nyaman dan efisien. Berikut ini adalah rancangan antarmuka pada aplikasi yang dibangun, yang disajikan secara berurutan:
 
@@ -1778,7 +1787,7 @@ Perancangan antarmuka adalah tahap penting yang digunakan untuk memvisualisasika
 
     #### Gambar 3.116 T25 \- Keluar
 
-    4. ### **Perancangan Pesan**
+    5. ### **Perancangan Pesan**
 
 Perancangan pesan merupakan tahap krusial dalam interaksi manusia dan komputer guna memberikan umpan balik yang jelas terhadap setiap aktivitas pengguna. Pada pengembangan sistem ini, pesan dirancang dengan pendekatan dinamis, yang berarti struktur teks pada pesan akan beradaptasi secara otomatis dengan konteks penggunaan yang sedang berjalan. Hal ini bertujuan untuk meminimalisir redundansi dan meningkatkan konsistensi antarmuka. Pesan yang ditampilkan menggunakan komponen Toaster untuk notifikasi singkat. Berikut ini merupakan 3 (tiga) kategori perancangan pesan yang diimplementasikan pada sistem yang dibangun:
 
@@ -1800,7 +1809,7 @@ Perancangan pesan merupakan tahap krusial dalam interaksi manusia dan komputer g
 
    #### Gambar 3.119 Pesan Validasi Input
 
-   5. ### **Perancangan Jaringan Semantik**
+   6. ### **Perancangan Jaringan Semantik**
 
 Jaringan semantik merupakan representasi visual yang memodelkan hubungan dan alur navigasi antar antarmuka di dalam sistem. Pemodelan ini bertujuan untuk memberikan gambaran logis mengenai perpindahan pengguna dari satu halaman ke halaman lainnya berdasarkan aksi yang dilakukan, serta memperlihatkan pesan sistem yang merespons aksi tersebut.  
 Pada perancangan antarmuka aplikasi, jaringan semantik digunakan untuk memetakan keterhubungan mulai dari T01 hingga T25. Selain itu, jaringan ini memuat rancangan pesan peringatan yang terdiri dari PP01, PP02, dan PP03 yang muncul pada transisi atau aktivitas tertentu. Berikut adalah rancangan jaringan semantik dari aplikasi yang akan dibangun, dapat dilihat pada Gambar 3.82:  

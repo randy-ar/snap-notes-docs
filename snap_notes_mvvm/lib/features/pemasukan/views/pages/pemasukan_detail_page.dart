@@ -50,10 +50,13 @@ class _PemasukanDetailPageState extends State<PemasukanDetailPage> {
           DestructiveButton(
             onPressed: () async {
               Navigator.pop(dialogContext);
-              await _viewModel.hapusPemasukan(widget.pemasukanId);
-              
+              await _viewModel.submitPemasukan(
+                id: widget.pemasukanId,
+                isDelete: true,
+              );
+
               if (!mounted) return;
-              
+
               if (_viewModel.errorMessage != null) {
                 _showErrorToast(_viewModel.errorMessage!);
               } else {
@@ -218,4 +221,3 @@ class _PemasukanDetailPageState extends State<PemasukanDetailPage> {
     );
   }
 }
-

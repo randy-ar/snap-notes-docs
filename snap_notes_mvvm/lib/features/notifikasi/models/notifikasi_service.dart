@@ -183,9 +183,66 @@ class NotifikasiService {
     }
   }
 
-  /// Cancel all notifications
-  Future<void> cancelAllNotifications() async {
-    await _notificationsPlugin.cancelAll();
+  /// Method trigger notifikasi dari schedule / background
+  Future<void> onScheduledTimeReached(int notifikasiId) async {
+    // Digunakan sebagai penanda saat background worker terpanggil (jika menggunakan workmanager/cron)
+    // Di aplikasi ini, zonedSchedule dari flutter_local_notifications sudah handle secara native.
+    // Metode ini merupakan representasi konseptual dari desain SKPL-F-021.
+    final hasCatatan = await checkCatatanHariIni();
+    if (!hasCatatan) {
+      await showLocalNotification(
+        id: notifikasiId,
+        title: 'Waktunya Catat Keuangan!',
+        body: 'Yuk catat pengeluaran atau pemasukan kamu hari ini agar keuangan tetap sehat.',
+      );
+    } else {
+      await batalkanPengiriman(notifikasiId);
+    }
+  }
+
+  /// Mengecek apakah ada catatan pemasukan/pengeluaran hari ini
+  Future<bool> checkCatatanHariIni() async {
+    try {
+      final now = DateTime.now();
+      // Contoh pemanggilan dummy ke API, diimplementasikan riil jika dibutuhkan endpoint khusus
+      // Untuk implementasi MVVM yang bersih, endpoint khusus seperti /api/dashboard/status-hari-ini lebih ideal
+      final response = await _dio.get('/api/dashboard/status-hari-ini', queryParameters: {
+        'tanggal': now.toIso8601String(),
+      });
+      if (response.statusCode == 200) {
+        return response.data['data']['hasCatatan'] as bool;
+      }
+      return false;
+    } catch (e) {
+      // Fallback: anggap belum ada catatan agar notifikasi tetap terkirim sebagai pengingat
+      return false;
+    }
+  }
+
+  /// Menampilkan notifikasi lokal
+  Future<void> showLocalNotification({required int id, required String title, required String body}) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'daily_reminder_channel',
+      'Daily Reminder',
+      channelDescription: 'Notifikasi pengingat pencatatan keuangan harian',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await _notificationsPlugin.show(
+      id,
+      title,
+      body,
+      platformChannelSpecifics,
+    );
+  }
+
+  /// Membatalkan pengiriman (tidak jadi mengirim / cancel spesifik ID)
+  Future<void> batalkanPengiriman(int id) async {
+    await _notificationsPlugin.cancel(id);
   }
 
   tz.TZDateTime _nextInstanceOfDayAndTime(int day, int hour, int minute) {

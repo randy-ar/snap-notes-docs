@@ -1,0 +1,238 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Sequence Pendaftaran Akun" id="1">
+    <mxGraphModel dx="2171" dy="1436" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ll_M" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fontSize=16;labelBackgroundColor=none;" value="«actor»&lt;br&gt;&amp;nbsp;:Pengguna" vertex="1">
+          <mxGeometry height="1050" width="140" x="30" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_M" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="950" width="10" x="95" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_RP" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fontSize=16;labelBackgroundColor=none;" value=":RegisterPage" vertex="1">
+          <mxGeometry height="1050" width="130" x="180" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_RP" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="940" width="10" x="240" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_RVM" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fontSize=16;labelBackgroundColor=none;" value=":RegisterViewModel" vertex="1">
+          <mxGeometry height="1050" width="180" x="325" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_RVM" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="800" width="10" x="410" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_AS" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fontSize=16;labelBackgroundColor=none;" value=":AuthService" vertex="1">
+          <mxGeometry height="1050" width="130" x="520" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_AS" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="490" width="10" x="580" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_DC" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fontSize=16;labelBackgroundColor=none;" value=":DioClient" vertex="1">
+          <mxGeometry height="1050" width="130" x="660" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_DC" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="250" width="10" x="720" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_WS" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fontSize=16;labelBackgroundColor=none;" value="&lt;div&gt;«actor»&lt;/div&gt;:WebService" vertex="1">
+          <mxGeometry height="1050" width="130" x="800" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_WS" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="170" width="10" x="860" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_P" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fontSize=16;labelBackgroundColor=none;" value=":Pengguna" vertex="1">
+          <mxGeometry height="1050" width="130" x="940" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_P" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="50" width="10" x="1000" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_AT" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fontSize=16;labelBackgroundColor=none;" value=":AuthToken" vertex="1">
+          <mxGeometry height="1050" width="130" x="1080" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_AT" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="50" width="10" x="1140" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="msg1" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=18;labelBackgroundColor=none;" target="act_RP" value="1. fillRegisterForm(nama, email, password)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="105" y="150" as="sourcePoint" />
+            <mxPoint x="310" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg2" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=18;labelBackgroundColor=none;" target="act_RP" value="2. submitRegister()">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="105" y="190" as="sourcePoint" />
+            <mxPoint x="310" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg3" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=18;labelBackgroundColor=none;" target="act_RVM" value="3. validateInput(nama, email, password)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="250" y="230" as="sourcePoint" />
+            <mxPoint x="450" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg4" edge="1" parent="1" source="act_RVM" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;fontSize=18;labelBackgroundColor=none;" value="return bool (is valid)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="270" as="sourcePoint" />
+            <mxPoint x="250" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="frameAlt" parent="1" style="shape=umlFrame;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=60;height=30;fontSize=18;labelBackgroundColor=none;" value="Alt" vertex="1">
+          <mxGeometry height="810" width="1170" x="40" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="frameAlt_text1" parent="frameAlt" style="text;html=1;fontSize=18;labelBackgroundColor=none;" value="&lt;b&gt;[Input Tidak Valid]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" relative="1" width="150" as="geometry">
+            <mxPoint x="70" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="frameAlt_line" parent="frameAlt" style="line;strokeWidth=1;dashed=1;labelPosition=center;verticalLabelPosition=bottom;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;html=1;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="10" width="1170" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="frameAlt_text2" parent="frameAlt" style="text;html=1;fontSize=18;labelBackgroundColor=none;" value="&lt;b&gt;[Input Valid]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="150" x="70" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="act_RP_self1" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="30" width="10" x="246" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="msg5" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=18;labelBackgroundColor=none;" target="act_RP_self1" value="_showToastValidation()">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="330" />
+              <mxPoint x="280" y="355" />
+            </Array>
+            <mxPoint x="250" y="330" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg6" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=18;labelBackgroundColor=none;" target="act_RVM" value="4. register(nama, email, password)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="250" y="420" as="sourcePoint" />
+            <mxPoint x="450" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg8" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=18;labelBackgroundColor=none;" target="act_AS" value="register(nama, email, password)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="460" as="sourcePoint" />
+            <mxPoint x="620" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg9" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=18;labelBackgroundColor=none;" target="act_DC" value="post(&quot;/auth/register&quot;, data)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="590" y="500" as="sourcePoint" />
+            <mxPoint x="780" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg10" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=18;labelBackgroundColor=none;" target="act_WS" value="HTTP POST /auth/register">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="730" y="540" as="sourcePoint" />
+            <mxPoint x="920" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="act_WS_self1" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="30" width="10" x="867" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="msg11" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=18;labelBackgroundColor=none;" value="5. Verifikasi &amp;amp; buat akun (Supabase)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="900" y="560" />
+              <mxPoint x="900" y="585" />
+            </Array>
+            <mxPoint x="870" y="560" as="sourcePoint" />
+            <mxPoint x="877" y="585" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="act_WS_self2" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="30" width="10" x="867" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="msg12" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=18;labelBackgroundColor=none;" value="7. Simpan profil ke DB">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="900" y="620" />
+              <mxPoint x="900" y="645" />
+            </Array>
+            <mxPoint x="870" y="620" as="sourcePoint" />
+            <mxPoint x="877" y="645" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg13" edge="1" parent="1" source="act_WS" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;fontSize=18;labelBackgroundColor=none;" value="8. HTTP 201 Created (JSON)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="690" as="sourcePoint" />
+            <mxPoint x="730" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg14" edge="1" parent="1" source="act_AS" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;fontSize=18;labelBackgroundColor=none;" value="return Response">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610" y="730" as="sourcePoint" />
+            <mxPoint x="420" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg15" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=18;labelBackgroundColor=none;" target="act_P" value="fromJson(response.data)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="770" as="sourcePoint" />
+            <mxPoint x="1010" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg16" edge="1" parent="1" source="act_P" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;fontSize=18;labelBackgroundColor=none;" value="return Pengguna instance">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1010" y="800" as="sourcePoint" />
+            <mxPoint x="420" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_AT_req" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;fontSize=18;labelBackgroundColor=none;" target="act_AT" value="fromJson(response.data.token)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="420" y="830" as="sourcePoint" />
+            <mxPoint x="1180" y="830" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_AT_res" edge="1" parent="1" source="act_AT" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;fontSize=18;labelBackgroundColor=none;" value="return AuthToken instance">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1180" y="860" as="sourcePoint" />
+            <mxPoint x="420" y="860" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="act_AS_save" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="30" width="10" x="586" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_save" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=18;labelBackgroundColor=none;" target="act_AS_save" value="saveTokenToSecureStorage(authToken)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="620" y="880" />
+              <mxPoint x="620" y="905" />
+            </Array>
+            <mxPoint x="590" y="880" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg17" edge="1" parent="1" source="act_AS" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;fontSize=18;labelBackgroundColor=none;" value="return (Pengguna, AuthToken)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="620" y="930" as="sourcePoint" />
+            <mxPoint x="420" y="930" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="act_RP_self2" parent="1" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;fontSize=18;labelBackgroundColor=none;" value="" vertex="1">
+          <mxGeometry height="30" width="10" x="246" y="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="msg19" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=18;labelBackgroundColor=none;" target="act_RP_self2" value="9. _showToastSuccess(&quot;Pendaftaran berhasil!&quot;)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="990" />
+              <mxPoint x="280" y="1015" />
+            </Array>
+            <mxPoint x="250" y="990" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yYyqdoVC8pCeY7Bc2K4D-1" edge="1" parent="1" source="act_RVM" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;fontSize=18;labelBackgroundColor=none;" value="notifyListeners() :&amp;nbsp;&lt;div&gt;_pengguna = penggunaData&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="450" y="970" as="sourcePoint" />
+            <mxPoint x="250" y="970" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yYyqdoVC8pCeY7Bc2K4D-2" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;fontSize=18;labelBackgroundColor=none;" value="menampilkan dashboard page">
+          <mxGeometry relative="1" x="0.0732" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="310" y="1070" as="sourcePoint" />
+            <mxPoint x="105" y="1070" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,94 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="Flowchart_Pengkategorian">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <mxCell id="swimlane1" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Flowchart Analisis Pengkategorian Pengeluaran" vertex="1">
+          <mxGeometry x="200" y="100" width="480" height="500" as="geometry" />
+        </mxCell>
+
+        <mxCell id="start" parent="swimlane1" style="ellipse;fillColor=strokeColor;html=1;" value="" vertex="1">
+          <mxGeometry x="65" y="40" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="step1" parent="swimlane1" style="rounded=1;whiteSpace=wrap;html=1;" value="Aplikasi klien mengirim teks OCR ke web service" vertex="1">
+          <mxGeometry x="20" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_start_step1" edge="1" parent="swimlane1" source="start" target="step1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="step2" parent="swimlane1" style="rounded=1;whiteSpace=wrap;html=1;" value="Menyiapkan pemetaan kategori BPS" vertex="1">
+          <mxGeometry x="20" y="190" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_step1_step2" edge="1" parent="swimlane1" source="step1" target="step2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step3" parent="swimlane1" style="rounded=1;whiteSpace=wrap;html=1;" value="Menyisipkan kategori ke system prompt &amp; kirim ke Gemini API" vertex="1">
+          <mxGeometry x="20" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_step2_step3" edge="1" parent="swimlane1" source="step2" target="step3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn1_out" parent="swimlane1" style="ellipse;" value="1" vertex="1">
+          <mxGeometry x="65" y="370" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_step3_conn1" edge="1" parent="swimlane1" source="step3" target="conn1_out" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn1_in" parent="swimlane1" style="ellipse;" value="1" vertex="1">
+          <mxGeometry x="215" y="40" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="step4" parent="swimlane1" style="rounded=1;whiteSpace=wrap;html=1;" value="Gemini API mengembalikan JSON prediksi kategori" vertex="1">
+          <mxGeometry x="170" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_conn1_step4" edge="1" parent="swimlane1" source="conn1_in" target="step4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="decision" parent="swimlane1" style="rhombus;whiteSpace=wrap;html=1;" value="Prediksi kategori sesuai?" vertex="1">
+          <mxGeometry x="170" y="190" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_step4_decision" edge="1" parent="swimlane1" source="step4" target="decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="step5" parent="swimlane1" style="rounded=1;whiteSpace=wrap;html=1;" value="Pengguna mengubah kategori secara manual" vertex="1">
+          <mxGeometry x="340" y="200" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_decision_step5" edge="1" parent="swimlane1" source="decision" target="step5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" value="Tidak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="step6" parent="swimlane1" style="rounded=1;whiteSpace=wrap;html=1;" value="Menyimpan ke basis data" vertex="1">
+          <mxGeometry x="170" y="310" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_decision_step6" edge="1" parent="swimlane1" source="decision" target="step6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" value="Ya">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="edge_step5_step6" edge="1" parent="swimlane1" source="step5" target="step6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="400" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="end" parent="swimlane1" style="ellipse;html=1;shape=endState;fillColor=strokeColor;" value="" vertex="1">
+          <mxGeometry x="215" y="410" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_step6_end" edge="1" parent="swimlane1" source="step6" target="end" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

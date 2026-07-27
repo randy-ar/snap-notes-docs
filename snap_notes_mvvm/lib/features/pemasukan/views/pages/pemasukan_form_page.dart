@@ -70,8 +70,8 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
     final viewModel = context.read<PemasukanViewModel>();
 
     if (isEdit) {
-      await viewModel.updatePemasukan(
-        widget.pemasukan!.id,
+      await viewModel.submitPemasukan(
+        id: widget.pemasukan!.id,
         deskripsi: deskripsi,
         jumlah: jumlah,
         tanggal: _selectedDate,
@@ -79,7 +79,7 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
         catatan: _catatanController.text.trim().isNotEmpty ? _catatanController.text.trim() : null,
       );
     } else {
-      await viewModel.tambahPemasukan(
+      await viewModel.submitPemasukan(
         deskripsi: deskripsi,
         jumlah: jumlah,
         tanggal: _selectedDate,
@@ -125,7 +125,7 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<PemasukanViewModel>();
-    
+
     return Scaffold(
       headers: [
         AppBar(
@@ -151,7 +151,7 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
                 placeholder: const Text('Contoh: Gaji bulanan'),
               ),
               const Gap(20),
-              
+
               const Text('Jumlah (Rp)').medium(),
               const Gap(8),
               TextField(
@@ -265,4 +265,3 @@ void navigateToPemasukanForm(BuildContext context, {Pemasukan? pemasukan}) {
     ),
   );
 }
-

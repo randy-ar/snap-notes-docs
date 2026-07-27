@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Class NotifikasiService" id="class-notifikasiservice">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="notifikasiservice" value="NotifikasiService" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="712" height="502" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr1" value="- _dio : Dio" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="26" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr2" value="- _notificationsPlugin : FlutterLocalNotificationsPlugin" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="52" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr3" value="- _storage : FlutterSecureStorage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="78" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr4" value="- _cacheKey : String = 'preferensi_notifikasi_cache'" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="104" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="div1" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="130" width="712" height="8" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth1" value="+ cachePreferensiList(list: List&lt;PreferensiNotifikasi&gt;) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="138" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth2" value="+ getCachedPreferensiList() : Future&lt;List&lt;PreferensiNotifikasi&gt;&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="164" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth3" value="+ init() : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="190" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth4" value="+ getPreferensiList() : Future&lt;List&lt;PreferensiNotifikasi&gt;&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="216" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth5" value="+ createPreferensi(preferensi: PreferensiNotifikasi) : Future&lt;PreferensiNotifikasi&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="242" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth6" value="+ updatePreferensi(id: String, preferensi: PreferensiNotifikasi) : Future&lt;PreferensiNotifikasi&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="268" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth7" value="+ deletePreferensi(id: String) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="294" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth8" value="+ scheduleNotifications(preferensiList: List&lt;PreferensiNotifikasi&gt;) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="320" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth9" value="+ onScheduledTimeReached(notifikasiId: int) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="346" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth10" value="+ checkCatatanHariIni() : Future&lt;bool&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="372" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth11" value="+ showLocalNotification(id: int, title: String, body: String) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="398" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth12" value="+ batalkanPengiriman(id: int) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="424" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth13" value="- _nextInstanceOfDayAndTime(day: int, hour: int, minute: int) : TZDateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="450" width="712" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth14" value="- _nextInstanceOfTime(hour: int, minute: int) : TZDateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="notifikasiservice">
+          <mxGeometry y="476" width="712" height="26" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

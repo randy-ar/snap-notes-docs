@@ -64,7 +64,7 @@ class PemasukanViewModel extends ChangeNotifier {
       final targetBulan = bulan ?? now.month;
       final targetTahun = tahun ?? now.year;
 
-      final list = await _pemasukanService.getDaftarPemasukan(
+      final list = await _pemasukanService.getPemasukan(
         bulan: targetBulan,
         tahun: targetTahun,
       );
@@ -77,7 +77,7 @@ class PemasukanViewModel extends ChangeNotifier {
         prevBulan = 12;
         prevTahun -= 1;
       }
-      final prevList = await _pemasukanService.getDaftarPemasukan(
+      final prevList = await _pemasukanService.getPemasukan(
         bulan: prevBulan,
         tahun: prevTahun,
       );
@@ -102,70 +102,48 @@ class PemasukanViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> tambahPemasukan({
-    required String deskripsi,
-    required double jumlah,
-    required DateTime tanggal,
-    String? kategoriId,
-    String? catatan,
-  }) async {
-    _setLoading(true);
-    _errorMessage = null;
-    try {
-      final pemasukan = await _pemasukanService.tambahPemasukan(
-        deskripsi: deskripsi,
-        jumlah: jumlah,
-        tanggal: tanggal,
-        kategoriId: kategoriId,
-        catatan: catatan,
-      );
-      _pemasukanList.insert(0, pemasukan);
-    } catch (e) {
-      _errorMessage = e.toString();
-    } finally {
-      _setLoading(false);
-    }
-  }
-
-  Future<void> updatePemasukan(
-    String id, {
+  Future<void> submitPemasukan({
+    String? id,
     String? deskripsi,
     double? jumlah,
     DateTime? tanggal,
     String? kategoriId,
     String? catatan,
+    bool isDelete = false,
   }) async {
     _setLoading(true);
     _errorMessage = null;
-    try {
-      final pemasukan = await _pemasukanService.updatePemasukan(
-        id,
-        deskripsi: deskripsi,
-        jumlah: jumlah,
-        tanggal: tanggal,
-        kategoriId: kategoriId,
-        catatan: catatan,
-      );
-      final index = _pemasukanList.indexWhere((p) => p.id == id);
-      if (index != -1) {
-        _pemasukanList[index] = pemasukan;
-      }
-      if (_pemasukanDetail?.id == id) {
-        _pemasukanDetail = pemasukan;
-      }
-    } catch (e) {
-      _errorMessage = e.toString();
-    } finally {
-      _setLoading(false);
-    }
-  }
 
-  Future<void> hapusPemasukan(String id) async {
-    _setLoading(true);
-    _errorMessage = null;
     try {
-      await _pemasukanService.hapusPemasukan(id);
-      _pemasukanList.removeWhere((p) => p.id == id);
+      if (isDelete && id != null) {
+        await _pemasukanService.deletePemasukan(id);
+        _pemasukanList.removeWhere((p) => p.id == id);
+      } else if (id == null && deskripsi != null && jumlah != null && tanggal != null) {
+        final pemasukan = await _pemasukanService.createPemasukan(
+          deskripsi: deskripsi,
+          jumlah: jumlah,
+          tanggal: tanggal,
+          kategoriId: kategoriId,
+          catatan: catatan,
+        );
+        _pemasukanList.insert(0, pemasukan);
+      } else if (id != null) {
+        final pemasukan = await _pemasukanService.updatePemasukan(
+          id,
+          deskripsi: deskripsi,
+          jumlah: jumlah,
+          tanggal: tanggal,
+          kategoriId: kategoriId,
+          catatan: catatan,
+        );
+        final index = _pemasukanList.indexWhere((p) => p.id == id);
+        if (index != -1) {
+          _pemasukanList[index] = pemasukan;
+        }
+        if (_pemasukanDetail?.id == id) {
+          _pemasukanDetail = pemasukan;
+        }
+      }
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

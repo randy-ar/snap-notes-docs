@@ -288,8 +288,8 @@ class PemasukanView extends StatelessWidget {
               },
               child: ListView.builder(
                 padding: const EdgeInsets.all(16),
-                itemCount: viewModel.pemasukanList.isEmpty 
-                  ? 2 
+                itemCount: viewModel.pemasukanList.isEmpty
+                  ? 2
                   : viewModel.pemasukanList.length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {
@@ -307,7 +307,7 @@ class PemasukanView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text('Total Pemasukan').muted(),
-                                isGoodTrending 
+                                isGoodTrending
                                   ? SecondaryBadge(
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
@@ -371,8 +371,11 @@ class PemasukanView extends StatelessWidget {
                         onTap: () async {
                           final result = await Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => PemasukanDetailPage(
-                                pemasukanId: pemasukan.id,
+                              builder: (_) => ChangeNotifierProvider(
+                                create: (_) => getIt<PemasukanViewModel>(),
+                                child: PemasukanDetailPage(
+                                  pemasukanId: pemasukan.id,
+                                ),
                               ),
                             ),
                           );
@@ -405,7 +408,7 @@ class PemasukanView extends StatelessWidget {
                                 Text(FormatUtils.formatRupiah(pemasukan.jumlah)).base(),
                                 const Gap(12),
                                 Icon(
-                                  LucideIcons.chevronRight, 
+                                  LucideIcons.chevronRight,
                                   size: 16,
                                   color: Theme.of(context).colorScheme.foreground,
                                 ),

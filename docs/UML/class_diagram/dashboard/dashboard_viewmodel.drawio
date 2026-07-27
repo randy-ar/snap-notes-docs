@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Class DashboardViewModel" id="class-dashboardviewmodel">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="dashboardviewmodel" value="DashboardViewModel" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="495" height="710" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr1" value="- _dashboardService : DashboardService" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="26" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr2" value="- _isLoading : bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="52" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr3" value="- _ringkasan : RingkasanDashboard?" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="78" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr4" value="- _errorMessage : String?" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="104" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr5" value="- _calendarData : Map&lt;DateTime, double&gt;?" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="130" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr6" value="- _kategoriData : List&lt;Map&lt;String, dynamic&gt;&gt;?" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="156" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr7" value="- _trendCache : List&lt;Map&lt;String, dynamic&gt;&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="182" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr8" value="- _focusMonth : DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="208" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="attr9" value="- _isTrendLoading : bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="234" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="div1" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="260" width="495" height="8" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth1" value="+ isLoading() : bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="268" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth2" value="+ ringkasan() : RingkasanDashboard?" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="294" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth3" value="+ errorMessage() : String?" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="320" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth4" value="+ calendarData() : Map&lt;DateTime, double&gt;?" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="346" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth5" value="+ kategoriData() : List&lt;Map&lt;String, dynamic&gt;&gt;?" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="372" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth6" value="+ trendCache() : List&lt;Map&lt;String, dynamic&gt;&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="398" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth7" value="+ monthlyTrend() : List&lt;Map&lt;String, dynamic&gt;&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="424" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth8" value="+ focusMonth() : DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="450" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth9" value="+ isTrendLoading() : bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="476" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth10" value="- _setLoading(value: bool) : void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="502" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth11" value="+ initDashboard(bulan: int?, tahun: int?) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="528" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth12" value="+ loadRingkasan(bulan: int?, tahun: int?) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="554" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth13" value="+ loadCalendarData(bulan: int?, tahun: int?) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="580" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth14" value="+ loadKategoriData(bulan: int?, tahun: int?) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="606" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth15" value="+ loadMonthlyTrend(force: bool, isBackground: bool) : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="632" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth16" value="+ nextMonth() : void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="658" width="495" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="meth17" value="+ prevMonth() : void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="dashboardviewmodel">
+          <mxGeometry y="684" width="495" height="26" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

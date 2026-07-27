@@ -35,7 +35,7 @@ class PemasukanService {
   }
 
   /// Tambah pemasukan baru
-  Future<Pemasukan> tambahPemasukan({
+  Future<Pemasukan> createPemasukan({
     required String deskripsi,
     required double jumlah,
     required DateTime tanggal,
@@ -61,7 +61,7 @@ class PemasukanService {
   }
 
   /// Get daftar pemasukan
-  Future<List<Pemasukan>> getDaftarPemasukan({
+  Future<List<Pemasukan>> getPemasukan({
     int? bulan,
     int? tahun,
   }) async {
@@ -124,7 +124,7 @@ class PemasukanService {
   }
 
   /// Hapus pemasukan
-  Future<void> hapusPemasukan(String id) async {
+  Future<void> deletePemasukan(String id) async {
     try {
       await _dio.delete('/api/pemasukan/$id');
     } on DioException catch (e) {

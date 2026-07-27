@@ -16,13 +16,19 @@ class DashboardViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  // State untuk Tren Bulanan (Line Chart)
+  // State untuk Heatmap (Kalender Pengeluaran)
+  Map<DateTime, double>? _calendarData;
+  Map<DateTime, double>? get calendarData => _calendarData;
+
+  // State untuk Pie Chart (Kategori Pengeluaran)
+  List<Map<String, dynamic>>? _kategoriData;
+  List<Map<String, dynamic>>? get kategoriData => _kategoriData;
   List<Map<String, dynamic>> _trendCache = [];
   List<Map<String, dynamic>> get trendCache => _trendCache;
-  
+
   List<Map<String, dynamic>> get monthlyTrend {
     if (_trendCache.isEmpty) return [];
-    
+
     int centroidIdx = _trendCache.indexWhere((t) => t['bulan'] == _focusMonth.month && t['tahun'] == _focusMonth.year);
     if (centroidIdx == -1) return [];
 
@@ -46,6 +52,16 @@ class DashboardViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> initDashboard({int? bulan, int? tahun}) async {
+    _focusMonth = DateTime(tahun ?? DateTime.now().year, bulan ?? DateTime.now().month, 1);
+    await Future.wait([
+      loadRingkasan(bulan: _focusMonth.month, tahun: _focusMonth.year),
+      loadMonthlyTrend(),
+      loadCalendarData(bulan: _focusMonth.month, tahun: _focusMonth.year),
+      loadKategoriData(bulan: _focusMonth.month, tahun: _focusMonth.year),
+    ]);
+  }
+
   Future<void> loadRingkasan({int? bulan, int? tahun}) async {
     _setLoading(true);
     _errorMessage = null;
@@ -62,7 +78,35 @@ class DashboardViewModel extends ChangeNotifier {
     }
   }
 
-  /// Memuat tren data transaksi (pemasukan & pengeluaran) 37 bulan berturut-turut
+  Future<void> loadCalendarData({int? bulan, int? tahun}) async {
+    _errorMessage = null;
+    try {
+      final data = await _dashboardService.getKalender(
+        bulan: bulan,
+        tahun: tahun,
+      );
+      _calendarData = data;
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadKategoriData({int? bulan, int? tahun}) async {
+    _errorMessage = null;
+    try {
+      final data = await _dashboardService.getPerKategori(
+        bulan: bulan,
+        tahun: tahun,
+      );
+      _kategoriData = data;
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      notifyListeners();
+    }
+  }
   Future<void> loadMonthlyTrend({bool force = false, bool isBackground = false}) async {
     if (!force) {
       int centroidIdx = _trendCache.indexWhere((t) => t['bulan'] == _focusMonth.month && t['tahun'] == _focusMonth.year);
@@ -102,7 +146,7 @@ class DashboardViewModel extends ChangeNotifier {
   /// Geser grafik 1 bulan ke depan
   void nextMonth() {
     _focusMonth = DateTime(_focusMonth.year, _focusMonth.month + 1, 1);
-    
+
     int centroidIdx = _trendCache.indexWhere((t) => t['bulan'] == _focusMonth.month && t['tahun'] == _focusMonth.year);
     if (centroidIdx != -1 && centroidIdx - 2 >= 0 && centroidIdx + 3 < _trendCache.length) {
       notifyListeners();
@@ -118,7 +162,7 @@ class DashboardViewModel extends ChangeNotifier {
   /// Geser grafik 1 bulan ke belakang
   void prevMonth() {
     _focusMonth = DateTime(_focusMonth.year, _focusMonth.month - 1, 1);
-    
+
     int centroidIdx = _trendCache.indexWhere((t) => t['bulan'] == _focusMonth.month && t['tahun'] == _focusMonth.year);
     if (centroidIdx != -1 && centroidIdx - 2 >= 0 && centroidIdx + 3 < _trendCache.length) {
       notifyListeners();
