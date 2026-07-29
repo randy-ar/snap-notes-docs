@@ -1,12 +1,37 @@
 import 'dart:io';
-import 'package:flutter/material.dart' show Icons;
+import 'package:flutter/material.dart'
+    hide
+        Stepper,
+        Step,
+        Positioned,
+        Column,
+        Expanded,
+        Row,
+        Stack,
+        Scaffold,
+        AppBar,
+        IconButton,
+        Theme,
+        Card,
+        Divider,
+        TextField,
+        AlertDialog,
+        FormField,
+        Colors,
+        CircularProgressIndicator,
+        showDialog;
+import 'package:shadcn_flutter/shadcn_flutter.dart' as shadcn;
+import 'package:shadcn_flutter/shadcn_flutter.dart' hide Card;
 import 'package:provider/provider.dart';
-import 'package:shadcn_flutter/shadcn_flutter.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.dart';
-import 'package:snap_notes_mvvm/features/receipt/views/pages/full_screen_image_page.dart';
+import 'package:snap_notes_mvvm/utils/format_utils.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
+import 'package:snap_notes_mvvm/features/receipt/views/pages/receipt_upload_page.dart';
 import 'package:snap_notes_mvvm/features/receipt/views/widgets/scan_animation_overlay.dart';
-import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
+import 'package:snap_notes_mvvm/features/receipt/views/pages/full_screen_image_page.dart';
+import 'package:snap_notes_mvvm/utils/rupiah_input_formatter.dart';
 
 class ReceiptParsedPage extends StatefulWidget {
   /// Single-mode image
@@ -41,6 +66,7 @@ class ReceiptParsedPage extends StatefulWidget {
 }
 
 class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
+  final StepperController _stepperController = StepperController();
   int _tabIndex = 0;
   int _selectedReceiptIndex = 0;
 
@@ -49,6 +75,7 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ReceiptViewModel>().loadCategories();
+      _stepperController.jumpToStep(2); // Jump to "Review AI" step
     });
   }
 
@@ -61,8 +88,8 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
     final viewModel = context.read<ReceiptViewModel>();
     final targetReceipt = widget.isBatchMode
         ? (viewModel.batchReceipts.isNotEmpty
-            ? viewModel.batchReceipts[_selectedReceiptIndex]
-            : widget.receipts![_selectedReceiptIndex])
+              ? viewModel.batchReceipts[_selectedReceiptIndex]
+              : widget.receipts![_selectedReceiptIndex])
         : (viewModel.receiptDetail ?? widget.receipt!);
     _openManualEditSheet(
       context,
@@ -73,8 +100,55 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
   }
 
   /// Calls viewModel.confirmReceipt()
-  void konfirmasiSimpan() {
-    context.read<ReceiptViewModel>().confirmReceipt();
+  void konfirmasiSimpan() async {
+    final viewModel = context.read<ReceiptViewModel>();
+    await viewModel.confirmReceipt();
+    if (mounted && viewModel.currentStep == ReceiptScanStep.confirmed) {
+      showToast(
+        context: context,
+        builder: (context, overlay) =>
+            ToastFormatter.success('Struk berhasil disimpan!'),
+        location: ToastLocation.bottomRight,
+      );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider.value(
+            value: viewModel,
+            child: ReceiptUploadPage(
+              image: widget.image,
+              images: widget.images,
+              receipt: widget.isBatchMode ? null : viewModel.receiptDetail,
+              receipts: widget.isBatchMode ? viewModel.batchReceipts : null,
+              isBatchMode: widget.isBatchMode,
+              isError: false,
+            ),
+          ),
+        ),
+      );
+    } else if (mounted && viewModel.errorMessage != null) {
+      showToast(
+        context: context,
+        builder: (context, overlay) =>
+            ToastFormatter.error(viewModel.errorMessage!),
+        location: ToastLocation.bottomRight,
+      );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider.value(
+            value: viewModel,
+            child: ReceiptUploadPage(
+              image: widget.image,
+              images: widget.images,
+              receipt: widget.isBatchMode ? null : viewModel.receiptDetail,
+              receipts: widget.isBatchMode ? viewModel.batchReceipts : null,
+              isBatchMode: widget.isBatchMode,
+              isError: true,
+              errorMessage: viewModel.errorMessage,
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -89,39 +163,72 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
         ? _buildBatchContent(context, viewModel)
         : _buildSingleContent(context, viewModel);
 
-    return Stack(
-      children: [
-        if (widget.useScaffold)
-          Scaffold(
-            headers: [
-              AppBar(
-                title: Text(widget.isBatchMode
-                    ? 'Hasil Parsing Batch AI'
-                    : 'Review Hasil Scan'),
-                leading: [
-                  IconButton.ghost(
-                    onPressed: () => viewModel.cancelScan(),
-                    icon: const Icon(LucideIcons.arrowLeft),
-                  ),
-                ],
+    return DrawerOverlay(
+      child: Stack(
+        children: [
+          if (widget.useScaffold)
+            Scaffold(
+              headers: [
+                AppBar(
+                  title: const Text('Scan Struk'),
+                  leading: [
+                    IconButton.ghost(
+                      onPressed: () => viewModel.cancelScan(),
+                      icon: const Icon(LucideIcons.arrowLeft),
+                    ),
+                  ],
+                ),
+              ],
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Stepper(
+                        controller: _stepperController,
+                        direction: Axis.horizontal,
+                        variant: StepVariant.circleAlt,
+                        steps: [
+                          const Step(
+                            title: Text('Ambil Foto'),
+                            contentBuilder: _buildEmptyStepContent,
+                          ),
+                          const Step(
+                            title: Text('Scan Foto'),
+                            contentBuilder: _buildEmptyStepContent,
+                          ),
+                          Step(
+                            title: const Text('Review AI'),
+                            contentBuilder: (context) => mainContent,
+                          ),
+                          const Step(
+                            title: Text('Simpan Struk'),
+                            contentBuilder: _buildEmptyStepContent,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-            child: mainContent,
-          )
-        else
-          mainContent,
-        if (viewModel.isLoading)
-          const Positioned.fill(
-            child: ScanAnimationOverlay(
-              text: 'Memproses ulang dengan konteks AI...',
+            )
+          else
+            mainContent,
+          if (viewModel.isLoading && !viewModel.isUploading)
+            const Positioned.fill(
+              child: ScanAnimationOverlay(
+                text: 'Memproses ulang dengan konteks AI...',
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 
+  static Widget _buildEmptyStepContent(BuildContext context) =>
+      const SizedBox.shrink();
+
   // ---------------------------------------------------------------------------
-  // Single-mode content (reuses ResponsePreviewPage logic)
+  // Single-mode content
   // ---------------------------------------------------------------------------
 
   Widget _buildSingleContent(BuildContext context, ReceiptViewModel viewModel) {
@@ -207,7 +314,12 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
                     return SecondaryButton(
                       onPressed: viewModel.isLoading
                           ? null
-                          : () => showKoreksiDrawer(),
+                          : () => _openManualEditSheet(
+                              context,
+                              viewModel,
+                              receipt,
+                              null,
+                            ),
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -223,14 +335,22 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
               const Gap(16),
               Expanded(
                 child: PrimaryButton(
-                  onPressed:
-                      viewModel.isLoading ? null : () => konfirmasiSimpan(),
-                  child: const Row(
+                  onPressed: viewModel.isLoading || viewModel.isUploading
+                      ? null
+                      : () => konfirmasiSimpan(),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(LucideIcons.check),
-                      Gap(8),
-                      Text('Simpan Data'),
+                      if (viewModel.isUploading)
+                        const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(),
+                        )
+                      else
+                        const Icon(LucideIcons.check),
+                      const Gap(8),
+                      Text(viewModel.isUploading ? 'Menyimpan...' : 'Simpan Data'),
                     ],
                   ),
                 ),
@@ -270,9 +390,9 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Struk ${_selectedReceiptIndex + 1} dari ${receipts.length}')
-                  .medium()
-                  .semiBold(),
+              Text(
+                'Struk ${_selectedReceiptIndex + 1} dari ${receipts.length}',
+              ).medium().semiBold(),
               Row(
                 children: [
                   OutlineButton(
@@ -330,8 +450,7 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
                         MaterialPageRoute(
                           builder: (context) => FullScreenImagePage(
                             imageFile: currentImg,
-                            title:
-                                'Foto Struk ${_selectedReceiptIndex + 1}',
+                            title: 'Foto Struk ${_selectedReceiptIndex + 1}',
                           ),
                         ),
                       );
@@ -363,31 +482,48 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
           child: Row(
             children: [
               Expanded(
-                child: SecondaryButton(
-                  onPressed: viewModel.isLoading || currentReceipt == null
-                      ? null
-                      : () => showKoreksiDrawer(),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(LucideIcons.pencil, size: 16),
-                      Gap(8),
-                      Text('Ubah Data'),
-                    ],
-                  ),
+                child: Builder(
+                  builder: (context) {
+                    return SecondaryButton(
+                      onPressed: viewModel.isLoading || currentReceipt == null
+                          ? null
+                          : () => _openManualEditSheet(
+                              context,
+                              viewModel,
+                              currentReceipt,
+                              _selectedReceiptIndex,
+                            ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(LucideIcons.pencil, size: 16),
+                          Gap(8),
+                          Text('Ubah Data'),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
               const Gap(16),
               Expanded(
                 child: PrimaryButton(
-                  onPressed:
-                      viewModel.isLoading ? null : () => konfirmasiSimpan(),
-                  child: const Row(
+                  onPressed: viewModel.isLoading || viewModel.isUploading
+                      ? null
+                      : () => konfirmasiSimpan(),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(LucideIcons.check, size: 16),
-                      Gap(8),
-                      Text('Simpan Semua'),
+                      if (viewModel.isUploading)
+                        const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(),
+                        )
+                      else
+                        const Icon(LucideIcons.check, size: 16),
+                      const Gap(8),
+                      Text(viewModel.isUploading ? 'Menyimpan...' : 'Simpan Semua'),
                     ],
                   ),
                 ),
@@ -409,15 +545,19 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
     Receipt initialReceipt,
     int? batchIndex,
   ) {
-    openDrawer(
+    showModalBottomSheet(
       context: context,
-      position: OverlayPosition.bottom,
-      builder: (drawerContext) {
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
         return _ManualEditSheet(
           initialReceipt: initialReceipt,
           categories: viewModel.categories,
           onSave: (updatedReceipt) {
-            viewModel.updateReceiptManual(updatedReceipt, batchIndex: batchIndex);
+            viewModel.updateReceiptManual(
+              updatedReceipt,
+              batchIndex: batchIndex,
+            );
           },
         );
       },
@@ -432,22 +572,19 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context)
-            .colorScheme
-            .primary
-            .withValues(alpha: 0.1),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Theme.of(context)
-              .colorScheme
-              .primary
-              .withValues(alpha: 0.2),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
         ),
       ),
       child: Row(
         children: [
-          Icon(Icons.check_circle,
-              color: Theme.of(context).colorScheme.primary, size: 32),
+          Icon(
+            Icons.check_circle,
+            color: Theme.of(context).colorScheme.primary,
+            size: 32,
+          ),
           const Gap(12),
           Expanded(
             child: Column(
@@ -456,13 +593,13 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
                 Text(
                   'Ekstraksi Berhasil!',
                   style: Theme.of(context).typography.base.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
-                const Text('AI berhasil menguraikan data struk belanja Anda.')
-                    .xSmall()
-                    .muted(),
+                const Text(
+                  'AI berhasil menguraikan data struk belanja Anda.',
+                ).xSmall().muted(),
               ],
             ),
           ),
@@ -472,7 +609,7 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
   }
 
   Widget _buildParsedReceipt(BuildContext context, Receipt receipt) {
-    return Card(
+    return shadcn.Card(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,9 +618,17 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
           const Gap(12),
           _buildDataRow('Nama Toko', receipt.storeName),
           _buildDataRow('Kategori', receipt.categoryName ?? 'Lainnya'),
-          _buildDataRow('Tanggal', receipt.date),
           _buildDataRow(
-              'Total', 'Rp ${receipt.totalAmount.toStringAsFixed(0)}'),
+            'Tanggal',
+            FormatUtils.formatIndonesianDate(DateTime.tryParse(receipt.date)),
+          ),
+          if (receipt.discount != null && receipt.discount! > 0)
+            _buildDataRow(
+              'Diskon',
+              FormatUtils.formatRupiah(receipt.discount!),
+            ),
+          _buildDataRow('Total Items', FormatUtils.formatRupiah(receipt.totalItemAmount ?? receipt.totalAmount)),
+          _buildDataRow('Total', FormatUtils.formatRupiah(receipt.totalAmount)),
           const Gap(16),
           const Divider(),
           const Gap(16),
@@ -500,14 +645,21 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('${item.quantity} x Rp ${item.price.toStringAsFixed(0)}')
-                          .xSmall()
-                          .muted(),
-                      Text('Rp ${item.totalPrice.toStringAsFixed(0)}')
-                          .small()
-                          .semiBold(),
+                      Text(
+                        '${FormatUtils.formatDecimalRibuan(item.quantity)} x ${FormatUtils.formatRupiah(item.price)}',
+                      ).xSmall().muted(),
+                      Text(
+                        FormatUtils.formatRupiah(item.totalPrice),
+                      ).small().semiBold(),
                     ],
                   ),
+                  if (item.discount != null && item.discount! > 0)
+                    Text(
+                      'Diskon: ${FormatUtils.formatRupiah(item.discount!)}',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ).xSmall(),
                 ],
               ),
             ),
@@ -523,13 +675,8 @@ class _ReceiptParsedPageState extends State<ReceiptParsedPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 100,
-            child: Text(label).xSmall().muted(),
-          ),
-          Expanded(
-            child: Text(value).small().semiBold(),
-          ),
+          SizedBox(width: 100, child: Text(label).xSmall().muted()),
+          Expanded(child: Text(value).small().semiBold()),
         ],
       ),
     );
@@ -541,6 +688,7 @@ class _ItemEditGroup {
   final TextEditingController nameController;
   final TextEditingController quantityController;
   final TextEditingController priceController;
+  final TextEditingController discountController;
   final TextEditingController totalPriceController;
   String? categoryId;
   String? categoryName;
@@ -550,6 +698,7 @@ class _ItemEditGroup {
     required this.nameController,
     required this.quantityController,
     required this.priceController,
+    required this.discountController,
     required this.totalPriceController,
     this.categoryId,
     this.categoryName,
@@ -559,9 +708,20 @@ class _ItemEditGroup {
     return _ItemEditGroup(
       id: item.id,
       nameController: TextEditingController(text: item.name),
-      quantityController: TextEditingController(text: item.quantity.toString()),
-      priceController: TextEditingController(text: item.price.toStringAsFixed(0)),
-      totalPriceController: TextEditingController(text: item.totalPrice.toStringAsFixed(0)),
+      quantityController: TextEditingController(
+        text: FormatUtils.formatDecimalRibuan(item.quantity),
+      ),
+      priceController: TextEditingController(
+        text: FormatUtils.formatDecimalRibuan(item.price),
+      ),
+      discountController: TextEditingController(
+        text: item.discount != null && item.discount! > 0
+            ? FormatUtils.formatDecimalRibuan(item.discount)
+            : '',
+      ),
+      totalPriceController: TextEditingController(
+        text: FormatUtils.formatDecimalRibuan(item.totalPrice),
+      ),
       categoryId: item.categoryId,
       categoryName: item.categoryName,
     );
@@ -571,6 +731,7 @@ class _ItemEditGroup {
     nameController.dispose();
     quantityController.dispose();
     priceController.dispose();
+    discountController.dispose();
     totalPriceController.dispose();
   }
 }
@@ -593,7 +754,7 @@ class _ManualEditSheet extends StatefulWidget {
 class _ManualEditSheetState extends State<_ManualEditSheet> {
   late TextEditingController _storeNameController;
   late TextEditingController _dateController;
-  late TextEditingController _totalAmountController;
+  late TextEditingController _totalItemAmountController;
   String? _selectedCategoryId;
   String? _selectedCategoryName;
   late List<_ItemEditGroup> _itemGroups;
@@ -601,19 +762,26 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
   @override
   void initState() {
     super.initState();
-    _storeNameController = TextEditingController(text: widget.initialReceipt.storeName);
+    _storeNameController = TextEditingController(
+      text: widget.initialReceipt.storeName,
+    );
     _dateController = TextEditingController(text: widget.initialReceipt.date);
-    _totalAmountController = TextEditingController(text: widget.initialReceipt.totalAmount.toStringAsFixed(0));
+    _totalItemAmountController = TextEditingController(
+      text: FormatUtils.formatDecimalRibuan(
+          widget.initialReceipt.totalItemAmount ?? widget.initialReceipt.totalAmount),
+    );
     _selectedCategoryId = widget.initialReceipt.categoryId;
     _selectedCategoryName = widget.initialReceipt.categoryName;
-    _itemGroups = widget.initialReceipt.items.map((item) => _ItemEditGroup.fromItem(item)).toList();
+    _itemGroups = widget.initialReceipt.items
+        .map((item) => _ItemEditGroup.fromItem(item))
+        .toList();
   }
 
   @override
   void dispose() {
     _storeNameController.dispose();
     _dateController.dispose();
-    _totalAmountController.dispose();
+    _totalItemAmountController.dispose();
     for (final group in _itemGroups) {
       group.dispose();
     }
@@ -621,29 +789,38 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
   }
 
   void _recalculateItemTotal(_ItemEditGroup group) {
-    final qty = int.tryParse(group.quantityController.text.trim()) ?? 0;
-    final price = double.tryParse(group.priceController.text.trim()) ?? 0.0;
-    group.totalPriceController.text = (qty * price).toStringAsFixed(0);
+    final qty = FormatUtils.parseRupiahToDouble(
+      group.quantityController.text,
+    ).toInt();
+    final price = FormatUtils.parseRupiahToDouble(group.priceController.text);
+    final discount = FormatUtils.parseRupiahToDouble(
+      group.discountController.text,
+    );
+    final total = (qty * price) - discount;
+    group.totalPriceController.text = FormatUtils.formatDecimalRibuan(total);
     _recalculateGrandTotal();
   }
 
   void _recalculateGrandTotal() {
-    double grandTotal = 0.0;
+    double totalItemAmount = 0.0;
     for (final group in _itemGroups) {
-      grandTotal += double.tryParse(group.totalPriceController.text.trim()) ?? 0.0;
+      final qty = FormatUtils.parseRupiahToDouble(group.quantityController.text).toInt();
+      final price = FormatUtils.parseRupiahToDouble(group.priceController.text);
+      totalItemAmount += (qty * price);
     }
-    _totalAmountController.text = grandTotal.toStringAsFixed(0);
-    setState(() {});
+    _totalItemAmountController.text = FormatUtils.formatDecimalRibuan(totalItemAmount);
   }
 
   void _addItem() {
     setState(() {
-      _itemGroups.add(
+      _itemGroups.insert(
+        0,
         _ItemEditGroup(
           nameController: TextEditingController(text: ''),
-          quantityController: TextEditingController(text: '1'),
-          priceController: TextEditingController(text: '0'),
-          totalPriceController: TextEditingController(text: '0'),
+          quantityController: TextEditingController(text: ''),
+          priceController: TextEditingController(text: ''),
+          discountController: TextEditingController(text: ''),
+          totalPriceController: TextEditingController(text: ''),
         ),
       );
     });
@@ -661,42 +838,82 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
   void _save() {
     final items = _itemGroups.map((group) {
       final qty = int.tryParse(group.quantityController.text.trim()) ?? 1;
-      final price = double.tryParse(group.priceController.text.trim()) ?? 0.0;
-      final total = double.tryParse(group.totalPriceController.text.trim()) ?? (qty * price).toDouble();
+      final price = FormatUtils.parseRupiahToDouble(
+        group.priceController.text.trim(),
+      );
+      final discount = FormatUtils.parseRupiahToDouble(
+        group.discountController.text.trim(),
+      );
+      final total = FormatUtils.parseRupiahToDouble(
+        group.totalPriceController.text.trim(),
+      );
       return ReceiptItem(
         id: group.id,
-        name: group.nameController.text.trim().isEmpty ? 'Item Belanja' : group.nameController.text.trim(),
+        name: group.nameController.text.trim().isEmpty
+            ? 'Item Belanja'
+            : group.nameController.text.trim(),
         quantity: qty,
         price: price,
+        discount: discount > 0 ? discount : null,
         totalPrice: total,
         categoryId: group.categoryId,
         categoryName: group.categoryName,
       );
     }).toList();
 
-    final total = double.tryParse(_totalAmountController.text.trim()) ??
-        items.fold<double>(0.0, (sum, item) => sum + item.totalPrice);
+    double totalDiscount = 0.0;
+    double grandTotal = 0.0;
+
+    for (final group in _itemGroups) {
+      totalDiscount += FormatUtils.parseRupiahToDouble(
+        group.discountController.text,
+      );
+      grandTotal += FormatUtils.parseRupiahToDouble(
+        group.totalPriceController.text,
+      );
+    }
+
+    final total = grandTotal;
+
+    final totalItemAmount = FormatUtils.parseRupiahToDouble(
+      _totalItemAmountController.text.trim(),
+    );
 
     final updatedReceipt = widget.initialReceipt.copyWith(
-      storeName: _storeNameController.text.trim().isEmpty ? 'Toko Tidak Diketahui' : _storeNameController.text.trim(),
-      date: _dateController.text.trim().isEmpty ? DateTime.now().toIso8601String().split('T').first : _dateController.text.trim(),
+      storeName: _storeNameController.text.trim().isEmpty
+          ? 'Toko Tidak Diketahui'
+          : _storeNameController.text.trim(),
+      date: _dateController.text.trim(),
       categoryId: _selectedCategoryId,
       categoryName: _selectedCategoryName,
       items: items,
+      discount: totalDiscount > 0 ? totalDiscount : null,
       totalAmount: total,
+      totalItemAmount: totalItemAmount,
     );
 
     widget.onSave(updatedReceipt);
-    closeOverlay(context);
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
+
     return Container(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.88,
+        maxWidth: 600,
       ),
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.only(
+        top: 24,
+        left: 24,
+        right: 24,
+        bottom: 24 + bottomInset,
+      ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.background,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -707,7 +924,7 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
               const Text('Ubah Data Struk').large().semiBold(),
               IconButton.ghost(
                 icon: const Icon(LucideIcons.x, size: 20),
-                onPressed: () => closeOverlay(context),
+                onPressed: () => Navigator.of(context).pop(),
               ),
             ],
           ),
@@ -716,16 +933,14 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
             'Koreksi atau lengkapi informasi toko, tanggal, kategori, serta daftar item struk belanja secara langsung.',
           ).muted().small(),
           const Gap(16),
-          const Divider(),
-          const Gap(16),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // 1. Informasi Umum
+                  const Gap(16),
                   const Text('Informasi Umum').medium().semiBold(),
-                  const Gap(12),
+                  const Gap(16),
                   const Text('Nama Toko').small().medium(),
                   const Gap(6),
                   TextField(
@@ -735,9 +950,19 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
                   const Gap(12),
                   const Text('Tanggal Belanja').small().medium(),
                   const Gap(6),
-                  TextField(
-                    controller: _dateController,
-                    placeholder: const Text('YYYY-MM-DD atau DD/MM/YYYY'),
+                  DatePicker(
+                    value:
+                        DateTime.tryParse(_dateController.text.trim()) ??
+                        DateTime.now(),
+                    onChanged: (DateTime? date) {
+                      if (date != null) {
+                        _dateController.text = date
+                            .toIso8601String()
+                            .split('T')
+                            .first;
+                      }
+                    },
+                    placeholder: const Text('Pilih Tanggal Belanja'),
                   ),
                   const Gap(12),
                   const Text('Kategori Pengeluaran').small().medium(),
@@ -749,7 +974,9 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
                       setState(() {
                         _selectedCategoryId = value;
                         if (value != null) {
-                          final match = widget.categories.where((c) => c.id == value);
+                          final match = widget.categories.where(
+                            (c) => c.id == value,
+                          );
                           if (match.isNotEmpty) {
                             _selectedCategoryName = match.first.nama;
                           }
@@ -774,10 +1001,12 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
                         final filtered = searchQuery == null
                             ? widget.categories
                             : widget.categories
-                                .where((c) => c.nama
-                                    .toLowerCase()
-                                    .contains(searchQuery.toLowerCase()))
-                                .toList();
+                                  .where(
+                                    (c) => c.nama.toLowerCase().contains(
+                                      searchQuery.toLowerCase(),
+                                    ),
+                                  )
+                                  .toList();
                         return SelectItemList(
                           children: [
                             for (final category in filtered)
@@ -791,21 +1020,43 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
                     ),
                   ),
                   const Gap(12),
-                  const Text('Total Belanja (Rp)').small().medium(),
+                  const Text('Total Items (Rp)').small().medium(),
                   const Gap(6),
                   TextField(
-                    controller: _totalAmountController,
+                    controller: _totalItemAmountController,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [RupiahInputFormatter()],
                     placeholder: const Text('0'),
+                    readOnly: true,
+                    features: [
+                      shadcn.InputLeadingFeature(
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 12.0,
+                            right: 8.0,
+                          ),
+                          child: Text(
+                            'Rp',
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.mutedForeground,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const Gap(24),
+                  const Gap(16),
                   const Divider(),
                   const Gap(16),
                   // 2. Daftar Item Struk
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Daftar Item (${_itemGroups.length})').medium().semiBold(),
+                      Text(
+                        'Daftar Item (${_itemGroups.length})',
+                      ).medium().semiBold(),
                       OutlineButton(
                         size: ButtonSize.small,
                         onPressed: _addItem,
@@ -828,7 +1079,9 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
                         color: Theme.of(context).colorScheme.muted,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Text('Belum ada item belanja. Klik "+ Tambah Item" untuk menambahkan.').small().muted(),
+                      child: const Text(
+                        'Belum ada item belanja. Klik "+ Tambah Item" untuk menambahkan.',
+                      ).small().muted(),
                     )
                   else
                     for (int i = 0; i < _itemGroups.length; i++)
@@ -845,13 +1098,14 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               SecondaryButton(
-                onPressed: () => closeOverlay(context),
+                onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Batal'),
               ),
               const Gap(12),
               PrimaryButton(
                 onPressed: _save,
                 child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(LucideIcons.check, size: 16),
                     Gap(8),
@@ -866,83 +1120,145 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
     );
   }
 
-  Widget _buildItemEditorCard(BuildContext context, _ItemEditGroup group, int index) {
+  Widget _buildItemEditorCard(
+    BuildContext context,
+    _ItemEditGroup group,
+    int index,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: Card(
+      child: shadcn.Card(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Item #${index + 1}').small().semiBold(),
-              IconButton.ghost(
-                size: ButtonSize.small,
-                icon: Icon(
-                  LucideIcons.trash2,
-                  size: 16,
-                  color: Theme.of(context).colorScheme.destructive,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Item #${index + 1}').small().semiBold(),
+                IconButton.ghost(
+                  size: ButtonSize.small,
+                  icon: Icon(
+                    LucideIcons.trash2,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.destructive,
+                  ),
+                  onPressed: () => _removeItem(index),
                 ),
-                onPressed: () => _removeItem(index),
-              ),
-            ],
-          ),
-          const Gap(8),
-          const Text('Nama Item').xSmall().muted(),
-          const Gap(4),
-          TextField(
-            controller: group.nameController,
-            placeholder: const Text('Nama produk atau barang'),
-          ),
-          const Gap(8),
-          Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Jumlah').xSmall().muted(),
-                    const Gap(4),
-                    TextField(
-                      controller: group.quantityController,
-                      keyboardType: TextInputType.number,
-                      onChanged: (_) => _recalculateItemTotal(group),
+              ],
+            ),
+            const Gap(8),
+            const Text('Nama Item').xSmall().muted(),
+            const Gap(4),
+            TextField(
+              controller: group.nameController,
+              placeholder: const Text('Nama produk atau barang'),
+            ),
+            const Gap(8),
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Jumlah').xSmall().muted(),
+                      const Gap(4),
+                      TextField(
+                        controller: group.quantityController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [RupiahInputFormatter()],
+                        onChanged: (_) => _recalculateItemTotal(group),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(12),
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Harga Satuan (Rp)').xSmall().muted(),
+                      const Gap(4),
+                      TextField(
+                        controller: group.priceController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [RupiahInputFormatter()],
+                        onChanged: (_) => _recalculateItemTotal(group),
+                        features: [
+                          shadcn.InputLeadingFeature(
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 12.0,
+                                right: 8.0,
+                              ),
+                              child: Text(
+                                'Rp',
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.mutedForeground,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Gap(8),
+            const Text('Diskon Item (Rp)').xSmall().muted(),
+            const Gap(4),
+            TextField(
+              controller: group.discountController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [RupiahInputFormatter()],
+              onChanged: (_) => _recalculateItemTotal(group),
+              placeholder: const Text('Opsional'),
+              features: [
+                shadcn.InputLeadingFeature(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0, right: 8.0),
+                    child: Text(
+                      'Rp',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.mutedForeground,
+                      ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              const Gap(12),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Harga Satuan (Rp)').xSmall().muted(),
-                    const Gap(4),
-                    TextField(
-                      controller: group.priceController,
-                      keyboardType: TextInputType.number,
-                      onChanged: (_) => _recalculateItemTotal(group),
+              ],
+            ),
+            const Gap(8),
+            const Text('Subtotal / Total Harga Item (Rp)').xSmall().muted(),
+            const Gap(4),
+            TextField(
+              controller: group.totalPriceController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [RupiahInputFormatter()],
+              onChanged: (_) => _recalculateGrandTotal(),
+              readOnly: true,
+              features: [
+                shadcn.InputLeadingFeature(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0, right: 8.0),
+                    child: Text(
+                      'Rp',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.mutedForeground,
+                      ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const Gap(8),
-          const Text('Subtotal / Total Harga Item (Rp)').xSmall().muted(),
-          const Gap(4),
-          TextField(
-            controller: group.totalPriceController,
-            keyboardType: TextInputType.number,
-            onChanged: (_) => _recalculateGrandTotal(),
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 }

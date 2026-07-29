@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -23,7 +24,7 @@ import 'package:snap_notes_mvvm/features/notifikasi/viewmodels/notifikasi_viewmo
 
 final GetIt getIt = GetIt.instance;
 
-Future<void> initDependencies() async {
+Future<void> initDependencies(GlobalKey<NavigatorState> navigatorKey) async {
   // Inisialisasi lokalisasi tanggal Indonesia
   await initializeDateFormatting('id_ID', null);
 
@@ -44,7 +45,7 @@ Future<void> initDependencies() async {
   getIt.registerSingleton<FlutterSecureStorage>(secureStorage);
 
   // Dio Client
-  final dioClient = DioClient(storage: secureStorage);
+  final dioClient = DioClient(storage: secureStorage, navigatorKey: navigatorKey);
   getIt.registerSingleton<Dio>(dioClient.dio);
 
   // Local Notifications
@@ -117,4 +118,3 @@ Future<void> initDependencies() async {
     () => NotifikasiViewModel(notifikasiService: getIt()),
   );
 }
-

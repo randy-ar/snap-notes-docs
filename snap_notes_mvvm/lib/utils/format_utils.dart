@@ -15,6 +15,16 @@ class FormatUtils {
     return formatter.format(value);
   }
 
+  /// Memformat angka (int/double) menjadi format decimal ribuan (misal: 1.000).
+  /// Jika nilainya null, akan mengembalikan '0'.
+  static String formatDecimalRibuan(num? value) {
+    if (value == null) {
+      return '0';
+    }
+    final formatter = NumberFormat.decimalPattern('id_ID');
+    return formatter.format(value);
+  }
+
   /// Memformat DateTime menjadi string tanggal berbahasa Indonesia (misal: 12 Juli 2026).
   /// Jika nilainya null, akan mengembalikan tanda strip '-'.
   static String formatIndonesianDate(DateTime? date) {

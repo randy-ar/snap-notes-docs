@@ -31,7 +31,7 @@ class RupiahInputFormatter extends TextInputFormatter {
 
     // Hitung posisi kursor secara presisi agar tidak melompat ketika ribuan ditambahkan/dikurangi
     int selectionIndex = newValue.selection.end;
-    
+
     int digitsBeforeCursor = 0;
     for (int i = 0; i < selectionIndex && i < newValue.text.length; i++) {
       if (RegExp(r'[0-9]').hasMatch(newValue.text[i])) {
@@ -41,11 +41,14 @@ class RupiahInputFormatter extends TextInputFormatter {
 
     int newSelectionIndex = 0;
     int digitCount = 0;
-    while (newSelectionIndex < formattedText.length && digitCount < digitsBeforeCursor) {
-      if (RegExp(r'[0-9]').hasMatch(formattedText[newSelectionIndex])) {
+    for (int i = 0; i < formattedText.length; i++) {
+      if (digitCount >= digitsBeforeCursor) {
+        break;
+      }
+      if (RegExp(r'[0-9]').hasMatch(formattedText[i])) {
         digitCount++;
       }
-      newSelectionIndex++;
+      newSelectionIndex = i + 1;
     }
 
     return TextEditingValue(

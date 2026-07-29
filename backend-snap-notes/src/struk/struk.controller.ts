@@ -3,7 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { SupabaseAuthGuard } from '../auth/guards/supabase-auth.guard';
 import { StrukService } from './struk.service';
-import { ScanStrukDto } from './dto/scan-struk.dto';
+import { ScanStrukBatchDto } from './dto/scan-struk.dto';
 import { ReparseStrukDto } from './dto/reparse-struk.dto';
 import { UpdateStrukDto } from './dto/update-struk.dto';
 import { StrukResponseDto } from './dto/struk-response.dto';
@@ -21,26 +21,53 @@ interface RequestWithUser extends Request {
 export class StrukController {
   constructor(private readonly strukService: StrukService) {}
 
-  @Post('scan')
+  @Post('scan/analyze')
   @UseGuards(SupabaseAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Scan struk dengan OCR dan AI' })
-  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Analyze struk batch dengan OCR dan AI (tanpa save)' })
   @ApiBody({
-    description: 'Scan struk dengan gambar dan teks OCR',
-    type: ScanStrukDto,
+    description: 'Data teks OCR batch untuk dianalisis oleh AI',
+    type: ScanStrukBatchDto,
   })
-  @ApiResponse({ status: 201, description: 'Struk berhasil diproses', type: StrukResponseDto })
+  @ApiResponse({ status: 200, description: 'Struk batch berhasil dianalisis', type: [StrukResponseDto] })
   @ApiResponse({ status: 400, description: 'Data tidak valid' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 503, description: 'Service AI tidak tersedia' })
+  async analyzeStruk(
+    @Req() req: RequestWithUser,
+    @Body() dto: ScanStrukBatchDto,
+  ): Promise<StrukResponseDto[]> {
+    return this.strukService.analyzeStrukBatch(req.user.id, dto);
+  }
+
+  @Post('scan/save')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Save hasil analisis struk ke database dan storage' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Data struk yang sudah dianalisis dan gambar struk',
+    schema: {
+      type: 'object',
+      properties: {
+        receiptData: { type: 'string' },
+        gambar: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 201, description: 'Struk berhasil disimpan', type: StrukResponseDto })
+  @ApiResponse({ status: 400, description: 'Data tidak valid' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @UseInterceptors(FileInterceptor('gambar'))
-  async scanStruk(
+  async saveStruk(
     @Req() req: RequestWithUser,
     @UploadedFile() file: Express.Multer.File,
-    @Body() dto: ScanStrukDto,
+    @Body('receiptData') receiptData: string,
   ): Promise<StrukResponseDto> {
-    return this.strukService.scanStruk(req.user.id, file, dto);
+    return this.strukService.saveAnalyzedStruk(req.user.id, file, receiptData);
   }
 
   @Post(':id/reparse')

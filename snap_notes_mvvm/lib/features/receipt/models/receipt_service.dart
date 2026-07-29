@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart' show decodeImageFromList, Rect;
+import 'package:image/image.dart' as img;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart' hide TextLine;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart' as mlkit show RecognizedText;
 import 'package:snap_notes_mvvm/core/error/exceptions.dart';
@@ -15,15 +16,43 @@ class ReceiptService {
 
   ReceiptService({required this._dio});
 
+  /// Memutar gambar file sebesar angle tertentu (default 90)
+  Future<File> rotateImageFile(File image, {int angle = 90}) async {
+    try {
+      final bytes = await image.readAsBytes();
+      final decodedImage = img.decodeImage(bytes);
+      if (decodedImage == null) throw Exception('Gagal mendecode gambar untuk rotasi');
+
+      img.Image rotatedImage;
+      if (angle == 90) {
+        rotatedImage = img.copyRotate(decodedImage, angle: 90);
+      } else if (angle == -90 || angle == 270) {
+        rotatedImage = img.copyRotate(decodedImage, angle: -90);
+      } else if (angle == 180) {
+        rotatedImage = img.copyRotate(decodedImage, angle: 180);
+      } else {
+        rotatedImage = img.copyRotate(decodedImage, angle: angle);
+      }
+
+      final rotatedBytes = img.encodeJpg(rotatedImage);
+      final newPath = '${image.path}_rotated_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final newFile = File(newPath);
+      await newFile.writeAsBytes(rotatedBytes);
+      return newFile;
+    } catch (e) {
+      throw LocalException('Gagal memutar gambar: ${e.toString()}');
+    }
+  }
+
   /// Melakukan ekstraksi teks menggunakan Google ML Kit
   Future<local.RecognizedText> extractTextFromImage(File image) async {
     try {
       final inputImage = InputImage.fromFile(image);
       final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
-      
+
       final mlkit.RecognizedText mlkitText = await textRecognizer.processImage(inputImage);
       await textRecognizer.close();
-      
+
       // Mengambil dimensi gambar secara dinamis
       final decodedImage = await decodeImageFromList(await image.readAsBytes());
       final imageWidth = decodedImage.width.toDouble();
@@ -38,13 +67,13 @@ class ReceiptService {
           groupedLines.add([mlkitLine]);
         } else {
           final currentGroup = groupedLines.last;
-          
+
           double groupTop = currentGroup.map((l) => l.boundingBox.top as double).reduce((a, b) => a < b ? a : b);
           double groupBottom = currentGroup.map((l) => l.boundingBox.bottom as double).reduce((a, b) => a > b ? a : b);
-          
+
           double lineCenter = (mlkitLine.boundingBox.top + mlkitLine.boundingBox.bottom) / 2;
           double lineHeight = mlkitLine.boundingBox.bottom - mlkitLine.boundingBox.top;
-          
+
           double threshold = lineHeight * 0.5;
 
           if (lineCenter >= (groupTop - threshold) && lineCenter <= (groupBottom + threshold)) {
@@ -88,42 +117,46 @@ class ReceiptService {
     }
   }
 
-  /// Parse struk dari hasil OCR
-  Future<Receipt> parseReceipt(
-    String rawText,
-    File image,
-    List<local.TextLine> lines,
-    double imageWidth,
-    double imageHeight,
-    [String? customPrompt]
+  /// Parse struk batch dari hasil OCR
+  Future<List<Receipt>> parseReceiptBatch(
+    List<Map<String, dynamic>> ocrDataBatch,
   ) async {
+    final startTime = DateTime.now();
+    print('[Client] parseReceiptBatch request started at $startTime');
     try {
-      final Map<String, dynamic> ocrDataMap = {
-        'rawText': rawText,
-        'imageSize': {
-          'width': imageWidth,
-          'height': imageHeight,
+      final response = await _dio.post(
+        '/api/struk/scan/analyze',
+        data: {
+          'ocrDataBatch': ocrDataBatch,
         },
-        'lines': lines.map((line) => {
-          'lineIndex': line.lineIndex,
-          'text': line.text,
-          'boundingBox': {
-            'left': line.boundingBox.left,
-            'top': line.boundingBox.top,
-            'right': line.boundingBox.right,
-            'bottom': line.boundingBox.bottom,
-          },
-        }).toList(),
-      };
-      
-      if (customPrompt != null && customPrompt.isNotEmpty) {
-        ocrDataMap['customPrompt'] = customPrompt;
-      }
+      );
 
-      final ocrData = jsonEncode(ocrDataMap);
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime).inMilliseconds;
+      print('[Client] parseReceiptBatch request completed in ${duration}ms at $endTime');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseData = response.data as Map<String, dynamic>;
+        final receiptsData = responseData['data'] as List;
+        return receiptsData.map((e) => Receipt.fromJson(e as Map<String, dynamic>)).toList();
+      } else {
+        throw ServerException('Failed to parse receipt batch: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime).inMilliseconds;
+      print('[Client] parseReceiptBatch request failed after ${duration}ms');
+      _handleDioException(e);
+      rethrow;
+    }
+  }
+
+  Future<Receipt> saveReceipt(Receipt receipt, File image) async {
+    try {
+      final receiptData = jsonEncode(receipt.toJson());
 
       final formData = FormData.fromMap({
-        'ocrData': ocrData,
+        'receiptData': receiptData,
         'gambar': await MultipartFile.fromFile(
           image.path,
           filename: image.path.split('/').last,
@@ -131,7 +164,7 @@ class ReceiptService {
       });
 
       final response = await _dio.post(
-        '/api/struk/scan',
+        '/api/struk/scan/save',
         data: formData,
         options: Options(
           contentType: 'multipart/form-data',
@@ -140,10 +173,10 @@ class ReceiptService {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = response.data as Map<String, dynamic>;
-        final receiptData = responseData['data'] as Map<String, dynamic>;
-        return Receipt.fromJson(receiptData);
+        final data = responseData['data'] as Map<String, dynamic>;
+        return Receipt.fromJson(data);
       } else {
-        throw ServerException('Failed to parse receipt: ${response.statusCode}');
+        throw ServerException('Failed to save receipt: ${response.statusCode}');
       }
     } on DioException catch (e) {
       _handleDioException(e);

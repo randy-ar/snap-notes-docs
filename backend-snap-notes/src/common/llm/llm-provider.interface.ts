@@ -2,6 +2,7 @@ export interface ParsedItemDto {
   nama: string;
   jumlah: number;
   harga_satuan: number;
+  diskon?: number;
   subtotal: number;
   kategori?: string;
 }
@@ -10,6 +11,8 @@ export interface ParsedStrukDto {
   nama_toko: string;
   tanggal: string;
   total: number;
+  totalItem?: number;
+  diskon?: number;
   kategori_toko?: string;
   item: ParsedItemDto[];
 }
@@ -31,5 +34,5 @@ export interface ImageSize {
 }
 
 export interface ILLMProvider {
-  parseStrukOCR(rawText: string, lines?: OcrLine[], imageSize?: ImageSize, customPrompt?: string, kategoriContext?: string): Promise<ParsedStrukDto>;
+  parseStrukOCRBatch(ocrDataBatch: any[], customPrompt?: string, kategoriContext?: string): Promise<ParsedStrukDto[]>;
 }

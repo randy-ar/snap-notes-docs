@@ -23,8 +23,30 @@ class ReceiptViewModel extends ChangeNotifier {
   ReceiptScanStep _currentStep = ReceiptScanStep.camera;
   ReceiptScanStep get currentStep => _currentStep;
 
+  bool _isBatchMode = false;
+  bool get isBatchMode => _isBatchMode;
+
+  List<File> _selectedImages = [];
+  List<File> get selectedImages => _selectedImages;
+
+  List<RecognizedText> _recognizedTexts = [];
+  List<RecognizedText> get recognizedTexts => _recognizedTexts;
+
+  List<Receipt> _batchReceipts = [];
+  List<Receipt> get batchReceipts => _batchReceipts;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+
+
+
+  bool _isUploading = false;
+  bool get isUploading => _isUploading;
+
+  void _setUploading(bool value) {
+    _isUploading = value;
+    notifyListeners();
+  }
 
   List<Receipt> _receiptList = [];
   List<Receipt> get receiptList => _receiptList;
@@ -66,10 +88,23 @@ class ReceiptViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateReceiptManual(Receipt updatedReceipt, {int? batchIndex}) {
+    if (_isBatchMode && batchIndex != null && batchIndex >= 0 && batchIndex < _batchReceipts.length) {
+      _batchReceipts[batchIndex] = updatedReceipt;
+    } else {
+      _receiptDetail = updatedReceipt;
+    }
+    notifyListeners();
+  }
+
   /// Memulai ulang alur kamera
   void startCamera() {
     _selectedImage = null;
+    _selectedImages = [];
+    _isBatchMode = false;
     _recognizedText = null;
+    _recognizedTexts = [];
+    _batchReceipts = [];
     _payload = null;
     _receiptDetail = null;
     _errorMessage = null;
@@ -79,11 +114,47 @@ class ReceiptViewModel extends ChangeNotifier {
     _setStep(ReceiptScanStep.camera);
   }
 
+  /// Gambar dipilih (mode batch)
+  void selectImages(List<File> images) {
+    if (images.isEmpty) return;
+    _isBatchMode = images.length > 1;
+    _selectedImages = images;
+    _selectedImage = images.first;
+    _errorMessage = null;
+    _setStep(ReceiptScanStep.imageSelected);
+  }
+
   /// Gambar dipilih/cropper selesai
   void selectImage(File image) {
     _selectedImage = image;
     _errorMessage = null;
     _setStep(ReceiptScanStep.imageSelected);
+  }
+
+  Future<void> processBatchCrop(List<File> files) async {
+    _setLoading(true);
+    _errorMessage = null;
+    try {
+      _isBatchMode = files.length > 1;
+      _selectedImages = files;
+      _selectedImage = files.first;
+      _recognizedTexts = [];
+      _batchReceipts = [];
+
+      for (var file in files) {
+        final recognizedText = await _receiptService.extractTextFromImage(file);
+        _recognizedTexts.add(recognizedText);
+      }
+
+      _recognizedText = _recognizedTexts.first;
+      _setStep(ReceiptScanStep.ocrPreview);
+    } catch (e, stack) {
+      _errorMessage = "Gagal memproses gambar batch: $e";
+      _stackTrace = stack.toString();
+      _setStep(ReceiptScanStep.error);
+    } finally {
+      _setLoading(false);
+    }
   }
 
   /// Batalkan pemindaian saat ini
@@ -102,6 +173,67 @@ class ReceiptViewModel extends ChangeNotifier {
       print(textResult.text);
       print('===============================');
       _recognizedText = textResult;
+      _setStep(ReceiptScanStep.ocrPreview);
+    } catch (e, stack) {
+      _errorMessage = e.toString();
+      _stackTrace = stack.toString();
+      _setStep(ReceiptScanStep.error);
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Memutar gambar batch pada indeks tertentu dan re-run OCR khusus untuk gambar tersebut
+  Future<void> rotateBatchImage(int index, {int angle = 90}) async {
+    if (!_isBatchMode || index < 0 || index >= _selectedImages.length) return;
+    _setLoading(true);
+    _errorMessage = null;
+    try {
+      final rotatedImage = await _receiptService.rotateImageFile(_selectedImages[index], angle: angle);
+      _selectedImages[index] = rotatedImage;
+      if (index == 0) _selectedImage = rotatedImage;
+
+      final textResult = await _receiptService.extractTextFromImage(rotatedImage);
+      _recognizedTexts[index] = textResult;
+      if (index == 0) _recognizedText = textResult;
+    } catch (e, stack) {
+      _errorMessage = 'Gagal memutar gambar: $e';
+      _stackTrace = stack.toString();
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Memutar gambar single dan re-run OCR
+  Future<void> rotateImage({int angle = 90}) async {
+    if (_selectedImage == null) return;
+    _setLoading(true);
+    _errorMessage = null;
+    try {
+      final rotatedImage = await _receiptService.rotateImageFile(_selectedImage!, angle: angle);
+      _selectedImage = rotatedImage;
+      await runOCR();
+    } catch (e, stack) {
+      _errorMessage = 'Gagal memutar gambar: $e';
+      _stackTrace = stack.toString();
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  Future<void> runBatchOCR() async {
+    if (_selectedImages.isEmpty) return;
+    _setLoading(true);
+    _errorMessage = null;
+    try {
+      _recognizedTexts = [];
+      for (final image in _selectedImages) {
+        final textResult = await _receiptService.extractTextFromImage(image);
+        _recognizedTexts.add(textResult);
+      }
+      if (_recognizedTexts.isNotEmpty) {
+        _recognizedText = _recognizedTexts.first;
+      }
       _setStep(ReceiptScanStep.ocrPreview);
     } catch (e, stack) {
       _errorMessage = e.toString();
@@ -143,21 +275,82 @@ class ReceiptViewModel extends ChangeNotifier {
     }
   }
 
+  /// Upload batch gambar ke backend
+  Future<void> uploadBatchToServer([String? customPrompt]) async {
+    if (_selectedImages.isEmpty || _recognizedTexts.isEmpty) return;
+    _setLoading(true);
+    _errorMessage = null;
+    try {
+      final ocrDataBatch = _recognizedTexts.map((recognizedText) {
+        final data = {
+          'rawText': recognizedText.text,
+          'imageSize': {
+            'width': recognizedText.imageWidth,
+            'height': recognizedText.imageHeight,
+          },
+          'lines': recognizedText.lines.map((line) => {
+            'lineIndex': line.lineIndex,
+            'text': line.text,
+            'boundingBox': {
+              'left': line.boundingBox.left,
+              'top': line.boundingBox.top,
+              'right': line.boundingBox.right,
+              'bottom': line.boundingBox.bottom,
+            },
+          }).toList(),
+        };
+        if (customPrompt != null && customPrompt.isNotEmpty) {
+          data['customPrompt'] = customPrompt;
+        }
+        return data;
+      }).toList();
+
+      _batchReceipts = await _receiptService.parseReceiptBatch(ocrDataBatch);
+
+      if (_batchReceipts.isNotEmpty) {
+        _receiptDetail = _batchReceipts.first;
+      }
+      _setStep(ReceiptScanStep.responsePreview);
+    } catch (e, stack) {
+      _errorMessage = e.toString();
+      _stackTrace = stack.toString();
+      _setStep(ReceiptScanStep.error);
+    } finally {
+      _setLoading(false);
+    }
+  }
+
   /// Upload gambar dan kirim rawText hasil OCR ke backend REST API (Gemini AI)
   Future<void> uploadToServer([String? customPrompt]) async {
     if (_selectedImage == null || _recognizedText == null) return;
     _setLoading(true);
     _errorMessage = null;
     try {
-      final receipt = await _receiptService.parseReceipt(
-        _recognizedText!.text,
-        _selectedImage!,
-        _recognizedText!.lines,
-        _recognizedText!.imageWidth,
-        _recognizedText!.imageHeight,
-        customPrompt,
-      );
-      _receiptDetail = receipt;
+      final ocrData = {
+        'rawText': _recognizedText!.text,
+        'imageSize': {
+          'width': _recognizedText!.imageWidth,
+          'height': _recognizedText!.imageHeight,
+        },
+        'lines': _recognizedText!.lines.map((line) => {
+          'lineIndex': line.lineIndex,
+          'text': line.text,
+          'boundingBox': {
+            'left': line.boundingBox.left,
+            'top': line.boundingBox.top,
+            'right': line.boundingBox.right,
+            'bottom': line.boundingBox.bottom,
+          },
+        }).toList(),
+      };
+
+      if (customPrompt != null && customPrompt.isNotEmpty) {
+        ocrData['customPrompt'] = customPrompt;
+      }
+
+      final receipts = await _receiptService.parseReceiptBatch([ocrData]);
+      _receiptDetail = receipts.first;
+
       _setStep(ReceiptScanStep.responsePreview);
     } catch (e, stack) {
       _errorMessage = e.toString();
@@ -214,9 +407,38 @@ class ReceiptViewModel extends ChangeNotifier {
   }
 
   /// Konfirmasi data struk yang sudah berhasil disimpan
-  void confirmReceipt() {
-    if (_receiptDetail != null) {
-      _setStep(ReceiptScanStep.confirmed);
+  Future<void> confirmReceipt() async {
+    if (_isBatchMode) {
+      if (_batchReceipts.isNotEmpty && _selectedImages.isNotEmpty) {
+        _setUploading(true);
+        try {
+          // Batch mode save sequence
+          for (int i = 0; i < _batchReceipts.length; i++) {
+             if (i < _selectedImages.length) {
+                await _receiptService.saveReceipt(_batchReceipts[i], _selectedImages[i]);
+             }
+          }
+          _setStep(ReceiptScanStep.confirmed);
+        } catch (e) {
+          _errorMessage = e.toString();
+          _setStep(ReceiptScanStep.error);
+        } finally {
+          _setUploading(false);
+        }
+      }
+    } else {
+      if (_receiptDetail != null && _selectedImage != null) {
+        _setUploading(true);
+        try {
+          await _receiptService.saveReceipt(_receiptDetail!, _selectedImage!);
+          _setStep(ReceiptScanStep.confirmed);
+        } catch (e) {
+          _errorMessage = e.toString();
+          _setStep(ReceiptScanStep.error);
+        } finally {
+          _setUploading(false);
+        }
+      }
     }
   }
 

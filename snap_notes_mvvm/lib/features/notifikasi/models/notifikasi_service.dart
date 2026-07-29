@@ -137,6 +137,11 @@ class NotifikasiService {
     }
   }
 
+  /// Membatalkan semua pengiriman notifikasi
+  Future<void> cancelAllNotifications() async {
+    await _notificationsPlugin.cancelAll();
+  }
+
   /// Schedule notifications
   Future<void> scheduleNotifications(List<PreferensiNotifikasi> preferensiList) async {
     await cancelAllNotifications();

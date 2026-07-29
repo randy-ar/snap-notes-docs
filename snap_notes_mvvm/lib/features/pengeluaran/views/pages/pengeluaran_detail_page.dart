@@ -266,8 +266,9 @@ class PengeluaranDetailView extends StatelessWidget {
           }
 
           final hasImage = p.struk?.imageUrl != null && p.struk!.imageUrl!.isNotEmpty;
+          final isStrukDetail = p.struk != null || hasImage;
 
-          if (hasImage) {
+          if (isStrukDetail) {
             return RefreshIndicator(
               onRefresh: () => context.read<PengeluaranViewModel>().loadPengeluaranDetail(pengeluaranId),
               child: SingleChildScrollView(
@@ -276,47 +277,49 @@ class PengeluaranDetailView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FullScreenImagePage(
-                              imageUrl: p.struk!.imageUrl!,
-                              title: 'Foto Struk',
-                            ),
-                          ),
-                        );
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Hero(
-                          tag: p.struk!.imageUrl!,
-                          child: Image.network(
-                            p.struk!.imageUrl!,
-                            height: 300,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Container(
-                              height: 200,
-                              color: Theme.of(context).colorScheme.muted,
-                              child: Center(
-                                child: Icon(LucideIcons.imageOff, color: Theme.of(context).colorScheme.mutedForeground, size: 48),
+                    if (hasImage) ...[
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FullScreenImagePage(
+                                imageUrl: p.struk!.imageUrl!,
+                                title: 'Foto Struk',
                               ),
                             ),
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
-                                height: 300,
+                          );
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Hero(
+                            tag: p.struk!.imageUrl!,
+                            child: Image.network(
+                              p.struk!.imageUrl!,
+                              height: 300,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => Container(
+                                height: 200,
                                 color: Theme.of(context).colorScheme.muted,
-                                child: const Center(child: CircularProgressIndicator()),
-                              );
-                            },
+                                child: Center(
+                                  child: Icon(LucideIcons.imageOff, color: Theme.of(context).colorScheme.mutedForeground, size: 48),
+                                ),
+                              ),
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Container(
+                                  height: 300,
+                                  color: Theme.of(context).colorScheme.muted,
+                                  child: const Center(child: CircularProgressIndicator()),
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const Gap(24),
+                      const Gap(24),
+                    ],
                     Card(
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
@@ -356,6 +359,22 @@ class PengeluaranDetailView extends StatelessWidget {
                             ...p.struk!.items.map((item) => _buildItemRow(context, item))
                           else
                             const Text('Tidak ada item belanja').italic().muted().small(),
+                          if (p.struk != null && p.struk!.discount != null && p.struk!.discount! > 0) ...[
+                            const Gap(8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Diskon').small().medium(),
+                                Text(
+                                  FormatUtils.formatRupiah(p.struk!.discount!),
+                                  style: Theme.of(context).typography.small.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                           const Gap(16),
                           const Divider(),
                           const Gap(16),
@@ -369,6 +388,23 @@ class PengeluaranDetailView extends StatelessWidget {
                         ],
                       ),
                     ),
+                    if (p.catatan != null && p.catatan!.isNotEmpty) ...[
+                      const Gap(16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Catatan').small().bold(),
+                              const Gap(8),
+                              Text(p.catatan!),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -398,14 +434,17 @@ class PengeluaranDetailView extends StatelessWidget {
                     const Gap(24),
 
                     if (p.catatan != null && p.catatan!.isNotEmpty) ...[
-                      Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Catatan').small().bold(),
-                            const Gap(8),
-                            Text(p.catatan!),
-                          ],
+                      SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Catatan').small().bold(),
+                              const Gap(8),
+                              Text(p.catatan!),
+                            ],
+                          ),
                         ),
                       ),
                       const Gap(16),
@@ -433,38 +472,57 @@ class PengeluaranDetailView extends StatelessWidget {
   Widget _buildItemRow(BuildContext context, ReceiptItem item) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          Expanded(
-            flex: 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(item.name).small().medium(),
-                if (item.categoryName != null)
-                  Text(item.categoryName!).xSmall().muted(),
-              ],
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(item.name).small().medium(),
+                    if (item.categoryName != null)
+                      Text(item.categoryName!).xSmall().muted(),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  '${item.quantity} x ${FormatUtils.formatRupiah(item.price)}',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).typography.xSmall.copyWith(
+                    color: Theme.of(context).colorScheme.mutedForeground,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  FormatUtils.formatRupiah(item.totalPrice),
+                  textAlign: TextAlign.right,
+                  style: Theme.of(context).typography.small.copyWith(fontWeight: FontWeight.w500),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              '${item.quantity} x ${FormatUtils.formatRupiah(item.price)}',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).typography.xSmall.copyWith(
-                color: Theme.of(context).colorScheme.mutedForeground,
+          if (item.discount != null && item.discount! > 0)
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Diskon: -${FormatUtils.formatRupiah(item.discount!)}',
+                    style: Theme.of(context).typography.xSmall.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              FormatUtils.formatRupiah(item.totalPrice),
-              textAlign: TextAlign.right,
-              style: Theme.of(context).typography.small.copyWith(fontWeight: FontWeight.w500),
-            ),
-          ),
         ],
       ),
     );

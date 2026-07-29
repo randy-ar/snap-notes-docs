@@ -1,12 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:snap_notes_mvvm/core/network/auth_interceptor.dart';
 
 class DioClient {
   late final Dio dio;
+  final GlobalKey<NavigatorState> navigatorKey;
 
-  DioClient({FlutterSecureStorage? storage}) {
+  DioClient({FlutterSecureStorage? storage, required this.navigatorKey}) {
     dio = Dio(
       BaseOptions(
         baseUrl: dotenv.env['NESTJS_SERVER_URL'] ?? 'http://localhost:3000',
@@ -20,7 +22,7 @@ class DioClient {
     );
 
     if (storage != null) {
-      dio.interceptors.add(AuthInterceptor(storage: storage));
+      dio.interceptors.add(AuthInterceptor(storage: storage, navigatorKey: navigatorKey));
     }
 
     dio.interceptors.add(

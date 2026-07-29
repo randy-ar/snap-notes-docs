@@ -13,7 +13,10 @@ export class ItemStrukResponseDto {
   @ApiProperty({ description: 'Harga satuan' })
   hargaSatuan: number;
 
-  @ApiProperty({ description: 'Subtotal (jumlah * harga_satuan)' })
+  @ApiPropertyOptional({ description: 'Diskon per item' })
+  diskon?: number;
+
+  @ApiProperty({ description: 'Subtotal ((jumlah * harga_satuan) - diskon)' })
   subtotal: number;
 
   @ApiPropertyOptional({ description: 'ID kategori item' })
@@ -41,6 +44,12 @@ export class StrukResponseDto {
 
   @ApiProperty({ description: 'Tanggal belanja' })
   tanggalBelanja: Date;
+
+  @ApiPropertyOptional({ description: 'Diskon keseluruhan struk' })
+  diskon?: number;
+
+  @ApiPropertyOptional({ description: 'Total kotor sebelum diskon' })
+  totalItem?: number;
 
   @ApiProperty({ description: 'Total keseluruhan' })
   total: number;

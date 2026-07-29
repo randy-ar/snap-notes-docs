@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/pengeluaran_service.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/pengeluaran.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
+import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 
 class PengeluaranViewModel extends ChangeNotifier {
   final PengeluaranService _pengeluaranService;
@@ -129,6 +130,8 @@ class PengeluaranViewModel extends ChangeNotifier {
     required DateTime tanggal,
     String? kategoriId,
     String? catatan,
+    List<ReceiptItem>? strukItems,
+    String? imagePath,
   }) async {
     _setLoading(true);
     _errorMessage = null;
@@ -139,6 +142,8 @@ class PengeluaranViewModel extends ChangeNotifier {
         tanggal: tanggal,
         kategoriId: kategoriId,
         catatan: catatan,
+        strukItems: strukItems,
+        imagePath: imagePath,
       );
       _pengeluaranList.insert(0, pengeluaran);
     } catch (e) {
@@ -155,6 +160,8 @@ class PengeluaranViewModel extends ChangeNotifier {
     DateTime? tanggal,
     String? kategoriId,
     String? catatan,
+    String? strukId,
+    List<ReceiptItem>? strukItems,
   }) async {
     _setLoading(true);
     _errorMessage = null;
@@ -166,10 +173,15 @@ class PengeluaranViewModel extends ChangeNotifier {
         tanggal: tanggal,
         kategoriId: kategoriId,
         catatan: catatan,
+        strukId: strukId,
+        strukItems: strukItems,
       );
       final index = _pengeluaranList.indexWhere((p) => p.id == id);
       if (index != -1) {
         _pengeluaranList[index] = pengeluaran;
+      }
+      if (_pengeluaranDetail?.id == id) {
+        _pengeluaranDetail = pengeluaran;
       }
     } catch (e) {
       _errorMessage = e.toString();
@@ -203,4 +215,3 @@ class PengeluaranViewModel extends ChangeNotifier {
     }
   }
 }
-

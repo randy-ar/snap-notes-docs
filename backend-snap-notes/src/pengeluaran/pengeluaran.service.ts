@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { SupabaseService } from '../common/supabase/supabase.service';
 import { CreatePengeluaranDto } from './dto/create-pengeluaran.dto';
 import { UpdatePengeluaranDto } from './dto/update-pengeluaran.dto';
 import { QueryPengeluaranDto } from './dto/query-pengeluaran.dto';
@@ -7,36 +8,83 @@ import { PengeluaranResponseDto } from './dto/pengeluaran-response.dto';
 
 @Injectable()
 export class PengeluaranService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly supabaseService: SupabaseService,
+  ) {}
 
-  async tambah(penggunaId: string, dto: CreatePengeluaranDto): Promise<PengeluaranResponseDto> {
-    const pengeluaran = await this.prisma.pengeluaran.create({
-      data: {
-        penggunaId,
-        deskripsi: dto.deskripsi,
-        jumlah: dto.jumlah,
-        tanggal: new Date(dto.tanggal),
-        kategoriId: dto.kategoriId,
-        catatan: dto.catatan,
-      },
-      include: {
-        kategori: true,
-      },
+  async tambah(penggunaId: string, dto: CreatePengeluaranDto, file?: Express.Multer.File): Promise<PengeluaranResponseDto> {
+    let imageUrl: string | undefined = undefined;
+
+    if (file) {
+      imageUrl = await this.supabaseService.uploadImage(file, 'struk-images');
+    }
+
+    const pengeluaran = await this.prisma.$transaction(async (tx) => {
+      let strukId = undefined;
+
+      // Jika ada data struk (manual), kita buat entri Struk terlebih dahulu
+      if (dto.struk) {
+        // Hitung discount jika tidak disediakan secara eksplisit
+        const discount = dto.struk.items?.reduce((sum, item) => sum + (item.discount ?? 0), 0) ?? 0;
+
+        const newStruk = await tx.struk.create({
+          data: {
+            penggunaId,
+            kategoriId: dto.kategoriId,
+            namaToko: dto.deskripsi,
+            tanggalBelanja: new Date(dto.tanggal),
+            total: dto.jumlah,
+            diskon: discount > 0 ? discount : null,
+            // Secara default sudah dikonfirmasi karena pengguna input secara sadar
+            sudahDikonfirmasi: true,
+            gambarUrl: imageUrl,
+          }
+        });
+        strukId = newStruk.id;
+
+        // Tambahkan item-item struknya
+        if (dto.struk.items && dto.struk.items.length > 0) {
+          await tx.itemStruk.createMany({
+            data: dto.struk.items.map(item => ({
+              strukId: newStruk.id,
+              namaItem: item.name,
+              jumlah: item.quantity,
+              hargaSatuan: item.price,
+              diskon: item.discount,
+              subtotal: item.total_price,
+              kategoriId: item.categoryId,
+            })),
+          });
+        }
+      }
+
+      return tx.pengeluaran.create({
+        data: {
+          penggunaId,
+          deskripsi: dto.deskripsi,
+          jumlah: dto.jumlah,
+          tanggal: new Date(dto.tanggal),
+          kategoriId: dto.kategoriId,
+          catatan: dto.catatan,
+          strukId: strukId,
+        },
+        include: {
+          kategori: true,
+          struk: {
+            include: {
+              itemStruks: {
+                include: {
+                  kategori: true,
+                }
+              }
+            }
+          }
+        },
+      });
     });
 
-    return {
-      id: pengeluaran.id,
-      penggunaId: pengeluaran.penggunaId,
-      strukId: pengeluaran.strukId ?? undefined,
-      kategoriId: pengeluaran.kategoriId ?? undefined,
-      kategoriNama: pengeluaran.kategori?.nama,
-      deskripsi: pengeluaran.deskripsi,
-      jumlah: Number(pengeluaran.jumlah),
-      tanggal: pengeluaran.tanggal,
-      catatan: pengeluaran.catatan ?? undefined,
-      createdAt: pengeluaran.createdAt,
-      updatedAt: pengeluaran.updatedAt,
-    };
+    return this.mapToResponseDto(pengeluaran);
   }
 
   async getDaftar(penggunaId: string, query: QueryPengeluaranDto): Promise<any> {
@@ -227,6 +275,7 @@ export class PengeluaranService {
           namaItem: item.namaItem,
           jumlah: item.jumlah,
           hargaSatuan: Number(item.hargaSatuan),
+          diskon: item.diskon ? Number(item.diskon) : null,
           subtotal: Number(item.subtotal),
           kategoriId: item.kategoriId ?? null,
           kategoriNama: item.kategori?.nama ?? null,

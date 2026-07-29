@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/pengeluaran.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
+import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 
 /// Service untuk mengelola data pengeluaran
 class PengeluaranService {
@@ -15,16 +17,48 @@ class PengeluaranService {
     required DateTime tanggal,
     String? kategoriId,
     String? catatan,
+    List<ReceiptItem>? strukItems,
+    String? imagePath,
   }) async {
+    FormData formData = FormData();
+    formData.fields.addAll([
+      MapEntry('deskripsi', deskripsi),
+      MapEntry('jumlah', jumlah.toString()),
+      MapEntry('tanggal', DateTime.utc(tanggal.year, tanggal.month, tanggal.day).toIso8601String()),
+    ]);
+
+    if (kategoriId != null) {
+      formData.fields.add(MapEntry('kategoriId', kategoriId));
+    }
+
+    if (catatan != null) {
+      formData.fields.add(MapEntry('catatan', catatan));
+    }
+
+    if (strukItems != null) {
+      formData.fields.add(MapEntry('struk', jsonEncode({
+        'items': strukItems.map((item) => {
+          'name': item.name,
+          'quantity': item.quantity,
+          'price': item.price,
+          'discount': item.discount,
+          'total_price': item.totalPrice,
+          'categoryId': item.categoryId,
+          'categoryName': item.categoryName,
+        }).toList(),
+      })));
+    }
+
+    if (imagePath != null) {
+      formData.files.add(MapEntry(
+        'gambar',
+        await MultipartFile.fromFile(imagePath),
+      ));
+    }
+
     final response = await _dio.post(
       '/api/pengeluaran',
-      data: {
-        'deskripsi': deskripsi,
-        'jumlah': jumlah,
-        'tanggal': DateTime.utc(tanggal.year, tanggal.month, tanggal.day).toIso8601String(),
-        'kategoriId': kategoriId,
-        'catatan': catatan,
-      },
+      data: formData,
     );
     final envelope = response.data as Map<String, dynamic>;
     return Pengeluaran.fromJson(envelope['data'] as Map<String, dynamic>);
@@ -91,6 +125,8 @@ class PengeluaranService {
     DateTime? tanggal,
     String? kategoriId,
     String? catatan,
+    String? strukId,
+    List<ReceiptItem>? strukItems,
   }) async {
     final response = await _dio.patch(
       '/api/pengeluaran/$id',
@@ -101,9 +137,62 @@ class PengeluaranService {
           'tanggal': DateTime.utc(tanggal.year, tanggal.month, tanggal.day).toIso8601String(),
         'kategoriId': kategoriId,
         'catatan': catatan,
+        // Jika ada pengubahan dari mode struk
+        if (strukItems != null)
+           'struk': {
+             'items': strukItems.map((item) => {
+               'name': item.name,
+               'quantity': item.quantity,
+               'price': item.price,
+               'discount': item.discount,
+               'total_price': item.totalPrice,
+               'categoryId': item.categoryId,
+               'categoryName': item.categoryName,
+             }).toList(),
+           },
       },
     );
     final envelope = response.data as Map<String, dynamic>;
+
+    if (strukId != null && strukItems != null) {
+      // Calculate gross total item before discount, and accumulate total discounts
+      double totalItem = 0.0;
+      double totalDiscount = 0.0;
+      for (final item in strukItems) {
+        totalItem += item.quantity * item.price;
+        if (item.discount != null && item.discount! > 0) {
+          totalDiscount += item.discount!;
+        }
+      }
+
+      final strukData = {
+        'namaToko': deskripsi?.replaceAll('Pembelian di ', '') ?? deskripsi,
+        'total': jumlah,
+        'totalItem': totalItem,
+        'diskon': totalDiscount > 0 ? totalDiscount : null,
+        'tanggalBelanja': tanggal != null ? DateTime.utc(tanggal.year, tanggal.month, tanggal.day).toIso8601String() : null,
+        'kategoriId': kategoriId,
+        'items': strukItems.map((item) => {
+          'kategoriId': item.categoryId,
+          'namaItem': item.name,
+          'kategoriNama': item.categoryName,
+          'jumlah': item.quantity,
+          'hargaSatuan': item.price,
+          'diskon': item.discount,
+          'subtotal': item.totalPrice,
+        }).toList(),
+      };
+
+      await _dio.patch(
+        '/api/struk/$strukId',
+        data: strukData,
+      );
+
+      final updatedResponse = await _dio.get('/api/pengeluaran/$id');
+      final updatedEnvelope = updatedResponse.data as Map<String, dynamic>;
+      return Pengeluaran.fromJson(updatedEnvelope['data'] as Map<String, dynamic>);
+    }
+
     return Pengeluaran.fromJson(envelope['data'] as Map<String, dynamic>);
   }
 

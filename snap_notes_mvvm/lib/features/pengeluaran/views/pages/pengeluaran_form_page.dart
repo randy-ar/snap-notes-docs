@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/pengeluaran.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/viewmodels/pengeluaran_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/kategori.dart';
@@ -7,7 +9,55 @@ import 'package:snap_notes_mvvm/utils/format_utils.dart';
 import 'package:snap_notes_mvvm/utils/rupiah_input_formatter.dart';
 import 'package:snap_notes_mvvm/features/receipt/views/pages/full_screen_image_page.dart';
 import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
+import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 
+class _ItemEditGroup {
+  final String? id;
+  final TextEditingController nameController;
+  final TextEditingController quantityController;
+  final TextEditingController priceController;
+  final TextEditingController discountController;
+  final TextEditingController totalPriceController;
+  String? categoryId;
+  String? categoryName;
+
+  _ItemEditGroup({
+    this.id,
+    required this.nameController,
+    required this.quantityController,
+    required this.priceController,
+    required this.discountController,
+    required this.totalPriceController,
+    this.categoryId,
+    this.categoryName,
+  });
+
+  factory _ItemEditGroup.fromItem(ReceiptItem item) {
+    // Pada item edit group yang merupakan mode struk, hitung/sertakan discount-nya.
+    return _ItemEditGroup(
+      id: item.id,
+      nameController: TextEditingController(text: item.name),
+      quantityController: TextEditingController(text: item.quantity.toString()),
+      priceController: TextEditingController(text: FormatUtils.formatDecimalRibuan(item.price)),
+      discountController: TextEditingController(
+        text: item.discount != null && item.discount! > 0
+            ? FormatUtils.formatDecimalRibuan(item.discount)
+            : '',
+      ),
+      totalPriceController: TextEditingController(text: FormatUtils.formatDecimalRibuan(item.totalPrice)),
+      categoryId: item.categoryId,
+      categoryName: item.categoryName,
+    );
+  }
+
+  void dispose() {
+    nameController.dispose();
+    quantityController.dispose();
+    priceController.dispose();
+    discountController.dispose();
+    totalPriceController.dispose();
+  }
+}
 
 class PengeluaranFormPage extends StatefulWidget {
   final Pengeluaran? pengeluaran;
@@ -21,23 +71,74 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
   final _deskripsiController = TextEditingController();
   final _jumlahController = TextEditingController();
   final _catatanController = TextEditingController();
-  final _promptController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   String? _selectedCategoryId;
+  late List<_ItemEditGroup> _itemGroups;
 
   bool get isEdit => widget.pengeluaran != null;
-  bool get isStruk => isEdit && widget.pengeluaran!.strukId != null;
+  bool get isStruk => (isEdit && widget.pengeluaran!.strukId != null) || !isEdit;
 
-  @override
+  // Variabel untuk menyimpan gambar struk manual
+  File? _strukImageFile;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    try {
+      final pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _strukImageFile = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        showToast(
+          context: context,
+          builder: (context, overlay) => ToastFormatter.error('Gagal', 'Tidak dapat memuat gambar: $e'),
+          location: ToastLocation.bottomRight,
+        );
+      }
+    }
+  }
+
+  void _removeImage() {
+    setState(() {
+      _strukImageFile = null;
+    });
+  }
   void initState() {
     super.initState();
     if (isEdit) {
       _deskripsiController.text = widget.pengeluaran!.deskripsi;
       // Memformat nominal awal dengan separator ribuan (misal: 25.000)
-      _jumlahController.text = FormatUtils.formatRupiah(widget.pengeluaran!.jumlah).replaceAll('Rp ', '');
+      _jumlahController.text = FormatUtils.formatDecimalRibuan(widget.pengeluaran!.jumlah);
       _catatanController.text = widget.pengeluaran!.catatan ?? '';
       _selectedDate = widget.pengeluaran!.tanggal;
       _selectedCategoryId = widget.pengeluaran!.kategoriId;
+    }
+
+    if (isStruk) {
+      if (isEdit) {
+        _itemGroups = widget.pengeluaran!.struk!.items.map((item) => _ItemEditGroup.fromItem(item)).toList();
+      } else {
+        _itemGroups = [
+          _ItemEditGroup(
+            nameController: TextEditingController(),
+            quantityController: TextEditingController(text: '1'),
+            priceController: TextEditingController(text: ''),
+            discountController: TextEditingController(text: ''),
+            totalPriceController: TextEditingController(text: ''),
+          )
+        ];
+      }
+    } else {
+      _itemGroups = [];
     }
 
     // Muat daftar kategori dari backend
@@ -51,62 +152,53 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
     _deskripsiController.dispose();
     _jumlahController.dispose();
     _catatanController.dispose();
-    _promptController.dispose();
+    for (final group in _itemGroups) {
+      group.dispose();
+    }
     super.dispose();
+  }
+
+  void _recalculateItemTotal(_ItemEditGroup group) {
+    final qty = int.tryParse(group.quantityController.text) ?? 0;
+    final price = FormatUtils.parseRupiahToDouble(group.priceController.text);
+    final discount = FormatUtils.parseRupiahToDouble(group.discountController.text);
+    final total = (qty * price) - discount;
+    group.totalPriceController.text = FormatUtils.formatDecimalRibuan(total);
+    _recalculateGrandTotal();
+  }
+
+  void _recalculateGrandTotal() {
+    double total = 0;
+    for (final group in _itemGroups) {
+      total += FormatUtils.parseRupiahToDouble(group.totalPriceController.text);
+    }
+    _jumlahController.text = FormatUtils.formatDecimalRibuan(total);
+  }
+
+  void _addItem() {
+    setState(() {
+      _itemGroups.add(
+        _ItemEditGroup(
+          nameController: TextEditingController(),
+          quantityController: TextEditingController(text: '1'),
+          priceController: TextEditingController(text: ''),
+          discountController: TextEditingController(text: ''),
+          totalPriceController: TextEditingController(text: ''),
+        ),
+      );
+    });
+  }
+
+  void _removeItem(int index) {
+    setState(() {
+      _itemGroups[index].dispose();
+      _itemGroups.removeAt(index);
+      _recalculateGrandTotal();
+    });
   }
 
   Future<void> _submit() async {
     final viewModel = context.read<PengeluaranViewModel>();
-
-    if (isStruk) {
-      final prompt = _promptController.text.trim();
-      
-      // Mengambil nama kategori yang dipilih
-      final selectedCategory = viewModel.categories.firstWhere(
-        (c) => c.id == _selectedCategoryId,
-        orElse: () => Kategori(id: '', nama: 'Lainnya', jenis: 'PENGELUARAN', adalahPreset: true),
-      );
-      final selectedKategoriNama = selectedCategory.nama;
-
-      if (_selectedCategoryId == null && prompt.isEmpty) {
-        showToast(
-          context: context,
-          builder: (context, overlay) => ToastFormatter.validation('Kategori atau prompt koreksi harus diisi'),
-          location: ToastLocation.bottomRight,
-        );
-        return;
-      }
-
-      String promptToSend = '';
-      if (_selectedCategoryId != null) {
-        promptToSend += 'Kategori transaksi/toko ini harus diklasifikasikan sebagai "$selectedKategoriNama". Harap set kategori toko menjadi "$selectedKategoriNama" dan set kategori item-item yang sesuai menjadi "$selectedKategoriNama". ';
-      }
-      if (prompt.isNotEmpty) {
-        promptToSend += 'Koreksi tambahan: $prompt';
-      } else if (_selectedCategoryId != null) {
-        promptToSend += 'Tidak ada koreksi teks tambahan.';
-      }
-
-      await viewModel.reparseStruk(widget.pengeluaran!.strukId!, promptToSend);
-
-      if (mounted) {
-        if (viewModel.errorMessage != null) {
-          showToast(
-            context: context,
-            builder: (context, overlay) => ToastFormatter.error('Gagal', viewModel.errorMessage!),
-            location: ToastLocation.bottomRight,
-          );
-        } else {
-          showToast(
-            context: context,
-            builder: (context, overlay) => ToastFormatter.success('Struk berhasil diproses ulang dengan AI'),
-            location: ToastLocation.bottomRight,
-          );
-          Navigator.pop(context, true);
-        }
-      }
-      return;
-    }
 
     final deskripsi = _deskripsiController.text.trim();
     final jumlahStr = _jumlahController.text.trim();
@@ -132,6 +224,25 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
     }
 
     if (isEdit) {
+      List<ReceiptItem>? strukItems;
+      if (isStruk) {
+        strukItems = _itemGroups.map((group) {
+          final qty = int.tryParse(group.quantityController.text) ?? 1;
+          final price = FormatUtils.parseRupiahToDouble(group.priceController.text);
+          final discount = FormatUtils.parseRupiahToDouble(group.discountController.text);
+          final total = FormatUtils.parseRupiahToDouble(group.totalPriceController.text);
+          return ReceiptItem(
+            name: group.nameController.text.trim().isEmpty ? 'Item Belanja' : group.nameController.text.trim(),
+            quantity: qty,
+            price: price,
+            discount: discount > 0 ? discount : null,
+            totalPrice: total,
+            categoryId: group.categoryId,
+            categoryName: group.categoryName,
+          );
+        }).toList();
+      }
+
       await viewModel.updatePengeluaran(
         widget.pengeluaran!.id,
         deskripsi: deskripsi,
@@ -139,14 +250,37 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
         tanggal: _selectedDate,
         kategoriId: _selectedCategoryId,
         catatan: _catatanController.text.trim().isNotEmpty ? _catatanController.text.trim() : null,
+        strukId: widget.pengeluaran!.strukId,
+        strukItems: strukItems,
       );
     } else {
+      List<ReceiptItem>? strukItems;
+      if (isStruk) {
+         strukItems = _itemGroups.map((group) {
+          final qty = int.tryParse(group.quantityController.text) ?? 1;
+          final price = FormatUtils.parseRupiahToDouble(group.priceController.text);
+          final discount = FormatUtils.parseRupiahToDouble(group.discountController.text);
+          final total = FormatUtils.parseRupiahToDouble(group.totalPriceController.text);
+          return ReceiptItem(
+            name: group.nameController.text.trim().isEmpty ? 'Item Belanja' : group.nameController.text.trim(),
+            quantity: qty,
+            price: price,
+            discount: discount > 0 ? discount : null,
+            totalPrice: total,
+            categoryId: group.categoryId,
+            categoryName: group.categoryName,
+          );
+        }).toList();
+      }
+
       await viewModel.tambahPengeluaran(
         deskripsi: deskripsi,
         jumlah: jumlah,
         tanggal: _selectedDate,
         kategoriId: _selectedCategoryId,
         catatan: _catatanController.text.trim().isNotEmpty ? _catatanController.text.trim() : null,
+        strukItems: strukItems,
+        imagePath: _strukImageFile?.path,
       );
     }
 
@@ -243,11 +377,9 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
             children: isStruk
                 ? [
                     // Card Data Struk yang sedang di-edit
-                    Card(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
                           if (imageUrl != null && imageUrl.isNotEmpty) ...[
                             GestureDetector(
                               onTap: () {
@@ -287,63 +419,214 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                               ),
                             ),
                             const Gap(16),
+                          ] else if (_strukImageFile != null) ...[
+                            Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    _strukImageFile!,
+                                    height: 180,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: IconButton.ghost(
+                                    icon: const Icon(LucideIcons.x, size: 16),
+                                    onPressed: _removeImage,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(16),
+                          ] else if (!isEdit) ...[
+                            GestureDetector(
+                              onTap: _pickImage,
+                              child: Container(
+                                height: 120,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Theme.of(context).colorScheme.border,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Theme.of(context).colorScheme.muted.withValues(alpha: 0.5),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      LucideIcons.camera,
+                                      color: Theme.of(context).colorScheme.mutedForeground,
+                                      size: 32,
+                                    ),
+                                    const Gap(8),
+                                    Text(
+                                      'Upload Foto Struk (Opsional)',
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.mutedForeground,
+                                      ),
+                                    ).small(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const Gap(16),
                           ],
-                          
-                          // Informasi Struk
-                          Text(widget.pengeluaran?.deskripsi ?? 'Struk Belanja').large().bold(),
+                          const Text('Informasi Umum').large().bold(),
+                          const Gap(16),
+                          const Text('Nama Toko').small().semiBold(),
                           const Gap(4),
-                          Row(
-                            children: [
-                              Icon(LucideIcons.calendar, size: 14, color: Theme.of(context).colorScheme.mutedForeground),
-                              const Gap(6),
-                              Text(widget.pengeluaran != null
-                                  ? '${widget.pengeluaran!.tanggal.day}/${widget.pengeluaran!.tanggal.month}/${widget.pengeluaran!.tanggal.year}'
-                                  : '').small().muted(),
-                            ],
+                          TextField(
+                            controller: _deskripsiController,
+                            placeholder: const Text('Masukkan nama toko'),
+                          ),
+                          const Gap(16),
+                          const Text('Tanggal Pembelian').small().semiBold(),
+                          const Gap(4),
+                          DatePicker(
+                            value: _selectedDate,
+                            onChanged: (date) {
+                              if (date != null) {
+                                setState(() {
+                                  _selectedDate = date;
+                                });
+                              }
+                            },
+                          ),
+                          const Gap(16),
+                          const Text('Kategori').small().semiBold(),
+                          const Gap(4),
+                          _buildCategorySelect(viewModel),
+                          const Gap(16),
+                          const Text('Total Harga (Rp)').small().semiBold(),
+                          const Gap(4),
+                          TextField(
+                            controller: _jumlahController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [RupiahInputFormatter()],
+                            placeholder: const Text('0'),
+                            readOnly: true,
+                          ),
+                          const Gap(16),
+                          const Text('Catatan (Opsional)').small().semiBold(),
+                          const Gap(4),
+                          TextField(
+                            controller: _catatanController,
+                            maxLines: 2,
+                            placeholder: const Text('Tambahkan catatan'),
                           ),
                           const Gap(16),
                           const Divider(),
                           const Gap(12),
-                          const Text('Item Belanja').small().semiBold(),
-                          const Gap(8),
-                          if (widget.pengeluaran?.struk != null && widget.pengeluaran!.struk!.items.isNotEmpty)
-                            ...widget.pengeluaran!.struk!.items.map((item) => Padding(
-                              padding: const EdgeInsets.only(bottom: 6.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(item.name).small().medium(),
-                                        if (item.categoryName != null)
-                                          Text(item.categoryName!).xSmall().muted(),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(
-                                      '${item.quantity} x Rp ${item.price.toStringAsFixed(0)}',
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context).typography.small.copyWith(
-                                        color: Theme.of(context).colorScheme.mutedForeground,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(
-                                      'Rp ${item.totalPrice.toStringAsFixed(0)}',
-                                      textAlign: TextAlign.right,
-                                      style: Theme.of(context).typography.small.copyWith(fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Item Belanja').small().semiBold(),
+                              IconButton.ghost(
+                                size: ButtonSize.small,
+                                icon: const Icon(LucideIcons.plus, size: 16),
+                                onPressed: _addItem,
                               ),
-                            ))
+                            ],
+                          ),
+                          const Gap(8),
+                          if (_itemGroups.isNotEmpty)
+                            ..._itemGroups.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final group = entry.value;
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: Card(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Item #${index + 1}').small().semiBold(),
+                                          IconButton.ghost(
+                                            size: ButtonSize.small,
+                                            icon: Icon(
+                                              LucideIcons.trash2,
+                                              size: 16,
+                                              color: Theme.of(context).colorScheme.destructive,
+                                            ),
+                                            onPressed: () => _removeItem(index),
+                                          ),
+                                        ],
+                                      ),
+                                      const Gap(8),
+                                      const Text('Nama Item').xSmall().muted(),
+                                      const Gap(4),
+                                      TextField(
+                                        controller: group.nameController,
+                                        placeholder: const Text('Nama produk'),
+                                      ),
+                                      const Gap(8),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 2,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const Text('Jumlah').xSmall().muted(),
+                                                const Gap(4),
+                                                TextField(
+                                                  controller: group.quantityController,
+                                                  keyboardType: TextInputType.number,
+                                                  onChanged: (_) => _recalculateItemTotal(group),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Gap(12),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const Text('Harga Satuan').xSmall().muted(),
+                                                const Gap(4),
+                                                TextField(
+                                                  controller: group.priceController,
+                                                  keyboardType: TextInputType.number,
+                                                  inputFormatters: [RupiahInputFormatter()],
+                                                  onChanged: (_) => _recalculateItemTotal(group),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const Gap(8),
+                                      const Text('Diskon Item (Rp)').xSmall().muted(),
+                                      const Gap(4),
+                                      TextField(
+                                        controller: group.discountController,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [RupiahInputFormatter()],
+                                        onChanged: (_) => _recalculateItemTotal(group),
+                                        placeholder: const Text('Opsional'),
+                                      ),
+                                      const Gap(8),
+                                      const Text('Subtotal / Total Harga Item (Rp)').xSmall().muted(),
+                                      const Gap(4),
+                                      TextField(
+                                        controller: group.totalPriceController,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [RupiahInputFormatter()],
+                                        onChanged: (_) => _recalculateGrandTotal(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            })
                           else
                             const Text('Tidak ada item belanja').italic().muted().small(),
                           const Gap(12),
@@ -353,53 +636,12 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text('Total').small().semiBold(),
-                              Text(widget.pengeluaran != null
-                                  ? 'Rp ${widget.pengeluaran!.jumlah.toStringAsFixed(0)}'
-                                  : '').small().semiBold(),
+                              Text('Rp ${_jumlahController.text}').small().semiBold(),
                             ],
                           ),
                         ],
                       ),
-                    ),
                     const Gap(24),
-                    
-                    const Text('Kategori').medium(),
-                    const Gap(8),
-                    _buildCategorySelect(viewModel),
-                    const Gap(20),
-
-
-                    
-                    const Text('Prompt Koreksi (Opsional)').medium(),
-                    const Gap(8),
-                    TextField(
-                      controller: _promptController,
-                      minLines: 3,
-                      maxLines: 5,
-                      placeholder: const Text('Contoh: Koreksi nama toko menjadi Indomaret, harga barang A salah harusnya 12.000'),
-                    ),
-                    const Gap(24),
-
-                    SurfaceCard(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(LucideIcons.sparkles, color: Theme.of(context).colorScheme.primary, size: 18),
-                              const Gap(8),
-                              const Text('Koreksi dengan AI (Gemini)').semiBold().small(),
-                            ],
-                          ),
-                          const Gap(8),
-                          const Text(
-                            'Masukkan instruksi koreksi untuk memproses ulang data struk. AI akan membaca instruksi Anda beserta kategori pilihan Anda di atas untuk menyusun kembali detail transaksi.',
-                          ).muted().xSmall(),
-                        ],
-                      ),
-                    ),
-                    const Gap(40),
 
                     PrimaryButton(
                       onPressed: isLoading ? null : _submit,
@@ -413,7 +655,7 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                                   child: CircularProgressIndicator(),
                                 ),
                                 Gap(8),
-                                Text('Memproses Ulang...'),
+                                Text('Menyimpan...'),
                               ],
                             )
                           : const Text('Simpan Perubahan'),
@@ -427,7 +669,7 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                       placeholder: const Text('Contoh: Makan Siang'),
                     ),
                     const Gap(20),
-                    
+
                     const Text('Jumlah (Rp)').medium(),
                     const Gap(8),
                     TextField(

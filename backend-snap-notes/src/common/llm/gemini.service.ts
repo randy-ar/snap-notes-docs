@@ -24,9 +24,10 @@ export class GeminiService implements ILLMProvider {
     this.model = this.configService.get<string>('GEMINI_MODEL') || 'gemini-2.5-flash';
   }
 
-  async parseStrukOCR(rawText: string, lines?: OcrLine[], imageSize?: ImageSize, customPrompt?: string, kategoriContext?: string): Promise<ParsedStrukDto> {
+  async parseStrukOCRBatch(ocrDataBatch: any[], customPrompt?: string, kategoriContext?: string): Promise<ParsedStrukDto[]> {
+    const startTime = Date.now();
     try {
-      const prompt = this.buatPrompt(rawText, lines, imageSize, customPrompt, kategoriContext);
+      const prompt = this.buatPromptBatch(ocrDataBatch, customPrompt, kategoriContext);
 
       const geminiPromise = this.genAI.models.generateContent({
         model: this.model,
@@ -34,148 +35,158 @@ export class GeminiService implements ILLMProvider {
       });
 
       const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('Gemini AI timeout')), 28000);
+        setTimeout(() => reject(new Error('Gemini AI timeout')), 50000); // 50 seconds for batch processing
       });
 
       const response = await Promise.race([geminiPromise, timeoutPromise]);
 
       const text = response.text;
-      console.log('[Gemini AI] Raw response:', text);
+      const endTime = Date.now();
+      console.log(`[Gemini AI Batch] Received raw response in ${endTime - startTime}ms`);
+      console.log('[Gemini AI Batch] Raw response:', text);
       if (!text) {
         throw new ServiceUnavailableException('Gemini AI tidak memberikan response');
       }
 
-      return this.validasiResponse(text);
+      return this.validasiResponseBatch(text);
     } catch (error) {
       if (error instanceof ServiceUnavailableException || error instanceof UnprocessableEntityException) {
         throw error;
       }
-      if (error.message === 'Gemini AI timeout') {
-        throw new ServiceUnavailableException('Gemini AI timeout - coba lagi dengan struk yang lebih jelas');
+      if ((error as Error).message === 'Gemini AI timeout') {
+        throw new ServiceUnavailableException('Gemini AI timeout - coba lagi dengan batch yang lebih kecil');
       }
-      throw new ServiceUnavailableException(`Gemini AI error: ${error.message}`);
+      throw new ServiceUnavailableException(`Gemini AI error: ${(error as Error).message}`);
     }
   }
 
-  private buatPrompt(rawText: string, lines?: OcrLine[], imageSize?: ImageSize, customPrompt?: string, kategoriContext?: string): string {
-    let layoutInfo = '';
+  private buatPromptBatch(ocrDataBatch: any[], customPrompt?: string, kategoriContext?: string): string {
+    let batchInfo = '';
 
-    if (lines && lines.length > 0 && imageSize) {
-      const lineInfo = lines.map((line) => {
-        const centerX = (line.boundingBox.left + line.boundingBox.right) / 2;
-        const centerY = (line.boundingBox.top + line.boundingBox.bottom) / 2;
-        const relativeX = (centerX / imageSize.width * 100).toFixed(1);
-        const relativeY = (centerY / imageSize.height * 100).toFixed(1);
-        const textPreview = line.text.substring(0, 40);
-        const ellipsis = line.text.length > 40 ? '...' : '';
-        return `[${line.lineIndex}] X:${relativeX}% Y:${relativeY}% | "${textPreview}${ellipsis}"`;
-      }).join('\n');
+    ocrDataBatch.forEach((ocrData, index) => {
+      let layoutInfo = '';
+      if (ocrData.lines && ocrData.lines.length > 0 && ocrData.imageSize) {
+        const lineInfo = ocrData.lines.map((line: any) => {
+          const centerX = (line.boundingBox.left + line.boundingBox.right) / 2;
+          const centerY = (line.boundingBox.top + line.boundingBox.bottom) / 2;
+          const relativeX = (centerX / ocrData.imageSize.width * 100).toFixed(1);
+          const relativeY = (centerY / ocrData.imageSize.height * 100).toFixed(1);
+          const textPreview = line.text.substring(0, 40);
+          const ellipsis = line.text.length > 40 ? '...' : '';
+          return `[${line.lineIndex}] X:${relativeX}% Y:${relativeY}% | "${textPreview}${ellipsis}"`;
+        }).join('\n');
 
-      layoutInfo = `
+        layoutInfo = `INFO LAYOUT LINE POSISI:\n${lineInfo}\n`;
+      }
 
-INFO LAYOUT LINE POSISI (persentase dari ukuran gambar ${imageSize.width}x${imageSize.height}px):
-${lineInfo}
-
-Analisis posisi:
-- X 0-30% = Kolom kiri (biasanya nama item/produk)
-- X 30-60% = Kolom tengah (biasanya qty/jumlah)
-- X 60-100% = Kolom kanan (biasanya harga/total)
-- Y urutan dari atas ke bawah menunjukkan urutan item
-- lineIndex menunjukkan urutan baris dari atas ke bawah`;
-    }
+      batchInfo += `\n--- STRUK ${index + 1} ---\nTEKS OCR:\n"""\n${ocrData.rawText}\n"""\n${layoutInfo}`;
+    });
 
     const currentDate = new Date().toISOString().split('T')[0];
 
-    return `Anda adalah parser struk belanja. Analisis teks OCR berikut dan ekstrak informasi struk ke format JSON.
+    return `Anda adalah parser struk belanja. Analisis ${ocrDataBatch.length} teks OCR berikut dan ekstrak informasi setiap struk ke format array JSON.
 
-TEKS OCR:
-"""
-${rawText}
-"""${layoutInfo}
+DATA BATCH OCR:
+${batchInfo}
 
 ${customPrompt ? `KONTEKS TAMBAHAN DARI USER UNTUK KOREKSI:\n"""\n${customPrompt}\n"""\n` : ''}
-Ekstrak informasi berikut dalam format JSON:
-{
-  "nama_toko": "Nama toko/merchant",
-  "tanggal": "YYYY-MM-DD",
-  "total": 0,
-  "kategori_toko": "Kategori toko (opsional)",
-  "item": [
-    {
-      "nama": "Nama item",
-      "jumlah": 1,
-      "harga_satuan": 0,
-      "subtotal": 0,
-      "kategori": "Pilihan dari 10 kategori di bawah"
-    }
-  ]
-}
+Ekstrak informasi seluruh struk dalam format Array JSON yang berisi objek-objek struk dengan urutan yang sama (dari struk 1 hingga ${ocrDataBatch.length}):
+[
+  {
+    "nama_toko": "Nama toko/merchant",
+    "tanggal": "YYYY-MM-DD",
+    "total": 0,
+    "totalItem": 0,
+    "diskon": 0,
+    "kategori_toko": "Kategori toko (opsional)",
+    "item": [
+      {
+        "nama": "Nama item",
+        "jumlah": 1,
+        "harga_satuan": 0,
+        "diskon": 0,
+        "subtotal": 0,
+        "kategori": "Pilihan dari 10 kategori di bawah"
+      }
+    ]
+  },
+  ...
+]
 
 Aturan Kategori Pengeluaran:
 Kamu HANYA diizinkan mengklasifikasikan item ke dalam salah satu dari 10 kategori persis berikut (jangan membuat kategori baru):
-1. "Makanan & Minuman" -> Segala jenis sembako, makanan restoran, minuman, kopi, snack, air galon, bahan makanan mentah, bumbu, rokok.
-2. "Perumahan & Utilitas" -> Tagihan listrik, air (PAM), gas elpiji/LPG, atau utilitas rumah tangga pokok.
-3. "Komunikasi" -> Pulsa HP, kuota internet, paket data, tagihan telepon.
-4. "Transportasi" -> Bensin, solar, biaya parkir, karcis tol, tiket transportasi, tarif ojek online.
-5. "Kesehatan" -> Obat-obatan, biaya rumah sakit/klinik, dokter, iuran BPJS, vitamin.
-6. "Pendidikan" -> Buku pelajaran, alat tulis kantor (ATK), uang sekolah/kuliah, kursus.
-7. "Hiburan" -> Tiket bioskop, top-up game, langganan streaming (Netflix dll), hotel/penginapan, rekreasi.
-8. "Perawatan Pribadi" -> Sabun mandi, sampo, pasta gigi, kosmetik, skincare, parfum, tisu, pembalut.
-9. "Pakaian" -> Baju, celana, jaket, sepatu, sandal, topi, jilbab, atau produk sandang lainnya.
-10. "Lain-lain" -> Pajak, keperluan pesta/kondangan, kantong plastik, atau item yang sama sekali tidak cocok masuk ke 9 kategori di atas.
+1. "Makanan & Minuman"
+2. "Perumahan & Utilitas"
+3. "Komunikasi"
+4. "Transportasi"
+5. "Kesehatan"
+6. "Pendidikan"
+7. "Hiburan"
+8. "Perawatan Pribadi"
+9. "Pakaian"
+10. "Lain-lain"
 
 Aturan WAJIB:
-1. SELALY kembalikan semua field yang dibutuhkan, jangan biarkan kosong
-2. Jika nama_toko tidak ditemukan, gunakan "Tidak diketahui"
-3. Jika tanggal tidak ditemukan dalam teks, gunakan tanggal hari ini: ${currentDate}
-4. Jika total tidak ditemukan, jumlahkan semua subtotal dari item untuk mendapatkan total
-5. Jika tidak ada item produk sama sekali yang bisa diidentifikasi, return JSON dengan error message di field "error": "Gambar struk tidak jelas, mohon upload ulang"
-6. Tanggal harus dalam format YYYY-MM-DD (konversi dari format Indonesia DD-MM-YYYY atau DD/MM/YYYY)
-7. Total adalah angka total keseluruhan struk (bukan subtotal item)
-8. Harga dalam format number tanpa pemisah ribuan (contoh: 10500 bukan 10.500)
-9. Kategori harus dipilih dari daftar kategori pengeluaran di atas. Jika singkatan aneh di struk minimarket (misal: "SBN MDI LFB"), tebak barang aslinya sebelum klasifikasi (masuk "Perawatan Pribadi").
-10. Pastikan jumlah * harga_satuan = subtotal untuk setiap item
-11. Gunakan info posisi X untuk membedakan kolom: kiri=item, tengah=qty, kanan=harga
-12. Jika ada teks seperti "1 5,000" di posisi tengah+kanan, interpretasikan sebagai qty=1, harga=5000
-13. Return HANYA JSON, tanpa markdown atau penjelasan lain`;
+1. Kembalikan array JSON berisi persis ${ocrDataBatch.length} object struk (sesuai jumlah struk pada input).
+2. Jika ada struk yang teksnya tidak jelas atau kosong, kembalikan object tersebut dengan array item kosong dan error: "error": "Gambar struk tidak jelas". Namun struktur lainnya (nama_toko dsb) tetap isi sebisanya.
+3. Selalu isi field nama_toko, tanggal, total, totalItem, diskon, dan item. Untuk field diskon (baik pada struk maupun item), isi 0 jika tidak ada diskon.
+4. Jika nama_toko tidak ditemukan, gunakan "Tidak diketahui".
+5. Jika tanggal tidak ditemukan dalam teks, gunakan tanggal hari ini: ${currentDate}
+6. Tanggal harus format YYYY-MM-DD.
+7. totalItem (total kotor) adalah jumlah dari semua subtotal item. total (total bersih) adalah totalItem - diskon keseluruhan. Jika field total tidak tertera dengan jelas, hitung secara manual.
+8. Harga dalam format number tanpa pemisah ribuan.
+9. Diskon per item (pada array "item") BUKAN diskon keseluruhan. Jika sebuah item dipotong harga, masukkan nilai potongannya pada properti "diskon" miliknya.
+10. Pastikan (jumlah * harga_satuan) - diskon = subtotal untuk setiap item.
+11. Return HANYA JSON array, tanpa markdown atau string tambahan lain.`;
   }
 
-  private validasiResponse(response: string): ParsedStrukDto {
+  private validasiResponseBatch(response: string): ParsedStrukDto[] {
     try {
       const cleaned = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-      const parsed = JSON.parse(cleaned) as ParsedStrukDto & { error?: string };
+      const parsedArray = JSON.parse(cleaned);
 
-      if (parsed.error) {
-        throw new UnprocessableEntityException(parsed.error);
+      if (!Array.isArray(parsedArray)) {
+        throw new UnprocessableEntityException('Response AI bukan berupa array JSON');
       }
 
-      if (!parsed.nama_toko || !parsed.tanggal || typeof parsed.total !== 'number') {
-        throw new UnprocessableEntityException('Format JSON dari AI tidak lengkap');
-      }
+      for (let i = 0; i < parsedArray.length; i++) {
+        const parsed = parsedArray[i];
 
-      if ((parsed as any).items && Array.isArray((parsed as any).items) && !parsed.item) {
-        parsed.item = (parsed as any).items;
-      }
-
-      if (!Array.isArray(parsed.item) || parsed.item.length === 0) {
-        throw new UnprocessableEntityException('JSON tidak memiliki array item yang valid');
-      }
-
-      for (const item of parsed.item) {
-        if (!item.nama || typeof item.jumlah !== 'number' || typeof item.harga_satuan !== 'number') {
-          throw new UnprocessableEntityException('Format item dalam JSON tidak valid');
+        if (parsed.error && (!parsed.item || parsed.item.length === 0)) {
+           // It's allowed to have an error state, it will be handled upstream or returned empty
+           continue;
         }
-        if (!item.subtotal) {
-          item.subtotal = item.jumlah * item.harga_satuan;
+
+        if (!parsed.nama_toko) parsed.nama_toko = 'Tidak diketahui';
+        if (!parsed.tanggal) parsed.tanggal = new Date().toISOString().split('T')[0];
+        if (typeof parsed.total !== 'number') parsed.total = 0;
+        if (parsed.totalItem === undefined || typeof parsed.totalItem !== 'number') parsed.totalItem = parsed.total;
+        if (parsed.diskon === undefined || typeof parsed.diskon !== 'number') parsed.diskon = 0;
+
+        if ((parsed as any).items && Array.isArray((parsed as any).items) && !parsed.item) {
+          parsed.item = (parsed as any).items;
+        }
+        if (!Array.isArray(parsed.item)) {
+          parsed.item = [];
+        }
+
+        for (const item of parsed.item) {
+          if (!item.nama) item.nama = "Unknown Item";
+          if (typeof item.jumlah !== 'number') item.jumlah = 1;
+          if (typeof item.harga_satuan !== 'number') item.harga_satuan = 0;
+          if (item.diskon === undefined || typeof item.diskon !== 'number') item.diskon = 0;
+          if (!item.subtotal) {
+            item.subtotal = (item.jumlah * item.harga_satuan) - item.diskon;
+          }
         }
       }
 
-      return parsed;
+      return parsedArray;
     } catch (error) {
       if (error instanceof UnprocessableEntityException) {
         throw error;
       }
-      throw new UnprocessableEntityException(`Response AI tidak valid JSON: ${error.message}`);
+      throw new UnprocessableEntityException(`Response AI tidak valid JSON array: ${error.message}`);
     }
   }
 }

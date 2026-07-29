@@ -73,12 +73,13 @@ export class OcrDataDto {
   lines: OcrLineDto[];
 }
 
-export class ScanStrukDto {
+export class ScanStrukBatchDto {
   @ApiProperty({
-    description: 'Data OCR dalam format JSON string',
-    example: '{"rawText":"Indomaret\nJl. Sudirman No.1...","imageSize":{"width":1080,"height":1920},"lines":[{"lineIndex":0,"text":"Indomaret","boundingBox":{"left":120,"top":45,"right":420,"bottom":80}}]}'
+    description: 'Array of data OCR dalam format object JSON',
+    type: [OcrDataDto]
   })
-  @IsString()
-  @IsNotEmpty({ message: 'Data OCR tidak boleh kosong' })
-  ocrData: string;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => OcrDataDto)
+  ocrDataBatch: OcrDataDto[];
 }

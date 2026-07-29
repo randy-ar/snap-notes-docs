@@ -6,6 +6,8 @@ import 'package:snap_notes_mvvm/features/auth/viewmodels/login_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/auth/views/pages/login_page.dart';
 import 'package:snap_notes_mvvm/features/main/views/pages/main_page.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class SnapNotesApp extends StatelessWidget {
   const SnapNotesApp({super.key});
 
@@ -14,11 +16,15 @@ class SnapNotesApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => getIt<AuthViewModel>()..checkAuth(),
       child: ShadcnApp(
+        navigatorKey: navigatorKey,
         title: 'Snap Notes',
         theme: ThemeData(
           radius: 0.5,
           typography: const Typography.geist().scale(0.85),
         ),
+        builder: (context, child) {
+          return DrawerOverlay(child: child!);
+        },
         home: const AuthWrapper(),
       ),
     );
@@ -31,7 +37,7 @@ class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authViewModel = context.watch<AuthViewModel>();
-    
+
     if (authViewModel.isLoading) {
       return const Scaffold(
         child: Center(child: CircularProgressIndicator()),
@@ -46,4 +52,3 @@ class AuthWrapper extends StatelessWidget {
     }
   }
 }
-

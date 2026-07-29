@@ -1,5 +1,6 @@
-import { Controller, Post, Body, Req, UseGuards, Get, Query, Param, Patch, Delete, HttpCode } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Post, Body, Req, UseGuards, Get, Query, Param, Patch, Delete, HttpCode, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { SupabaseAuthGuard } from '../auth/guards/supabase-auth.guard';
 import { PengeluaranService } from './pengeluaran.service';
 import { CreatePengeluaranDto } from './dto/create-pengeluaran.dto';
@@ -22,15 +23,52 @@ export class PengeluaranController {
   @Post()
   @UseGuards(SupabaseAuthGuard)
   @ApiBearerAuth()
+  @UseInterceptors(FileInterceptor('gambar'))
+  @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Tambah data pengeluaran secara manual' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        deskripsi: { type: 'string' },
+        jumlah: { type: 'number' },
+        tanggal: { type: 'string', format: 'date-time' },
+        kategoriId: { type: 'string', format: 'uuid', nullable: true },
+        catatan: { type: 'string', nullable: true },
+        struk: { type: 'string', description: 'JSON string of CreateStrukManualDto', nullable: true },
+        gambar: {
+          type: 'string',
+          format: 'binary',
+          description: 'Foto struk (opsional)',
+          nullable: true,
+        },
+      },
+      required: ['deskripsi', 'jumlah', 'tanggal'],
+    },
+  })
   @ApiResponse({ status: 201, description: 'Pengeluaran berhasil ditambahkan', type: PengeluaranResponseDto })
   @ApiResponse({ status: 400, description: 'Data tidak valid' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async tambah(
     @Req() req: RequestWithUser,
-    @Body() dto: CreatePengeluaranDto,
+    @Body() body: any,
+    @UploadedFile() gambar?: Express.Multer.File,
   ): Promise<PengeluaranResponseDto> {
-    return this.pengeluaranService.tambah(req.user.id, dto);
+    const dto: CreatePengeluaranDto = {
+      deskripsi: body.deskripsi,
+      jumlah: Number(body.jumlah),
+      tanggal: body.tanggal,
+      kategoriId: body.kategoriId,
+      catatan: body.catatan,
+    };
+    if (body.struk) {
+      try {
+        dto.struk = JSON.parse(body.struk);
+      } catch (e) {
+        throw new BadRequestException('Format struk tidak valid (harus JSON)');
+      }
+    }
+    return this.pengeluaranService.tambah(req.user.id, dto, gambar);
   }
 
   @Get('overview')

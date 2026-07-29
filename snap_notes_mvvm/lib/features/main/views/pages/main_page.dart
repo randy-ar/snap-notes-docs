@@ -5,7 +5,7 @@ import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.da
 import 'package:snap_notes_mvvm/features/dashboard/views/pages/dashboard_page.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/views/pages/pemasukan_page.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/views/pages/pengeluaran_page.dart';
-import 'package:snap_notes_mvvm/features/receipt/views/pages/scanner_page.dart';
+import 'package:snap_notes_mvvm/features/receipt/views/pages/receipt_scan_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -58,7 +58,7 @@ class _MainPageState extends State<MainPage> {
                   MaterialPageRoute(
                     builder: (_) => ChangeNotifierProvider(
                       create: (_) => getIt<ReceiptViewModel>(),
-                      child: const ScannerPage(),
+                      child: const ReceiptScanPage(),
                     ),
                   ),
                 );
@@ -100,4 +100,3 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
-

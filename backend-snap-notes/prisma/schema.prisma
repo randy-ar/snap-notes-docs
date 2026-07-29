@@ -67,6 +67,7 @@ model Struk {
   sudahDikonfirmasi Boolean      @default(false) @map("sudah_dikonfirmasi")
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
+  diskon            Decimal?     @db.Decimal(15, 2)
   itemStruks        ItemStruk[]
   pengeluaran       Pengeluaran?
   kategori          Kategori?    @relation(fields: [kategoriId], references: [id])
@@ -84,6 +85,7 @@ model ItemStruk {
   hargaSatuan Decimal   @map("harga_satuan") @db.Decimal(15, 2)
   subtotal    Decimal   @db.Decimal(15, 2)
   createdAt   DateTime  @default(now())
+  diskon      Decimal?  @db.Decimal(15, 2)
   kategori    Kategori? @relation(fields: [kategoriId], references: [id])
   struk       Struk     @relation(fields: [strukId], references: [id], onDelete: Cascade)
 

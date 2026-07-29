@@ -25,37 +25,21 @@ class FakeReceiptService implements ReceiptService {
   }
 
   @override
-  Future<List<local.RecognizedText>> extractTextFromImages(List<File> images) async {
-    return images.map((_) => local.RecognizedText(
-      text: 'Sample OCR Batch Text',
-      lines: [],
-      imageWidth: 1080,
-      imageHeight: 1920,
+  Future<List<Receipt>> parseReceiptBatch(
+    List<Map<String, dynamic>> ocrDataBatch,
+  ) async {
+    return ocrDataBatch.map((e) => Receipt(
+      id: 'r1',
+      storeName: 'Indomaret Batch',
+      date: '2026-07-08',
+      totalAmount: 10000,
+      items: [],
     )).toList();
   }
 
   @override
-  Future<List<Receipt>> parseBatchReceipt(
-    List<File> images,
-    List<local.RecognizedText> recognizedTexts,
-    [String? customPrompt]
-  ) async {
-    return [
-      Receipt(
-        id: 'r1',
-        storeName: 'Indomaret Batch',
-        date: '2026-07-08',
-        totalAmount: 10000,
-        items: [],
-      ),
-      Receipt(
-        id: 'r2',
-        storeName: 'Alfamart Batch',
-        date: '2026-07-08',
-        totalAmount: 20000,
-        items: [],
-      ),
-    ];
+  Future<Receipt> saveReceipt(Receipt receipt, File image) async {
+    return receipt;
   }
 }
 
@@ -78,7 +62,7 @@ void main() {
       expect(viewModel.currentStep, ReceiptScanStep.imageSelected);
     });
 
-    test('runBatchOCR should run OCR on multiple images and update step to batchOcrPreview', () async {
+    test('runBatchOCR should run OCR on multiple images and update step to ocrPreview', () async {
       final mockImages = [File('test1.jpg'), File('test2.jpg')];
       viewModel.selectImages(mockImages);
 
@@ -86,11 +70,11 @@ void main() {
 
       expect(viewModel.isLoading, isFalse);
       expect(viewModel.recognizedTexts.length, 2);
-      expect(viewModel.recognizedTexts.first.text, 'Sample OCR Batch Text');
-      expect(viewModel.currentStep, ReceiptScanStep.batchOcrPreview);
+      expect(viewModel.recognizedTexts.first.text, 'Rotated OCR Text');
+      expect(viewModel.currentStep, ReceiptScanStep.ocrPreview);
     });
 
-    test('uploadBatchToServer should upload batch data and update step to batchResponsePreview', () async {
+    test('uploadBatchToServer should upload batch data and update step to responsePreview', () async {
       final mockImages = [File('test1.jpg'), File('test2.jpg')];
       viewModel.selectImages(mockImages);
       await viewModel.runBatchOCR();
@@ -100,8 +84,8 @@ void main() {
       expect(viewModel.isLoading, isFalse);
       expect(viewModel.batchReceipts.length, 2);
       expect(viewModel.batchReceipts.first.storeName, 'Indomaret Batch');
-      expect(viewModel.batchReceipts[1].storeName, 'Alfamart Batch');
-      expect(viewModel.currentStep, ReceiptScanStep.batchResponsePreview);
+      expect(viewModel.batchReceipts[1].storeName, 'Indomaret Batch');
+      expect(viewModel.currentStep, ReceiptScanStep.responsePreview);
     });
 
     test('confirmReceipt should update step to confirmed when batchReceipts is not empty', () async {
@@ -110,7 +94,7 @@ void main() {
       await viewModel.runBatchOCR();
       await viewModel.uploadBatchToServer();
 
-      viewModel.confirmReceipt();
+      await viewModel.confirmReceipt();
 
       expect(viewModel.currentStep, ReceiptScanStep.confirmed);
     });

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/recognized_text.dart';
 import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.dart';
+import 'package:snap_notes_mvvm/features/receipt/views/pages/receipt_parsed_page.dart';
 import 'package:snap_notes_mvvm/features/receipt/views/widgets/scan_animation_overlay.dart';
 
 class ReceiptTextRecognizedPage extends StatefulWidget {
@@ -29,126 +30,57 @@ class ReceiptTextRecognizedPage extends StatefulWidget {
 }
 
 class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
-  String? _selectedCategory;
-  String? _customPrompt;
+  final StepperController _stepperController = StepperController();
   int _currentIndex = 0;
 
-  final List<String> categories = [
-    'Makanan', 'Minuman', 'Sembako', 'Transportasi', 'Komunikasi',
-    'Edukasi', 'Perawatan', 'Pakaian', 'Hiburan', 'Kesehatan',
-    'Elektronik', 'Otomotif', 'Lainnya',
-  ];
-
-  void showKonteksDrawer() {
-    final promptController = TextEditingController(text: _customPrompt);
-    String? tempCategory = _selectedCategory;
-
-    openDrawer(
-      context: context,
-      position: OverlayPosition.bottom,
-      builder: (drawerContext) {
-        return StatefulBuilder(
-          builder: (drawerContext, setSheetState) {
-            return Container(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(widget.isBatchMode
-                          ? 'Beri Konteks AI Batch'
-                          : 'Beri Konteks AI')
-                      .large()
-                      .semiBold(),
-                  const Gap(8),
-                  Text(widget.isBatchMode
-                          ? 'Berikan instruksi tambahan sebelum AI menganalisis seluruh gambar struk sekaligus.'
-                          : 'Pilih kategori dan/atau berikan instruksi tambahan sebelum AI menganalisis struk.')
-                      .muted(),
-                  const Gap(16),
-
-                  // Kategori hanya ditampilkan di single mode
-                  if (!widget.isBatchMode) ...[
-                    const Text('Kategori (Opsional)').medium(),
-                    const Gap(4),
-                    Select<String>(
-                      itemBuilder: (context, item) => Text(item),
-                      popup: SelectPopup.builder(
-                        searchPlaceholder: const Text('Cari kategori'),
-                        builder: (context, searchQuery) {
-                          final filtered = searchQuery == null
-                              ? categories
-                              : categories
-                                  .where((c) => c
-                                      .toLowerCase()
-                                      .contains(searchQuery.toLowerCase()))
-                                  .toList();
-                          return SelectItemList(
-                            children: [
-                              for (final c in filtered)
-                                SelectItemButton(value: c, child: Text(c))
-                            ],
-                          );
-                        },
-                      ),
-                      onChanged: (value) {
-                        setSheetState(() {
-                          tempCategory = value;
-                        });
-                      },
-                      value: tempCategory,
-                      placeholder: const Text('Pilih Kategori'),
-                    ),
-                    const Gap(16),
-                  ],
-
-                  const Text('Instruksi Tambahan (Opsional)').medium(),
-                  const Gap(4),
-                  TextField(
-                    controller: promptController,
-                    placeholder: Text(widget.isBatchMode
-                        ? 'Contoh: "Semua struk ini adalah biaya konsumsi rapat kantor"'
-                        : 'Contoh: "Ini adalah struk tagihan internet bulanan"'),
-                    minLines: 3,
-                    maxLines: 5,
-                  ),
-                  const Gap(24),
-
-                  PrimaryButton(
-                    onPressed: () {
-                      setState(() {
-                        _selectedCategory = tempCategory;
-                        _customPrompt = promptController.text;
-                      });
-                      closeOverlay(drawerContext);
-                    },
-                    child: const Text('Simpan Konteks'),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _stepperController.jumpToStep(1); // Jump to "Scan Foto" step
+    });
   }
 
   void submitAnalisis() {
     final viewModel = context.read<ReceiptViewModel>();
-    String combinedPrompt = '';
-    if (_selectedCategory != null && _selectedCategory!.isNotEmpty) {
-      combinedPrompt += 'Kategori yang disarankan: $_selectedCategory.\n';
-    }
-    if (_customPrompt != null && _customPrompt!.isNotEmpty) {
-      combinedPrompt += _customPrompt!;
-    }
-    viewModel
-        .uploadToServer(combinedPrompt.isEmpty ? null : combinedPrompt.trim());
+    // Backend returns parsed JSON from Gemini API, saving it to viewModel state.
+    // We don't await because we want the loading overlay to show.
+    viewModel.uploadToServer(null).then((_) {
+      if (mounted && viewModel.receiptDetail != null) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider.value(
+              value: viewModel,
+              child: ReceiptParsedPage(
+                isBatchMode: false,
+                image: widget.image,
+                receipt: viewModel.receiptDetail,
+              ),
+            ),
+          ),
+        );
+      }
+    });
   }
 
   void submitBatchAnalisis() {
     final viewModel = context.read<ReceiptViewModel>();
-    viewModel.uploadBatchToServer(_customPrompt);
+    viewModel.uploadBatchToServer(null).then((_) {
+      if (mounted && viewModel.batchReceipts.isNotEmpty) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider.value(
+              value: viewModel,
+              child: ReceiptParsedPage(
+                isBatchMode: true,
+                images: widget.images,
+                receipts: viewModel.batchReceipts,
+              ),
+            ),
+          ),
+        );
+      }
+    });
   }
 
   // ---------------------------------------------------------------------------
@@ -170,20 +102,51 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
     return Scaffold(
       headers: [
         AppBar(
-          title: Text(
-              widget.isBatchMode ? 'Preview OCR Batch' : 'Hasil Deteksi Teks'),
+          title: const Text('Scan Struk'),
           leading: [
             if (!widget.isBatchMode)
               IconButton.ghost(
-                onPressed: () => viewModel.cancelScan(),
+                onPressed: () => Navigator.of(context).pop(),
                 icon: const Icon(LucideIcons.arrowLeft),
               ),
           ],
         ),
       ],
-      child: mainContent,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Stepper(
+                controller: _stepperController,
+                direction: Axis.horizontal,
+                variant: StepVariant.circleAlt,
+                steps: [
+                  const Step(
+                    title: Text('Ambil Foto'),
+                    contentBuilder: _buildEmptyStepContent,
+                  ),
+                  Step(
+                    title: const Text('Scan Foto'),
+                    contentBuilder: (context) => mainContent,
+                  ),
+                  const Step(
+                    title: Text('Review AI'),
+                    contentBuilder: _buildEmptyStepContent,
+                  ),
+                  const Step(
+                    title: Text('Simpan Struk'),
+                    contentBuilder: _buildEmptyStepContent,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
+
+  static Widget _buildEmptyStepContent(BuildContext context) => const SizedBox.shrink();
 
   // ---------------------------------------------------------------------------
   // Single mode
@@ -195,8 +158,7 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
         Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -217,13 +179,13 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                      if (widget.recognizedText != null)
+                      if (viewModel.recognizedText != null)
                         Positioned.fill(
                           child: CustomPaint(
                             painter: BoundingBoxPainter(
-                              lines: widget.recognizedText!.lines,
-                              imageWidth: widget.recognizedText!.imageWidth,
-                              imageHeight: widget.recognizedText!.imageHeight,
+                              lines: viewModel.recognizedText!.lines,
+                              imageWidth: viewModel.recognizedText!.imageWidth,
+                              imageHeight: viewModel.recognizedText!.imageHeight,
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
@@ -235,36 +197,9 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Builder(
-                      builder: (innerContext) {
-                        return SecondaryButton(
-                          onPressed: viewModel.isLoading
-                              ? null
-                              : () => showKonteksDrawer(),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(LucideIcons.messageSquarePlus),
-                              Gap(8),
-                              Text('Beri Konteks'),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const Gap(16),
-                  Expanded(
-                    child: PrimaryButton(
-                      onPressed:
-                          viewModel.isLoading ? null : () => submitAnalisis(),
-                      child: const Text('Analisis dengan AI'),
-                    ),
-                  ),
-                ],
+              child: PrimaryButton(
+                onPressed: viewModel.isLoading ? null : () => submitAnalisis(),
+                child: const Text('Analisis dengan AI'),
               ),
             ),
           ],
@@ -272,7 +207,7 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
         if (viewModel.isLoading)
           Positioned.fill(
             child: ScanAnimationOverlay(
-              text: widget.recognizedText == null
+              text: viewModel.recognizedText == null
                   ? 'Menjalankan OCR lokal (ML Kit)...'
                   : 'Menganalisis dengan Gemini AI...',
             ),
@@ -288,9 +223,8 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
   Widget _buildBatchContent(BuildContext context, ReceiptViewModel viewModel) {
     final images = widget.images!;
     final currentImg = images[_currentIndex];
-    final currentRt = widget.recognizedTexts != null &&
-            widget.recognizedTexts!.length > _currentIndex
-        ? widget.recognizedTexts![_currentIndex]
+    final currentRt = viewModel.recognizedTexts.length > _currentIndex
+        ? viewModel.recognizedTexts[_currentIndex]
         : null;
 
     return Stack(
@@ -359,41 +293,18 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SecondaryButton(
-                      onPressed: () => showKonteksDrawer(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(LucideIcons.sparkles, size: 18),
-                          const Gap(8),
-                          Text(_customPrompt != null &&
-                                  _customPrompt!.isNotEmpty
-                              ? 'Konteks Aktif'
-                              : 'Beri Konteks'),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Gap(16),
-                  Expanded(
-                    child: PrimaryButton(
-                      onPressed: viewModel.isLoading
-                          ? null
-                          : () => submitBatchAnalisis(),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(LucideIcons.check, size: 18),
-                          Gap(8),
-                          Text('Proses Batch AI'),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              child: PrimaryButton(
+                onPressed: viewModel.isLoading
+                    ? null
+                    : () => submitBatchAnalisis(),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(LucideIcons.check, size: 18),
+                    Gap(8),
+                    Text('Selanjutnya'),
+                  ],
+                ),
               ),
             ),
           ],

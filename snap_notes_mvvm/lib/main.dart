@@ -4,6 +4,6 @@ import 'package:snap_notes_mvvm/app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initDependencies();
+  await initDependencies(navigatorKey);
   runApp(const SnapNotesApp());
 }

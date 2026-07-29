@@ -40,13 +40,13 @@ export class OpenRouterService implements ILLMProvider {
     this.timeoutMs = this.configService.get<number>('OPENROUTER_TIMEOUT_MS') || 28000;
   }
 
-  async parseStrukOCR(rawText: string, lines?: OcrLine[], imageSize?: ImageSize, customPrompt?: string, kategoriContext?: string): Promise<ParsedStrukDto> {
+  async parseStrukOCRBatch(ocrDataBatch: any[], customPrompt?: string, kategoriContext?: string): Promise<ParsedStrukDto[]> {
     try {
-      const prompt = this.buatPrompt(rawText, lines, imageSize, customPrompt, kategoriContext);
+      const prompt = this.buatPromptBatch(ocrDataBatch, customPrompt, kategoriContext);
       const messages: OpenRouterMessage[] = [
         {
           role: 'system',
-          content: 'Anda adalah parser struk belanja yang mengkonversi teks OCR menjadi JSON terstruktur. Selalu kembalikan JSON valid tanpa markdown.',
+          content: 'Anda adalah parser struk belanja yang mengkonversi teks OCR menjadi JSON terstruktur. Selalu kembalikan JSON array valid tanpa markdown.',
         },
         {
           role: 'user',
@@ -56,27 +56,149 @@ export class OpenRouterService implements ILLMProvider {
 
       const openRouterPromise = this.callOpenRouter(messages);
       const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('OpenRouter timeout')), this.timeoutMs);
+        setTimeout(() => reject(new Error('OpenRouter timeout')), this.timeoutMs * 1.5);
       });
 
       const response = await Promise.race([openRouterPromise, timeoutPromise]);
 
       const text = response.choices?.[0]?.message?.content;
-      console.log('[OpenRouter] Raw response:', text);
+      console.log('[OpenRouter Batch] Raw response:', text);
 
       if (!text) {
         throw new ServiceUnavailableException('OpenRouter tidak memberikan response');
       }
 
-      return this.validasiResponse(text);
+      return this.validasiResponseBatch(text, ocrDataBatch.length);
     } catch (error) {
       if (error instanceof ServiceUnavailableException || error instanceof UnprocessableEntityException) {
         throw error;
       }
       if (error.message === 'OpenRouter timeout') {
-        throw new ServiceUnavailableException('OpenRouter timeout - coba lagi dengan struk yang lebih jelas');
+        throw new ServiceUnavailableException('OpenRouter timeout - coba lagi dengan batch yang lebih kecil');
       }
       throw new ServiceUnavailableException(`OpenRouter error: ${error.message}`);
+    }
+  }
+
+  private buatPromptBatch(ocrDataBatch: any[], customPrompt?: string, kategoriContext?: string): string {
+    let batchInfo = '';
+
+    ocrDataBatch.forEach((ocrData, index) => {
+      let layoutInfo = '';
+      if (ocrData.lines && ocrData.lines.length > 0 && ocrData.imageSize) {
+        const lineInfo = ocrData.lines.map((line: any) => {
+          const centerX = (line.boundingBox.left + line.boundingBox.right) / 2;
+          const centerY = (line.boundingBox.top + line.boundingBox.bottom) / 2;
+          const relativeX = (centerX / ocrData.imageSize.width * 100).toFixed(1);
+          const relativeY = (centerY / ocrData.imageSize.height * 100).toFixed(1);
+          const textPreview = line.text.substring(0, 40);
+          const ellipsis = line.text.length > 40 ? '...' : '';
+          return `[${line.lineIndex}] X:${relativeX}% Y:${relativeY}% | "${textPreview}${ellipsis}"`;
+        }).join('\n');
+
+        layoutInfo = `INFO LAYOUT LINE POSISI:\n${lineInfo}\n`;
+      }
+
+      batchInfo += `\n--- STRUK ${index + 1} ---\nTEKS OCR:\n"""\n${ocrData.rawText}\n"""\n${layoutInfo}`;
+    });
+
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    return `Anda adalah parser struk belanja. Analisis ${ocrDataBatch.length} teks OCR berikut dan ekstrak informasi setiap struk ke format array JSON.
+
+DATA BATCH OCR:
+${batchInfo}
+
+${customPrompt ? `KONTEKS TAMBAHAN DARI USER UNTUK KOREKSI:\n"""\n${customPrompt}\n"""\n` : ''}
+Ekstrak informasi seluruh struk dalam format Array JSON yang berisi objek-objek struk dengan urutan yang sama (dari struk 1 hingga ${ocrDataBatch.length}):
+[
+  {
+    "nama_toko": "Nama toko/merchant",
+    "tanggal": "YYYY-MM-DD",
+    "total": 0,
+    "kategori_toko": "Kategori toko (opsional)",
+    "item": [
+      {
+        "nama": "Nama item",
+        "jumlah": 1,
+        "harga_satuan": 0,
+        "subtotal": 0,
+        "kategori": "Pilihan dari 10 kategori di bawah"
+      }
+    ]
+  },
+  ...
+]
+
+Aturan Kategori Pengeluaran:
+Kamu HANYA diizinkan mengklasifikasikan item ke dalam salah satu dari 10 kategori persis berikut (jangan membuat kategori baru):
+1. "Makanan & Minuman"
+2. "Perumahan & Utilitas"
+3. "Komunikasi"
+4. "Transportasi"
+5. "Kesehatan"
+6. "Pendidikan"
+7. "Hiburan"
+8. "Perawatan Pribadi"
+9. "Pakaian"
+10. "Lain-lain"
+
+Aturan WAJIB:
+1. Kembalikan array JSON berisi persis ${ocrDataBatch.length} object struk (sesuai jumlah struk pada input).
+2. Jika ada struk yang teksnya tidak jelas atau kosong, kembalikan object tersebut dengan array item kosong dan error: "error": "Gambar struk tidak jelas". Namun struktur lainnya (nama_toko dsb) tetap isi sebisanya.
+3. Selalu isi field nama_toko, tanggal, total, dan item.
+4. Jika nama_toko tidak ditemukan, gunakan "Tidak diketahui".
+5. Jika tanggal tidak ditemukan dalam teks, gunakan tanggal hari ini: ${currentDate}
+6. Tanggal harus format YYYY-MM-DD.
+7. Total adalah angka keseluruhan struk (bukan subtotal item). Jika tidak ada total, jumlahkan subtotal item.
+8. Harga dalam format number tanpa pemisah ribuan.
+9. Pastikan jumlah * harga_satuan = subtotal untuk setiap item.
+10. Return HANYA JSON array, tanpa markdown atau string tambahan lain.`;
+  }
+
+  private validasiResponseBatch(text: string, expectedLength: number): ParsedStrukDto[] {
+    try {
+      const cleaned = text.replace(/```json\n?|\n?```/g, '').trim();
+      const parsedArray = JSON.parse(cleaned);
+
+      if (!Array.isArray(parsedArray)) {
+        throw new UnprocessableEntityException('Response AI bukan berupa array JSON');
+      }
+
+      for (let i = 0; i < parsedArray.length; i++) {
+        const parsed = parsedArray[i];
+
+        if (parsed.error && (!parsed.item || parsed.item.length === 0)) {
+           continue;
+        }
+
+        if (!parsed.nama_toko) parsed.nama_toko = 'Tidak diketahui';
+        if (!parsed.tanggal) parsed.tanggal = new Date().toISOString().split('T')[0];
+        if (typeof parsed.total !== 'number') parsed.total = 0;
+
+        if ((parsed as any).items && Array.isArray((parsed as any).items) && !parsed.item) {
+          parsed.item = (parsed as any).items;
+        }
+        if (!Array.isArray(parsed.item)) {
+          parsed.item = [];
+        }
+
+        for (const item of parsed.item) {
+          if (!item.nama) item.nama = "Unknown Item";
+          if (typeof item.jumlah !== 'number') item.jumlah = 1;
+          if (typeof item.harga_satuan !== 'number') item.harga_satuan = 0;
+          if (!item.subtotal) {
+            item.subtotal = item.jumlah * item.harga_satuan;
+          }
+        }
+      }
+
+      return parsedArray;
+    } catch (error) {
+      if (error instanceof UnprocessableEntityException) {
+        throw error;
+      }
+      throw new UnprocessableEntityException(`Response AI tidak valid JSON array: ${(error as Error).message}`);
     }
   }
 
@@ -103,127 +225,5 @@ export class OpenRouterService implements ILLMProvider {
     }
 
     return response.json() as Promise<OpenRouterResponse>;
-  }
-
-  private buatPrompt(rawText: string, lines?: OcrLine[], imageSize?: ImageSize, customPrompt?: string, kategoriContext?: string): string {
-    let layoutInfo = '';
-
-    if (lines && lines.length > 0 && imageSize) {
-      const lineInfo = lines.map((line) => {
-        const centerX = (line.boundingBox.left + line.boundingBox.right) / 2;
-        const centerY = (line.boundingBox.top + line.boundingBox.bottom) / 2;
-        const relativeX = (centerX / imageSize.width * 100).toFixed(1);
-        const relativeY = (centerY / imageSize.height * 100).toFixed(1);
-        const textPreview = line.text.substring(0, 40);
-        const ellipsis = line.text.length > 40 ? '...' : '';
-        return `[${line.lineIndex}] X:${relativeX}% Y:${relativeY}% | "${textPreview}${ellipsis}"`;
-      }).join('\n');
-
-      layoutInfo = `
-
-INFO LAYOUT LINE POSISI (persentase dari ukuran gambar ${imageSize.width}x${imageSize.height}px):
-${lineInfo}
-
-Analisis posisi:
-- X 0-30% = Kolom kiri (biasanya nama item/produk)
-- X 30-60% = Kolom tengah (biasanya qty/jumlah)
-- X 60-100% = Kolom kanan (biasanya harga/total)
-- Y urutan dari atas ke bawah menunjukkan urutan item
-- lineIndex menunjukkan urutan baris dari atas ke bawah`;
-    }
-
-    const currentDate = new Date().toISOString().split('T')[0];
-
-    return `Anda adalah parser struk belanja. Analisis teks OCR berikut dan ekstrak informasi struk ke format JSON.
-
-TEKS OCR:
-"""
-${rawText}
-"""${layoutInfo}
-
-${customPrompt ? `KONTEKS TAMBAHAN DARI USER UNTUK KOREKSI:\n"""\n${customPrompt}\n"""\n` : ''}
-Ekstrak informasi berikut dalam format JSON:
-{
-  "nama_toko": "Nama toko/merchant",
-  "tanggal": "YYYY-MM-DD",
-  "total": 0,
-  "kategori_toko": "Kategori toko (opsional)",
-  "item": [
-    {
-      "nama": "Nama item",
-      "jumlah": 1,
-      "harga_satuan": 0,
-      "subtotal": 0,
-      "kategori": "Pilihan dari 10 kategori di bawah"
-    }
-  ]
-}
-
-Aturan Kategori Pengeluaran:
-Kamu HANYA diizinkan mengklasifikasikan item ke dalam salah satu dari 10 kategori persis berikut (jangan membuat kategori baru):
-1. "Makanan & Minuman" -> Segala jenis sembako, makanan restoran, minuman, kopi, snack, air galon, bahan makanan mentah, bumbu, rokok.
-2. "Perumahan & Utilitas" -> Tagihan listrik, air (PAM), gas elpiji/LPG, atau utilitas rumah tangga pokok.
-3. "Komunikasi" -> Pulsa HP, kuota internet, paket data, tagihan telepon.
-4. "Transportasi" -> Bensin, solar, biaya parkir, karcis tol, tiket transportasi, tarif ojek online.
-5. "Kesehatan" -> Obat-obatan, biaya rumah sakit/klinik, dokter, iuran BPJS, vitamin.
-6. "Pendidikan" -> Buku pelajaran, alat tulis kantor (ATK), uang sekolah/kuliah, kursus.
-7. "Hiburan" -> Tiket bioskop, top-up game, langganan streaming (Netflix dll), hotel/penginapan, rekreasi.
-8. "Perawatan Pribadi" -> Sabun mandi, sampo, pasta gigi, kosmetik, skincare, parfum, tisu, pembalut.
-9. "Pakaian" -> Baju, celana, jaket, sepatu, sandal, topi, jilbab, atau produk sandang lainnya.
-10. "Lain-lain" -> Pajak, keperluan pesta/kondangan, kantong plastik, atau item yang sama sekali tidak cocok masuk ke 9 kategori di atas.
-
-Aturan WAJIB:
-1. SELALU kembalikan semua field yang dibutuhkan, jangan biarkan kosong
-2. Jika nama_toko tidak ditemukan, gunakan "Tidak diketahui"
-3. Jika tanggal tidak ditemukan dalam teks, gunakan tanggal hari ini: ${currentDate}
-4. Jika total tidak ditemukan, jumlahkan semua subtotal dari item untuk mendapatkan total
-5. Jika tidak ada item produk sama sekali yang bisa diidentifikasi, return JSON dengan error message di field "error": "Gambar struk tidak jelas, mohon upload ulang"
-6. Tanggal harus dalam format YYYY-MM-DD (konversi dari format Indonesia DD-MM-YYYY atau DD/MM/YYYY)
-7. Total adalah angka total keseluruhan struk (bukan subtotal item)
-8. Harga dalam format number tanpa pemisah ribuan (contoh: 10500 bukan 10.500)
-9. Kategori harus dipilih dari daftar kategori pengeluaran di atas. Jika singkatan aneh di struk minimarket (misal: "SBN MDI LFB"), tebak barang aslinya sebelum klasifikasi (masuk "Perawatan Pribadi").
-10. Pastikan jumlah * harga_satuan = subtotal untuk setiap item
-11. Gunakan info posisi X untuk membedakan kolom: kiri=item, tengah=qty, kanan=harga
-12. Jika ada teks seperti "1 5,000" di posisi tengah+kanan, interpretasikan sebagai qty=1, harga=5000
-13. Return HANYA JSON, tanpa markdown atau penjelasan lain`;
-  }
-
-  private validasiResponse(text: string): ParsedStrukDto {
-    try {
-      const cleaned = text.replace(/```json\n?|\n?```/g, '').trim();
-      const parsed = JSON.parse(cleaned);
-
-      if (parsed.error) {
-        throw new UnprocessableEntityException(parsed.error);
-      }
-
-      if (!parsed.nama_toko || !parsed.tanggal || typeof parsed.total !== 'number') {
-        throw new UnprocessableEntityException('Response AI tidak lengkap: nama_toko, tanggal, dan total wajib ada');
-      }
-
-      if (parsed.items && Array.isArray(parsed.items) && !parsed.item) {
-        parsed.item = parsed.items;
-      }
-
-      if (!Array.isArray(parsed.item) || parsed.item.length === 0) {
-        throw new UnprocessableEntityException('Response AI tidak valid: item harus berupa array tidak kosong');
-      }
-
-      parsed.item.forEach((item: Record<string, unknown>, index: number) => {
-        if (!item.nama || typeof item.jumlah !== 'number' || typeof item.harga_satuan !== 'number') {
-          throw new UnprocessableEntityException(`Item ke-${index + 1} tidak valid: nama, jumlah, dan harga_satuan wajib ada`);
-        }
-        if (!item.subtotal) {
-          item.subtotal = (item.jumlah as number) * (item.harga_satuan as number);
-        }
-      });
-
-      return parsed as ParsedStrukDto;
-    } catch (error) {
-      if (error instanceof UnprocessableEntityException) {
-        throw error;
-      }
-      throw new UnprocessableEntityException(`Gagal parse response AI: ${(error as Error).message}`);
-    }
   }
 }

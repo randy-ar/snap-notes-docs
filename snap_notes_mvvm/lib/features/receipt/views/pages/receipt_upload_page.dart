@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'dart:convert';
-import 'package:flutter/material.dart' show Icons;
+import 'package:flutter/material.dart' hide Stepper, Step, Column, Row, Expanded, Stack, Scaffold, AppBar, Theme, Card, Divider;
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.dart';
+import 'package:snap_notes_mvvm/utils/format_utils.dart';
+import 'package:snap_notes_mvvm/features/main/views/pages/main_page.dart';
 
 class ReceiptUploadPage extends StatefulWidget {
   final File? image;
@@ -41,7 +43,16 @@ class ReceiptUploadPage extends StatefulWidget {
 }
 
 class _ReceiptUploadPageState extends State<ReceiptUploadPage> {
+  final StepperController _stepperController = StepperController();
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _stepperController.jumpToStep(3); // Jump to "Simpan Struk" step
+    });
+  }
 
   // ---------------------------------------------------------------------------
   // Public API
@@ -60,9 +71,12 @@ class _ReceiptUploadPageState extends State<ReceiptUploadPage> {
     viewModel.startCamera();
   }
 
-  /// Pops the current route to finish.
+  /// Navigates to the Dashboard/Main page.
   void selesai() {
-    Navigator.of(context).pop();
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const MainPage()),
+      (route) => false,
+    );
   }
 
   // ---------------------------------------------------------------------------
@@ -82,12 +96,47 @@ class _ReceiptUploadPageState extends State<ReceiptUploadPage> {
     return Scaffold(
       headers: [
         AppBar(
-          title: Text(widget.isError ? 'Upload Gagal' : 'Upload Berhasil'),
+          title: const Text('Scan Struk'),
         ),
       ],
-      child: mainContent,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Stepper(
+                controller: _stepperController,
+                direction: Axis.horizontal,
+                variant: StepVariant.circleAlt,
+                steps: [
+                  const Step(
+                    title: Text('Ambil Foto'),
+                    contentBuilder: _buildEmptyStepContent,
+                  ),
+                  const Step(
+                    title: Text('Scan Foto'),
+                    contentBuilder: _buildEmptyStepContent,
+                  ),
+                  const Step(
+                    title: Text('Review AI'),
+                    contentBuilder: _buildEmptyStepContent,
+                  ),
+                  Step(
+                    title: const Text('Simpan Struk'),
+                    icon: !widget.isError
+                        ? const StepNumber(icon: Icon(LucideIcons.check))
+                        : const StepNumber(icon: Icon(LucideIcons.x)),
+                    contentBuilder: (context) => mainContent,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
+
+  static Widget _buildEmptyStepContent(BuildContext context) => const SizedBox.shrink();
 
   // ---------------------------------------------------------------------------
   // Success UI
@@ -195,8 +244,11 @@ class _ReceiptUploadPageState extends State<ReceiptUploadPage> {
                       const Gap(16),
                       _buildInfoRow(context, 'Nama Toko', currentReceipt.storeName),
                       _buildInfoRow(context, 'Kategori', currentReceipt.categoryName ?? 'Lainnya'),
-                      _buildInfoRow(context, 'Tanggal', currentReceipt.date),
-                      _buildInfoRow(context, 'Total', 'Rp ${currentReceipt.totalAmount.toStringAsFixed(0)}'),
+                      _buildInfoRow(context, 'Tanggal', FormatUtils.formatIndonesianDate(DateTime.tryParse(currentReceipt.date))),
+                      _buildInfoRow(context, 'Total Items', FormatUtils.formatRupiah(currentReceipt.totalItemAmount ?? currentReceipt.totalAmount)),
+                      if (currentReceipt.discount != null && currentReceipt.discount! > 0)
+                        _buildInfoRow(context, 'Diskon', '-${FormatUtils.formatRupiah(currentReceipt.discount!)}'),
+                      _buildInfoRow(context, 'Total', FormatUtils.formatRupiah(currentReceipt.totalAmount)),
                       const Gap(16),
                       const Divider(),
                       const Gap(16),
@@ -204,13 +256,33 @@ class _ReceiptUploadPageState extends State<ReceiptUploadPage> {
                       const Gap(8),
                       ...currentReceipt.items.map((item) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 6),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: Text('${item.name} (x${item.quantity})').small(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text('${item.name} (x${FormatUtils.formatDecimalRibuan(item.quantity)})').small(),
+                                    ),
+                                    Text(FormatUtils.formatRupiah(item.totalPrice)).small().semiBold(),
+                                  ],
                                 ),
-                                Text('Rp ${item.totalPrice.toStringAsFixed(0)}').small().semiBold(),
+                                if (item.discount != null && item.discount! > 0)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('Diskon Item').xSmall().muted(),
+                                        Text(
+                                          '-${FormatUtils.formatRupiah(item.discount!)}',
+                                          style: Theme.of(context).typography.xSmall.copyWith(
+                                            color: Theme.of(context).colorScheme.primary,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                               ],
                             ),
                           )),
