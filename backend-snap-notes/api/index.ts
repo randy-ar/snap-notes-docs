@@ -19,7 +19,9 @@ const bootstrap = async () => {
     );
     const configService = app.get(ConfigService);
 
-    // Remove global prefix since Vercel already routes through /api directory
+    // Vercel passes the full path including /api to the function, so we need the global prefix
+    app.setGlobalPrefix('api');
+
     app.useGlobalPipes(new ValidationPipe({
       whitelist: true,
       transform: true,
