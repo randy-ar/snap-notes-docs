@@ -52,7 +52,7 @@ const STRUK_JSON_SCHEMA = {
     kategori_toko: {
       type: 'string',
       description:
-        'Kategori toko (opsional): Makanan & Minuman, Transportasi, Kesehatan, Pendidikan, Hiburan, Rumah Tangga, Pakaian & Aksesoris, Belanja Online, Lainnya.',
+        'Kategori toko (opsional): Makanan & Minuman, Perumahan & Utilitas, Komunikasi, Transportasi, Kesehatan, Pendidikan, Hiburan, Perawatan Pribadi, Pakaian, Lain-lain.',
     },
     error: {
       type: 'string',
@@ -173,7 +173,7 @@ Aturan WAJIB:
 6. Tanggal harus dalam format YYYY-MM-DD (konversi dari format Indonesia DD-MM-YYYY atau DD/MM/YYYY)
 7. Total adalah angka total keseluruhan struk (bukan subtotal item)
 8. Harga dalam format number tanpa pemisah ribuan (contoh: 10500 bukan 10.500)
-9. Kategori bisa: Makanan & Minuman, Transportasi, Kesehatan, Pendidikan, Hiburan, Rumah Tangga, Pakaian & Aksesoris, Belanja Online, Lainnya
+9. Kategori bisa: Makanan & Minuman, Perumahan & Utilitas, Komunikasi, Transportasi, Kesehatan, Pendidikan, Hiburan, Perawatan Pribadi, Pakaian, Lain-lain
 10. Pastikan jumlah * harga_satuan = subtotal untuk setiap item
 11. Gunakan info posisi X untuk membedakan kolom: kiri=item, tengah=qty, kanan=harga
 12. Jika ada teks seperti "1 5,000" di posisi tengah+kanan, interpretasikan sebagai qty=1, harga=5000

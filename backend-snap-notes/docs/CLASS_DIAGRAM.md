@@ -652,14 +652,15 @@ src/
 | Nama | Jenis |
 |------|-------|
 | Makanan & Minuman | PENGELUARAN |
+| Perumahan & Utilitas | PENGELUARAN |
+| Komunikasi | PENGELUARAN |
 | Transportasi | PENGELUARAN |
 | Kesehatan | PENGELUARAN |
 | Pendidikan | PENGELUARAN |
 | Hiburan | PENGELUARAN |
-| Rumah Tangga | PENGELUARAN |
-| Pakaian & Aksesoris | PENGELUARAN |
-| Belanja Online | PENGELUARAN |
-| Lainnya (Pengeluaran) | PENGELUARAN |
+| Perawatan Pribadi | PENGELUARAN |
+| Pakaian | PENGELUARAN |
+| Lain-lain | PENGELUARAN |
 | Gaji | PEMASUKAN |
 | Freelance | PEMASUKAN |
 | Investasi | PEMASUKAN |

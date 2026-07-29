@@ -168,7 +168,7 @@ Pengguna dapat memotret atau memilih gambar struk belanja. Google ML Kit mengeks
 ```
 
 **Kategori:**
-- Sistem menyediakan kategori preset (Makanan & Minuman, Transportasi, Kesehatan, Pendidikan, Hiburan, Rumah Tangga, Pakaian, Lainnya)
+- Sistem menyediakan kategori preset (Makanan & Minuman, Perumahan & Utilitas, Komunikasi, Transportasi, Kesehatan, Pendidikan, Hiburan, Perawatan Pribadi, Pakaian, Lain-lain)
 - Pengguna dapat membuat kategori custom
 - Gemini AI akan mengenali dan memetakan kategori dari item struk secara otomatis
 

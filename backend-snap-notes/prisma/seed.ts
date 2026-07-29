@@ -12,19 +12,16 @@ async function main() {
   console.log('Cleared existing preset categories.');
 
   const presetCategories = [
-    { nama: 'Makanan', jenis: JenisKategori.PENGELUARAN },
-    { nama: 'Minuman', jenis: JenisKategori.PENGELUARAN },
-    { nama: 'Sembako', jenis: JenisKategori.PENGELUARAN },
-    { nama: 'Transportasi', jenis: JenisKategori.PENGELUARAN },
+    { nama: 'Makanan & Minuman', jenis: JenisKategori.PENGELUARAN },
+    { nama: 'Perumahan & Utilitas', jenis: JenisKategori.PENGELUARAN },
     { nama: 'Komunikasi', jenis: JenisKategori.PENGELUARAN },
-    { nama: 'Edukasi', jenis: JenisKategori.PENGELUARAN },
-    { nama: 'Perawatan', jenis: JenisKategori.PENGELUARAN },
-    { nama: 'Pakaian', jenis: JenisKategori.PENGELUARAN },
-    { nama: 'Hiburan', jenis: JenisKategori.PENGELUARAN },
+    { nama: 'Transportasi', jenis: JenisKategori.PENGELUARAN },
     { nama: 'Kesehatan', jenis: JenisKategori.PENGELUARAN },
-    { nama: 'Elektronik', jenis: JenisKategori.PENGELUARAN },
-    { nama: 'Otomotif', jenis: JenisKategori.PENGELUARAN },
-    { nama: 'Lainnya', jenis: JenisKategori.PENGELUARAN },
+    { nama: 'Pendidikan', jenis: JenisKategori.PENGELUARAN },
+    { nama: 'Hiburan', jenis: JenisKategori.PENGELUARAN },
+    { nama: 'Perawatan Pribadi', jenis: JenisKategori.PENGELUARAN },
+    { nama: 'Pakaian', jenis: JenisKategori.PENGELUARAN },
+    { nama: 'Lain-lain', jenis: JenisKategori.PENGELUARAN },
 
     // PEMASUKAN
     { nama: 'Saku', jenis: JenisKategori.PEMASUKAN },

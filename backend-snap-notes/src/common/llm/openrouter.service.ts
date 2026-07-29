@@ -142,6 +142,9 @@ Kamu HANYA diizinkan mengklasifikasikan item ke dalam salah satu dari 10 kategor
 8. "Perawatan Pribadi"
 9. "Pakaian"
 10. "Lain-lain"
+8. "Perawatan Pribadi"
+9. "Pakaian"
+10. "Lain-lain"
 
 Aturan WAJIB:
 1. Kembalikan array JSON berisi persis ${ocrDataBatch.length} object struk (sesuai jumlah struk pada input).
