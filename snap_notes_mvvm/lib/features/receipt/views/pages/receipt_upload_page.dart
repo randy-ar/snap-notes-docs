@@ -8,7 +8,7 @@ import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/receipt.dart';
 import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.dart';
 import 'package:snap_notes_mvvm/utils/format_utils.dart';
-import 'package:snap_notes_mvvm/features/main/views/pages/main_page.dart';
+import 'package:snap_notes_mvvm/features/receipt/views/pages/receipt_scan_page.dart';
 
 class ReceiptUploadPage extends StatefulWidget {
   final File? image;
@@ -69,14 +69,14 @@ class _ReceiptUploadPageState extends State<ReceiptUploadPage> {
   void scanLagi() {
     final viewModel = context.read<ReceiptViewModel>();
     viewModel.startCamera();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const ReceiptScanPage()),
+    );
   }
 
   /// Navigates to the Dashboard/Main page.
   void selesai() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const MainPage()),
-      (route) => false,
-    );
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   // ---------------------------------------------------------------------------
@@ -530,7 +530,7 @@ class _ReceiptUploadPageState extends State<ReceiptUploadPage> {
               const Gap(16),
               Expanded(
                 child: PrimaryButton(
-                  onPressed: () => viewModel.cancelScan(),
+                  onPressed: selesai,
                   child: const Text('Tutup'),
                 ),
               ),
