@@ -5,9 +5,9 @@ import 'package:snap_notes_mvvm/features/pengeluaran/models/pengeluaran.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseHeatmapWidget extends StatefulWidget {
-  final List<Pengeluaran> dataTransaksi;
+  final Map<DateTime, double> calendarData;
 
-  const ExpenseHeatmapWidget({super.key, required this.dataTransaksi});
+  const ExpenseHeatmapWidget({super.key, required this.calendarData});
 
   @override
   State<ExpenseHeatmapWidget> createState() => _ExpenseHeatmapWidgetState();
@@ -20,38 +20,24 @@ class _ExpenseHeatmapWidgetState extends State<ExpenseHeatmapWidget> {
   Widget build(BuildContext context) {
     final theme = shadcn.Theme.of(context);
 
-    // Transformasi data transaksi menjadi format intensitas Heatmap
-    final Map<DateTime, int> datasetHeatmap = {};
-    final Map<DateTime, List<Pengeluaran>> groupedData = {};
-
-    for (var pengeluaran in widget.dataTransaksi) {
-      final dateOnly = DateTime(
-          pengeluaran.tanggal.year, pengeluaran.tanggal.month, pengeluaran.tanggal.day);
-      if (!groupedData.containsKey(dateOnly)) {
-        groupedData[dateOnly] = [];
-      }
-      groupedData[dateOnly]!.add(pengeluaran);
-      datasetHeatmap[dateOnly] = (datasetHeatmap[dateOnly] ?? 0) + 1;
-    }
-
     Widget buildHeatmapCell(DateTime date, {bool isToday = false}) {
       final dateOnly = DateTime(date.year, date.month, date.day);
-      final intensity = datasetHeatmap[dateOnly] ?? 0;
+      final intensity = widget.calendarData[dateOnly] ?? 0;
 
       Color bgColor = theme.colorScheme.muted.withValues(alpha: 0.3); // Muted background for no data
       Color textColor = theme.colorScheme.foreground;
 
       if (intensity > 0) {
-        if (intensity == 1) {
+        if (intensity < 100000) {
           bgColor = const Color(0xFFFCA5A5); // Red 300
           textColor = Colors.black; // Text hitam untuk background terang
-        } else if (intensity == 2) {
+        } else if (intensity < 500000) {
           bgColor = const Color(0xFFF87171); // Red 400
           textColor = Colors.black; // Text hitam untuk background terang
-        } else if (intensity == 3) {
+        } else if (intensity < 1000000) {
           bgColor = const Color(0xFFEF4444); // Red 500
           textColor = Colors.white; // Text putih untuk background agak gelap
-        } else if (intensity == 4) {
+        } else if (intensity < 5000000) {
           bgColor = const Color(0xFFDC2626); // Red 600
           textColor = Colors.white; // Text putih untuk background gelap
         } else {
@@ -129,10 +115,10 @@ class _ExpenseHeatmapWidgetState extends State<ExpenseHeatmapWidget> {
 
           final dateOnly = DateTime(
               selectedDay.year, selectedDay.month, selectedDay.day);
-          final transaksiHariIni = groupedData[dateOnly] ?? [];
+          final double amount = widget.calendarData[dateOnly] ?? 0;
 
-          if (transaksiHariIni.isNotEmpty) {
-            _showTransactionDetails(context, dateOnly, transaksiHariIni);
+          if (amount > 0) {
+            _showTransactionDetails(context, dateOnly, amount);
           }
         },
       ),
@@ -140,36 +126,17 @@ class _ExpenseHeatmapWidgetState extends State<ExpenseHeatmapWidget> {
   }
 
   void _showTransactionDetails(
-      BuildContext context, DateTime tanggal, List<Pengeluaran> listTransaksi) {
+      BuildContext context, DateTime tanggal, double amount) {
     final dateFormat = DateFormat('dd MMM yyyy', 'id_ID');
+    final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
     final tanggalStr = dateFormat.format(tanggal);
 
     shadcn.showDialog(
       context: context,
       builder: (context) {
         return shadcn.AlertDialog(
-          title: shadcn.Text('Transaksi $tanggalStr'),
-          content: listTransaksi.isEmpty
-              ? const shadcn.Text('Tidak ada riwayat pengeluaran.')
-              : SizedBox(
-                  width: 320,
-                  height: 250,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: listTransaksi.length,
-                    itemBuilder: (context, index) {
-                      final transaksi = listTransaksi[index];
-                      return ListTile(
-                        title: shadcn.Text(transaksi.deskripsi),
-                        subtitle: shadcn.Text(transaksi.kategoriNama ?? ''),
-                        trailing: shadcn.Text(
-                          'Rp ${transaksi.jumlah.toInt()}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+          title: shadcn.Text('Pengeluaran $tanggalStr'),
+          content: shadcn.Text('Total Pengeluaran: ${currencyFormat.format(amount)}'),
           actions: [
             shadcn.OutlineButton(
               onPressed: () => Navigator.pop(context),

@@ -51,4 +51,38 @@ export class DashboardController {
     const penggunaId = req.user.sub;
     return this.dashboardService.getTrend(penggunaId, query);
   }
+
+  @Get('kalender')
+  @ApiOperation({
+    summary: 'Mendapatkan data heatmap pengeluaran per hari dalam 1 bulan',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Data kalender berhasil diambil',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getKalender(
+    @Req() req: any,
+    @Query() query: QueryDashboardDto,
+  ): Promise<any> {
+    const penggunaId = req.user.sub;
+    return this.dashboardService.getKalender(penggunaId, query);
+  }
+
+  @Get('kategori')
+  @ApiOperation({
+    summary: 'Mendapatkan agregasi pengeluaran berdasarkan kategori dalam 1 bulan',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Data kategori berhasil diambil',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getKategori(
+    @Req() req: any,
+    @Query() query: QueryDashboardDto,
+  ): Promise<any[]> {
+    const penggunaId = req.user.sub;
+    return this.dashboardService.getKategori(penggunaId, query);
+  }
 }

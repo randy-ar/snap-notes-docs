@@ -64,6 +64,83 @@ export class DashboardService {
     };
   }
 
+  async getKalender(
+    penggunaId: string,
+    query: QueryDashboardDto,
+  ): Promise<Record<string, number>> {
+    const now = new Date();
+    const bulan = query.bulan ? parseInt(query.bulan, 10) : now.getMonth() + 1;
+    const tahun = query.tahun ? parseInt(query.tahun, 10) : now.getFullYear();
+
+    const startDate = new Date(Date.UTC(tahun, bulan - 1, 1, -7, 0, 0, 0));
+    const endDate = new Date(Date.UTC(tahun, bulan, 0, 16, 59, 59, 999));
+
+    const pengeluaran = await this.prisma.pengeluaran.findMany({
+      where: {
+        penggunaId,
+        tanggal: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      select: {
+        tanggal: true,
+        jumlah: true,
+      },
+    });
+
+    const result: Record<string, number> = {};
+    for (const item of pengeluaran) {
+      // Format as YYYY-MM-DD
+      const dateKey = item.tanggal.toISOString().split('T')[0];
+      result[dateKey] = (result[dateKey] || 0) + Number(item.jumlah);
+    }
+    
+    return result;
+  }
+
+  async getKategori(
+    penggunaId: string,
+    query: QueryDashboardDto,
+  ): Promise<any[]> {
+    const now = new Date();
+    const bulan = query.bulan ? parseInt(query.bulan, 10) : now.getMonth() + 1;
+    const tahun = query.tahun ? parseInt(query.tahun, 10) : now.getFullYear();
+
+    const startDate = new Date(Date.UTC(tahun, bulan - 1, 1, -7, 0, 0, 0));
+    const endDate = new Date(Date.UTC(tahun, bulan, 0, 16, 59, 59, 999));
+
+    const pengeluaran = await this.prisma.pengeluaran.groupBy({
+      by: ['kategoriId'],
+      where: {
+        penggunaId,
+        tanggal: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      _sum: {
+        jumlah: true,
+      },
+    });
+
+    if (pengeluaran.length === 0) return [];
+
+    const kategoriIds = pengeluaran.map(p => p.kategoriId).filter(Boolean) as string[];
+    const kategoris = await this.prisma.kategori.findMany({
+      where: { id: { in: kategoriIds } },
+    });
+
+    return pengeluaran.map(p => {
+      const kategori = kategoris.find(k => k.id === p.kategoriId);
+      return {
+        kategoriId: p.kategoriId,
+        kategoriNama: kategori ? kategori.nama : 'Lainnya',
+        totalAmount: Number(p._sum.jumlah || 0),
+      };
+    });
+  }
+
   async getTrend(
     penggunaId: string,
     query: QueryDashboardDto,
@@ -73,28 +150,60 @@ export class DashboardService {
     const focusTahun = query.tahun ? parseInt(query.tahun, 10) : now.getFullYear();
     const focusDate = new Date(focusTahun, focusBulan - 1, 1);
 
+    // Limit range to -6 to +6 months to reduce payload and processing
+    const startDate = new Date(Date.UTC(focusDate.getFullYear(), focusDate.getMonth() - 6, 1, -7, 0, 0, 0));
+    const endDate = new Date(Date.UTC(focusDate.getFullYear(), focusDate.getMonth() + 7, 0, 16, 59, 59, 999));
+
     const months: { bulan: number; tahun: number; date: Date }[] = [];
-    for (let i = -18; i <= 18; i++) {
+    for (let i = -6; i <= 6; i++) {
       const d = new Date(focusDate.getFullYear(), focusDate.getMonth() + i, 1);
       months.push({ bulan: d.getMonth() + 1, tahun: d.getFullYear(), date: d });
     }
 
-    const results = await Promise.all(
-      months.map((m) => {
-        const dto = new QueryDashboardDto();
-        dto.bulan = m.bulan.toString();
-        dto.tahun = m.tahun.toString();
-        return this.getRingkasan(penggunaId, dto);
+    // Fetch all transactions within the range to memory, then group them using JS.
+    // This uses standard Prisma APIs (efficient query) and avoids raw SQL typing issues.
+    const [pemasukanList, pengeluaranList] = await Promise.all([
+      this.prisma.pemasukan.findMany({
+        where: {
+          penggunaId,
+          tanggal: {
+            gte: startDate,
+            lte: endDate,
+          },
+        },
+        select: { tanggal: true, jumlah: true },
       }),
-    );
+      this.prisma.pengeluaran.findMany({
+        where: {
+          penggunaId,
+          tanggal: {
+            gte: startDate,
+            lte: endDate,
+          },
+        },
+        select: { tanggal: true, jumlah: true },
+      }),
+    ]);
 
-    return months.map((m, index) => {
-      const res = results[index];
+    const pemasukanMap = new Map<string, number>();
+    for (const p of pemasukanList) {
+      const key = `${p.tanggal.getFullYear()}-${p.tanggal.getMonth() + 1}`;
+      pemasukanMap.set(key, (pemasukanMap.get(key) || 0) + Number(p.jumlah));
+    }
+
+    const pengeluaranMap = new Map<string, number>();
+    for (const p of pengeluaranList) {
+      const key = `${p.tanggal.getFullYear()}-${p.tanggal.getMonth() + 1}`;
+      pengeluaranMap.set(key, (pengeluaranMap.get(key) || 0) + Number(p.jumlah));
+    }
+
+    return months.map((m) => {
+      const key = `${m.tahun}-${m.bulan}`;
       return {
         bulan: m.bulan,
         tahun: m.tahun,
-        totalPemasukan: res.totalPemasukan,
-        totalPengeluaran: res.totalPengeluaran,
+        totalPemasukan: pemasukanMap.get(key) || 0,
+        totalPengeluaran: pengeluaranMap.get(key) || 0,
         dateTime: m.date.toISOString(),
       };
     });

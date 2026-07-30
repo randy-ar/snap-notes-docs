@@ -4,9 +4,9 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:snap_notes_mvvm/features/pengeluaran/models/pengeluaran.dart';
 
 class ExpensePieChartWidget extends StatefulWidget {
-  final List<Pengeluaran> dataTransaksi;
+  final List<Map<String, dynamic>> kategoriData;
 
-  const ExpensePieChartWidget({super.key, required this.dataTransaksi});
+  const ExpensePieChartWidget({super.key, required this.kategoriData});
 
   @override
   State<ExpensePieChartWidget> createState() => _ExpensePieChartWidgetState();
@@ -48,13 +48,11 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
     final currentMonth = now.month;
     final currentYear = now.year;
 
-    // 2. Filter transaksi pengeluaran untuk bulan ini
-    final monthlyExpenses = widget.dataTransaksi.where((e) {
-      return e.tanggal.month == currentMonth && e.tanggal.year == currentYear;
-    }).toList();
+    // 2. Gunakan data dari backend
+    final categoryData = widget.kategoriData;
 
     // 3. Jika tidak ada transaksi, tampilkan state kosong secara anggun
-    if (monthlyExpenses.isEmpty) {
+    if (categoryData.isEmpty) {
       return Card(
         padding: const EdgeInsets.all(16),
         child: SizedBox(
@@ -83,10 +81,11 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
     final Map<String, double> categorySums = {};
     double totalAmount = 0.0;
 
-    for (final exp in monthlyExpenses) {
-      final category = exp.kategoriNama ?? 'Lainnya';
-      categorySums[category] = (categorySums[category] ?? 0.0) + exp.jumlah;
-      totalAmount += exp.jumlah;
+    for (final item in categoryData) {
+      final category = item['kategoriNama'] as String? ?? 'Lainnya';
+      final amount = (item['totalAmount'] as num?)?.toDouble() ?? 0.0;
+      categorySums[category] = amount;
+      totalAmount += amount;
     }
 
     // 5. Urutkan kategori dari yang terbesar ke terkecil
@@ -99,12 +98,12 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
       final entry = sortedCategories[i];
       final isTouched = i == _touchedIndex;
       final percentage = (entry.value / totalAmount) * 100;
-      
+
       final color = _colorPalette[i % _colorPalette.length];
-      
+
       final isLargest = i == 0;
       final double radius = isTouched ? 105.0 : (isLargest ? 98.0 : 85.0);
-      
+
       sections.add(
         PieChartSectionData(
           color: color,
@@ -163,7 +162,7 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
                color: theme.colorScheme.muted.withValues(alpha: 0.5),
                borderRadius: BorderRadius.circular(8),
             ),
-            child: _touchedIndex != -1 
+            child: _touchedIndex != -1
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

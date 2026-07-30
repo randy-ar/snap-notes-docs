@@ -23,8 +23,7 @@ class DashboardPage extends StatelessWidget {
           create: (context) {
             final now = DateTime.now();
             return getIt<DashboardViewModel>()
-              ..loadRingkasan(bulan: now.month, tahun: now.year)
-              ..loadMonthlyTrend();
+              ..initDashboard(bulan: now.month, tahun: now.year);
           },
         ),
         ChangeNotifierProvider(
@@ -250,7 +249,7 @@ class DashboardView extends StatelessWidget {
               'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
             ];
             final currentMonthName = monthNames[now.month - 1];
-            
+
             // Hitung persentase pengeluaran
             int spendingPercent = 0;
             if (ringkasan.totalPemasukan > 0) {
@@ -262,32 +261,19 @@ class DashboardView extends StatelessWidget {
 
             return RefreshIndicator(
               onRefresh: () async {
-                context.read<DashboardViewModel>().loadRingkasan(
+                final now = DateTime.now();
+                await context.read<DashboardViewModel>().initDashboard(
                   bulan: now.month,
                   tahun: now.year,
                 );
-                context.read<DashboardViewModel>().loadMonthlyTrend(force: true);
-                context.read<PengeluaranViewModel>().loadPengeluaran(isRefresh: true);
               },
               child: ListView(
                 padding: const EdgeInsets.all(16.0),
                 children: [
-                  // 2. Heatmap Calendar
-                  if (pengeluaranViewModel.isLoading)
-                    Card(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Aktivitas Pengeluaran').h4(),
-                          const Gap(16),
-                          const SizedBox(height: 150),
-                        ],
-                      ).asSkeleton(),
-                    )
-                  else if (pengeluaranViewModel.pengeluaranList.isNotEmpty)
+                  // 1. Heatmap Calendar
+                  if (dashboardViewModel.calendarData != null)
                     ExpenseHeatmapWidget(
-                      dataTransaksi: pengeluaranViewModel.pengeluaranList,
+                      calendarData: dashboardViewModel.calendarData!,
                     )
                   else
                     const SizedBox.shrink(),
@@ -296,22 +282,12 @@ class DashboardView extends StatelessWidget {
                   const ExpenseLineChartWidget(),
                   const Gap(24),
                   // 3. Pie Chart
-                  if (pengeluaranViewModel.isLoading)
-                    Card(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Distribusi Pengeluaran').h4(),
-                          const Gap(16),
-                          const SizedBox(height: 200),
-                        ],
-                      ).asSkeleton(),
+                  if (dashboardViewModel.kategoriData != null)
+                    ExpensePieChartWidget(
+                      kategoriData: dashboardViewModel.kategoriData!,
                     )
                   else
-                    ExpensePieChartWidget(
-                      dataTransaksi: pengeluaranViewModel.pengeluaranList,
-                    ),
+                    const SizedBox.shrink(),
                 ],
               ),
             );

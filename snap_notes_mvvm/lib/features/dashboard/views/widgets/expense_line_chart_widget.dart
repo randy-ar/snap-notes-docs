@@ -211,7 +211,7 @@ class ExpenseLineChartWidget extends StatelessWidget {
                 ),
                 borderData: FlBorderData(show: false),
                 minX: 0,
-                maxX: 5,
+                maxX: (trendData.length - 1).toDouble() > 0 ? (trendData.length - 1).toDouble() : 4,
                 minY: 0,
                 maxY: maxVal,
                 lineTouchData: LineTouchData(
