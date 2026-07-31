@@ -18,6 +18,7 @@ class SnapNotesApp extends StatelessWidget {
       child: ShadcnApp(
         navigatorKey: navigatorKey,
         title: 'Snap Notes',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           radius: 0.5,
           typography: const Typography.geist().scale(0.85),

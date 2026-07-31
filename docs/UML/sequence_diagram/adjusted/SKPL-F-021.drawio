@@ -1,96 +1,209 @@
 <mxfile host="app.diagrams.net">
-  <diagram name="SKPL-F-021 Notifikasi Otomatis" id="SKPL-F-021">
-    <mxGraphModel dx="939" dy="528" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="800" background="#ffffff" math="0" shadow="0">
+  <diagram name="SKPL-F-022 Pengelolaan Notifikasi" id="SKPL-F-022">
+    <mxGraphModel dx="1008" dy="567" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1400" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="ll_M" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="«actor»&lt;br&gt;&lt;b&gt;Masyarakat&lt;/b&gt;" vertex="1">
-          <mxGeometry height="500" width="100" x="40" y="70" as="geometry" />
+          <mxGeometry height="1070" width="100" x="40" y="70" as="geometry" />
         </mxCell>
         <mxCell id="act_M" parent="ll_M" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
-          <mxGeometry height="30" width="10" x="45" y="360" as="geometry" />
+          <mxGeometry height="950" width="10" x="45" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_NFP" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="view :&lt;br&gt;&lt;b&gt;NotifikasiFormPage&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1070" width="180" x="180" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_NFP" parent="ll_NFP" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="940" width="10" x="85" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_NVM" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="viewModel :&lt;br&gt;&lt;b&gt;NotifikasiViewModel&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1070" width="180" x="420" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="act_NVM" parent="ll_NVM" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="800" width="10" x="85" y="200" as="geometry" />
         </mxCell>
         <mxCell id="ll_NS" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="service :&lt;br&gt;&lt;b&gt;NotifikasiService&lt;/b&gt;" vertex="1">
-          <mxGeometry height="500" width="160" x="250" y="70" as="geometry" />
+          <mxGeometry height="1070" width="160" x="660" y="70" as="geometry" />
         </mxCell>
-        <mxCell id="act_NS" parent="ll_NS" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value=" " vertex="1">
-          <mxGeometry height="390" width="10" x="75" y="80" as="geometry" />
+        <mxCell id="act_NS" parent="ll_NS" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="680" width="10" x="75" y="290" as="geometry" />
         </mxCell>
-        <mxCell id="act_NS_self1" parent="ll_NS" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
-          <mxGeometry height="35" width="10" x="81" y="240" as="geometry" />
+        <mxCell id="ll_DC" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="client :&lt;br&gt;&lt;b&gt;DioClient&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1070" width="120" x="860" y="70" as="geometry" />
         </mxCell>
-        <mxCell id="act_NS_self2" parent="ll_NS" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
-          <mxGeometry height="35" width="10" x="81" y="430" as="geometry" />
+        <mxCell id="act_DC" parent="ll_DC" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="630" width="10" x="55" y="310" as="geometry" />
         </mxCell>
-        <mxCell id="act_NS_self_init" parent="ll_NS" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
-          <mxGeometry height="35" width="10" x="81" y="100" as="geometry" />
+        <mxCell id="ll_WS" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="«actor»&lt;br&gt;&lt;b&gt;Web Service&lt;/b&gt;" vertex="1">
+          <mxGeometry height="1070" width="120" x="1020" y="70" as="geometry" />
         </mxCell>
-        <mxCell id="msg_1" edge="1" parent="ll_NS" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;exitX=1;exitY=0;exitDx=0;exitDy=5;exitPerimeter=0;" value="&lt;span style=&quot;text-align: center;&quot;&gt;1. onScheduledTimeReached()&lt;/span&gt;">
+        <mxCell id="act_WS" parent="ll_WS" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="290" width="10" x="55" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_1" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="1. klikOpsi()">
           <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="110" y="85" />
-              <mxPoint x="110" y="117.5" />
-            </Array>
-            <mxPoint x="85" y="85" as="sourcePoint" />
-            <mxPoint x="91" y="117.5" as="targetPoint" />
+            <mxPoint x="95" y="160" as="sourcePoint" />
+            <mxPoint x="265" y="160" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ll_PN" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="model :&lt;br&gt;&lt;b&gt;PreferensiNotifikasi&lt;/b&gt;" vertex="1">
-          <mxGeometry height="500" width="160" x="500" y="70" as="geometry" />
-        </mxCell>
-        <mxCell id="act_PN" parent="ll_PN" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
-          <mxGeometry height="60" width="10" x="75" y="150" as="geometry" />
-        </mxCell>
-        <mxCell id="msg_2" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="2. getPreferensi()">
+        <mxCell id="msg_2" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="2. Tampilkan form jadwal / dialog">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="335" y="220" as="sourcePoint" />
-            <mxPoint x="575" y="220" as="targetPoint" />
+            <mxPoint x="265" y="200" as="sourcePoint" />
+            <mxPoint x="95" y="200" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg_3" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="return preferensi">
+        <mxCell id="msg_3" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="3. Mengatur waktu/data dan submit()">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="575" y="280" as="sourcePoint" />
-            <mxPoint x="335" y="280" as="targetPoint" />
+            <mxPoint x="95" y="240" as="sourcePoint" />
+            <mxPoint x="265" y="240" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg_4" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;" target="act_NS_self1" value="&lt;span style=&quot;text-align: center;&quot;&gt;3. checkCatatanHariIni()&lt;/span&gt;">
+        <mxCell id="msg_4" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="4. submitNotifikasi(data, id?)">
           <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="361" y="300" />
-              <mxPoint x="361" y="330" />
-            </Array>
-            <mxPoint x="335" y="300" as="sourcePoint" />
-            <mxPoint x="336" y="340" as="targetPoint" />
+            <mxPoint x="275" y="270" as="sourcePoint" />
+            <mxPoint x="505" y="270" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="frame_alt" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=60;height=30;" value="Alt" vertex="1">
-          <mxGeometry height="190" width="370" x="50" y="360" as="geometry" />
+        <mxCell id="frame_crud" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=60;height=30;" value="Alt" vertex="1">
+          <mxGeometry height="340" width="670" x="460" y="290" as="geometry" />
         </mxCell>
-        <mxCell id="frame_alt_succ_text" parent="frame_alt" style="text;html=1;" value="&lt;b&gt;[Belum Ada Catatan Hari Ini]&lt;/b&gt;" vertex="1">
+        <mxCell id="frame_crud_add" parent="frame_crud" style="text;html=1;" value="&lt;b&gt;[Tambah Data Baru (id == null)]&lt;/b&gt;" vertex="1">
           <mxGeometry height="20" relative="1" width="220" as="geometry">
             <mxPoint x="70" y="10" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="frame_alt_sep" parent="frame_alt" style="line;strokeWidth=1;dashed=1;labelPosition=center;verticalLabelPosition=bottom;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;html=1;whiteSpace=wrap;" value="" vertex="1">
-          <mxGeometry height="10" width="370" y="100" as="geometry" />
+        <mxCell id="frame_crud_div1" parent="frame_crud" style="line;strokeWidth=1;dashed=1;labelPosition=center;verticalLabelPosition=bottom;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;html=1;whiteSpace=wrap;" value="" vertex="1">
+          <mxGeometry height="10" width="670" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="frame_alt_fail_text" parent="frame_alt" style="text;html=1;" value="&lt;b&gt;[Sudah Ada Catatan]&lt;/b&gt;" vertex="1">
-          <mxGeometry height="20" width="220" x="70" y="110" as="geometry" />
+        <mxCell id="frame_crud_edit" parent="frame_crud" style="text;html=1;" value="&lt;b&gt;[Ubah Data (id != null)]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="180" x="70" y="120" as="geometry" />
         </mxCell>
-        <mxCell id="msg_5" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="4. showLocalNotification(pesan)">
+        <mxCell id="frame_crud_div2" parent="frame_crud" style="line;strokeWidth=1;dashed=1;labelPosition=center;verticalLabelPosition=bottom;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;html=1;whiteSpace=wrap;" value="" vertex="1">
+          <mxGeometry height="10" width="670" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="frame_crud_del" parent="frame_crud" style="text;html=1;" value="&lt;b&gt;[Hapus Data (action == delete)]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="220" x="70" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_8" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="5. createPreferensi(data)">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="325" y="430" as="sourcePoint" />
-            <mxPoint x="95" y="430" as="targetPoint" />
+            <mxPoint x="515" y="360" as="sourcePoint" />
+            <mxPoint x="735" y="360" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg_6" edge="1" parent="1" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;" target="act_NS_self2" value="&lt;span style=&quot;text-align: center;&quot;&gt;batalkanPengiriman()&lt;/span&gt;">
+        <mxCell id="msg_9" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="6. updatePreferensi(id, data)">
           <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="361" y="480" />
-              <mxPoint x="361" y="517.5" />
-            </Array>
-            <mxPoint x="335" y="480" as="sourcePoint" />
-            <mxPoint x="336.0344827586207" y="520" as="targetPoint" />
+            <mxPoint x="515" y="470" as="sourcePoint" />
+            <mxPoint x="735" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_10" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="7. deletePreferensi(id)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="515" y="580" as="sourcePoint" />
+            <mxPoint x="735" y="580" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_11" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="delete(&#39;/api/notifikasi/:id&#39;)">
+          <mxGeometry relative="1" x="0.0045" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="745" y="610" as="sourcePoint" />
+            <mxPoint x="915" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_12" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="9. HTTP Request /notifikasi">
+          <mxGeometry relative="1" x="-0.0044" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="925" y="690" as="sourcePoint" />
+            <mxPoint x="1075" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="frame_alt" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;recursiveResize=0;container=1;collapsible=0;width=60;height=30;" value="Alt" vertex="1">
+          <mxGeometry height="390" width="1060" x="40" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="frame_alt_succ_text" parent="frame_alt" style="text;html=1;" value="&lt;b&gt;[Berhasil]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" relative="1" width="140" as="geometry">
+            <mxPoint x="70" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="frame_alt_sep" parent="frame_alt" style="line;strokeWidth=1;dashed=1;labelPosition=center;verticalLabelPosition=bottom;align=left;verticalAlign=top;spacingLeft=20;spacingTop=15;html=1;whiteSpace=wrap;" value="" vertex="1">
+          <mxGeometry height="10" width="1060" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="frame_alt_fail_text" parent="frame_alt" style="text;html=1;" value="&lt;b&gt;[Gagal / Error]&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="220" x="70" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="msg_21" edge="1" parent="frame_alt" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" target="act_NFP" value="notifyListeners() :&amp;nbsp;&lt;div&gt;errorMessage diisi,&amp;nbsp;&lt;/div&gt;&lt;div&gt;isLoading = false&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="475" y="340" as="sourcePoint" />
+            <mxPoint x="255" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4_UiLFpAHVBd5XSuQI0h-1" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Menampilkan Toast Berhasil">
+          <mxGeometry relative="1" x="-0.0025" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="265" y="910" as="sourcePoint" />
+            <mxPoint x="95" y="910" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4_UiLFpAHVBd5XSuQI0h-2" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Menampilkan Pesan Error">
+          <mxGeometry relative="1" x="-0.0025" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="265" y="1100" as="sourcePoint" />
+            <mxPoint x="95" y="1100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4_UiLFpAHVBd5XSuQI0h-3" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="post(&#39;/api/notifikasi&#39;,data)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="744.9999999999998" y="380" as="sourcePoint" />
+            <mxPoint x="914.9999999999998" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4_UiLFpAHVBd5XSuQI0h-4" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="put(&#39;/api/notifikasi/:id&#39;,data)">
+          <mxGeometry relative="1" x="0.0045" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="744.9999999999998" y="490" as="sourcePoint" />
+            <mxPoint x="914.9999999999998" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_13" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="HTTP 2xx (Sukses)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1075" y="775" as="sourcePoint" />
+            <mxPoint x="925" y="775" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_14" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Response Data">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="915" y="815" as="sourcePoint" />
+            <mxPoint x="745" y="815" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_15" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Data PreferensiNotifikasi">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735" y="850" as="sourcePoint" />
+            <mxPoint x="515" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_16" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="notifyListeners() :&amp;nbsp;&lt;div&gt;isLoading = false,&amp;nbsp;&lt;/div&gt;&lt;div&gt;isSuccess = true&lt;/div&gt;">
+          <mxGeometry relative="1" x="-0.0025" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="505" y="880" as="sourcePoint" />
+            <mxPoint x="275" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_20" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="Throw Exception">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="735" y="1040" as="sourcePoint" />
+            <mxPoint x="515" y="1040" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_19" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="DioException">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="915" y="1010" as="sourcePoint" />
+            <mxPoint x="745" y="1010" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg_18" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;" value="HTTP 400/500 Server Error">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1075" y="979" as="sourcePoint" />
+            <mxPoint x="925" y="979" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>

@@ -42,8 +42,21 @@ export class PemasukanController {
   async getDaftar(
     @Req() req: RequestWithUser,
     @Query() query: QueryPemasukanDto,
-  ): Promise<PemasukanResponseDto[]> {
+  ): Promise<any> {
     return this.pemasukanService.getDaftar(req.user.id, query);
+  }
+
+  @Get('overview')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Mendapatkan ringkasan pemasukan (total bulan ini vs bulan lalu)' })
+  @ApiResponse({ status: 200, description: 'Ringkasan pemasukan berhasil diambil' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getOverview(
+    @Req() req: RequestWithUser,
+    @Query() query: QueryPemasukanDto,
+  ): Promise<any> {
+    return this.pemasukanService.getOverview(req.user.id, query);
   }
 
   @Get(':id')

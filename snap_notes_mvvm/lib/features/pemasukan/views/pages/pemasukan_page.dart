@@ -6,6 +6,7 @@ import 'package:snap_notes_mvvm/features/pemasukan/viewmodels/pemasukan_viewmode
 import 'package:snap_notes_mvvm/features/pemasukan/views/pages/pemasukan_detail_page.dart';
 import 'package:snap_notes_mvvm/features/pemasukan/views/pages/pemasukan_form_page.dart';
 import 'package:snap_notes_mvvm/features/auth/viewmodels/auth_viewmodel.dart';
+import 'package:snap_notes_mvvm/features/pemasukan/models/pemasukan.dart';
 import 'package:snap_notes_mvvm/utils/format_utils.dart';
 
 class PemasukanPage extends StatelessWidget {
@@ -17,7 +18,8 @@ class PemasukanPage extends StatelessWidget {
       create: (_) {
         final now = DateTime.now();
         return getIt<PemasukanViewModel>()
-          ..loadPemasukan(bulan: now.month, tahun: now.year);
+          ..loadOverview(bulan: now.month, tahun: now.year)
+          ..loadPemasukan(isRefresh: true);
       },
       child: const PemasukanView(),
     );
@@ -156,7 +158,8 @@ class PemasukanView extends StatelessWidget {
             IconButton.ghost(
               onPressed: () async {
                 final vm = context.read<PemasukanViewModel>();
-                final result = await Navigator.of(context).push(
+                final result = await Navigator.push(
+                  context,
                   MaterialPageRoute(
                     builder: (_) => ChangeNotifierProvider.value(
                       value: vm,
@@ -166,10 +169,11 @@ class PemasukanView extends StatelessWidget {
                 );
                 if (result == true && context.mounted) {
                   final now = DateTime.now();
-                  context.read<PemasukanViewModel>().loadPemasukan(
+                  context.read<PemasukanViewModel>().loadOverview(
                     bulan: now.month,
                     tahun: now.year,
                   );
+                  context.read<PemasukanViewModel>().loadPemasukan(isRefresh: true);
                 }
               },
               icon: const Icon(LucideIcons.plus),
@@ -227,6 +231,7 @@ class PemasukanView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Nama Pemasukan'),
+                              Text('Kategori'),
                               Gap(8),
                               Text('DD/MM/YYYY'),
                             ],
@@ -267,10 +272,11 @@ class PemasukanView extends StatelessWidget {
                   PrimaryButton(
                     onPressed: () {
                       final now = DateTime.now();
-                      context.read<PemasukanViewModel>().loadPemasukan(
+                      context.read<PemasukanViewModel>().loadOverview(
                         bulan: now.month,
                         tahun: now.year,
                       );
+                      context.read<PemasukanViewModel>().loadPemasukan(isRefresh: true);
                     },
                     child: const Text('Coba Lagi'),
                   ),
@@ -278,148 +284,222 @@ class PemasukanView extends StatelessWidget {
               ),
             );
           } else {
-            return RefreshIndicator(
-              onRefresh: () async {
-                final now = DateTime.now();
-                context.read<PemasukanViewModel>().loadPemasukan(
-                  bulan: now.month,
-                  tahun: now.year,
-                );
+            final flattenedItems = <dynamic>[];
+            flattenedItems.add('OVERVIEW');
+
+            int? currentMonth;
+            int? currentYear;
+
+            for (var p in viewModel.pemasukanList) {
+              if (currentMonth != p.tanggal.month || currentYear != p.tanggal.year) {
+                currentMonth = p.tanggal.month;
+                currentYear = p.tanggal.year;
+                flattenedItems.add({'month': currentMonth, 'year': currentYear});
+              }
+              flattenedItems.add(p);
+            }
+
+            return NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification scrollInfo) {
+                if (!viewModel.isLoadingMore &&
+                    viewModel.hasMoreData &&
+                    scrollInfo.metrics.pixels >=
+                        scrollInfo.metrics.maxScrollExtent - 200) {
+                  viewModel.loadMorePemasukan();
+                }
+                return false;
               },
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: viewModel.pemasukanList.isEmpty
-                  ? 2
-                  : viewModel.pemasukanList.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    final isGoodTrending = viewModel.percentageChange >= 0;
-                    final percentageText = '${viewModel.percentageChange > 0 ? '+' : ''}${viewModel.percentageChange.toStringAsFixed(1)}%';
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  final now = DateTime.now();
+                  context.read<PemasukanViewModel>().loadOverview(
+                    bulan: now.month,
+                    tahun: now.year,
+                  );
+                  await context.read<PemasukanViewModel>().loadPemasukan(isRefresh: true);
+                },
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: flattenedItems.length + (viewModel.hasMoreData ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == flattenedItems.length) {
+                      return const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    }
 
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: Card(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text('Total Pemasukan').muted(),
-                                isGoodTrending
-                                  ? SecondaryBadge(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(LucideIcons.trendingUp, size: 14, color: Theme.of(context).colorScheme.primary),
-                                          const Gap(4),
-                                          Text(percentageText),
-                                        ],
-                                      ),
-                                    )
-                                  : DestructiveBadge(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Icon(LucideIcons.trendingDown, size: 14),
-                                          const Gap(4),
-                                          Text(percentageText),
-                                        ],
-                                      ),
-                                    ),
-                              ],
-                            ),
-                            const Gap(16),
-                            Text(FormatUtils.formatRupiah(viewModel.totalCurrentMonth)).h3(),
-                            const Gap(12),
-                            Row(
-                              children: [
-                                Text('Trending ${isGoodTrending ? 'good' : 'bad'} this month').small(),
-                                const Gap(8),
-                                Icon(
-                                  isGoodTrending ? LucideIcons.trendingUp : LucideIcons.trendingDown,
-                                  size: 16,
-                                ),
-                              ],
-                            ),
-                            const Gap(4),
-                            Text('$percentageText since last month').small().muted(),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
+                    final item = flattenedItems[index];
 
-                  if (viewModel.pemasukanList.isEmpty) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 48),
-                      child: Center(
-                        child: const Text('Belum ada riwayat pemasukan untuk bulan ini.').muted().small(),
-                      ),
-                    );
-                  }
+                    if (item == 'OVERVIEW') {
+                      final overview = viewModel.overviewData;
+                      if (overview == null) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: const Card(
+                            padding: EdgeInsets.all(16),
+                            child: SizedBox(height: 120),
+                          ).asSkeleton(),
+                        );
+                      }
 
-                  final pemasukan = viewModel.pemasukanList[index - 1];
+                      final totalCurrentMonth = (overview['totalCurrentMonth'] as num).toDouble();
+                      final percentageChange = (overview['percentageChange'] as num).toDouble();
+                      final isGoodTrending = overview['isTrendingGood'] as bool;
+                      final percentageText = '${percentageChange > 0 ? '+' : ''}${percentageChange.toStringAsFixed(1)}%';
 
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Card(
-                      padding: const EdgeInsets.all(16),
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () async {
-                          final result = await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => ChangeNotifierProvider(
-                                create: (_) => getIt<PemasukanViewModel>(),
-                                child: PemasukanDetailPage(
-                                  pemasukanId: pemasukan.id,
-                                ),
-                              ),
-                            ),
-                          );
-                          if (result == true && context.mounted) {
-                            final now = DateTime.now();
-                            context.read<PemasukanViewModel>().loadPemasukan(
-                              bulan: now.month,
-                              tahun: now.year,
-                            );
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Card(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(pemasukan.deskripsi).base(),
-                                  Text(pemasukan.kategoriNama ?? 'Lainnya').muted(),
-                                  const Gap(8),
-                                  Text(
-                                    FormatUtils.formatIndonesianDate(pemasukan.tanggal),
-                                  ).small(),
+                                  const Text('Total Pemasukan').muted(),
+                                  isGoodTrending
+                                      ? SecondaryBadge(
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                LucideIcons.trendingUp,
+                                                size: 14,
+                                                color: Theme.of(context).colorScheme.primary,
+                                              ),
+                                              const Gap(4),
+                                              Text(percentageText),
+                                            ],
+                                          ),
+                                        )
+                                      : DestructiveBadge(
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(
+                                                LucideIcons.trendingDown,
+                                                size: 14,
+                                              ),
+                                              const Gap(4),
+                                              Text(percentageText),
+                                            ],
+                                          ),
+                                        ),
                                 ],
                               ),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(FormatUtils.formatRupiah(pemasukan.jumlah)).base(),
-                                const Gap(12),
-                                Icon(
-                                  LucideIcons.chevronRight,
-                                  size: 16,
-                                  color: Theme.of(context).colorScheme.foreground,
+                              const Gap(16),
+                              Text(
+                                FormatUtils.formatRupiah(totalCurrentMonth),
+                              ).h3(),
+                              const Gap(12),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Tren pemasukan ${isGoodTrending ? 'membaik' : 'memburuk'} bulan ini',
+                                  ).small(),
+                                  const Gap(8),
+                                  Icon(
+                                    isGoodTrending ? LucideIcons.trendingUp : LucideIcons.trendingDown,
+                                    size: 16,
+                                  ),
+                                ],
+                              ),
+                              const Gap(4),
+                              Text(
+                                '$percentageText dibanding bulan lalu',
+                              ).small().muted(),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (item is Map<String, int?>) {
+                      final monthNames = [
+                        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                      ];
+                      final monthName = monthNames[(item['month'] ?? 1) - 1];
+                      final year = item['year'];
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 8.0, left: 4.0),
+                        child: Text('$monthName $year').small().muted().bold(),
+                      );
+                    }
+
+                    final pemasukan = item as Pemasukan;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Card(
+                        padding: const EdgeInsets.all(16),
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            final vm = context.read<PemasukanViewModel>();
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ChangeNotifierProvider(
+                                  create: (_) => getIt<PemasukanViewModel>(),
+                                  child: PemasukanDetailPage(
+                                    pemasukanId: pemasukan.id,
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ],
+                              ),
+                            );
+
+                            if (result == true && context.mounted) {
+                              final now = DateTime.now();
+                              vm.loadOverview(
+                                bulan: now.month,
+                                tahun: now.year,
+                              );
+                              vm.loadPemasukan(isRefresh: true);
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(pemasukan.deskripsi).base(),
+                                    Text(
+                                      pemasukan.kategoriNama ?? 'Lainnya',
+                                    ).muted(),
+                                    const Gap(8),
+                                    Text(
+                                      FormatUtils.formatIndonesianDate(pemasukan.tanggal),
+                                    ).small(),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    FormatUtils.formatRupiah(pemasukan.jumlah),
+                                  ).base(),
+                                  const Gap(12),
+                                  Icon(
+                                    LucideIcons.chevronRight,
+                                    size: 16,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.foreground,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             );
           }

@@ -28,6 +28,18 @@ class PemasukanViewModel extends ChangeNotifier {
   List<Pemasukan> _pemasukanList = [];
   List<Pemasukan> get pemasukanList => _pemasukanList;
 
+  int _currentPage = 1;
+  int get currentPage => _currentPage;
+
+  bool _hasMoreData = true;
+  bool get hasMoreData => _hasMoreData;
+
+  bool _isLoadingMore = false;
+  bool get isLoadingMore => _isLoadingMore;
+
+  Map<String, dynamic>? _overviewData;
+  Map<String, dynamic>? get overviewData => _overviewData;
+
   Pemasukan? _pemasukanDetail;
   Pemasukan? get pemasukanDetail => _pemasukanDetail;
 
@@ -42,53 +54,63 @@ class PemasukanViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  double _totalCurrentMonth = 0;
-  double get totalCurrentMonth => _totalCurrentMonth;
-
-  double _totalPreviousMonth = 0;
-  double get totalPreviousMonth => _totalPreviousMonth;
-
-  double get percentageChange {
-    if (_totalPreviousMonth == 0) {
-      if (_totalCurrentMonth == 0) return 0.0;
-      return 100.0;
-    }
-    return ((_totalCurrentMonth - _totalPreviousMonth) / _totalPreviousMonth) * 100;
-  }
-
-  Future<void> loadPemasukan({int? bulan, int? tahun}) async {
-    _setLoading(true);
-    _errorMessage = null;
+  Future<void> loadOverview({int? bulan, int? tahun}) async {
     try {
       final now = DateTime.now();
-      final targetBulan = bulan ?? now.month;
-      final targetTahun = tahun ?? now.year;
-
-      final list = await _pemasukanService.getPemasukan(
-        bulan: targetBulan,
-        tahun: targetTahun,
+      _overviewData = await _pemasukanService.getPemasukanOverview(
+        bulan: bulan ?? now.month,
+        tahun: tahun ?? now.year,
       );
-      _pemasukanList = list;
-      _totalCurrentMonth = _pemasukanList.fold(0, (sum, item) => sum + item.jumlah);
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
+    }
+  }
 
-      int prevBulan = targetBulan - 1;
-      int prevTahun = targetTahun;
-      if (prevBulan == 0) {
-        prevBulan = 12;
-        prevTahun -= 1;
+  Future<void> loadPemasukan({bool isRefresh = false}) async {
+    if (isRefresh) {
+      _currentPage = 1;
+      _hasMoreData = true;
+      _pemasukanList.clear();
+      _setLoading(true);
+    } else {
+      if (!_hasMoreData || _isLoadingMore) return;
+      _isLoadingMore = true;
+      notifyListeners();
+    }
+
+    _errorMessage = null;
+
+    try {
+      final result = await _pemasukanService.getDaftarPemasukan(
+        page: _currentPage,
+        limit: 10,
+      );
+      final List<Pemasukan> newData = result['data'] as List<Pemasukan>;
+      final meta = result['meta'] as Map<String, dynamic>;
+
+      if (isRefresh) {
+        _pemasukanList = newData;
+      } else {
+        _pemasukanList.addAll(newData);
       }
-      final prevList = await _pemasukanService.getPemasukan(
-        bulan: prevBulan,
-        tahun: prevTahun,
-      );
-      _totalPreviousMonth = prevList.fold(0, (sum, item) => sum + item.jumlah);
 
+      _currentPage = (meta['page'] as int) + 1;
+      _hasMoreData = (meta['page'] as int) < (meta['totalPages'] as int);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
-      _setLoading(false);
+      if (isRefresh) {
+        _setLoading(false);
+      } else {
+        _isLoadingMore = false;
+        notifyListeners();
+      }
     }
   }
+
+  Future<void> loadMorePemasukan() => loadPemasukan(isRefresh: false);
 
   Future<void> loadCategories({String? jenis}) async {
     _errorMessage = null;

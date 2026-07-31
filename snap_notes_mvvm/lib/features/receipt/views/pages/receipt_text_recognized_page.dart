@@ -53,8 +53,8 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
               value: viewModel,
               child: ReceiptParsedPage(
                 isBatchMode: false,
-                image: widget.image,
-                receipt: viewModel.receiptDetail,
+                image: widget.image!,
+                receipt: viewModel.receiptDetail!,
               ),
             ),
           ),
@@ -172,13 +172,14 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
                 child: Center(
                   child: Stack(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.file(
-                          widget.image!,
-                          fit: BoxFit.contain,
+                      if (widget.image != null)
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.file(
+                            widget.image!,
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      ),
                       if (viewModel.recognizedText != null)
                         Positioned.fill(
                           child: CustomPaint(
@@ -199,7 +200,14 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
               padding: const EdgeInsets.all(16.0),
               child: PrimaryButton(
                 onPressed: viewModel.isLoading ? null : () => submitAnalisis(),
-                child: const Text('Analisis dengan AI'),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(LucideIcons.check, size: 18),
+                    Gap(8),
+                    Text('Selanjutnya'),
+                  ],
+                ),
               ),
             ),
           ],
@@ -221,7 +229,11 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
   // ---------------------------------------------------------------------------
 
   Widget _buildBatchContent(BuildContext context, ReceiptViewModel viewModel) {
-    final images = widget.images!;
+    final images = widget.images;
+    if (images == null || images.isEmpty) {
+      return const Center(child: Text('Tidak ada gambar'));
+    }
+
     final currentImg = images[_currentIndex];
     final currentRt = viewModel.recognizedTexts.length > _currentIndex
         ? viewModel.recognizedTexts[_currentIndex]

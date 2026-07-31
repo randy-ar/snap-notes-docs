@@ -360,7 +360,7 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
     return Scaffold(
       headers: [
         AppBar(
-          title: Text(isStruk ? 'Edit Struk' : (isEdit ? 'Ubah Pengeluaran' : 'Tambah Pengeluaran')),
+          title: Text(isStruk ? 'Simpan Struk' : (isEdit ? 'Ubah Pengeluaran' : 'Tambah Pengeluaran')),
           leading: [
             IconButton.ghost(
               icon: const Icon(LucideIcons.arrowLeft),

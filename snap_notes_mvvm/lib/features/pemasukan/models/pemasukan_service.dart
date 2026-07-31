@@ -60,8 +60,41 @@ class PemasukanService {
     }
   }
 
-  /// Get daftar pemasukan
-  Future<List<Pemasukan>> getPemasukan({
+  /// Get daftar pemasukan (paginated)
+  Future<Map<String, dynamic>> getDaftarPemasukan({
+    int? bulan,
+    int? tahun,
+    int page = 1,
+    int limit = 10,
+  }) async {
+    try {
+      final queryParameters = <String, dynamic>{
+        'page': page,
+        'limit': limit,
+      };
+      if (bulan != null) queryParameters['bulan'] = bulan;
+      if (tahun != null) queryParameters['tahun'] = tahun;
+
+      final response = await _dio.get(
+        '/api/pemasukan',
+        queryParameters: queryParameters,
+      );
+      final envelope = response.data as Map<String, dynamic>;
+      final dataObject = envelope['data'] as Map<String, dynamic>;
+      final list = dataObject['data'] as List;
+      final meta = dataObject['meta'] as Map<String, dynamic>;
+
+      return {
+        'data': list.map((e) => Pemasukan.fromJson(e as Map<String, dynamic>)).toList(),
+        'meta': meta,
+      };
+    } on DioException catch (e) {
+      throw ServerException(_handleDioError(e));
+    }
+  }
+
+  /// Get ringkasan/overview pemasukan
+  Future<Map<String, dynamic>> getPemasukanOverview({
     int? bulan,
     int? tahun,
   }) async {
@@ -71,14 +104,11 @@ class PemasukanService {
       if (tahun != null) queryParameters['tahun'] = tahun;
 
       final response = await _dio.get(
-        '/api/pemasukan',
+        '/api/pemasukan/overview',
         queryParameters: queryParameters,
       );
       final envelope = response.data as Map<String, dynamic>;
-      final list = envelope['data'] as List;
-      return list
-          .map((e) => Pemasukan.fromJson(e as Map<String, dynamic>))
-          .toList();
+      return envelope['data'] as Map<String, dynamic>;
     } on DioException catch (e) {
       throw ServerException(_handleDioError(e));
     }

@@ -37,10 +37,10 @@ class _ReceiptScanViewState extends State<ReceiptScanView> {
   @override
   void initState() {
     super.initState();
-    _initCamera();
+    initCamera();
   }
 
-  Future<void> _initCamera() async {
+  Future<void> initCamera() async {
     _cameras = await availableCameras();
     if (_cameras != null && _cameras!.isNotEmpty) {
       _cameraController = CameraController(
@@ -61,96 +61,113 @@ class _ReceiptScanViewState extends State<ReceiptScanView> {
   @override
   void dispose() {
     _cameraController?.dispose();
+    _stepperController.dispose();
     super.dispose();
   }
 
   // Dispose camera before navigating away to avoid resource leak
   Future<void> _disposeCamera() async {
-    if (_cameraController != null) {
-      await _cameraController!.dispose();
+    final controller = _cameraController;
+    if (controller == null) return;
+
+    if (mounted) {
+      setState(() {
+        _isCameraInitialized = false;
+        _cameraController = null;
+      });
+    } else {
       _cameraController = null;
     }
+    await controller.dispose();
   }
 
-  Future<void> _captureImage() async {
-    if (_cameraController != null && _cameraController!.value.isInitialized) {
-      final xFile = await _cameraController!.takePicture();
+  Future<void> captureImage() async {
+    final controller = _cameraController;
+    if (controller != null && controller.value.isInitialized) {
+      final xFile = await controller.takePicture();
       if (mounted) {
         await _disposeCamera();
-        _cropImage(File(xFile.path));
+        cropImage(File(xFile.path));
       }
     }
   }
 
 
 
-  Future<void> _pickBatchImages() async {
+  Future<void> pickMultipleImages() async {
     final picker = ImagePicker();
     final pickedFiles = await picker.pickMultiImage();
     if (pickedFiles.isNotEmpty && mounted) {
       await _disposeCamera();
-
-      List<File> processedFiles = [];
-
-      for (var pickedFile in pickedFiles) {
-        if (!mounted) return;
-
-        final croppedFile = await ImageCropper().cropImage(
-          sourcePath: pickedFile.path,
-          uiSettings: [
-            AndroidUiSettings(
-              toolbarTitle: 'Crop Struk ${processedFiles.length + 1} / ${pickedFiles.length}',
-              toolbarColor: const Color(0xFF000000),
-              toolbarWidgetColor: const Color(0xFFFFFFFF),
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false,
-              aspectRatioPresets: [
-                CropAspectRatioPreset.original,
-              ],
-            ),
-            IOSUiSettings(
-              title: 'Crop Struk ${processedFiles.length + 1} / ${pickedFiles.length}',
-              aspectRatioPickerButtonHidden: true,
-              aspectRatioPresets: [
-                CropAspectRatioPreset.original,
-              ],
-            ),
-          ],
-        );
-
-        if (croppedFile != null) {
-          processedFiles.add(File(croppedFile.path));
-        }
-      }
-
-      if (processedFiles.isNotEmpty && mounted) {
-        final viewModel = context.read<ReceiptViewModel>();
-
-        if (processedFiles.length == 1) {
-          viewModel.selectImage(processedFiles.first);
-          viewModel.runOCR();
-        } else {
-          await viewModel.processBatchCrop(processedFiles);
-        }
-
-        if (mounted) {
-           Navigator.of(context).push(
-             MaterialPageRoute(
-               builder: (context) => ChangeNotifierProvider.value(
-                 value: viewModel,
-                 child: ReceiptTextRecognizedPage(
-                   isBatchMode: processedFiles.length > 1,
-                   images: processedFiles,
-                 ),
-               ),
-             ),
-           );
-        }
-      }
+      await processBatchCrop(pickedFiles.map((pf) => File(pf.path)).toList());
     }
   }
 
-  Future<void> _cropImage(File imageFile) async {
+  Future<void> processBatchCrop(List<File> initialFiles) async {
+    List<File> processedFiles = [];
+
+    for (var file in initialFiles) {
+      if (!mounted) return;
+
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: file.path,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Struk ${processedFiles.length + 1} / ${initialFiles.length}',
+            toolbarColor: const Color(0xFF000000),
+            toolbarWidgetColor: const Color(0xFFFFFFFF),
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+            ],
+          ),
+          IOSUiSettings(
+            title: 'Crop Struk ${processedFiles.length + 1} / ${initialFiles.length}',
+            aspectRatioPickerButtonHidden: true,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.original,
+            ],
+          ),
+        ],
+      );
+
+      if (croppedFile != null) {
+        processedFiles.add(File(croppedFile.path));
+      }
+    }
+
+    if (processedFiles.isNotEmpty && mounted) {
+      final viewModel = context.read<ReceiptViewModel>();
+
+      if (processedFiles.length == 1) {
+        viewModel.selectImage(processedFiles.first);
+        viewModel.runOCR();
+      } else {
+        await viewModel.processBatchCrop(processedFiles);
+      }
+
+      if (mounted) {
+         await Navigator.of(context).push(
+           MaterialPageRoute(
+             builder: (context) => ChangeNotifierProvider.value(
+               value: viewModel,
+               child: ReceiptTextRecognizedPage(
+                 isBatchMode: processedFiles.length > 1,
+                 image: processedFiles.length == 1 ? processedFiles.first : null,
+                 images: processedFiles.length > 1 ? processedFiles : null,
+               ),
+             ),
+           ),
+         );
+         if (mounted) await initCamera();
+      }
+    } else {
+      if (mounted) await initCamera();
+    }
+  }
+
+  Future<void> cropImage(File imageFile) async {
     final croppedFile = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
       uiSettings: [
@@ -174,11 +191,11 @@ class _ReceiptScanViewState extends State<ReceiptScanView> {
       ],
     );
 
-    if (croppedFile != null && mounted) {
+    if (croppedFile != null) {
       final viewModel = context.read<ReceiptViewModel>();
       viewModel.selectImage(File(croppedFile.path));
       viewModel.runOCR();
-      Navigator.of(context).push(
+      await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider.value(
             value: viewModel,
@@ -189,6 +206,9 @@ class _ReceiptScanViewState extends State<ReceiptScanView> {
           ),
         ),
       );
+      if (mounted) await initCamera();
+    } else {
+      await initCamera();
     }
   }
 
@@ -250,6 +270,11 @@ class _ReceiptScanViewState extends State<ReceiptScanView> {
   }
 
   Widget _buildCameraPreview(BuildContext context) {
+    final controller = _cameraController;
+    if (controller == null || !controller.value.isInitialized) {
+      return const Center(child: shadcn.CircularProgressIndicator());
+    }
+
     return Stack(
       children: [
         // Camera preview
@@ -258,8 +283,8 @@ class _ReceiptScanViewState extends State<ReceiptScanView> {
             color: Colors.black,
             child: Center(
               child: AspectRatio(
-                aspectRatio: 1 / _cameraController!.value.aspectRatio,
-                child: CameraPreview(_cameraController!),
+                aspectRatio: 1 / controller.value.aspectRatio,
+                child: CameraPreview(controller),
               ),
             ),
           ),
@@ -273,13 +298,13 @@ class _ReceiptScanViewState extends State<ReceiptScanView> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
                 shadcn.IconButton.ghost(
-                onPressed: _pickBatchImages,
+                onPressed: pickMultipleImages,
                 icon: const Icon(shadcn.LucideIcons.image, color: Colors.white),
               ),
               shadcn.PrimaryButton(
                 shape: shadcn.ButtonShape.circle,
                 size: shadcn.ButtonSize.large,
-                onPressed: _captureImage,
+                onPressed: captureImage,
                 child: const Icon(shadcn.LucideIcons.camera),
               ),
               const SizedBox(width: 48), // Placeholder untuk menyeimbangkan layout

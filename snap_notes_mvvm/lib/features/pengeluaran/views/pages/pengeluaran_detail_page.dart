@@ -296,9 +296,8 @@ class PengeluaranDetailView extends StatelessWidget {
                             tag: p.struk!.imageUrl!,
                             child: Image.network(
                               p.struk!.imageUrl!,
-                              height: 300,
                               width: double.infinity,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fitWidth,
                               errorBuilder: (context, error, stackTrace) => Container(
                                 height: 200,
                                 color: Theme.of(context).colorScheme.muted,
