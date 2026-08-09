@@ -60,7 +60,7 @@ class Receipt extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    final map = <String, dynamic>{
       'id': id,
       'namaToko': storeName,
       'tanggalBelanja': date,
@@ -70,11 +70,21 @@ class Receipt extends Equatable {
       'diskon': discount,
       'gambarUrl': imageUrl,
       'sudahDikonfirmasi': isConfirmed,
-      'kategoriId': categoryId,
-      'kategoriNama': categoryName,
-      'createdAt': createdAt?.toIso8601String(),
-      'updatedAt': updatedAt?.toIso8601String(),
     };
+
+    if (categoryId != null) {
+      map['kategoriId'] = categoryId;
+    }
+
+    if (createdAt != null) {
+      map['createdAt'] = createdAt!.toIso8601String();
+    }
+
+    if (updatedAt != null) {
+      map['updatedAt'] = updatedAt!.toIso8601String();
+    }
+
+    return map;
   }
 
   Receipt copyWith({
@@ -164,16 +174,21 @@ class ReceiptItem extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    final map = <String, dynamic>{
       'id': id,
       'namaItem': name,
       'jumlah': quantity,
       'hargaSatuan': price,
       'diskon': discount,
       'subtotal': totalPrice,
-      'kategoriId': categoryId,
-      'kategoriNama': categoryName,
     };
+
+    // API backend menolak property kategoriId dan kategoriNama untuk item
+    if (categoryId != null) {
+      map['kategoriId'] = categoryId;
+    }
+
+    return map;
   }
 
   ReceiptItem copyWith({

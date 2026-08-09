@@ -36,7 +36,11 @@ class LoginViewModel extends ChangeNotifier {
       final tokenData = await _authService.login(email, password);
       _token = tokenData;
     } catch (e) {
-      _errorMessage = e.toString();
+      if (e is Exception) {
+        _errorMessage = e.toString().replaceFirst('Exception: ', '');
+      } else {
+        _errorMessage = e.toString();
+      }
     } finally {
       _setLoading(false);
     }
@@ -49,7 +53,11 @@ class LoginViewModel extends ChangeNotifier {
       final tokenData = await _authService.loginWithGoogle();
       _token = tokenData;
     } catch (e) {
-      _errorMessage = e.toString();
+      if (e is Exception) {
+        _errorMessage = e.toString().replaceFirst('Exception: ', '');
+      } else {
+        _errorMessage = e.toString();
+      }
     } finally {
       _setGoogleLoading(false);
     }

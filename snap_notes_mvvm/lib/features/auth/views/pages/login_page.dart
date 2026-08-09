@@ -39,7 +39,9 @@ class _LoginPageState extends State<LoginPage> {
       _showErrorToast(viewModel.errorMessage!);
     } else if (viewModel.token != null) {
       _showSuccessToast('Berhasil login');
-      await context.read<AuthViewModel>().checkAuth();
+      // Ensure we don't try to use context across async gaps unnecessarily,
+      // and AuthViewModel will handle the navigation when the token updates
+      context.read<AuthViewModel>().checkAuth();
     }
   }
 
@@ -53,7 +55,8 @@ class _LoginPageState extends State<LoginPage> {
       _showErrorToast(viewModel.errorMessage!);
     } else if (viewModel.token != null) {
       _showSuccessToast('Berhasil login dengan Google');
-      await context.read<AuthViewModel>().checkAuth();
+      // AuthViewModel will handle the navigation when the token updates
+      context.read<AuthViewModel>().checkAuth();
     }
   }
 

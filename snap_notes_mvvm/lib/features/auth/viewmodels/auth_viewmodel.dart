@@ -7,8 +7,8 @@ class AuthViewModel extends ChangeNotifier {
 
   AuthViewModel({required this._authService});
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool _isCheckingAuth = false; // Set initial ke false, hindari skeleton muncul jika tidak perlu
+  bool get isLoading => _isCheckingAuth;
 
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
@@ -20,27 +20,38 @@ class AuthViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   void _setLoading(bool value) {
-    _isLoading = value;
+    _isCheckingAuth = value;
     notifyListeners();
   }
 
   Future<void> checkAuth() async {
-    _setLoading(true);
-    _errorMessage = null;
     try {
+      final isTokenExist = await _authService.isAuthenticated();
+      if (!isTokenExist) {
+        _isAuthenticated = false;
+        _pengguna = null;
+        notifyListeners();
+        return;
+      }
+
+      // Optimistic authentication jika token lokal ada, langsung asumsikan terautentikasi
+      _isAuthenticated = true;
+      notifyListeners();
+
+      // Pengecekan profil / refresh token berjalan di latar belakang (background)
       final penggunaData = await _authService.getProfile();
       _pengguna = penggunaData;
-      _isAuthenticated = true;
+      notifyListeners();
     } catch (e) {
       _isAuthenticated = false;
       _pengguna = null;
-    } finally {
-      _setLoading(false);
+      notifyListeners();
     }
   }
 
   Future<void> logout() async {
-    _setLoading(true);
+    _isCheckingAuth = true;
+    notifyListeners();
     _errorMessage = null;
     try {
       await _authService.logout();
@@ -49,7 +60,8 @@ class AuthViewModel extends ChangeNotifier {
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
-      _setLoading(false);
+      _isCheckingAuth = false;
+      notifyListeners();
     }
   }
 

@@ -54,6 +54,7 @@ class PengeluaranDetailView extends StatelessWidget {
           location: ToastLocation.bottomRight,
         );
         Navigator.pop(context, true);
+        context.read<PengeluaranViewModel>().loadPengeluaran(isRefresh: true);
       }
     }
   }

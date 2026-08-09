@@ -683,17 +683,17 @@ Berdasarkan pemaparan latar belakang permasalahan serta validasi kebutuhan pengg
 
 Berdasarkan pemaparan latar belakang masalah diatas, masalah-masalah yang teridentifikasi dalam penelitian ini adalah:
 
-1. Masyarakat sering lupa mencatat pengeluaran harian secara rinci karena adanya jeda waktu yang cukup lama antara saat bertransaksi dengan saat pencatatan dilakukan.	  
-2. Masyarakat menghadapi proses pembukuan manual yang repetitif, membosankan, dan menyita banyak waktu.  
-3. Masyarakat kesulitan melihat pola konsumsi pribadi pada setiap periodenya karena terhambat dalam melakukan perhitungan dari data yang telah dicatat.
+1. Masyarakat sering lupa mencatat pengeluaran harian karena adanya jeda waktu saat pencatatan dengan saat bertransaksi dilakukan.
+2. Masyarakat sering tidak mencatat pengeluaran disebabkan metode pencatatan yang mengharuskan mencatat data struk secara manual ke buku atau aplikasi spreadsheet.
+3. Masyarakat kesulitan melihat pola pengeluaran bulanan karena sulit dalam melakukan perhitungan dari data yang telah dicatat.
 
 3. ## **Maksud dan Tujuan** {#maksud-dan-tujuan}
 
 Maksud dari penelitian ini adalah untuk membangun sebuah aplikasi pencatatan keuangan pribadi berbasis mobile yang mengintegrasikan teknologi OCR dan LLM guna mengotomatisasi proses input data dari struk belanja fisik menjadi laporan keuangan digital yang terstruktur, adapun tujuan dari penelitian ini adalah:
 
-1. Membantu masyarakat dalam mengingat pendokumentasian pengeluaran harian, guna meminimalisir risiko hilangnya rincian data laporan pengeluaran keuangan.  
-2. Memudahkan masyarakat dalam melakukan pembukuan keuangan secara rutin untuk membantu proses input data manual yang repetitif.  
-3. Memudahkan masyarakat dalam melihat data laporan pengeluaran agar memudahkan dalam melakukan evaluasi pola konsumsi pribadi pada setiap periodenya.
+1. Mengingatkan masyarakat untuk melakukan pencatatan pengeluaran harian dari struk belanja.
+2. Mempermudah masyarakat untuk melakukan pencatatan pengeluaran ke laporan dari struk belanja.
+3. Memudahkan masyarakat dalam melihat pola pengeluaran bulanan berdasarkan transaksi harian dari struk belanja.
 
 4. ## **Batasan Masalah** {#batasan-masalah}
 
@@ -3377,18 +3377,86 @@ Sesuai dengan hasil analisis pada Gambar 3.3 mengenai alur Google ML Kit, kerang
 
 **1) Ekstraksi Teks Mentah (*Raw Text*)**
 Proses diawali dengan menerima masukan berupa objek `File` gambar, lalu modul `TextRecognizer` mengeksekusi model *machine learning* di peranti lokal untuk mencari koordinat kotak pembatas (*bounding box*) dan mengembalikan entitas data teks mentah.
+
+**Gambar 4.28** Kode Program Ekstraksi Gambar menjadi `RecognizedText`
 ```dart
 final inputImage = InputImage.fromFile(image);
 final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+
 final mlkit.RecognizedText mlkitText = await textRecognizer.processImage(inputImage);
 await textRecognizer.close();
 ```
 
-**2) Pembentukan Model Data Lokal `RecognizedText`**
-Teks yang dideteksi oleh ML Kit tidak langsung dibuang, melainkan dikelompokkan (berdasarkan tinggi spasial koordinat) dan dipetakan ke dalam model representasi struktur `local.RecognizedText` milik aplikasi. Model ini menyimpan gabungan kalimat utuh, dimensi gambar, beserta koleksi posisi *bounding box* setiap kata.
+**2) Pengambilan Meta Data Gambar**
+Untuk memetakan titik koordinat teks hasil ekstraksi secara akurat ke atas layar, dimensi asli gambar (lebar dan tinggi) diekstrak melalui proses *decoding* menjadi nilai presisi desimal ganda (*double*).
+
+**Gambar 4.29** Kode Program Ekstraksi Resolusi Citra
 ```dart
+// Mengambil dimensi gambar secara dinamis
+final decodedImage = await decodeImageFromList(await image.readAsBytes());
+final imageWidth = decodedImage.width.toDouble();
+final imageHeight = decodedImage.height.toDouble();
+```
+
+**3) Penggabungan Baris (*Merged Lines*) Berdasarkan Koordinat Spasial**
+Permasalahan umum pada OCR konvensional adalah hasil pemindaian karakter sering terpecah-pecah (*scattered*) tidak beraturan. Untuk mengatasi hal tersebut, aplikasi mengekstrak semua baris (`allMlkitLines`) kemudian mengurutkannya dari atas ke bawah. Sistem menghitung titik tengah (*lineCenter*) dan ambang batas (*threshold*) dari setiap baris teks untuk mengelompokkan kata yang saling berdekatan secara vertikal ke dalam kelompok baris (`groupedLines`) yang sama.
+
+**Gambar 4.30** Kode Program Algoritma Penggabungan Kata Menjadi Baris Utuh
+```dart
+final allMlkitLines = mlkitText.blocks.expand((block) => block.lines).toList();
+allMlkitLines.sort((a, b) => a.boundingBox.top.compareTo(b.boundingBox.top));
+
+final List<List<dynamic>> groupedLines = [];
+for (var mlkitLine in allMlkitLines) {
+  if (groupedLines.isEmpty) {
+    groupedLines.add([mlkitLine]);
+  } else {
+    final currentGroup = groupedLines.last;
+
+    double groupTop = currentGroup.map((l) => l.boundingBox.top as double).reduce((a, b) => a < b ? a : b);
+    double groupBottom = currentGroup.map((l) => l.boundingBox.bottom as double).reduce((a, b) => a > b ? a : b);
+
+    double lineCenter = (mlkitLine.boundingBox.top + mlkitLine.boundingBox.bottom) / 2;
+    double lineHeight = mlkitLine.boundingBox.bottom - mlkitLine.boundingBox.top;
+
+    double threshold = lineHeight * 0.5;
+
+    if (lineCenter >= (groupTop - threshold) && lineCenter <= (groupBottom + threshold)) {
+      currentGroup.add(mlkitLine);
+    } else {
+      groupedLines.add([mlkitLine]);
+    }
+  }
+}
+```
+
+**4) Strukturisasi Data Koordinat (*Bounding Box*) ke dalam Model `local.RecognizedText`**
+Setelah semua kata dikelompokkan menjadi baris yang utuh, setiap kelompok kata diurutkan dari kiri ke kanan. Teks tersebut kemudian digabung (`mergedText`) dengan penambahan tiga spasi sebagai representasi jeda antar-kata. Sistem kemudian menghitung dimensi kotak pembatas baru yang menyelimuti satu kalimat penuh (`Rect.fromLTRB`), dan memetakannya ke dalam entitas representasi struktur `local.RecognizedText` milik aplikasi.
+
+**Gambar 4.31** Kode Program Pembentukan Model Entitas Hasil OCR
+```dart
+int lineIndex = 0;
 final List<local.TextLine> lines = [];
-// ... (Proses pengelompokan teks)
+
+for (var group in groupedLines) {
+  group.sort((a, b) => (a.boundingBox.left as double).compareTo(b.boundingBox.left as double));
+
+  final mergedText = group.map((l) => l.text).join('   '); // Gunakan 3 spasi untuk menandakan jeda/gap
+
+  double left = group.map((l) => l.boundingBox.left as double).reduce((a, b) => a < b ? a : b);
+  double top = group.map((l) => l.boundingBox.top as double).reduce((a, b) => a < b ? a : b);
+  double right = group.map((l) => l.boundingBox.right as double).reduce((a, b) => a > b ? a : b);
+  double bottom = group.map((l) => l.boundingBox.bottom as double).reduce((a, b) => a > b ? a : b);
+
+  lines.add(local.TextLine(
+    lineIndex: lineIndex++,
+    text: mergedText,
+    boundingBox: Rect.fromLTRB(left, top, right, bottom),
+  ));
+}
+
+final fullReconstructedText = lines.map((l) => l.text).join('\n');
+
 return local.RecognizedText(
   text: fullReconstructedText,
   lines: lines,
@@ -3397,8 +3465,10 @@ return local.RecognizedText(
 );
 ```
 
-**3) Visualisasi Hasil Ekstraksi ke Pengguna**
+**5) Visualisasi Hasil Ekstraksi ke Pengguna**
 Untuk memberikan umpan balik visual bahwa proses pemindaian berhasil dilakukan, aplikasi menggunakan kelas `BoundingBoxPainter` (pada fail `receipt_text_recognized_page.dart`). Data koordinat kotak pembatas (`lines`) digambar di atas (di-*overlay*) citra struk belanja menggunakan `CustomPaint`.
+
+**Gambar 4.32** Kode Program Render BoundingBoxPainter di atas Gambar Struk
 ```dart
 if (viewModel.recognizedText != null)
   Positioned.fill(
@@ -3412,14 +3482,15 @@ if (viewModel.recognizedText != null)
     ),
   ),
 ```
-Selama proses ekstraksi berlangsung, antarmuka juga menampilkan `ScanAnimationOverlay` berupa garis animasi *scanning* untuk mengindikasikan bahwa peranti sedang bekerja.
 
       2. **Implementasi Gemini API**
 
-Berdasarkan analisis alur integrasi Gemini API pada Gambar 3.7, pemrosesan LLM tidak dilakukan langsung di sisi klien (*Flutter*), melainkan dijembatani melalui server lokal (*NestJS*) untuk menyembunyikan kunci keamanan (*API key*). Meskipun demikian, implementasi teknis pemanggilan *endpoint* oleh aplikasi klien diuraikan dalam fail kode sumber yang sama, yakni `receipt_service.dart`. Berikut adalah langkah-langkah penerapannya:
+Berdasarkan analisis alur integrasi Gemini API pada Gambar 3.7, pemrosesan bahasa alami (LLM) tidak dilakukan langsung di sisi peranti genggam (*Flutter*), melainkan dijembatani melalui layanan *backend* (*NestJS*). Pendekatan ini dilakukan untuk menyembunyikan kunci antarmuka pemrograman aplikasi (*API key*) agar tidak terekspos ke publik. Berikut adalah rincian tahapan komunikasi sistem, mulai dari inisiasi dari *frontend* (menggunakan kelas `receipt_service.dart`) hingga pemrosesan algoritma pada *backend* (menggunakan kelas `gemini.service.ts`):
 
-**1) Penyiapan *Payload* (*Batch OCR Data*)**
-Aplikasi menyusun hasil *raw text* dari Google ML Kit yang telah dikelompokkan ke dalam struktur senarai (*list*) bertipe data pemetaan (`Map<String, dynamic>`).
+**1) Penyiapan *Payload* (*Batch OCR Data*) pada Klien**
+Aplikasi menyusun data teks mentah hasil Google ML Kit yang memuat representasi kata (termasuk variabel baris, dan koordinat kotak pembatas) ke dalam struktur himpunan data (`Map<String, dynamic>`). Paket data (*payload*) ini kemudian dikirimkan ke layanan *backend*.
+
+**Gambar 4.34** Kode Program Pengiriman Payload Data OCR ke NestJS (`receipt_service.dart`)
 ```dart
 final response = await _dio.post(
   '/api/struk/scan/analyze',
@@ -3428,13 +3499,99 @@ final response = await _dio.post(
   },
 );
 ```
-Pada bagian kode ini, aplikasi memanfaatkan pustaka klien HTTP `Dio` untuk melakukan permintaan (`POST`) asinkron ke rute `/api/struk/scan/analyze` di *backend*. 
 
-**2) Pengecekan Kode Status dan Penerjemahan *Response***
-Bila permintaan berhasil merespons dengan kode HTTP 200 atau 201, aplikasi akan memecah (*parsing*) muatan respons berformat *JSON* tersebut menggunakan pola *factory method* `Receipt.fromJson()`. Proses ini mengikat data JSON mentah menjadi wujud entitas objek `Receipt` yang dimengerti oleh sistem aplikasi.
+**2) Definisi Skema Ekstraksi JSON pada Backend**
+Sebelum berkomunikasi dengan Gemini API, layanan *backend* perlu menyiapkan spesifikasi struktur JSON baku (*schema*). Pendekatan ini (berdasarkan SDK `@google/genai`) bertujuan untuk membatasi imajinasi atau halusinasi kecerdasan buatan, sehingga memaksa Gemini untuk mengembalikan hasil yang formatnya pasti konsisten (seperti `nama_toko`, `tanggal`, `total`, dan `item`).
+
+**Gambar 4.35** Kode Program Deklarasi Skema Respons JSON Struk (`gemini.service.ts`)
+```typescript
+const STRUK_JSON_SCHEMA = {
+  type: 'object',
+  properties: {
+    nama_toko: {
+      type: 'string',
+      description: 'Nama toko atau merchant pada struk.',
+    },
+    tanggal: {
+      type: 'string',
+      description: 'Tanggal transaksi dalam format YYYY-MM-DD.',
+    },
+    total: {
+      type: 'number',
+      description: 'Total keseluruhan struk (angka tanpa pemisah ribuan).',
+    },
+    // ... konfigurasi field lainnya ...
+    item: {
+      type: 'array',
+      description: 'Daftar item pada struk.',
+      items: {
+        type: 'object',
+        properties: {
+          nama: { type: 'string', description: 'Nama item/produk.' },
+          jumlah: { type: 'integer', description: 'Jumlah/qty item.' },
+          harga_satuan: { type: 'number', description: 'Harga per satuan item.' },
+          subtotal: { type: 'number', description: 'jumlah * harga_satuan.' },
+        },
+        required: ['nama', 'jumlah', 'harga_satuan', 'subtotal'],
+      },
+    },
+  },
+  required: ['nama_toko', 'tanggal', 'total', 'item'],
+};
+```
+
+**3) Menyusun Kalimat Perintah (*Prompt*) Berbasis Koordinat Spasial**
+Agar kecerdasan buatan Gemini dapat mengekstraksi data secara akurat layaknya manusia membaca struk belanja, layanan *backend* memanipulasi kalimat perintah (*prompt*) dasar dengan menambahkan meta-informasi koordinat posisi kalimat (*X/Y percentage*). Konfigurasi ini menjabarkan aturan khusus agar kecerdasan buatan mengetahui bahwa tulisan di area kiri layar (*X 0-30%*) adalah nama produk, nilai di area tengah (*X 30-60%*) adalah jumlah barang, dan angka di sisi kanan (*X 60-100%*) adalah harga.
+
+**Gambar 4.36** Kode Program Perakitan Prompt Spasial (`gemini.service.ts`)
+```typescript
+const lineInfo = lines.map((line) => {
+  const centerX = (line.boundingBox.left + line.boundingBox.right) / 2;
+  const centerY = (line.boundingBox.top + line.boundingBox.bottom) / 2;
+  const relativeX = (centerX / imageSize.width * 100).toFixed(1);
+  const relativeY = (centerY / imageSize.height * 100).toFixed(1);
+  return `[${line.lineIndex}] X:${relativeX}% Y:${relativeY}% | "${line.text}"`;
+}).join('\n');
+
+const prompt = `Anda adalah parser struk belanja. Analisis teks OCR berikut dan ekstrak informasi struk ke format JSON.
+TEKS OCR:
+INFO LAYOUT LINE POSISI (persentase dari ukuran gambar ${imageSize.width}x${imageSize.height}px):
+${lineInfo}
+
+Analisis posisi:
+- X 0-30% = Kolom kiri (biasanya nama item/produk)
+- X 30-60% = Kolom tengah (biasanya qty/jumlah)
+- X 60-100% = Kolom kanan (biasanya harga/total)`;
+```
+
+**4) Eksekusi Gemini API dan Penanganan Waktu Tunggu**
+Setelah *prompt* dan struktur JSON terangkai, sistem peladen melaksanakan fungsi `generateContent()` pada model `gemini-1.5-flash-8b`. Untuk mengantisipasi lamanya waktu respons kecerdasan buatan, sistem menerapkan pembatas waktu (*timeout*) selama 28 detik agar antarmuka pengguna tidak macet jika layanan Google sedang bermasalah.
+
+**Gambar 4.37** Kode Program Inisiasi LLM dan Kontrol Timeout (`gemini.service.ts`)
+```typescript
+const geminiPromise = this.genAI.models.generateContent({
+  model: 'gemini-1.5-flash-8b',
+  contents: prompt,
+  config: {
+    responseMimeType: 'application/json',
+    responseSchema: STRUK_JSON_SCHEMA,
+  },
+});
+
+const timeoutPromise = new Promise<never>((_, reject) => {
+  setTimeout(() => reject(new Error('Gemini AI timeout')), 28000);
+});
+
+const response = await Promise.race([geminiPromise, timeoutPromise]);
+```
+
+**5) Menerima dan Memecah Respons pada Aplikasi Klien**
+Sekembalinya data struktur JSON hasil olahan *backend*, aplikasi klien (Flutter) menerima respons berstatus berhasil (200 atau 201) dan langsung memecah (*parsing*) muatan tersebut. Teks JSON dikonversi menjadi entitas objek utuh melalui fungsi bantuan `Receipt.fromJson()`. Data tersebut kemudian dipanggil untuk dimunculkan pada antarmuka peninjauan struk.
+
+**Gambar 4.38** Kode Program Konversi Keluaran Server Menjadi Objek Data Klien (`receipt_service.dart`)
 ```dart
 if (response.statusCode == 200 || response.statusCode == 201) {
-  final responseData = response.data as Map<String, dynamic>;
+  const responseData = response.data as Map<String, dynamic>;
   final receiptsData = responseData['data'] as List;
   return receiptsData.map((e) => Receipt.fromJson(e as Map<String, dynamic>)).toList();
 } else {
@@ -3442,45 +3599,387 @@ if (response.statusCode == 200 || response.statusCode == 201) {
 }
 ```
 
-**3) Penanganan *Exception* (Kesalahan Pemrosesan LLM)**
-Apabila terjadi kegagalan saat server *backend* menjembatani proses dengan infrastruktur Google Gemini (misalnya *Rate Limit Exceeded* atau kegagalan *parsing* struktur JSON dari model AI), aplikasi akan menangkap kode galat tersebut (*HTTP 422* atau *HTTP 503*). Kesalahan tersebut dikemas ulang menjadi galat `ServerException` untuk memberikan pesan penolakan yang sesuai ke antarmuka pengguna.
-```dart
-on DioException catch (e) {
-  if (e.response?.statusCode == 422 || e.response?.statusCode == 503) {
-    final errorMessage = e.response?.data?['message'] ?? e.message;
-    throw ServerException('AI Processing Error: $errorMessage');
-  }
-  throw ServerException('Failed to communicate with server: ${e.message}');
-}
-```
+## **Pengujian Sistem**
 
-2. ## **Pengujian Sistem**
+Pengujian sistem merupakan langkah penting yang dilakukan untuk menilai kelayakan sistem yang telah dibangun. Melalui hasil pengujian ini, dapat ditentukan apakah sistem memerlukan perbaikan lebih lanjut atau sudah siap untuk digunakan. Berikut adalah beberapa pengujian yang dilakukan terhadap sistem.
 
-   1. ### **Pengujian Fungsional**
+### **Pengujian Fungsional**
 
-      1. **Rencana**
+Pengujian fungsional adalah proses yang dilakukan untuk memastikan bahwa sistem yang dibangun berjalan sesuai dengan spesifikasi kebutuhan fungsional yang telah dirancang. Seluruh pengujian fungsional pada sistem ini menggunakan metode *blackbox testing*. Pada bab ini dipaparkan pengujian terhadap 19 fungsionalitas inti, sedangkan pengujian modul pemasukan (Riwayat Pemasukan dan Pengelolaan Pemasukan) dilampirkan pada bagian Lampiran.
 
-      2. **Hasil**
+#### **Rencana Pengujian Fungsional**
 
-      3. **Kesimpulan**
+Berikut adalah rencana pengujian fungsionalitas yang dilakukan menggunakan metode *blackbox*. Setiap fungsionalitas diuji dengan minimal dua kondisi, yaitu kondisi normal (data valid) dan kondisi non-ideal (data tidak valid atau skenario gagal), untuk memverifikasi bahwa fungsi utama maupun penanganan kesalahan pada sistem bekerja sebagaimana mestinya. Rencana pengujian dapat dilihat pada Tabel 4.6:
 
-   2. ### **Pengujian Waktu**
+**Tabel 4.6** Rencana Pengujian Fungsional
 
-      1. **Rencana**
+| No | Fungsionalitas Yang Diuji | Detail Pengujian | Pengujian |
+| :---: | :--- | :--- | :---: |
+| 1 | Pendaftaran Akun | 1) Menguji pendaftaran dengan data lengkap dan valid 2) Menguji pendaftaran dengan seluruh kolom dikosongkan 3) Menguji pendaftaran dengan email yang sudah terdaftar | *Blackbox* |
+| 2 | Autentikasi Masuk | 1) Menguji masuk dengan kredensial yang valid 2) Menguji masuk dengan email yang tidak terdaftar 3) Menguji masuk dengan password yang salah 4) Menguji masuk dengan seluruh kolom dikosongkan | *Blackbox* |
+| 3 | Keluar dari Sistem | 1) Menguji konfirmasi dialog keluar diterima 2) Menguji konfirmasi dialog keluar dibatalkan | *Blackbox* |
+| 4 | Pengambilan Foto Struk | 1) Menguji pengambilan foto struk melalui kamera 2) Menguji penolakan izin akses kamera oleh sistem operasi | *Blackbox* |
+| 5 | Unggah Gambar Struk | 1) Menguji pemilihan gambar struk dari galeri perangkat 2) Menguji pembatalan pemilihan gambar dari galeri | *Blackbox* |
+| 6 | Pemindaian Teks Struk (OCR) | 1) Menguji ekstraksi teks dari gambar struk yang jelas dan terbaca 2) Menguji tampilan kotak pembatas di atas gambar struk 3) Menguji pemindaian gambar yang tidak mengandung teks | *Blackbox* |
+| 7 | Strukturisasi Data Struk (AI) | 1) Menguji transformasi teks OCR menjadi data terstruktur JSON 2) Menguji kesesuaian data hasil parsing (nama toko, tanggal, item, total) 3) Menguji penanganan saat koneksi ke layanan *backend* gagal | *Blackbox* |
+| 8 | Tinjauan Data Ekstraksi | 1) Menguji penyuntingan nama item pada formulir tinjauan 2) Menguji penyuntingan nominal harga pada formulir tinjauan 3) Menguji validasi kolom yang dikosongkan 4) Menguji validasi format nominal diisi huruf | *Blackbox* |
+| 9 | Simpan Pengeluaran Hasil Scan | 1) Menguji penyimpanan data hasil scan dengan data lengkap 2) Menguji penanganan kegagalan koneksi saat penyimpanan | *Blackbox* |
+| 10 | Riwayat Pengeluaran | 1) Menguji pemuatan daftar riwayat pengeluaran yang memiliki data 2) Menguji tampilan kondisi kosong saat belum ada data pengeluaran | *Blackbox* |
+| 11 | Detail Pengeluaran | 1) Menguji tampilan detail pengeluaran bertipe scan struk 2) Menguji tampilan detail pengeluaran bertipe manual | *Blackbox* |
+| 12 | Hapus Pengeluaran | 1) Menguji penghapusan data pengeluaran melalui konfirmasi dialog 2) Menguji pembatalan penghapusan melalui dialog konfirmasi | *Blackbox* |
+| 13 | Tambah Pengeluaran Manual | 1) Menguji penambahan pengeluaran dengan data lengkap dan valid 2) Menguji validasi kolom judul tidak diisi 3) Menguji validasi kolom nominal tidak diisi 4) Menguji validasi kategori tidak dipilih | *Blackbox* |
+| 14 | Ubah Pengeluaran | 1) Menguji perubahan data pengeluaran dengan data valid 2) Menguji validasi kolom judul dikosongkan 3) Menguji validasi nominal diisi dengan huruf | *Blackbox* |
+| 15 | Tren Pengeluaran (*Line Chart*) | 1) Menguji tampilan grafik tren pengeluaran bulanan dengan data tersedia 2) Menguji tampilan grafik saat data transaksi kosong | *Blackbox* |
+| 16 | Kalender Pengeluaran (*Heatmap*) | 1) Menguji tampilan kalender *heatmap* dengan data pengeluaran harian 2) Menguji tampilan kalender pada bulan tanpa transaksi | *Blackbox* |
+| 17 | Visualisasi Kategori (*Pie Chart*) | 1) Menguji tampilan diagram lingkaran dengan data kategori tersedia 2) Menguji tampilan diagram saat tidak ada data kategori | *Blackbox* |
+| 18 | Notifikasi Pengingat Otomatis | 1) Menguji pengiriman notifikasi sesuai jadwal yang dikonfigurasi 2) Menguji tidak adanya notifikasi setelah preferensi dihapus | *Blackbox* |
+| 19 | Preferensi Notifikasi | 1) Menguji penambahan jadwal notifikasi baru 2) Menguji perubahan jadwal notifikasi yang sudah ada 3) Menguji penghapusan preferensi notifikasi 4) Menguji validasi kolom pesan dikosongkan 5) Menguji validasi waktu tidak dipilih | *Blackbox* |
 
-      2. **Hasil**
+#### **Hasil Pengujian Fungsional**
 
-      3. **Kesimpulan**
+Hasil pengujian fungsional merupakan tahapan untuk mengetahui apakah setiap aspek fungsionalitas dari sistem yang dibangun sudah berjalan sesuai dengan spesifikasi atau belum. Setiap fungsionalitas diuji dengan dua kondisi: kondisi normal menggunakan data valid dan kondisi non-ideal menggunakan data tidak valid atau skenario gagal. Kasus dan hasil pengujian dapat dilihat sebagai berikut.
 
-   3. ### **Pengujian Respon Pengguna**
+**1. Hasil Pengujian Pendaftaran Akun**
 
-      1. **Rencana**
+Pengujian ini memverifikasi kemampuan sistem dalam memproses registrasi akun baru serta menangani validasi formulir pendaftaran. Hasil pengujian dapat dilihat pada Tabel 4.7:
 
-      2. **Hasil**
+**Tabel 4.7** Hasil Pengujian Pendaftaran Akun
 
-      3. **Kesimpulan**
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Nama: Randy Abdul Rahman, Email: randy@example.com, Password: 123456 | Akun berhasil terdaftar, sistem menampilkan pesan konfirmasi dan mengarahkan ke halaman masuk. | Berhasil menampilkan pesan konfirmasi dan diarahkan ke halaman masuk. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Nama: (kosong), Email: (kosong), Password: (kosong) | Validasi formulir aktif, sistem menampilkan pesan bahwa semua kolom wajib diisi. | Berhasil menampilkan pesan validasi pada setiap kolom. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| Email: randy@example.com (sudah terdaftar) | Sistem menolak pendaftaran dan menampilkan pesan bahwa email sudah terdaftar. | Berhasil menampilkan pesan email sudah terdaftar. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
 
-## 
+**2. Hasil Pengujian Autentikasi Masuk**
+
+Pengujian ini memverifikasi mekanisme autentikasi sistem terhadap kredensial yang valid maupun tidak valid. Hasil pengujian dapat dilihat pada Tabel 4.8:
+
+**Tabel 4.8** Hasil Pengujian Autentikasi Masuk
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Email: randy@example.com, Password: 123456 | Autentikasi berhasil, sistem mengarahkan ke halaman *dashboard*. | Berhasil masuk dan menampilkan halaman *dashboard*. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Email: salah@example.com, Password: wrongpass | Autentikasi gagal, sistem menampilkan pesan kesalahan kredensial tidak valid. | Berhasil menampilkan pesan kesalahan autentikasi. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**3. Hasil Pengujian Keluar dari Sistem**
+
+Pengujian ini memverifikasi proses terminasi sesi aktif serta pengalihan halaman setelah pengguna keluar. Hasil pengujian dapat dilihat pada Tabel 4.9:
+
+**Tabel 4.9** Hasil Pengujian Keluar dari Sistem
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Konfirmasi dialog keluar diterima. | Sesi aktif dihapus, sistem mengarahkan kembali ke halaman masuk. | Berhasil mengakhiri sesi dan menampilkan halaman masuk. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Konfirmasi dialog keluar dibatalkan. | Sesi tetap aktif, sistem tidak berpindah halaman. | Sesi tetap berjalan dan halaman tidak berubah. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**4. Hasil Pengujian Pengambilan Foto Struk**
+
+Pengujian ini memverifikasi fungsi kamera dalam menangkap gambar struk belanja serta penanganan penolakan izin kamera. Hasil pengujian dapat dilihat pada Tabel 4.10:
+
+**Tabel 4.10** Hasil Pengujian Pengambilan Foto Struk
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Gambar struk diambil melalui kamera perangkat. | Gambar berhasil ditangkap dan ditampilkan pada antarmuka pemindaian. | Berhasil menampilkan gambar struk hasil tangkapan kamera. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Izin akses kamera ditolak oleh sistem operasi. | Sistem menampilkan pesan bahwa izin kamera diperlukan untuk menggunakan fitur ini. | Berhasil menampilkan pesan permintaan izin kamera. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**5. Hasil Pengujian Unggah Gambar Struk**
+
+Pengujian ini memverifikasi fungsi pemilihan gambar dari galeri perangkat serta penanganan saat pemilihan dibatalkan. Hasil pengujian dapat dilihat pada Tabel 4.11:
+
+**Tabel 4.11** Hasil Pengujian Unggah Gambar Struk
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Gambar struk dipilih dari galeri perangkat. | Gambar berhasil dimuat dan ditampilkan pada antarmuka pemindaian. | Berhasil menampilkan gambar struk dari galeri. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Proses pemilihan gambar dari galeri dibatalkan. | Sistem kembali ke halaman sebelumnya tanpa memproses gambar. | Berhasil kembali ke halaman sebelumnya tanpa kesalahan. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**6. Hasil Pengujian Pemindaian Teks Struk (OCR)**
+
+Pengujian ini memverifikasi kemampuan Google ML Kit dalam mengekstraksi teks dari gambar struk serta respons sistem terhadap gambar tanpa teks. Hasil pengujian dapat dilihat pada Tabel 4.12:
+
+**Tabel 4.12** Hasil Pengujian Pemindaian Teks Struk (OCR)
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Gambar struk belanja dengan teks yang jelas dan terbaca. | Teks berhasil diekstraksi, kotak pembatas (*bounding box*) ditampilkan di atas gambar struk. | Berhasil menampilkan teks dan kotak pembatas pada posisi yang sesuai. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Gambar tanpa teks (foto benda/pemandangan). | Sistem tidak mendeteksi teks dan menampilkan hasil kosong atau pesan bahwa tidak ada teks yang ditemukan. | Berhasil menampilkan kondisi tanpa hasil teks terdeteksi. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**7. Hasil Pengujian Strukturisasi Data Struk (AI)**
+
+Pengujian ini memverifikasi transformasi teks OCR menjadi data terstruktur JSON melalui Gemini AI serta penanganan kegagalan koneksi ke layanan *backend*. Hasil pengujian dapat dilihat pada Tabel 4.13:
+
+**Tabel 4.13** Hasil Pengujian Strukturisasi Data Struk (AI)
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Teks OCR hasil pemindaian struk belanja yang valid. | Data terstruktur berupa nama toko, tanggal transaksi, daftar item, dan total harga berhasil ditampilkan pada formulir tinjauan. | Berhasil menampilkan data terstruktur pada formulir tinjauan. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Koneksi ke layanan *backend* diputus (simulasi *offline*). | Sistem menampilkan pesan kesalahan bahwa koneksi ke layanan gagal. | Berhasil menampilkan pesan kesalahan koneksi. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**8. Hasil Pengujian Tinjauan Data Ekstraksi**
+
+Pengujian ini memverifikasi kemampuan penyuntingan formulir hasil ekstraksi AI serta validasi terhadap kolom yang dikosongkan. Hasil pengujian dapat dilihat pada Tabel 4.14:
+
+**Tabel 4.14** Hasil Pengujian Tinjauan Data Ekstraksi
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Nama item diubah dari "AQUA 600ML" menjadi "Air Mineral 600ML", harga diubah dari 3000 menjadi 3500. | Perubahan tersimpan pada formulir dan ditampilkan sesuai data editan. | Berhasil menyimpan perubahan pada formulir tinjauan. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Kolom nama item dikosongkan, kolom harga diisi dengan huruf "abc". | Validasi formulir aktif, sistem menampilkan pesan bahwa kolom wajib diisi dan format harga harus berupa angka. | Berhasil menampilkan pesan validasi pada kolom yang tidak sesuai. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**9. Hasil Pengujian Simpan Pengeluaran Hasil Scan**
+
+Pengujian ini memverifikasi persistensi data pengeluaran hasil pemindaian struk ke basis data serta penanganan kegagalan koneksi saat penyimpanan. Hasil pengujian dapat dilihat pada Tabel 4.15:
+
+**Tabel 4.15** Hasil Pengujian Simpan Pengeluaran Hasil Scan
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Data formulir tinjauan struk yang telah terisi lengkap dan valid. | Data pengeluaran berhasil disimpan ke basis data, sistem menampilkan pesan konfirmasi berhasil. | Berhasil menyimpan data dan menampilkan pesan berhasil. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Koneksi ke layanan *backend* diputus saat proses simpan berlangsung. | Sistem menampilkan pesan kesalahan penyimpanan gagal akibat koneksi terputus. | Berhasil menampilkan pesan kesalahan koneksi. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**10. Hasil Pengujian Riwayat Pengeluaran**
+
+Pengujian ini memverifikasi pemuatan daftar riwayat pengeluaran pada antarmuka serta tampilan kondisi kosong ketika belum ada data. Hasil pengujian dapat dilihat pada Tabel 4.16:
+
+**Tabel 4.16** Hasil Pengujian Riwayat Pengeluaran
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Akun pengguna yang telah memiliki data pengeluaran. | Daftar riwayat pengeluaran ditampilkan sesuai dengan data yang tersimpan di basis data. | Berhasil menampilkan daftar riwayat pengeluaran. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Akun pengguna yang belum memiliki data pengeluaran. | Sistem menampilkan tampilan kondisi kosong (*empty state*) dengan pesan informatif. | Berhasil menampilkan tampilan kondisi kosong. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**11. Hasil Pengujian Detail Pengeluaran**
+
+Pengujian ini memverifikasi tampilan informasi lengkap suatu pengeluaran pada halaman detail serta kesesuaian data yang ditampilkan. Hasil pengujian dapat dilihat pada Tabel 4.17:
+
+**Tabel 4.17** Hasil Pengujian Detail Pengeluaran
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Pengeluaran bertipe scan struk (memiliki data item dan gambar struk). | Halaman detail menampilkan seluruh informasi termasuk gambar struk, daftar item, nama toko, dan total. | Berhasil menampilkan halaman detail pengeluaran scan. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Pengeluaran bertipe manual (tanpa data item struk). | Halaman detail menampilkan informasi pengeluaran manual tanpa bagian daftar item struk. | Berhasil menampilkan halaman detail pengeluaran manual. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**12. Hasil Pengujian Hapus Pengeluaran**
+
+Pengujian ini memverifikasi proses penghapusan data pengeluaran melalui dialog konfirmasi serta validasi pembatalan penghapusan. Hasil pengujian dapat dilihat pada Tabel 4.18:
+
+**Tabel 4.18** Hasil Pengujian Hapus Pengeluaran
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Konfirmasi dialog hapus diterima pada salah satu data pengeluaran. | Data pengeluaran terhapus dari basis data dan hilang dari daftar riwayat. | Berhasil menghapus data dan item hilang dari daftar. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Konfirmasi dialog hapus dibatalkan. | Data pengeluaran tetap tersimpan, daftar riwayat tidak berubah. | Data tetap tersimpan dan daftar tidak berubah. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**13. Hasil Pengujian Tambah Pengeluaran Manual**
+
+Pengujian ini memverifikasi penyimpanan data pengeluaran manual dengan data lengkap serta validasi formulir terhadap kolom wajib yang dikosongkan. Hasil pengujian dapat dilihat pada Tabel 4.19:
+
+**Tabel 4.19** Hasil Pengujian Tambah Pengeluaran Manual
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Judul: Makan Siang, Nominal: 25000, Kategori: Makanan, Tanggal: 01/07/2026 | Data pengeluaran berhasil disimpan, sistem menampilkan pesan konfirmasi. | Berhasil menyimpan data dan menampilkan pesan berhasil. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Judul: (kosong), Nominal: (kosong), Kategori: tidak dipilih | Validasi formulir aktif, sistem menampilkan pesan bahwa kolom wajib diisi. | Berhasil menampilkan pesan validasi pada setiap kolom. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**14. Hasil Pengujian Ubah Pengeluaran**
+
+Pengujian ini memverifikasi pembaruan data pengeluaran yang sudah tersimpan serta validasi formulir terhadap perubahan dengan data tidak valid. Hasil pengujian dapat dilihat pada Tabel 4.20:
+
+**Tabel 4.20** Hasil Pengujian Ubah Pengeluaran
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Nominal diubah dari 25000 menjadi 30000, kategori diubah dari Makanan menjadi Transportasi. | Data pengeluaran berhasil diperbarui, sistem menampilkan pesan konfirmasi. | Berhasil memperbarui data dan menampilkan pesan berhasil. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Kolom judul dikosongkan, nominal diisi dengan huruf "abc". | Validasi formulir aktif, sistem menampilkan pesan bahwa kolom wajib diisi dan nominal harus berupa angka. | Berhasil menampilkan pesan validasi. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**15. Hasil Pengujian Tren Pengeluaran (*Line Chart*)**
+
+Pengujian ini memverifikasi rendering grafik tren pengeluaran bulanan terhadap kesesuaian data serta tampilan saat data kosong. Hasil pengujian dapat dilihat pada Tabel 4.21:
+
+**Tabel 4.21** Hasil Pengujian Tren Pengeluaran
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Akun pengguna yang memiliki data pengeluaran selama beberapa bulan. | Grafik *line chart* tren pengeluaran per bulan ditampilkan sesuai data transaksi yang tersimpan. | Berhasil menampilkan grafik tren pengeluaran. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Akun pengguna yang belum memiliki data pengeluaran. | Grafik menampilkan kondisi kosong atau garis datar pada nilai nol. | Berhasil menampilkan grafik dengan kondisi data kosong. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**16. Hasil Pengujian Kalender Pengeluaran (*Heatmap*)**
+
+Pengujian ini memverifikasi rendering kalender *heatmap* terhadap intensitas warna berdasarkan pengeluaran harian serta kondisi bulan tanpa transaksi. Hasil pengujian dapat dilihat pada Tabel 4.22:
+
+**Tabel 4.22** Hasil Pengujian Kalender Pengeluaran
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Akun pengguna yang memiliki data pengeluaran pada bulan berjalan. | Kalender *heatmap* ditampilkan dengan intensitas warna sesuai jumlah pengeluaran per hari. | Berhasil menampilkan kalender *heatmap* dengan gradasi warna yang sesuai. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Akun pengguna pada bulan yang tidak memiliki transaksi. | Kalender ditampilkan tanpa gradasi warna (*baseline color*). | Berhasil menampilkan kalender tanpa gradasi warna. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**17. Hasil Pengujian Visualisasi Kategori (*Pie Chart*)**
+
+Pengujian ini memverifikasi rendering diagram lingkaran proporsi kategori pengeluaran serta tampilan saat tidak ada data kategori. Hasil pengujian dapat dilihat pada Tabel 4.23:
+
+**Tabel 4.23** Hasil Pengujian Visualisasi Kategori
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Akun pengguna yang memiliki data pengeluaran dari berbagai kategori. | Diagram lingkaran (*pie chart*) ditampilkan dengan proporsi sesuai distribusi kategori pengeluaran. | Berhasil menampilkan diagram lingkaran kategori. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Akun pengguna yang belum memiliki data pengeluaran berkategori. | Sistem menampilkan kondisi kosong (*empty state*) pada area diagram. | Berhasil menampilkan kondisi kosong pada area diagram. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**18. Hasil Pengujian Notifikasi Pengingat Otomatis**
+
+Pengujian ini memverifikasi pengiriman notifikasi pengingat sesuai jadwal yang telah dikonfigurasi serta validasi bahwa notifikasi tidak terkirim di luar jadwal. Hasil pengujian dapat dilihat pada Tabel 4.24:
+
+**Tabel 4.24** Hasil Pengujian Notifikasi Pengingat Otomatis
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Preferensi notifikasi aktif dengan jadwal pukul 20:00. | Notifikasi pengingat muncul pada perangkat tepat sesuai jadwal yang telah dikonfigurasi. | Berhasil menampilkan notifikasi pengingat pada waktu yang dijadwalkan. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Preferensi notifikasi dinonaktifkan atau dihapus. | Notifikasi pengingat tidak muncul pada perangkat. | Notifikasi tidak muncul setelah preferensi dihapus. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+**19. Hasil Pengujian Preferensi Notifikasi**
+
+Pengujian ini memverifikasi operasi tambah, ubah, dan hapus preferensi jadwal notifikasi serta validasi formulir terhadap input tidak valid. Hasil pengujian dapat dilihat pada Tabel 4.25:
+
+**Tabel 4.25** Hasil Pengujian Preferensi Notifikasi
+
+| Kasus dan Hasil Pengujian (Data Normal) | | | |
+| :--- | :--- | :--- | :--- |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Jadwal notifikasi baru pada pukul 08:00 dengan pesan "Catat pengeluaran pagi". | Preferensi notifikasi berhasil disimpan dan ditampilkan pada daftar jadwal. | Berhasil menyimpan dan menampilkan preferensi notifikasi baru. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| Jadwal notifikasi diubah dari pukul 08:00 menjadi 09:00. | Preferensi notifikasi berhasil diperbarui. | Berhasil memperbarui jadwal notifikasi. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| Konfirmasi dialog hapus preferensi notifikasi diterima. | Preferensi notifikasi terhapus dari daftar. | Berhasil menghapus preferensi notifikasi. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+| **Kasus dan Hasil Pengujian (Data Tidak Valid)** | | | |
+| **Data Masukan** | **Hasil Yang Diharapkan** | **Hasil Pengamatan** | **Kesimpulan** |
+| Kolom pesan notifikasi dikosongkan, waktu tidak dipilih. | Validasi formulir aktif, sistem menampilkan pesan bahwa kolom wajib diisi. | Berhasil menampilkan pesan validasi pada formulir notifikasi. `[screenshot]` | \[✓\]Diterima \[ \]Ditolak |
+
+#### **Kesimpulan Pengujian Fungsional**
+
+Berdasarkan hasil pengujian fungsional yang telah dilakukan terhadap 19 fungsionalitas inti menggunakan metode *blackbox testing*, seluruh skenario pengujian — baik pada kondisi normal (data valid) maupun kondisi non-ideal (data tidak valid atau skenario gagal) — mendapatkan hasil "Diterima". Hal ini menunjukkan bahwa aplikasi yang dibangun telah memenuhi spesifikasi kebutuhan fungsional yang telah dirancang pada tahap analisis dan perancangan. Sistem mampu memproses data valid dengan benar sekaligus menangani kondisi kesalahan secara tepat melalui mekanisme validasi dan pesan informatif kepada pengguna. Pengujian terhadap modul pemasukan (Riwayat Pemasukan dan Pengelolaan Pemasukan) dilampirkan pada bagian Lampiran.
+
+### **Pengujian Waktu**
+
+   1. **Rencana**
+
+   2. **Hasil**
+
+   3. **Kesimpulan**
+
+### **Pengujian Respon Pengguna (*User Acceptance Testing*)**
+
+Pengujian respon pengguna atau *User Acceptance Testing* (UAT) dilakukan untuk mengukur tingkat keberhasilan aplikasi dalam memenuhi tujuan yang telah ditetapkan. Pengujian ini menggunakan kuesioner dengan skala Likert yang disebarkan kepada responden. Pertanyaan dirancang untuk memvalidasi tiga aspek utama, yaitu kemampuan aplikasi dalam mengingatkan pengguna untuk mencatat, membantu mencatat data struk belanja, dan memudahkan pengguna dalam melihat pola pengeluaran bulanan.
+
+#### **Rencana Pengujian Respon Pengguna**
+
+Kuesioner dirancang dengan skala Likert yang memiliki bobot nilai dari 1 hingga 5. Daftar pertanyaan yang digunakan pada kuesioner dapat dilihat pada Tabel 4.X.
+
+**Tabel 4.X** Daftar Pertanyaan Kuesioner
+| No | Pertanyaan | Tujuan Validasi |
+| :--- | :--- | :--- |
+| 1 | Fitur pengingat pada aplikasi ini membantu saya untuk tidak lupa melakukan pencatatan keuangan harian. | Mengingatkan pencatatan |
+| 2 | Notifikasi yang diberikan oleh aplikasi ini mendorong saya untuk lebih rutin mencatat pengeluaran. | Mengingatkan pencatatan |
+| 3 | Aplikasi ini memberikan kemudahan dalam membangun kebiasaan mencatat keuangan setiap hari. | Mengingatkan pencatatan |
+| 4 | Fitur pemindaian struk belanja pada aplikasi ini mempercepat proses pencatatan data ke dalam laporan keuangan. | Membantu pencatatan struk |
+| 5 | Hasil ekstraksi teks dari struk belanja ke dalam formulir laporan dinilai akurat dan mengurangi proses input manual. | Membantu pencatatan struk |
+| 6 | Aplikasi ini membuat proses dokumentasi transaksi dari struk fisik menjadi lebih praktis. | Membantu pencatatan struk |
+| 7 | Tampilan grafik pola pengeluaran bulanan pada aplikasi ini mudah dibaca dan dipahami. | Melihat pola pengeluaran |
+| 8 | Ringkasan transaksi harian membantu saya dalam menganalisis total pengeluaran per bulan dengan lebih baik. | Melihat pola pengeluaran |
+| 9 | Aplikasi ini memberikan informasi visual yang memadai mengenai riwayat transaksi dan alokasi dana bulanan. | Melihat pola pengeluaran |
+
+Jawaban responden diukur berdasarkan lima tingkat persetujuan seperti yang ditunjukkan pada Tabel 4.X.
+
+**Tabel 4.X** Skala Penilaian Kuesioner
+| Jawaban | Bobot |
+| :--- | :---: |
+| Sangat Setuju (SS) | 5 |
+| Setuju (S) | 4 |
+| Netral (N) | 3 |
+| Tidak Setuju (TS) | 2 |
+| Sangat Tidak Setuju (STS) | 1 |
+
+Skor akhir dari setiap pertanyaan dihitung menggunakan rumus persentase indeks dengan formula sebagai berikut:
+**Index % = (Total Skor / Skor Maksimal) x 100**
+
+Keterangan:
+- Total Skor = Jumlah dari (frekuensi setiap opsi jawaban × bobot)
+- Skor Maksimal = Jumlah responden × bobot tertinggi (5)
+
+#### **Hasil Pengujian Respon Pengguna**
+
+Berdasarkan kuesioner yang telah disebarkan, diperoleh data responden sebanyak `[n]` responden. Hasil rekapitulasi jawaban dari seluruh responden dapat dilihat pada Tabel 4.X.
+
+**Tabel 4.X** Rekapitulasi Hasil Kuesioner
+| No | SS (5) | S (4) | N (3) | TS (2) | STS (1) | Total Skor | Persentase |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ]% |
+| 2 | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ]% |
+| 3 | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ]% |
+| 4 | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ]% |
+| 5 | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ]% |
+| 6 | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ]% |
+| 7 | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ]% |
+| 8 | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ]% |
+| 9 | [ ] | [ ] | [ ] | [ ] | [ ] | [ ] | [ ]% |
+| **Total Rata-rata** | | | | | | | **[ ]%** |
+
+#### **Kesimpulan Pengujian Respon Pengguna**
+
+Berdasarkan hasil perhitungan dari `[n]` responden, diperoleh rata-rata persentase indeks sebesar `[persentase]%`. Berdasarkan interval kriteria penilaian, nilai tersebut berada pada kategori **"[Sangat Baik/Baik]"**. Hal ini menunjukkan bahwa aplikasi yang dibangun telah berhasil mencapai tujuannya dalam mengingatkan pengguna untuk mencatat keuangan, membantu mencatat data struk belanja secara otomatis, serta memudahkan pengguna dalam melihat pola pengeluaran bulanan.
 
 # 
 

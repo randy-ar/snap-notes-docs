@@ -153,6 +153,8 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
   // ---------------------------------------------------------------------------
 
   Widget _buildSingleContent(BuildContext context, ReceiptViewModel viewModel) {
+    final hasNoText = viewModel.recognizedText == null || viewModel.recognizedText!.text.trim().isEmpty;
+
     return Stack(
       children: [
         Column(
@@ -163,9 +165,25 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Preview OCR').medium().semiBold(),
+                  if (hasNoText && !viewModel.isLoading)
+                     IconButton.destructive(
+                       onPressed: () {
+                         Navigator.of(context).pop();
+                       },
+                       icon: const Icon(LucideIcons.trash),
+                     )
                 ],
               ),
             ),
+            if (hasNoText && !viewModel.isLoading)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: _buildWarningBanner(
+                  context,
+                  title: 'Teks tidak terdeteksi',
+                  message: 'OCR tidak dapat menemukan teks pada gambar ini. Pastikan gambar jelas dan tidak buram.',
+                ),
+              ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -180,7 +198,7 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
                             fit: BoxFit.contain,
                           ),
                         ),
-                      if (viewModel.recognizedText != null)
+                      if (viewModel.recognizedText != null && !hasNoText)
                         Positioned.fill(
                           child: CustomPaint(
                             painter: BoundingBoxPainter(
@@ -199,7 +217,7 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: PrimaryButton(
-                onPressed: viewModel.isLoading ? null : () => submitAnalisis(),
+                onPressed: (viewModel.isLoading || hasNoText) ? null : () => submitAnalisis(),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -229,15 +247,22 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
   // ---------------------------------------------------------------------------
 
   Widget _buildBatchContent(BuildContext context, ReceiptViewModel viewModel) {
-    final images = widget.images;
+    final images = viewModel.selectedImages.isNotEmpty ? viewModel.selectedImages : widget.images;
     if (images == null || images.isEmpty) {
       return const Center(child: Text('Tidak ada gambar'));
+    }
+
+    if (_currentIndex >= images.length) {
+      _currentIndex = images.length - 1;
     }
 
     final currentImg = images[_currentIndex];
     final currentRt = viewModel.recognizedTexts.length > _currentIndex
         ? viewModel.recognizedTexts[_currentIndex]
         : null;
+
+    final hasNoText = currentRt == null || currentRt.text.trim().isEmpty;
+    final allImagesHaveNoText = viewModel.recognizedTexts.every((rt) => rt.text.trim().isEmpty);
 
     return Stack(
       children: [
@@ -254,6 +279,18 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
                       .semiBold(),
                   Row(
                     children: [
+                      if (hasNoText && !viewModel.isLoading)
+                        IconButton.destructive(
+                          onPressed: () {
+                             if (images.length == 1) {
+                               Navigator.of(context).pop();
+                             } else {
+                               viewModel.removeBatchImage(_currentIndex);
+                             }
+                          },
+                          icon: const Icon(LucideIcons.trash),
+                        ),
+                      const Gap(8),
                       OutlineButton(
                         onPressed: _currentIndex > 0
                             ? () => setState(() => _currentIndex--)
@@ -274,6 +311,15 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
                 ],
               ),
             ),
+            if (hasNoText && !viewModel.isLoading)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: _buildWarningBanner(
+                  context,
+                  title: 'Teks tidak terdeteksi',
+                  message: 'OCR tidak dapat menemukan teks pada gambar ini. Hapus foto ini dari batch.',
+                ),
+              ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -287,7 +333,7 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
                           fit: BoxFit.contain,
                         ),
                       ),
-                      if (currentRt != null)
+                      if (currentRt != null && !hasNoText)
                         Positioned.fill(
                           child: CustomPaint(
                             painter: BoundingBoxPainter(
@@ -306,7 +352,7 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: PrimaryButton(
-                onPressed: viewModel.isLoading
+                onPressed: (viewModel.isLoading || allImagesHaveNoText)
                     ? null
                     : () => submitBatchAnalisis(),
                 child: const Row(
@@ -327,6 +373,44 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
                 text: 'Menganalisis batch struk dengan Gemini AI...'),
           ),
       ],
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------------------
+
+  Widget _buildWarningBanner(BuildContext context, {required String title, required String message}) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.destructive.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+            color: Theme.of(context).colorScheme.destructive.withValues(alpha: 0.2)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.warning_amber_rounded,
+              color: Theme.of(context).colorScheme.destructive, size: 32),
+          const Gap(12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).typography.base.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.destructive,
+                      ),
+                ),
+                Text(message).xSmall().muted(),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

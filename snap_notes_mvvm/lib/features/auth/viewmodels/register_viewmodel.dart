@@ -31,6 +31,8 @@ class RegisterViewModel extends ChangeNotifier {
     try {
       final penggunaData = await _authService.register(email, password, namaLengkap);
       _pengguna = penggunaData;
+      // Auto login setelah berhasil daftar
+      await _authService.login(email, password);
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

@@ -1,6 +1,7 @@
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
+import 'package:snap_notes_mvvm/features/auth/viewmodels/auth_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/auth/viewmodels/register_viewmodel.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -46,9 +47,11 @@ class _RegisterPageState extends State<RegisterPage> {
       _showToastError(viewModel.errorMessage!);
     } else if (viewModel.pengguna != null) {
       _showToastSuccess(
-        'Akun berhasil dibuat! Selamat datang, ${viewModel.pengguna!.namaLengkap}',
+        'Selamat datang, ${viewModel.pengguna!.namaLengkap}',
       );
-      Navigator.of(context).pop();
+      // Update global auth state sehingga AuthWrapper beralih ke MainPage
+      context.read<AuthViewModel>().checkAuth();
+      Navigator.of(context).pop(); // Tutup halaman register
     }
   }
 

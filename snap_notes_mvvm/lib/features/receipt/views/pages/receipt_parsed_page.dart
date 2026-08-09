@@ -835,7 +835,24 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
     _recalculateGrandTotal();
   }
 
-  void _save() {
+  void _save(BuildContext context, Map<FormKey<dynamic>, dynamic> values) {
+    if (_itemGroups.isEmpty) {
+      shadcn.showToast(
+        context: context,
+        builder: (context, overlay) => shadcn.SurfaceCard(
+          child: shadcn.Basic(
+            title: const Text('Struk Kosong'),
+            subtitle: const Text('Setiap struk wajib memiliki minimal 1 item.'),
+            trailing: shadcn.IconButton.ghost(
+              icon: const Icon(LucideIcons.x),
+              onPressed: () => overlay.close(),
+            ),
+          ),
+        ),
+        location: shadcn.ToastLocation.bottomRight,
+      );
+      return;
+    }
     final items = _itemGroups.map((group) {
       final qty = int.tryParse(group.quantityController.text.trim()) ?? 1;
       final price = FormatUtils.parseRupiahToDouble(
@@ -934,37 +951,48 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
           ).muted().small(),
           const Gap(16),
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Gap(16),
-                  const Text('Informasi Umum').medium().semiBold(),
-                  const Gap(16),
-                  const Text('Nama Toko').small().medium(),
-                  const Gap(6),
-                  TextField(
-                    controller: _storeNameController,
-                    placeholder: const Text('Contoh: Indomaret, Alfamart...'),
-                  ),
-                  const Gap(12),
-                  const Text('Tanggal Belanja').small().medium(),
-                  const Gap(6),
-                  DatePicker(
-                    value:
-                        DateTime.tryParse(_dateController.text.trim()) ??
-                        DateTime.now(),
-                    onChanged: (DateTime? date) {
-                      if (date != null) {
-                        _dateController.text = date
-                            .toIso8601String()
-                            .split('T')
-                            .first;
-                      }
-                    },
-                    placeholder: const Text('Pilih Tanggal Belanja'),
-                  ),
-                  const Gap(12),
+            child: shadcn.Form(
+              onSubmit: _save,
+              child: Builder(
+                builder: (formContext) => SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Gap(16),
+                      const Text('Informasi Umum').medium().semiBold(),
+                      const Gap(16),
+                      shadcn.FormField(
+                        key: const shadcn.TextFieldKey('storeName'),
+                        label: const Text('Nama Toko').small().medium(),
+                        validator: const shadcn.NotEmptyValidator(message: 'Nama toko tidak boleh kosong'),
+                        showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+                        child: shadcn.TextField(
+                          controller: _storeNameController,
+                          placeholder: const Text('Contoh: Indomaret, Alfamart...'),
+                        ),
+                      ),
+                      const Gap(16),
+                      shadcn.FormField(
+                        key: const shadcn.DatePickerKey('date'),
+                        label: const Text('Tanggal Belanja').small().medium(),
+                        validator: const shadcn.NonNullValidator(message: 'Tanggal tidak boleh kosong'),
+                        showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+                        child: shadcn.DatePicker(
+                          value:
+                              DateTime.tryParse(_dateController.text.trim()) ??
+                              DateTime.now(),
+                          onChanged: (DateTime? date) {
+                            if (date != null) {
+                              _dateController.text = date
+                                  .toIso8601String()
+                                  .split('T')
+                                  .first;
+                            }
+                          },
+                          placeholder: const Text('Pilih Tanggal Belanja'),
+                        ),
+                      ),
+                      const Gap(12),
                   const Text('Kategori Pengeluaran').small().medium(),
                   const Gap(6),
                   Select<String>(
@@ -1057,8 +1085,8 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
                       Text(
                         'Daftar Item (${_itemGroups.length})',
                       ).medium().semiBold(),
-                      OutlineButton(
-                        size: ButtonSize.small,
+                      shadcn.OutlineButton(
+                        size: shadcn.ButtonSize.small,
                         onPressed: _addItem,
                         child: const Row(
                           children: [
@@ -1087,36 +1115,36 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
                     for (int i = 0; i < _itemGroups.length; i++)
                       _buildItemEditorCard(context, _itemGroups[i], i),
                   const Gap(16),
+                  const Divider(),
+                  const Gap(16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      shadcn.SecondaryButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Batal'),
+                      ),
+                      const Gap(12),
+                      const shadcn.SubmitButton(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(LucideIcons.check, size: 16),
+                            Gap(8),
+                            Text('Simpan Perubahan'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
           ),
-          const Gap(16),
-          const Divider(),
-          const Gap(16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SecondaryButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Batal'),
-              ),
-              const Gap(12),
-              PrimaryButton(
-                onPressed: _save,
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(LucideIcons.check, size: 16),
-                    Gap(8),
-                    Text('Simpan Perubahan'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
+    ],
+    ),
     );
   }
 
@@ -1136,8 +1164,8 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Item #${index + 1}').small().semiBold(),
-                IconButton.ghost(
-                  size: ButtonSize.small,
+                shadcn.IconButton.ghost(
+                  size: shadcn.ButtonSize.small,
                   icon: Icon(
                     LucideIcons.trash2,
                     size: 16,
@@ -1148,11 +1176,15 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
               ],
             ),
             const Gap(8),
-            const Text('Nama Item').xSmall().muted(),
-            const Gap(4),
-            TextField(
-              controller: group.nameController,
-              placeholder: const Text('Nama produk atau barang'),
+            shadcn.FormField(
+              key: shadcn.TextFieldKey('itemName_$index'),
+              label: const Text('Nama Item').xSmall().muted(),
+              validator: const shadcn.NotEmptyValidator(message: 'Nama item tidak boleh kosong'),
+              showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+              child: shadcn.TextField(
+                controller: group.nameController,
+                placeholder: const Text('Nama produk atau barang'),
+              ),
             ),
             const Gap(8),
             Row(
@@ -1162,13 +1194,17 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Jumlah').xSmall().muted(),
-                      const Gap(4),
-                      TextField(
-                        controller: group.quantityController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [RupiahInputFormatter()],
-                        onChanged: (_) => _recalculateItemTotal(group),
+                      shadcn.FormField(
+                        key: shadcn.TextFieldKey('itemQty_$index'),
+                        label: const Text('Jumlah').xSmall().muted(),
+                        validator: const shadcn.NotEmptyValidator(message: 'Jumlah tidak boleh kosong'),
+                        showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+                        child: shadcn.TextField(
+                          controller: group.quantityController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [RupiahInputFormatter()],
+                          onChanged: (_) => _recalculateItemTotal(group),
+                        ),
                       ),
                     ],
                   ),
@@ -1179,31 +1215,35 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Harga Satuan (Rp)').xSmall().muted(),
-                      const Gap(4),
-                      TextField(
-                        controller: group.priceController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [RupiahInputFormatter()],
-                        onChanged: (_) => _recalculateItemTotal(group),
-                        features: [
-                          shadcn.InputLeadingFeature(
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 12.0,
-                                right: 8.0,
-                              ),
-                              child: Text(
-                                'Rp',
-                                style: TextStyle(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.mutedForeground,
+                      shadcn.FormField(
+                        key: shadcn.TextFieldKey('itemPrice_$index'),
+                        label: const Text('Harga Satuan (Rp)').xSmall().muted(),
+                        validator: const shadcn.NotEmptyValidator(message: 'Harga tidak boleh kosong'),
+                        showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+                        child: shadcn.TextField(
+                          controller: group.priceController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [RupiahInputFormatter()],
+                          onChanged: (_) => _recalculateItemTotal(group),
+                          features: [
+                            shadcn.InputLeadingFeature(
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 12.0,
+                                  right: 8.0,
+                                ),
+                                child: Text(
+                                  'Rp',
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.mutedForeground,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -1211,32 +1251,35 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
               ],
             ),
             const Gap(8),
-            const Text('Diskon Item (Rp)').xSmall().muted(),
-            const Gap(4),
-            TextField(
-              controller: group.discountController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [RupiahInputFormatter()],
-              onChanged: (_) => _recalculateItemTotal(group),
-              placeholder: const Text('Opsional'),
-              features: [
-                shadcn.InputLeadingFeature(
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12.0, right: 8.0),
-                    child: Text(
-                      'Rp',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.mutedForeground,
+            shadcn.FormField(
+              key: shadcn.TextFieldKey('itemDiscount_$index'),
+              label: const Text('Diskon Item (Rp)').xSmall().muted(),
+              showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+              child: shadcn.TextField(
+                controller: group.discountController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [RupiahInputFormatter()],
+                onChanged: (_) => _recalculateItemTotal(group),
+                placeholder: const Text('Opsional'),
+                features: [
+                  shadcn.InputLeadingFeature(
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0, right: 8.0),
+                      child: Text(
+                        'Rp',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.mutedForeground,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const Gap(8),
             const Text('Subtotal / Total Harga Item (Rp)').xSmall().muted(),
             const Gap(4),
-            TextField(
+            shadcn.TextField(
               controller: group.totalPriceController,
               keyboardType: TextInputType.number,
               inputFormatters: [RupiahInputFormatter()],

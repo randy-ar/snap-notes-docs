@@ -137,7 +137,7 @@ class _NotifikasiSettingsPageState extends State<NotifikasiSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<NotifikasiViewModel>();
-    
+
     return Scaffold(
       headers: [
         AppBar(
@@ -274,22 +274,24 @@ class _NotifikasiSettingsPageState extends State<NotifikasiSettingsPage> {
                                 onPressed: () {
                                   showDropdown(
                                     context: context,
-                                    builder: (context) {
-                                      return DropdownMenu(
-                                        children: [
-                                          MenuButton(
-                                            onPressed: (context) => _navigateToForm(preferensi: item),
-                                            child: const Text('Edit'),
-                                          ),
-                                          MenuButton(
-                                            onPressed: (context) {
-                                              _showDeleteConfirmation(context, item);
-                                            },
-                                            child: const Text('Hapus'),
-                                          ),
-                                        ],
-                                      );
-                                    },
+                                    builder: (dropdownContext) => DropdownMenu(
+                                      children: [
+                                        MenuButton(
+                                          onPressed: (_) {
+                                            closeOverlay(dropdownContext);
+                                            _navigateToForm(preferensi: item);
+                                          },
+                                          child: const Text('Edit'),
+                                        ),
+                                        MenuButton(
+                                          onPressed: (_) {
+                                            closeOverlay(dropdownContext);
+                                            _showDeleteConfirmation(context, item);
+                                          },
+                                          child: const Text('Hapus'),
+                                        ),
+                                      ],
+                                    ),
                                   );
                                 },
                               ),
@@ -316,4 +318,3 @@ class _NotifikasiSettingsPageState extends State<NotifikasiSettingsPage> {
     );
   }
 }
-

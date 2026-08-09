@@ -39,11 +39,24 @@ class AuthWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final authViewModel = context.watch<AuthViewModel>();
 
+    // Saat isCheckingAuth true (ketika proses logout dijalankan),
+    // tampilkan spinner loading layar penuh.
     if (authViewModel.isLoading) {
       return const Scaffold(
-        child: Center(child: CircularProgressIndicator()),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              Gap(16),
+              Text('Keluar aplikasi...'),
+            ],
+          ),
+        ),
       );
-    } else if (authViewModel.isAuthenticated) {
+    }
+
+    if (authViewModel.isAuthenticated) {
       return const MainPage();
     } else {
       return ChangeNotifierProvider(

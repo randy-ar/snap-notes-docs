@@ -11,6 +11,7 @@ import 'package:snap_notes_mvvm/features/dashboard/views/widgets/expense_line_ch
 import 'package:snap_notes_mvvm/features/dashboard/views/widgets/expense_pie_chart_widget.dart';
 import 'package:snap_notes_mvvm/features/notifikasi/views/pages/notifikasi_settings_page.dart';
 import 'package:intl/intl.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -126,9 +127,19 @@ class DashboardView extends StatelessWidget {
                                                 child: const Text('Batal'),
                                               ),
                                               DestructiveButton(
-                                                onPressed: () {
-                                                  Navigator.pop(dialogContext);
-                                                  authViewModel.logout();
+                                                onPressed: () async {
+                                                  Navigator.pop(dialogContext); // Tutup dialog
+                                                  await authViewModel.logout();
+                                                  if (context.mounted && !authViewModel.isAuthenticated) {
+                                                    showToast(
+                                                      context: context,
+                                                      builder: (context, overlay) => ToastFormatter.success(
+                                                        'Berhasil Keluar',
+                                                        'Anda telah berhasil keluar dari akun.',
+                                                      ),
+                                                      location: ToastLocation.bottomRight,
+                                                    );
+                                                  }
                                                 },
                                                 child: const Text('Keluar'),
                                               ),

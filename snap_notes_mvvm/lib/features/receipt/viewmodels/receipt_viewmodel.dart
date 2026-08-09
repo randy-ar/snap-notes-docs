@@ -146,7 +146,9 @@ class ReceiptViewModel extends ChangeNotifier {
         _recognizedTexts.add(recognizedText);
       }
 
-      _recognizedText = _recognizedTexts.first;
+      if (_recognizedTexts.isNotEmpty) {
+        _recognizedText = _recognizedTexts.first;
+      }
       _setStep(ReceiptScanStep.ocrPreview);
     } catch (e, stack) {
       _errorMessage = "Gagal memproses gambar batch: $e";
@@ -183,7 +185,34 @@ class ReceiptViewModel extends ChangeNotifier {
     }
   }
 
-  /// Memutar gambar batch pada indeks tertentu dan re-run OCR khusus untuk gambar tersebut
+  /// Hapus satu gambar dari batch
+  void removeBatchImage(int index) {
+    if (!_isBatchMode || index < 0 || index >= _selectedImages.length) return;
+
+    _selectedImages.removeAt(index);
+    if (index < _recognizedTexts.length) {
+      _recognizedTexts.removeAt(index);
+    }
+
+    if (_selectedImages.isEmpty) {
+      startCamera();
+    } else {
+      if (_selectedImages.length == 1) {
+        _isBatchMode = false;
+        _selectedImage = _selectedImages.first;
+        if (_recognizedTexts.isNotEmpty) {
+          _recognizedText = _recognizedTexts.first;
+        }
+      } else {
+        // adjust if removing the first item
+        _selectedImage = _selectedImages.first;
+        if (_recognizedTexts.isNotEmpty) {
+          _recognizedText = _recognizedTexts.first;
+        }
+      }
+      notifyListeners();
+    }
+  }
   Future<void> rotateBatchImage(int index, {int angle = 90}) async {
     if (!_isBatchMode || index < 0 || index >= _selectedImages.length) return;
     _setLoading(true);

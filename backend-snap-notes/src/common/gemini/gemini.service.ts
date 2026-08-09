@@ -92,7 +92,7 @@ export class GeminiService {
       throw new Error('GEMINI_API_KEY harus diatur di environment variables');
     }
     this.genAI = new GoogleGenAI({ apiKey });
-    this.model = 'gemini-1.5-flash-8b';
+    this.model = 'gemini-2.5-flash';
   }
 
   async parseStrukOCR(rawText: string, lines?: OcrLine[], imageSize?: ImageSize): Promise<ParsedStrukDto> {
@@ -147,37 +147,35 @@ export class GeminiService {
       }).join('\n');
 
       layoutInfo = `
-
-INFO LAYOUT LINE POSISI (persentase dari ukuran gambar ${imageSize.width}x${imageSize.height}px):
-${lineInfo}
-
-Analisis posisi:
-- X 0-30% = Kolom kiri (biasanya nama item/produk)
-- X 30-60% = Kolom tengah (biasanya qty/jumlah)
-- X 60-100% = Kolom kanan (biasanya harga/total)
-- Y urutan dari atas ke bawah menunjukkan urutan item
-- lineIndex menunjukkan urutan baris dari atas ke bawah`;
+        INFO LAYOUT LINE POSISI (persentase dari ukuran gambar ${imageSize.width}x${imageSize.height}px):
+        ${lineInfo}
+        Analisis posisi:
+        - X 0-30% = Kolom kiri (biasanya nama item/produk)
+        - X 30-60% = Kolom tengah (biasanya qty/jumlah)
+        - X 60-100% = Kolom kanan (biasanya harga/total)
+        - Y urutan dari atas ke bawah menunjukkan urutan item
+        - lineIndex menunjukkan urutan baris dari atas ke bawah`;
     }
 
     const currentDate = new Date().toISOString().split('T')[0];
-    
+
     return `Anda adalah parser struk belanja. Analisis teks OCR berikut dan ekstrak informasi struk ke format JSON.
-TEKS OCR:
-${layoutInfo}
-Aturan WAJIB:
-1. SELALU kembalikan semua field yang dibutuhkan, jangan biarkan kosong
-2. Jika nama_toko tidak ditemukan, gunakan "Tidak diketahui"
-3. Jika tanggal tidak ditemukan dalam teks, gunakan tanggal hari ini: ${currentDate}
-4. Jika total tidak ditemukan, jumlahkan semua subtotal dari item untuk mendapatkan total
-5. Jika tidak ada item produk sama sekali yang bisa diidentifikasi, return JSON dengan error message di field "error": "Gambar struk tidak jelas, mohon upload ulang"
-6. Tanggal harus dalam format YYYY-MM-DD (konversi dari format Indonesia DD-MM-YYYY atau DD/MM/YYYY)
-7. Total adalah angka total keseluruhan struk (bukan subtotal item)
-8. Harga dalam format number tanpa pemisah ribuan (contoh: 10500 bukan 10.500)
-9. Kategori bisa: Makanan & Minuman, Perumahan & Utilitas, Komunikasi, Transportasi, Kesehatan, Pendidikan, Hiburan, Perawatan Pribadi, Pakaian, Lain-lain
-10. Pastikan jumlah * harga_satuan = subtotal untuk setiap item
-11. Gunakan info posisi X untuk membedakan kolom: kiri=item, tengah=qty, kanan=harga
-12. Jika ada teks seperti "1 5,000" di posisi tengah+kanan, interpretasikan sebagai qty=1, harga=5000
-13. Gunakan info posisi X dan Y untuk memastikan pengelompokan item yang benar`;
+      TEKS OCR:
+      ${layoutInfo}
+      Aturan WAJIB:
+      1. SELALU kembalikan semua field yang dibutuhkan, jangan biarkan kosong
+      2. Jika nama_toko tidak ditemukan, gunakan "Tidak diketahui"
+      3. Jika tanggal tidak ditemukan dalam teks, gunakan tanggal hari ini: ${currentDate}
+      4. Jika total tidak ditemukan, jumlahkan semua subtotal dari item untuk mendapatkan total
+      5. Jika tidak ada item produk sama sekali yang bisa diidentifikasi, return JSON dengan error message di field "error": "Gambar struk tidak jelas, mohon upload ulang"
+      6. Tanggal harus dalam format YYYY-MM-DD (konversi dari format Indonesia DD-MM-YYYY atau DD/MM/YYYY)
+      7. Total adalah angka total keseluruhan struk (bukan subtotal item)
+      8. Harga dalam format number tanpa pemisah ribuan (contoh: 10500 bukan 10.500)
+      9. Kategori bisa: Makanan & Minuman, Perumahan & Utilitas, Komunikasi, Transportasi, Kesehatan, Pendidikan, Hiburan, Perawatan Pribadi, Pakaian, Lain-lain
+      10. Pastikan jumlah * harga_satuan = subtotal untuk setiap item
+      11. Gunakan info posisi X untuk membedakan kolom: kiri=item, tengah=qty, kanan=harga
+      12. Jika ada teks seperti "1 5,000" di posisi tengah+kanan, interpretasikan sebagai qty=1, harga=5000
+      13. Gunakan info posisi X dan Y untuk memastikan pengelompokan item yang benar`;
   }
 
   private validasiResponse(response: string): ParsedStrukDto {

@@ -86,26 +86,20 @@ class ReceiptService {
 
       int lineIndex = 0;
       final List<local.TextLine> lines = [];
-
       for (var group in groupedLines) {
         group.sort((a, b) => (a.boundingBox.left as double).compareTo(b.boundingBox.left as double));
-
         final mergedText = group.map((l) => l.text).join('   '); // Gunakan 3 spasi untuk menandakan jeda/gap
-
         double left = group.map((l) => l.boundingBox.left as double).reduce((a, b) => a < b ? a : b);
         double top = group.map((l) => l.boundingBox.top as double).reduce((a, b) => a < b ? a : b);
         double right = group.map((l) => l.boundingBox.right as double).reduce((a, b) => a > b ? a : b);
         double bottom = group.map((l) => l.boundingBox.bottom as double).reduce((a, b) => a > b ? a : b);
-
         lines.add(local.TextLine(
           lineIndex: lineIndex++,
           text: mergedText,
           boundingBox: Rect.fromLTRB(left, top, right, bottom),
         ));
       }
-
       final fullReconstructedText = lines.map((l) => l.text).join('\n');
-
       return local.RecognizedText(
         text: fullReconstructedText,
         lines: lines,

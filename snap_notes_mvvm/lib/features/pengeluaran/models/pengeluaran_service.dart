@@ -147,7 +147,6 @@ class PengeluaranService {
                'discount': item.discount,
                'total_price': item.totalPrice,
                'categoryId': item.categoryId,
-               'categoryName': item.categoryName,
              }).toList(),
            },
       },

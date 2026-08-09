@@ -38,7 +38,8 @@ class AuthService {
       throw ServerException('Login gagal: ${response.statusCode}');
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        throw UnauthorizedException('Email atau password salah');
+        throw UnauthorizedException(
+            e.response?.data?['message'] ?? 'Email atau password salah');
       }
       throw ServerException(e.message ?? 'Terjadi kesalahan jaringan');
     }
