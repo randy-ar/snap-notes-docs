@@ -183,7 +183,6 @@ class ReceiptItem extends Equatable {
       'subtotal': totalPrice,
     };
 
-    // API backend menolak property kategoriId dan kategoriNama untuk item
     if (categoryId != null) {
       map['kategoriId'] = categoryId;
     }

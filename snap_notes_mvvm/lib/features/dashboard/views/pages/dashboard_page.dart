@@ -276,15 +276,17 @@ class DashboardView extends StatelessWidget {
                 await context.read<DashboardViewModel>().initDashboard(
                   bulan: now.month,
                   tahun: now.year,
+                  force: true,
                 );
               },
               child: ListView(
                 padding: const EdgeInsets.all(16.0),
                 children: [
                   // 1. Heatmap Calendar
-                  if (dashboardViewModel.calendarData != null)
+                  if (dashboardViewModel.calendarPengeluaran != null)
                     ExpenseHeatmapWidget(
-                      calendarData: dashboardViewModel.calendarData!,
+                      pengeluaranData: dashboardViewModel.calendarPengeluaran!,
+                      pemasukanData: dashboardViewModel.calendarPemasukan ?? {},
                     )
                   else
                     const SizedBox.shrink(),

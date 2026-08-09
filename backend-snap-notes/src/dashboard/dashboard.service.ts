@@ -67,7 +67,7 @@ export class DashboardService {
   async getKalender(
     penggunaId: string,
     query: QueryDashboardDto,
-  ): Promise<Record<string, number>> {
+  ): Promise<{ pengeluaran: Record<string, number>; pemasukan: Record<string, number> }> {
     const now = new Date();
     const bulan = query.bulan ? parseInt(query.bulan, 10) : now.getMonth() + 1;
     const tahun = query.tahun ? parseInt(query.tahun, 10) : now.getFullYear();
@@ -75,28 +75,30 @@ export class DashboardService {
     const startDate = new Date(Date.UTC(tahun, bulan - 1, 1, -7, 0, 0, 0));
     const endDate = new Date(Date.UTC(tahun, bulan, 0, 16, 59, 59, 999));
 
-    const pengeluaran = await this.prisma.pengeluaran.findMany({
-      where: {
-        penggunaId,
-        tanggal: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
-      select: {
-        tanggal: true,
-        jumlah: true,
-      },
-    });
+    const whereClause = {
+      penggunaId,
+      tanggal: { gte: startDate, lte: endDate },
+    };
+    const selectClause = { tanggal: true as const, jumlah: true as const };
 
-    const result: Record<string, number> = {};
-    for (const item of pengeluaran) {
-      // Format as YYYY-MM-DD
+    const [pengeluaranData, pemasukanData] = await Promise.all([
+      this.prisma.pengeluaran.findMany({ where: whereClause, select: selectClause }),
+      this.prisma.pemasukan.findMany({ where: whereClause, select: selectClause }),
+    ]);
+
+    const pengeluaranResult: Record<string, number> = {};
+    for (const item of pengeluaranData) {
       const dateKey = item.tanggal.toISOString().split('T')[0];
-      result[dateKey] = (result[dateKey] || 0) + Number(item.jumlah);
+      pengeluaranResult[dateKey] = (pengeluaranResult[dateKey] || 0) + Number(item.jumlah);
     }
-    
-    return result;
+
+    const pemasukanResult: Record<string, number> = {};
+    for (const item of pemasukanData) {
+      const dateKey = item.tanggal.toISOString().split('T')[0];
+      pemasukanResult[dateKey] = (pemasukanResult[dateKey] || 0) + Number(item.jumlah);
+    }
+
+    return { pengeluaran: pengeluaranResult, pemasukan: pemasukanResult };
   }
 
   async getKategori(

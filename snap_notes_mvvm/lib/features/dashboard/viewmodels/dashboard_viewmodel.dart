@@ -16,9 +16,12 @@ class DashboardViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  // State untuk Heatmap (Kalender Pengeluaran)
-  Map<DateTime, double>? _calendarData;
-  Map<DateTime, double>? get calendarData => _calendarData;
+  // State untuk Heatmap (Kalender Pengeluaran & Pemasukan)
+  Map<DateTime, double>? _calendarPengeluaran;
+  Map<DateTime, double>? get calendarPengeluaran => _calendarPengeluaran;
+
+  Map<DateTime, double>? _calendarPemasukan;
+  Map<DateTime, double>? get calendarPemasukan => _calendarPemasukan;
 
   // State untuk Pie Chart (Kategori Pengeluaran)
   List<Map<String, dynamic>>? _kategoriData;
@@ -52,11 +55,11 @@ class DashboardViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initDashboard({int? bulan, int? tahun}) async {
+  Future<void> initDashboard({int? bulan, int? tahun, bool force = false}) async {
     _focusMonth = DateTime(tahun ?? DateTime.now().year, bulan ?? DateTime.now().month, 1);
     await Future.wait([
       loadRingkasan(bulan: _focusMonth.month, tahun: _focusMonth.year),
-      loadMonthlyTrend(),
+      loadMonthlyTrend(force: force),
       loadCalendarData(bulan: _focusMonth.month, tahun: _focusMonth.year),
       loadKategoriData(bulan: _focusMonth.month, tahun: _focusMonth.year),
     ]);
@@ -85,7 +88,8 @@ class DashboardViewModel extends ChangeNotifier {
         bulan: bulan,
         tahun: tahun,
       );
-      _calendarData = data;
+      _calendarPengeluaran = data['pengeluaran'];
+      _calendarPemasukan = data['pemasukan'];
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

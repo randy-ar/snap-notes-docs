@@ -174,7 +174,6 @@ class PengeluaranService {
         'items': strukItems.map((item) => {
           'kategoriId': item.categoryId,
           'namaItem': item.name,
-          'kategoriNama': item.categoryName,
           'jumlah': item.quantity,
           'hargaSatuan': item.price,
           'diskon': item.discount,

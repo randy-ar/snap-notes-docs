@@ -38,7 +38,7 @@ class DashboardService {
     }
   }
 
-  Future<Map<DateTime, double>> getKalender({int? bulan, int? tahun}) async {
+  Future<Map<String, Map<DateTime, double>>> getKalender({int? bulan, int? tahun}) async {
     final Map<String, dynamic> queryParams = {};
     if (bulan != null) queryParams['bulan'] = bulan.toString();
     if (tahun != null) queryParams['tahun'] = tahun.toString();
@@ -46,15 +46,22 @@ class DashboardService {
     final response = await _dio.get('/api/dashboard/kalender', queryParameters: queryParams);
 
     if (response.statusCode == 200) {
-      final map = response.data['data'] as Map<String, dynamic>;
-      final result = <DateTime, double>{};
-      map.forEach((key, value) {
-        result[DateTime.parse(key)] = (value as num).toDouble();
-      });
-      return result;
+      final data = response.data['data'] as Map<String, dynamic>;
+      return {
+        'pengeluaran': _parseDateMap((data['pengeluaran'] as Map<String, dynamic>?) ?? {}),
+        'pemasukan': _parseDateMap((data['pemasukan'] as Map<String, dynamic>?) ?? {}),
+      };
     } else {
       throw Exception('Gagal memuat kalender dashboard');
     }
+  }
+
+  Map<DateTime, double> _parseDateMap(Map<String, dynamic> map) {
+    final result = <DateTime, double>{};
+    map.forEach((key, value) {
+      result[DateTime.parse(key)] = (value as num).toDouble();
+    });
+    return result;
   }
 
   /// Get data kategori
