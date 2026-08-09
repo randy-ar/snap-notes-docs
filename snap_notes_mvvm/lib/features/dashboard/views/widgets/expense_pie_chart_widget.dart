@@ -51,29 +51,68 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
     // 2. Gunakan data dari backend
     final categoryData = widget.kategoriData;
 
-    // 3. Jika tidak ada transaksi, tampilkan state kosong secara anggun
+    // 3. Jika tidak ada transaksi, tampilkan pie chart abu-abu placeholder
     if (categoryData.isEmpty) {
-      return Card(
-        padding: const EdgeInsets.all(16),
-        child: SizedBox(
-          height: 250,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                LucideIcons.chartPie,
-                size: 48,
-              ).muted(),
-              const Gap(12),
-              Text('Pengeluaran kategori di bulan ${_getMonthName(currentMonth)}').lead(),
-              const Gap(4),
-              Text(
-                'Belum ada pengeluaran dicatat pada ${_getMonthName(currentMonth)} $currentYear.',
-                textAlign: TextAlign.center,
-              ).xSmall().muted(),
-            ],
+      return Column(
+        children: [
+          Card(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Text('Kategori Pengeluaran').small().muted(),
+                  ],
+                ),
+                const Gap(16),
+                SizedBox(
+                  height: 220,
+                  child: PieChart(
+                    PieChartData(
+                      borderData: FlBorderData(show: false),
+                      sectionsSpace: 0,
+                      centerSpaceRadius: 0,
+                      sections: [
+                        PieChartSectionData(
+                          color: theme.colorScheme.muted,
+                          value: 1,
+                          title: 'Belum ada data',
+                          radius: 85,
+                          titleStyle: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: theme.colorScheme.mutedForeground,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const Gap(24),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.muted.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Total Pengeluaran').medium().muted(),
+                      Text(currencyFormat.format(0)).medium().semiBold(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+          const Gap(8),
+          Text(
+            'Belum ada data pengeluaran di bulan ${_getMonthName(currentMonth)} $currentYear.',
+            textAlign: TextAlign.center,
+          ).xSmall().muted(),
+        ],
       );
     }
 

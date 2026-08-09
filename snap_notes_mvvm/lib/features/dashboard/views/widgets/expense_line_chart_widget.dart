@@ -190,20 +190,17 @@ class ExpenseLineChartWidget extends StatelessWidget {
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      reservedSize: 45,
+                      reservedSize: 36,
                       getTitlesWidget: (value, meta) {
-                        // Hanya tampilkan 5 pembagian sumbu Y
-                        if (value == 0 ||
-                            value == meta.max ||
-                            (value - (meta.max / 2)).abs() < (meta.max / 4)) {
-                          return SideTitleWidget(
-                            axisSide: meta.axisSide,
-                            child: Text(_formatYAxis(value)).xSmall().muted(),
-                          );
-                        }
                         return SideTitleWidget(
                           axisSide: meta.axisSide,
-                          child: Text(_formatYAxis(value)).xSmall().muted(),
+                          child: Text(
+                            _formatYAxis(value),
+                            style: TextStyle(
+                              fontSize: 9,
+                              color: Theme.of(context).colorScheme.mutedForeground,
+                            ),
+                          ),
                         );
                       },
                     ),

@@ -31,6 +31,15 @@ class PreferensiNotifikasi extends Equatable {
     };
   }
 
+  /// Khusus untuk payload request (backend menolak property id)
+  Map<String, dynamic> toRequestPayload() {
+    return {
+      'hariAktif': hariAktif,
+      'jamNotifikasi': jamNotifikasi,
+      'aktif': aktif,
+    };
+  }
+
   @override
   List<Object?> get props => [id, hariAktif, jamNotifikasi, aktif];
 }

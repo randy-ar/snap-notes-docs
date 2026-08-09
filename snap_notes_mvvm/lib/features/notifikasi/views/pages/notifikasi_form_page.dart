@@ -62,14 +62,14 @@ class _NotifikasiFormPageState extends State<NotifikasiFormPage> {
 
     final viewModel = context.read<NotifikasiViewModel>();
 
-    if (widget.preferensiToEdit != null) {
+    if (widget.preferensiToEdit != null && widget.preferensiToEdit!.id != null) {
       await viewModel.updatePreferensi(widget.preferensiToEdit!.id!, preferensi);
     } else {
       await viewModel.createPreferensi(preferensi);
     }
 
     if (!mounted) return;
-    
+
     setState(() => _isSaving = false);
 
     if (viewModel.errorMessage != null) {
@@ -177,8 +177,8 @@ class _NotifikasiFormPageState extends State<NotifikasiFormPage> {
               const Gap(32),
               PrimaryButton(
                 onPressed: _isSaving ? null : _save,
-                child: _isSaving 
-                    ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator()) 
+                child: _isSaving
+                    ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator())
                     : Text(widget.preferensiToEdit != null ? 'Simpan Perubahan' : 'Tambah Pengingat'),
               ),
             ],

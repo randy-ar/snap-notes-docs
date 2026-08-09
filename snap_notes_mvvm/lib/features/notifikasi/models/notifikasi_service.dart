@@ -99,7 +99,7 @@ class NotifikasiService {
     try {
       final response = await _dio.post(
         '/api/notifikasi/preferensi',
-        data: preferensi.toJson(),
+        data: preferensi.toRequestPayload(),
       );
       final envelope = response.data as Map<String, dynamic>;
       return PreferensiNotifikasi.fromJson(envelope['data'] as Map<String, dynamic>);
@@ -115,7 +115,7 @@ class NotifikasiService {
     try {
       final response = await _dio.patch(
         '/api/notifikasi/preferensi/$id',
-        data: preferensi.toJson(),
+        data: preferensi.toRequestPayload(),
       );
       final envelope = response.data as Map<String, dynamic>;
       return PreferensiNotifikasi.fromJson(envelope['data'] as Map<String, dynamic>);
