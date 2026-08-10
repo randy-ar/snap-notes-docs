@@ -3914,11 +3914,37 @@ Berdasarkan hasil pengujian fungsional yang telah dilakukan terhadap 19 fungsion
 
 ### **Pengujian Waktu**
 
-   1. **Rencana**
+Pengujian waktu merupakan tahap pengujian yang dilakukan untuk mengukur efisiensi waktu yang dihasilkan oleh aplikasi yang dibangun dalam menyelesaikan permasalahan pada identifikasi masalah ke-2 dan ke-3, yaitu proses pencatatan data transaksi dari struk belanja yang selama ini dilakukan secara manual serta kesulitan dalam melihat pola pengeluaran bulanan. Pengujian dilakukan dengan membandingkan waktu yang dibutuhkan responden untuk menyelesaikan tugas pencatatan dan interpretasi data secara konvensional dengan menggunakan fitur pada aplikasi.
 
-   2. **Hasil**
+#### **Rencana Pengujian Waktu**
 
-   3. **Kesimpulan**
+Pengujian waktu dilakukan secara langsung kepada responden di lapangan. Sebelum pengujian dimulai, disiapkan 5 struk belanja fisik yang berasal dari 3 bulan terakhir, yaitu bulan Juni, Juli, dan Agustus. Skenario petunjuk dan parameter pengerjaan pengujian waktu bagi responden diatur secara berpasangan antara metode konvensional dan metode aplikasi seperti yang tertera pada Tabel 4.26.
+
+**Tabel 4.26** Skenario dan Parameter Aktivitas Pengujian Waktu
+
+| No | Aktivitas Pengujian | Skenario Metode Konvensional | Skenario Metode Aplikasi |
+| :---: | :--- | :--- | :--- |
+| 1 | **Pencatatan Transaksi** (Identifikasi Masalah ke-2) | Responden mencatat seluruh data dari 5 struk belanja fisik (Juni, Juli, Agustus) secara manual ke catatan kertas atau *spreadsheet* dengan informasi wajib:<br>1. Tempat/judul transaksi<br>2. Tanggal transaksi<br>3. Total nominal pengeluaran<br>4. Daftar item barang yang dibeli | Responden mencatat 5 struk belanja fisik yang sama menggunakan fitur pemindaian struk otomatis pada aplikasi. |
+| 2 | **Analisis Pola Pengeluaran** (Identifikasi Masalah ke-3) | Responden mengidentifikasi tren pengeluaran bulanan dari hasil catatan manual dengan prosedur:<br>1. Menjumlahkan pengeluaran setiap bulan (Juni, Juli, Agustus)<br>2. Menyejajarkan/menyimpulkan tren kenaikan atau penurunan pengeluaran | Responden mengidentifikasi dan menyimpulkan tren pengeluaran bulanan (Juni, Juli, Agustus) secara instan melalui grafik visualisasi di *dashboard* aplikasi. |
+
+Waktu pengerjaan untuk setiap metode dihitung secara objektif menggunakan *stopwatch* dalam satuan detik. Rencana instrumen pengukuran waktu dapat dilihat pada Tabel 4.27:
+
+**Tabel 4.27** Rencana Pengukuran Waktu Pengujian
+
+| No | Aktivitas Pengujian Waktu | Detail Pengukuran |
+| :---: | :--- | :--- |
+| 1 | Pencatatan Konvensional | Waktu yang dibutuhkan responden untuk mencatat informasi wajib (judul, tanggal, total, dan daftar item) dari 5 struk belanja (Juni, Juli, Agustus) secara manual atau *spreadsheet*. |
+| 2 | Pencatatan Aplikasi | Waktu yang dibutuhkan responden untuk mencatat 5 struk belanja yang sama menggunakan fitur pemindaian struk otomatis pada aplikasi. |
+| 3 | Analisis Pola Konvensional | Waktu yang dibutuhkan responden untuk menjumlahkan, menyejajarkan, dan menyimpulkan pola tren pengeluaran bulanan (Juni, Juli, Agustus) dari catatan manual. |
+| 4 | Analisis Pola Aplikasi | Waktu yang diperoleh responden untuk membaca dan menyimpulkan tren pola pengeluaran bulanan secara langsung menggunakan halaman *dashboard* visualisasi pada aplikasi. |
+
+#### **Hasil Pengujian Waktu**
+
+`[akan diisi setelah pengujian dilaksanakan]`
+
+#### **Kesimpulan Pengujian Waktu**
+
+`[akan diisi setelah data pengujian terkumpul]`
 
 ### **Pengujian Respon Pengguna (*User Acceptance Testing*)**
 

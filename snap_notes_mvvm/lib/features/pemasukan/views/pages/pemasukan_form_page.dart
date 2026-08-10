@@ -17,6 +17,12 @@ class PemasukanFormPage extends StatefulWidget {
 }
 
 class _PemasukanFormPageState extends State<PemasukanFormPage> {
+  final _deskripsiKey = const TextFieldKey('deskripsi');
+  final _jumlahKey = const TextFieldKey('jumlah');
+  final _kategoriKey = const SelectKey<String>('kategori');
+  final _tanggalKey = const DatePickerKey('tanggal');
+  final _catatanKey = const TextFieldKey('catatan');
+
   final _deskripsiController = TextEditingController();
   final _jumlahController = TextEditingController();
   final _catatanController = TextEditingController();
@@ -30,14 +36,12 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
     super.initState();
     if (isEdit) {
       _deskripsiController.text = widget.pemasukan!.deskripsi;
-      // Memformat nominal awal dengan separator ribuan (misal: 5.000.000)
       _jumlahController.text = FormatUtils.formatRupiah(widget.pemasukan!.jumlah).replaceAll('Rp ', '');
       _catatanController.text = widget.pemasukan!.catatan ?? '';
       _selectedDate = widget.pemasukan!.tanggal;
       _selectedCategoryId = widget.pemasukan!.kategoriId;
     }
 
-    // Muat daftar kategori dari backend
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<PemasukanViewModel>().loadCategories(jenis: 'PEMASUKAN');
     });
@@ -51,42 +55,24 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
     super.dispose();
   }
 
-  Future<void> _submit() async {
-    final deskripsi = _deskripsiController.text.trim();
-    final jumlahStr = _jumlahController.text.trim();
+  Future<void> _submit(Map<FormKey<dynamic>, dynamic> values) async {
+    final deskripsi = _deskripsiKey[values] ?? _deskripsiController.text.trim();
+    final jumlahStr = _jumlahKey[values] ?? _jumlahController.text.trim();
+    final tanggal = _tanggalKey[values] ?? _selectedDate;
+    final categoryId = _kategoriKey[values] ?? _selectedCategoryId;
+    final catatan = _catatanKey[values] ?? _catatanController.text.trim();
 
-    if (deskripsi.isEmpty) {
-      _showToastValidation('Deskripsi tidak boleh kosong');
-      return;
-    }
-
-    // Mem-parse string nominal terformat kembali ke double secara aman
     final jumlah = FormatUtils.parseRupiahToDouble(jumlahStr);
-    if (jumlah <= 0) {
-      _showToastValidation('Jumlah tidak valid');
-      return;
-    }
-
     final viewModel = context.read<PemasukanViewModel>();
 
-    if (isEdit) {
-      await viewModel.submitPemasukan(
-        id: widget.pemasukan!.id,
-        deskripsi: deskripsi,
-        jumlah: jumlah,
-        tanggal: _selectedDate,
-        kategoriId: _selectedCategoryId,
-        catatan: _catatanController.text.trim().isNotEmpty ? _catatanController.text.trim() : null,
-      );
-    } else {
-      await viewModel.submitPemasukan(
-        deskripsi: deskripsi,
-        jumlah: jumlah,
-        tanggal: _selectedDate,
-        kategoriId: _selectedCategoryId,
-        catatan: _catatanController.text.trim().isNotEmpty ? _catatanController.text.trim() : null,
-      );
-    }
+    await viewModel.submitPemasukan(
+      id: isEdit ? widget.pemasukan!.id : null,
+      deskripsi: deskripsi,
+      jumlah: jumlah,
+      tanggal: tanggal,
+      kategoriId: categoryId,
+      catatan: catatan.isNotEmpty ? catatan : null,
+    );
 
     if (!mounted) return;
 
@@ -96,14 +82,6 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
       _showToastSuccess(isEdit ? 'Pemasukan berhasil diubah' : 'Pemasukan berhasil disimpan');
       Navigator.pop(context, true);
     }
-  }
-
-  void _showToastValidation(String message) {
-    showToast(
-      context: context,
-      builder: (context, overlay) => ToastFormatter.validation(message),
-      location: ToastLocation.bottomRight,
-    );
   }
 
   void _showToastError(String message, String description) {
@@ -141,112 +119,151 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text('Deskripsi').medium(),
-              const Gap(8),
-              TextField(
-                controller: _deskripsiController,
-                placeholder: const Text('Contoh: Gaji bulanan'),
-              ),
-              const Gap(20),
-
-              const Text('Jumlah (Rp)').medium(),
-              const Gap(8),
-              TextField(
-                controller: _jumlahController,
-                keyboardType: TextInputType.number,
-                placeholder: const Text('Contoh: 5.000.000'),
-                inputFormatters: [RupiahInputFormatter()],
-                features: const [
-                  InputFeature.leading(Text('Rp ')),
-                ],
-              ),
-              const Gap(20),
-
-              const Text('Kategori').medium(),
-              const Gap(8),
-              Select<String>(
-                value: _selectedCategoryId,
-                placeholder: const Text('Pilih Kategori'),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedCategoryId = value;
-                  });
-                },
-                itemBuilder: (context, itemValue) {
-                  final category = viewModel.categories.firstWhere(
-                    (c) => c.id == itemValue,
-                    orElse: () => Kategori(id: '', nama: 'Lainnya', jenis: 'PEMASUKAN', adalahPreset: true),
-                  );
-                  return Text(category.nama);
-                },
-                popup: SelectPopup<String>.builder(
-                  searchPlaceholder: const Text('Cari kategori...'),
-                  builder: (context, searchQuery) {
-                    final filtered = searchQuery == null
-                        ? viewModel.categories
-                        : viewModel.categories
-                            .where((c) => c.nama.toLowerCase().contains(searchQuery.toLowerCase()))
-                            .toList();
-                    return SelectItemList(
-                      children: [
-                        for (final category in filtered)
-                          SelectItemButton(
-                            value: category.id,
-                            child: Text(category.nama),
-                          ),
-                      ],
+          child: Form(
+            onSubmit: (context, values) async {
+              await _submit(values);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FormField<String>(
+                  key: _deskripsiKey,
+                  label: const Text('Deskripsi').medium(),
+                  showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                  validator: const NotEmptyValidator(message: 'Deskripsi tidak boleh kosong') &
+                      ValidationMode(
+                        ConditionalValidator((value) async {
+                          if (value == null || value.trim().isEmpty) return false;
+                          return true;
+                        }, message: 'Deskripsi wajib diisi'),
+                        mode: {FormValidationMode.submitted},
+                      ),
+                  child: TextField(
+                    controller: _deskripsiController,
+                    placeholder: const Text('Contoh: Gaji bulanan'),
+                  ),
+                ),
+                const Gap(20),
+                FormField<String>(
+                  key: _jumlahKey,
+                  label: const Text('Jumlah (Rp)').medium(),
+                  showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                  validator: const NotEmptyValidator(message: 'Jumlah wajib diisi') &
+                      ValidationMode(
+                        ConditionalValidator((value) async {
+                          if (value == null) return false;
+                          final doubleVal = FormatUtils.parseRupiahToDouble(value);
+                          return doubleVal > 0;
+                        }, message: 'Jumlah harus lebih besar dari 0'),
+                        mode: {FormValidationMode.submitted},
+                      ),
+                  child: TextField(
+                    controller: _jumlahController,
+                    keyboardType: TextInputType.number,
+                    placeholder: const Text('Contoh: 5.000.000'),
+                    inputFormatters: [RupiahInputFormatter()],
+                    features: const [
+                      InputFeature.leading(Text('Rp ')),
+                    ],
+                  ),
+                ),
+                const Gap(20),
+                FormField<String>(
+                  key: _kategoriKey,
+                  label: const Text('Kategori').medium(),
+                  showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                  child: Select<String>(
+                    value: _selectedCategoryId,
+                    placeholder: const Text('Pilih Kategori'),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategoryId = value;
+                      });
+                    },
+                    itemBuilder: (context, itemValue) {
+                      final category = viewModel.categories.firstWhere(
+                        (c) => c.id == itemValue,
+                        orElse: () => Kategori(id: '', nama: 'Lainnya', jenis: 'PEMASUKAN', adalahPreset: true),
+                      );
+                      return Text(category.nama);
+                    },
+                    popup: SelectPopup<String>.builder(
+                      searchPlaceholder: const Text('Cari kategori...'),
+                      builder: (context, searchQuery) {
+                        final filtered = searchQuery == null
+                            ? viewModel.categories
+                            : viewModel.categories
+                                .where((c) => c.nama.toLowerCase().contains(searchQuery.toLowerCase()))
+                                .toList();
+                        return SelectItemList(
+                          children: [
+                            for (final category in filtered)
+                              SelectItemButton(
+                                value: category.id,
+                                child: Text(category.nama),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                const Gap(20),
+                FormField<DateTime>(
+                  key: _tanggalKey,
+                  label: const Text('Tanggal').medium(),
+                  showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                  validator: const NonNullValidator(message: 'Tanggal wajib diisi'),
+                  child: DatePicker(
+                    value: _selectedDate,
+                    mode: PromptMode.popover,
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _selectedDate = value;
+                        });
+                      }
+                    },
+                  ),
+                ),
+                const Gap(20),
+                FormField<String>(
+                  key: _catatanKey,
+                  label: const Text('Catatan (Opsional)').medium(),
+                  showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                  child: TextField(
+                    controller: _catatanController,
+                    minLines: 3,
+                    maxLines: 5,
+                    placeholder: const Text('Tambahkan catatan jika perlu'),
+                  ),
+                ),
+                const Gap(40),
+                FormErrorBuilder(
+                  builder: (context, errors, child) {
+                    return PrimaryButton(
+                      onPressed: (errors.isEmpty && !viewModel.isLoading)
+                          ? () => context.submitForm()
+                          : null,
+                      child: viewModel.isLoading
+                          ? const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(),
+                                ),
+                                Gap(8),
+                                Text('Menyimpan...'),
+                              ],
+                            )
+                          : Text(isEdit ? 'Simpan Perubahan' : 'Simpan Pemasukan'),
                     );
                   },
                 ),
-              ),
-              const Gap(20),
-
-              const Text('Tanggal').medium(),
-              const Gap(8),
-              DatePicker(
-                value: _selectedDate,
-                mode: PromptMode.popover,
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _selectedDate = value;
-                    });
-                  }
-                },
-              ),
-              const Gap(20),
-
-              const Text('Catatan (Opsional)').medium(),
-              const Gap(8),
-              TextField(
-                controller: _catatanController,
-                minLines: 3,
-                maxLines: 5,
-                placeholder: const Text('Tambahkan catatan jika perlu'),
-              ),
-              const Gap(40),
-
-              PrimaryButton(
-                onPressed: viewModel.isLoading ? null : _submit,
-                child: viewModel.isLoading
-                    ? const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(),
-                          ),
-                          Gap(8),
-                          Text('Menyimpan...'),
-                        ],
-                      )
-                    : Text(isEdit ? 'Simpan Perubahan' : 'Simpan Pemasukan'),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -254,7 +271,6 @@ class _PemasukanFormPageState extends State<PemasukanFormPage> {
   }
 }
 
-/// Helper untuk navigate ke form pemasukan
 void navigateToPemasukanForm(BuildContext context, {Pemasukan? pemasukan}) {
   Navigator.of(context).push(
     MaterialPageRoute(

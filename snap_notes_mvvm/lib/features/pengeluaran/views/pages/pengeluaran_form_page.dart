@@ -77,7 +77,9 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
 
   final _deskripsiKey = const TextFieldKey('deskripsi');
   final _jumlahKey = const TextFieldKey('jumlah');
+  final _kategoriKey = const SelectKey<String>('kategori');
   final _dateKey = const DatePickerKey('date');
+  final _catatanKey = const TextFieldKey('catatan');
 
   bool get isEdit => widget.pengeluaran != null;
   bool get isStruk => (isEdit && widget.pengeluaran!.strukId != null) || !isEdit;
@@ -495,7 +497,7 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                             ),
                           ),
                           const Gap(16),
-                          FormField(
+                          FormField<DateTime>(
                             key: _dateKey,
                             label: const Text('Tanggal Pembelian').small().semiBold(),
                             validator: const NonNullValidator(message: 'Tanggal tidak boleh kosong'),
@@ -512,30 +514,47 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                             ),
                           ),
                           const Gap(16),
-                          const Text('Kategori').small().semiBold(),
-                          const Gap(4),
-                          _buildCategorySelect(viewModel),
+                          FormField<String>(
+                            key: _kategoriKey,
+                            label: const Text('Kategori').small().semiBold(),
+                            showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                            child: _buildCategorySelect(viewModel),
+                          ),
                           const Gap(16),
                           FormField(
                             key: _jumlahKey,
-                            label: const Text('Total Harga (Rp)').small().semiBold(),
-                            validator: const NotEmptyValidator(message: 'Total harga tidak boleh kosong'),
+                            label: const Text('Total Harga').small().semiBold(),
                             showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                            validator: const NotEmptyValidator(message: 'Total harga tidak boleh kosong') &
+                                ValidationMode(
+                                  ConditionalValidator((value) async {
+                                    if (value == null) return false;
+                                    final doubleVal = FormatUtils.parseRupiahToDouble(value);
+                                    return doubleVal > 0;
+                                  }, message: 'Total harga harus lebih besar dari 0'),
+                                  mode: {FormValidationMode.submitted},
+                                ),
                             child: TextField(
                               controller: _jumlahController,
                               keyboardType: TextInputType.number,
                               inputFormatters: [RupiahInputFormatter()],
                               placeholder: const Text('0'),
+                              features: const [
+                                InputFeature.leading(Text('Rp ')),
+                              ],
                               readOnly: true,
                             ),
                           ),
                           const Gap(16),
-                          const Text('Catatan (Opsional)').small().semiBold(),
-                          const Gap(4),
-                          TextField(
-                            controller: _catatanController,
-                            maxLines: 2,
-                            placeholder: const Text('Tambahkan catatan'),
+                          FormField<String>(
+                            key: _catatanKey,
+                            label: const Text('Catatan (Opsional)').small().semiBold(),
+                            showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                            child: TextField(
+                              controller: _catatanController,
+                              maxLines: 2,
+                              placeholder: const Text('Tambahkan catatan'),
+                            ),
                           ),
                           const Gap(16),
                           const Divider(),
@@ -591,70 +610,96 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                                       ),
                                       const Gap(8),
                                       Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
-                                            flex: 2,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                FormField(
-                                                  key: TextFieldKey('itemQty_$index'),
-                                                  label: const Text('Jumlah').xSmall().muted(),
-                                                  validator: const NotEmptyValidator(message: 'Jumlah tidak boleh kosong'),
-                                                  showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
-                                                  child: TextField(
-                                                    controller: group.quantityController,
-                                                    keyboardType: TextInputType.number,
-                                                    onChanged: (_) => _recalculateItemTotal(group),
+                                            flex: 1,
+                                            child: FormField(
+                                              key: TextFieldKey('itemQty_$index'),
+                                              label: const Text('Jumlah').xSmall().muted(),
+                                              validator: const NotEmptyValidator(message: 'Wajib diisi') &
+                                                  ValidationMode(
+                                                    ConditionalValidator((value) async {
+                                                      if (value == null) return false;
+                                                      final qty = int.tryParse(value.toString());
+                                                      return qty != null && qty >= 1;
+                                                    }, message: 'Minimal 1'),
+                                                    mode: {FormValidationMode.submitted},
                                                   ),
-                                                ),
-                                              ],
+                                              showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                                              child: TextField(
+                                                controller: group.quantityController,
+                                                keyboardType: TextInputType.number,
+                                                placeholder: const Text('1'),
+                                                onChanged: (_) => _recalculateItemTotal(group),
+                                              ),
                                             ),
                                           ),
                                           const Gap(12),
                                           Expanded(
-                                            flex: 3,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                FormField(
-                                                  key: TextFieldKey('itemPrice_$index'),
-                                                  label: const Text('Harga Satuan').xSmall().muted(),
-                                                  validator: const NotEmptyValidator(message: 'Harga tidak boleh kosong'),
-                                                  showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
-                                                  child: TextField(
-                                                    controller: group.priceController,
-                                                    keyboardType: TextInputType.number,
-                                                    inputFormatters: [RupiahInputFormatter()],
-                                                    onChanged: (_) => _recalculateItemTotal(group),
-                                                  ),
-                                                ),
-                                              ],
+                                            flex: 2,
+                                            child: FormField(
+                                              key: TextFieldKey('itemPrice_$index'),
+                                              label: const Text('Harga Satuan').xSmall().muted(),
+                                              validator: const NotEmptyValidator(message: 'Harga wajib diisi'),
+                                              showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                                              child: TextField(
+                                                controller: group.priceController,
+                                                keyboardType: TextInputType.number,
+                                                inputFormatters: [RupiahInputFormatter()],
+                                                placeholder: const Text('0'),
+                                                features: const [
+                                                  InputFeature.leading(Text('Rp ')),
+                                                ],
+                                                onChanged: (_) => _recalculateItemTotal(group),
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
                                       const Gap(8),
-                                      FormField(
-                                        key: TextFieldKey('itemDiscount_$index'),
-                                        label: const Text('Diskon Item (Rp)').xSmall().muted(),
-                                        showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
-                                        child: TextField(
-                                          controller: group.discountController,
-                                          keyboardType: TextInputType.number,
-                                          inputFormatters: [RupiahInputFormatter()],
-                                          onChanged: (_) => _recalculateItemTotal(group),
-                                          placeholder: const Text('Opsional'),
-                                        ),
-                                      ),
-                                      const Gap(8),
-                                      const Text('Subtotal / Total Harga Item (Rp)').xSmall().muted(),
-                                      const Gap(4),
-                                      TextField(
-                                        controller: group.totalPriceController,
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [RupiahInputFormatter()],
-                                        onChanged: (_) => _recalculateGrandTotal(),
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: FormField(
+                                              key: TextFieldKey('itemDiscount_$index'),
+                                              label: const Text('Diskon Item').xSmall().muted(),
+                                              showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                                              child: TextField(
+                                                controller: group.discountController,
+                                                keyboardType: TextInputType.number,
+                                                inputFormatters: [RupiahInputFormatter()],
+                                                onChanged: (_) => _recalculateItemTotal(group),
+                                                placeholder: const Text('0'),
+                                                features: const [
+                                                  InputFeature.leading(Text('Rp ')),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const Gap(12),
+                                          Expanded(
+                                            flex: 1,
+                                            child: FormField(
+                                              key: TextFieldKey('itemTotal_$index'),
+                                              label: const Text('Subtotal Item').xSmall().muted(),
+                                              showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                                              child: TextField(
+                                                controller: group.totalPriceController,
+                                                keyboardType: TextInputType.number,
+                                                inputFormatters: [RupiahInputFormatter()],
+                                                placeholder: const Text('0'),
+                                                readOnly: true,
+                                                features: const [
+                                                  InputFeature.leading(Text('Rp ')),
+                                                ],
+                                                onChanged: (_) => _recalculateGrandTotal(),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -676,21 +721,26 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                         ],
                       ),
                     const Gap(24),
-                    SubmitButton(
-                      child: isLoading
-                          ? const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(),
-                                ),
-                                Gap(8),
-                                Text('Menyimpan...'),
-                              ],
-                            )
-                          : const Text('Simpan Perubahan'),
+                    FormErrorBuilder(
+                      builder: (context, errors, child) {
+                        return PrimaryButton(
+                          onPressed: (errors.isEmpty && !isLoading) ? () => context.submitForm() : null,
+                          child: isLoading
+                              ? const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    Gap(8),
+                                    Text('Menyimpan...'),
+                                  ],
+                                )
+                              : const Text('Simpan Perubahan'),
+                        );
+                      },
                     ),
                   ]
                 : [
@@ -709,8 +759,16 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                     FormField(
                       key: _jumlahKey,
                       label: const Text('Jumlah (Rp)').medium(),
-                      validator: const NotEmptyValidator(message: 'Jumlah tidak boleh kosong'),
                       showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                      validator: const NotEmptyValidator(message: 'Jumlah tidak boleh kosong') &
+                          ValidationMode(
+                            ConditionalValidator((value) async {
+                              if (value == null) return false;
+                              final doubleVal = FormatUtils.parseRupiahToDouble(value);
+                              return doubleVal > 0;
+                            }, message: 'Jumlah harus lebih besar dari 0'),
+                            mode: {FormValidationMode.submitted},
+                          ),
                       child: TextField(
                         controller: _jumlahController,
                         keyboardType: TextInputType.number,
@@ -723,12 +781,15 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                     ),
                     const Gap(20),
 
-                    const Text('Kategori').medium(),
-                    const Gap(8),
-                    _buildCategorySelect(viewModel),
+                    FormField<String>(
+                      key: _kategoriKey,
+                      label: const Text('Kategori').medium(),
+                      showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                      child: _buildCategorySelect(viewModel),
+                    ),
                     const Gap(20),
 
-                    FormField(
+                    FormField<DateTime>(
                       key: _dateKey,
                       label: const Text('Tanggal').medium(),
                       validator: const NonNullValidator(message: 'Tanggal tidak boleh kosong'),
@@ -747,31 +808,39 @@ class _PengeluaranFormPageState extends State<PengeluaranFormPage> {
                     ),
                     const Gap(20),
 
-                    const Text('Catatan (Opsional)').medium(),
-                    const Gap(8),
-                    TextField(
-                      controller: _catatanController,
-                      minLines: 3,
-                      maxLines: 5,
-                      placeholder: const Text('Tambahkan catatan jika perlu'),
+                    FormField<String>(
+                      key: _catatanKey,
+                      label: const Text('Catatan (Opsional)').medium(),
+                      showErrors: const {FormValidationMode.changed, FormValidationMode.submitted},
+                      child: TextField(
+                        controller: _catatanController,
+                        minLines: 3,
+                        maxLines: 5,
+                        placeholder: const Text('Tambahkan catatan jika perlu'),
+                      ),
                     ),
                     const Gap(40),
 
-                    SubmitButton(
-                      child: isLoading
-                          ? const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(),
-                                ),
-                                Gap(8),
-                                Text('Menyimpan...'),
-                              ],
-                            )
-                          : Text(isEdit ? 'Simpan Perubahan' : 'Simpan Pengeluaran'),
+                    FormErrorBuilder(
+                      builder: (context, errors, child) {
+                        return PrimaryButton(
+                          onPressed: (errors.isEmpty && !isLoading) ? () => context.submitForm() : null,
+                          child: isLoading
+                              ? const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    Gap(8),
+                                    Text('Menyimpan...'),
+                                  ],
+                                )
+                              : Text(isEdit ? 'Simpan Perubahan' : 'Simpan Pengeluaran'),
+                        );
+                      },
                     ),
                   ],
                 ),

@@ -64,6 +64,23 @@ class DashboardService {
     return result;
   }
 
+  /// Get transaksi harian (pengeluaran & pemasukan) untuk tanggal tertentu
+  Future<Map<String, List<Map<String, dynamic>>>> getTransaksiHarian(DateTime tanggal) async {
+    final tanggalStr = tanggal.toIso8601String().split('T').first;
+    final response = await _dio.get('/api/dashboard/transaksi-harian', queryParameters: {'tanggal': tanggalStr});
+
+    if (response.statusCode == 200) {
+      final data = response.data['data'] as Map<String, dynamic>;
+      final pengeluaran = ((data['pengeluaran'] as List?) ?? []).map((e) => e as Map<String, dynamic>).toList();
+      final pemasukan = ((data['pemasukan'] as List?) ?? []).map((e) => e as Map<String, dynamic>).toList();
+      return {
+        'pengeluaran': pengeluaran,
+        'pemasukan': pemasukan,
+      };
+    } else {
+      throw Exception('Gagal memuat transaksi harian');
+    }
+  }
   /// Get data kategori
   Future<List<Map<String, dynamic>>> getPerKategori({int? bulan, int? tahun}) async {
     final Map<String, dynamic> queryParams = {};

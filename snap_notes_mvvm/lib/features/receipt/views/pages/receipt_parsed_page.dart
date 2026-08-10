@@ -993,88 +993,95 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
                         ),
                       ),
                       const Gap(12),
-                  const Text('Kategori Pengeluaran').small().medium(),
-                  const Gap(6),
-                  Select<String>(
-                    value: _selectedCategoryId,
-                    placeholder: const Text('Pilih Kategori'),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedCategoryId = value;
-                        if (value != null) {
-                          final match = widget.categories.where(
-                            (c) => c.id == value,
-                          );
-                          if (match.isNotEmpty) {
-                            _selectedCategoryName = match.first.nama;
-                          }
-                        }
-                      });
-                    },
-                    itemBuilder: (context, itemValue) {
-                      final category = widget.categories.firstWhere(
-                        (c) => c.id == itemValue,
-                        orElse: () => Kategori(
-                          id: '',
-                          nama: _selectedCategoryName ?? 'Lainnya',
-                          jenis: 'PENGELUARAN',
-                          adalahPreset: true,
-                        ),
-                      );
-                      return Text(category.nama);
-                    },
-                    popup: SelectPopup<String>.builder(
-                      searchPlaceholder: const Text('Cari kategori...'),
-                      builder: (context, searchQuery) {
-                        final filtered = searchQuery == null
-                            ? widget.categories
-                            : widget.categories
-                                  .where(
-                                    (c) => c.nama.toLowerCase().contains(
-                                      searchQuery.toLowerCase(),
-                                    ),
-                                  )
-                                  .toList();
-                        return SelectItemList(
-                          children: [
-                            for (final category in filtered)
-                              SelectItemButton(
-                                value: category.id,
-                                child: Text(category.nama),
-                              ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  const Gap(12),
-                  const Text('Total Items (Rp)').small().medium(),
-                  const Gap(6),
-                  TextField(
-                    controller: _totalItemAmountController,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [RupiahInputFormatter()],
-                    placeholder: const Text('0'),
-                    readOnly: true,
-                    features: [
-                      shadcn.InputLeadingFeature(
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 12.0,
-                            right: 8.0,
-                          ),
-                          child: Text(
-                            'Rp',
-                            style: TextStyle(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.mutedForeground,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+	                  shadcn.FormField<String>(
+	                    key: const shadcn.SelectKey<String>('category'),
+	                    showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+	                    label: const Text('Kategori Pengeluaran').small().medium(),
+	                    child: Select<String>(
+	                    value: _selectedCategoryId,
+	                    placeholder: const Text('Pilih Kategori'),
+	                    onChanged: (value) {
+	                      setState(() {
+	                        _selectedCategoryId = value;
+	                        if (value != null) {
+	                          final match = widget.categories.where(
+	                            (c) => c.id == value,
+	                          );
+	                          if (match.isNotEmpty) {
+	                            _selectedCategoryName = match.first.nama;
+	                          }
+	                        }
+	                      });
+	                    },
+	                    itemBuilder: (context, itemValue) {
+	                      final category = widget.categories.firstWhere(
+	                        (c) => c.id == itemValue,
+	                        orElse: () => Kategori(
+	                          id: '',
+	                          nama: _selectedCategoryName ?? 'Lainnya',
+	                          jenis: 'PENGELUARAN',
+	                          adalahPreset: true,
+	                        ),
+	                      );
+	                      return Text(category.nama);
+	                    },
+	                    popup: SelectPopup<String>.builder(
+	                      searchPlaceholder: const Text('Cari kategori...'),
+	                      builder: (context, searchQuery) {
+	                        final filtered = searchQuery == null
+	                            ? widget.categories
+	                            : widget.categories
+	                                  .where(
+	                                    (c) => c.nama.toLowerCase().contains(
+	                                      searchQuery.toLowerCase(),
+	                                    ),
+	                                  )
+	                                  .toList();
+	                        return SelectItemList(
+	                          children: [
+	                            for (final category in filtered)
+	                              SelectItemButton(
+	                                value: category.id,
+	                                child: Text(category.nama),
+	                              ),
+	                          ],
+	                        );
+	                      },
+	                    ),
+	                  ),
+	                  ),
+	                  const Gap(12),
+	                  shadcn.FormField(
+	                    key: const shadcn.TextFieldKey('totalItemAmount'),
+	                    label: const Text('Total Items (Rp)').small().medium(),
+	                    showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+	                    validator: const shadcn.NotEmptyValidator(message: 'Total items tidak boleh kosong') &
+	                        shadcn.ValidationMode(
+	                          shadcn.ConditionalValidator((value) async {
+	                            if (value == null) return false;
+	                            final doubleVal = FormatUtils.parseRupiahToDouble(value);
+	                            return doubleVal > 0;
+	                          }, message: 'Total items harus lebih besar dari 0'),
+	                          mode: {shadcn.FormValidationMode.submitted},
+	                        ),
+	                    child: TextField(
+	                      controller: _totalItemAmountController,
+	                      keyboardType: TextInputType.number,
+	                      inputFormatters: [RupiahInputFormatter()],
+	                      placeholder: const Text('0'),
+	                      readOnly: true,
+	                      features: [
+	                        shadcn.InputLeadingFeature(
+	                          Text(
+	                            'Rp',
+	                            style: TextStyle(
+	                              color: Theme.of(context).colorScheme.mutedForeground,
+	                            ),
+	                          ),
+	                        ),
+	                      ],
+	                    ),
+	                  ),
                   const Gap(16),
                   const Divider(),
                   const Gap(16),

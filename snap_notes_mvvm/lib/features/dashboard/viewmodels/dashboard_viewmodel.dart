@@ -147,6 +147,14 @@ class DashboardViewModel extends ChangeNotifier {
     }
   }
 
+  Future<Map<String, List<Map<String, dynamic>>>> loadTransaksiHarian(DateTime tanggal) async {
+    try {
+      return await _dashboardService.getTransaksiHarian(tanggal);
+    } catch (e) {
+      return {'pengeluaran': [], 'pemasukan': []};
+    }
+  }
+
   /// Geser grafik 1 bulan ke depan
   void nextMonth() {
     _focusMonth = DateTime(_focusMonth.year, _focusMonth.month + 1, 1);

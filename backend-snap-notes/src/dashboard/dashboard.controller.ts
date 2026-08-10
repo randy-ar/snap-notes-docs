@@ -69,6 +69,23 @@ export class DashboardController {
     return this.dashboardService.getKalender(penggunaId, query);
   }
 
+  @Get('transaksi-harian')
+  @ApiOperation({
+    summary: 'Mendapatkan daftar pengeluaran & pemasukan pada tanggal tertentu',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Data transaksi harian berhasil diambil',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getTransaksiHarian(
+    @Req() req: any,
+    @Query('tanggal') tanggal: string,
+  ): Promise<any> {
+    const penggunaId = req.user.sub;
+    return this.dashboardService.getDetailHarian(penggunaId, tanggal);
+  }
+
   @Get('kategori')
   @ApiOperation({
     summary: 'Mendapatkan agregasi pengeluaran berdasarkan kategori dalam 1 bulan',

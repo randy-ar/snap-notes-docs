@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart' as shadcn;
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:snap_notes_mvvm/features/dashboard/viewmodels/dashboard_viewmodel.dart';
+import 'package:snap_notes_mvvm/features/pemasukan/views/pages/pemasukan_detail_page.dart';
+import 'package:snap_notes_mvvm/features/pengeluaran/views/pages/pengeluaran_detail_page.dart';
 
 class ExpenseHeatmapWidget extends StatefulWidget {
   final Map<DateTime, double> pengeluaranData;
@@ -225,58 +229,131 @@ class _ExpenseHeatmapWidgetState extends State<ExpenseHeatmapWidget> {
 
   void _showTransactionDetails(
       BuildContext context, DateTime tanggal, double pengeluaran, double pemasukan) {
-    final dateFormat = DateFormat('dd MMM yyyy', 'id_ID');
+    final dateFormat = DateFormat('dd MMMM yyyy', 'id_ID');
     final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0);
     final tanggalStr = dateFormat.format(tanggal);
+    final dashboardVM = context.read<DashboardViewModel>();
 
     shadcn.showDialog(
       context: context,
-      builder: (context) {
+      builder: (dialogContext) {
         return shadcn.AlertDialog(
           title: shadcn.Text('Transaksi $tanggalStr'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (pemasukan > 0)
-                Row(
-                  children: [
-                    Container(
-                      width: 8, height: 8,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF22C55E),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const shadcn.Gap(8),
-                    shadcn.Text('Pemasukan: ${currencyFormat.format(pemasukan)}'),
-                  ],
+          content: SizedBox(
+            width: 360,
+            height: 380,
+            child: FutureBuilder<Map<String, List<Map<String, dynamic>>>>(
+                    future: dashboardVM.loadTransaksiHarian(tanggal),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: shadcn.CircularProgressIndicator(),
+                        );
+                      }
+
+                      final pengeluaranList = snapshot.data?['pengeluaran'] ?? [];
+                      final pemasukanList = snapshot.data?['pemasukan'] ?? [];
+
+                      if (pengeluaranList.isEmpty && pemasukanList.isEmpty) {
+                        return Center(
+                          child: shadcn.Text('Tidak ada data transaksi').muted(),
+                        );
+                      }
+
+                      final allTransactions = [
+                        ...pemasukanList.map((item) => {...item, 'isPemasukan': true}),
+                        ...pengeluaranList.map((item) => {...item, 'isPemasukan': false}),
+                      ];
+
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: allTransactions.length,
+                        separatorBuilder: (_, __) => const shadcn.Gap(8),
+                        itemBuilder: (context, index) {
+                          final item = allTransactions[index];
+                          final isPemasukan = item['isPemasukan'] == true;
+                          final id = item['id'] as String;
+                          final title = (item['deskripsi'] as String?) ?? 'Transaksi';
+                          final category = (item['kategoriNama'] as String?) ?? 'Lainnya';
+                          final amount = (item['jumlah'] as num?)?.toDouble() ?? 0.0;
+
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.pop(dialogContext);
+                              if (isPemasukan) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => PemasukanDetailPage(pemasukanId: id),
+                                  ),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => PengeluaranDetailPage(pengeluaranId: id),
+                                  ),
+                                );
+                              }
+                            },
+                            child: shadcn.Card(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: isPemasukan
+                                          ? const Color(0xFF22C55E).withValues(alpha: 0.15)
+                                          : const Color(0xFFEF4444).withValues(alpha: 0.15),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Icon(
+                                      isPemasukan
+                                          ? shadcn.LucideIcons.arrowDownLeft
+                                          : shadcn.LucideIcons.arrowUpRight,
+                                      color: isPemasukan
+                                          ? const Color(0xFF22C55E)
+                                          : const Color(0xFFEF4444),
+                                      size: 18,
+                                    ),
+                                  ),
+                                  const shadcn.Gap(12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        shadcn.Text(title).small().semiBold(),
+                                        shadcn.Text(category).xSmall().muted(),
+                                      ],
+                                    ),
+                                  ),
+                                  shadcn.Text(
+                                    '${isPemasukan ? '+' : '-'} ${currencyFormat.format(amount)}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                      color: isPemasukan
+                                          ? const Color(0xFF22C55E)
+                                          : const Color(0xFFEF4444),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              if (pemasukan > 0 && pengeluaran > 0)
-                const shadcn.Gap(8),
-              if (pengeluaran > 0)
-                Row(
-                  children: [
-                    Container(
-                      width: 8, height: 8,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFEF4444),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const shadcn.Gap(8),
-                    shadcn.Text('Pengeluaran: ${currencyFormat.format(pengeluaran)}'),
-                  ],
-                ),
-            ],
-          ),
-          actions: [
-            shadcn.OutlineButton(
-              onPressed: () => Navigator.pop(context),
-              child: const shadcn.Text('Tutup'),
-            ),
-          ],
-        );
+                actions: [
+                  shadcn.OutlineButton(
+                    onPressed: () => Navigator.pop(dialogContext),
+                    child: const shadcn.Text('Tutup'),
+                  ),
+                ],
+              );
       },
     );
   }

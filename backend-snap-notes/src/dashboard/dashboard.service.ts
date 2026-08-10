@@ -101,6 +101,61 @@ export class DashboardService {
     return { pengeluaran: pengeluaranResult, pemasukan: pemasukanResult };
   }
 
+  async getDetailHarian(
+    penggunaId: string,
+    tanggalStr: string,
+  ): Promise<{ pengeluaran: any[]; pemasukan: any[] }> {
+    const targetDate = new Date(tanggalStr);
+    const tahun = targetDate.getUTCFullYear();
+    const bulan = targetDate.getUTCMonth();
+    const dateNum = targetDate.getUTCDate();
+
+    const startDate = new Date(Date.UTC(tahun, bulan, dateNum, -7, 0, 0, 0));
+    const endDate = new Date(Date.UTC(tahun, bulan, dateNum, 16, 59, 59, 999));
+
+    const whereClause = {
+      penggunaId,
+      tanggal: { gte: startDate, lte: endDate },
+    };
+
+    const [pengeluaranList, pemasukanList] = await Promise.all([
+      this.prisma.pengeluaran.findMany({
+        where: whereClause,
+        include: { kategori: true },
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.pemasukan.findMany({
+        where: whereClause,
+        include: { kategori: true },
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
+
+    return {
+      pengeluaran: pengeluaranList.map((p) => ({
+        id: p.id,
+        deskripsi: p.deskripsi,
+        jumlah: Number(p.jumlah),
+        tanggal: p.tanggal,
+        catatan: p.catatan,
+        kategoriId: p.kategoriId,
+        kategoriNama: p.kategori?.nama,
+        strukId: p.strukId,
+        tipe: 'PENGELUARAN',
+      })),
+      pemasukan: pemasukanList.map((p) => ({
+        id: p.id,
+        deskripsi: p.deskripsi,
+        jumlah: Number(p.jumlah),
+        tanggal: p.tanggal,
+        catatan: p.catatan,
+        kategoriId: p.kategoriId,
+        kategoriNama: p.kategori?.nama,
+        tipe: 'PEMASUKAN',
+      })),
+    };
+  }
+
   async getKategori(
     penggunaId: string,
     query: QueryDashboardDto,

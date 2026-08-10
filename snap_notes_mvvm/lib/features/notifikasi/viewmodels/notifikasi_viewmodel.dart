@@ -16,6 +16,21 @@ class NotifikasiViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
+  bool _isDisposed = false;
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_isDisposed) {
+      super.notifyListeners();
+    }
+  }
+
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
@@ -27,7 +42,7 @@ class NotifikasiViewModel extends ChangeNotifier {
 
   Future<void> loadPreferensi() async {
     _errorMessage = null;
-    
+
     // 1. Ambil data dari cache terlebih dahulu secara lokal
     final cachedList = await _notifikasiService.getCachedPreferensiList();
     if (cachedList.isNotEmpty) {

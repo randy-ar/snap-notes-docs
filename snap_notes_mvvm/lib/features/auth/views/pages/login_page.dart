@@ -15,6 +15,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _emailKey = const TextFieldKey('email');
+  final _passwordKey = const TextFieldKey('password');
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
@@ -26,12 +28,9 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  Future<void> _handleLogin() async {
+  Future<void> _handleLogin(String email, String password) async {
     final viewModel = context.read<LoginViewModel>();
-    await viewModel.login(
-      _emailController.text.trim(),
-      _passwordController.text,
-    );
+    await viewModel.login(email.trim(), password);
 
     if (!mounted) return;
 
@@ -39,8 +38,6 @@ class _LoginPageState extends State<LoginPage> {
       _showErrorToast(viewModel.errorMessage!);
     } else if (viewModel.token != null) {
       _showSuccessToast('Berhasil login');
-      // Ensure we don't try to use context across async gaps unnecessarily,
-      // and AuthViewModel will handle the navigation when the token updates
       context.read<AuthViewModel>().checkAuth();
     }
   }
@@ -55,7 +52,6 @@ class _LoginPageState extends State<LoginPage> {
       _showErrorToast(viewModel.errorMessage!);
     } else if (viewModel.token != null) {
       _showSuccessToast('Berhasil login dengan Google');
-      // AuthViewModel will handle the navigation when the token updates
       context.read<AuthViewModel>().checkAuth();
     }
   }
@@ -89,24 +85,95 @@ class _LoginPageState extends State<LoginPage> {
               constraints: const BoxConstraints(maxWidth: 400),
               child: Card(
                 padding: const EdgeInsets.all(32),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeader(),
-                    const Gap(32),
-                    _buildEmailField(),
-                    const Gap(16),
-                    _buildPasswordField(),
-                    const Gap(24),
-                    _buildLoginButton(viewModel),
-                    const Gap(16),
-                    _buildDivider(),
-                    const Gap(16),
-                    _buildGoogleLoginButton(viewModel),
-                    const Gap(24),
-                    _buildRegisterLink(context),
-                  ],
+                child: Form(
+                  onSubmit: (context, values) async {
+                    final email = _emailKey[values] ?? _emailController.text;
+                    final password = _passwordKey[values] ?? _passwordController.text;
+                    await _handleLogin(email, password);
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildHeader(),
+                      const Gap(32),
+                      FormField<String>(
+                        key: _emailKey,
+                        label: const Text('Email'),
+                        showErrors: const {
+                          FormValidationMode.changed,
+                          FormValidationMode.submitted,
+                        },
+                        validator: const EmailValidator(message: 'Format email tidak valid') &
+                            const NotEmptyValidator(message: 'Email wajib diisi'),
+                        child: TextField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          placeholder: const Text('contoh@email.com'),
+                          features: const [InputFeature.leading(Icon(LucideIcons.mail))],
+                        ),
+                      ),
+                      const Gap(16),
+                      FormField<String>(
+                        key: _passwordKey,
+                        label: const Text('Password'),
+                        showErrors: const {
+                          FormValidationMode.changed,
+                          FormValidationMode.submitted,
+                        },
+                        validator: const LengthValidator(min: 6, message: 'Password minimal 6 karakter') &
+                            const NotEmptyValidator(message: 'Password wajib diisi'),
+                        child: TextField(
+                          controller: _passwordController,
+                          obscureText: _obscurePassword,
+                          placeholder: const Text('Masukkan password'),
+                          features: [
+                            const InputFeature.leading(Icon(LucideIcons.lock)),
+                            InputFeature.trailing(
+                              IconButton.ghost(
+                                density: ButtonDensity.compact,
+                                icon: Icon(
+                                  _obscurePassword ? LucideIcons.eyeOff : LucideIcons.eye,
+                                ),
+                                onPressed: () =>
+                                    setState(() => _obscurePassword = !_obscurePassword),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Gap(24),
+                      FormErrorBuilder(
+                        builder: (context, errors, child) {
+                          return PrimaryButton(
+                            onPressed: (errors.isEmpty && !viewModel.isLoading)
+                                ? () => context.submitForm()
+                                : null,
+                            child: viewModel.isLoading
+                                ? const Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      Gap(8),
+                                      Text('Sedang masuk...'),
+                                    ],
+                                  )
+                                : const Text('Masuk'),
+                          );
+                        },
+                      ),
+                      const Gap(16),
+                      _buildDivider(),
+                      const Gap(16),
+                      _buildGoogleLoginButton(viewModel),
+                      const Gap(24),
+                      _buildRegisterLink(context),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -124,70 +191,6 @@ class _LoginPageState extends State<LoginPage> {
         const Gap(8),
         const Text('Masukkan email dan password untuk melanjutkan').muted(),
       ],
-    );
-  }
-
-  Widget _buildEmailField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Email').medium(),
-        const Gap(8),
-        TextField(
-          controller: _emailController,
-          keyboardType: TextInputType.emailAddress,
-          placeholder: const Text('contoh@email.com'),
-          features: const [InputFeature.leading(Icon(LucideIcons.mail))],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPasswordField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Password').medium(),
-        const Gap(8),
-        TextField(
-          controller: _passwordController,
-          obscureText: _obscurePassword,
-          placeholder: const Text('Masukkan password'),
-          features: [
-            const InputFeature.leading(Icon(LucideIcons.lock)),
-            InputFeature.trailing(
-              IconButton.ghost(
-                density: ButtonDensity.compact,
-                icon: Icon(
-                  _obscurePassword ? LucideIcons.eyeOff : LucideIcons.eye,
-                ),
-                onPressed: () =>
-                    setState(() => _obscurePassword = !_obscurePassword),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLoginButton(LoginViewModel viewModel) {
-    return PrimaryButton(
-      onPressed: viewModel.isLoading ? null : _handleLogin,
-      child: viewModel.isLoading
-          ? const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(),
-                ),
-                Gap(8),
-                Text('Sedang masuk...'),
-              ],
-            )
-          : const Text('Masuk'),
     );
   }
 
