@@ -1,0 +1,13 @@
+#!/bin/sh
+
+APK_SRC="snap_notes_mvvm/build/app/outputs/flutter-apk/app-release.apk"
+APK_DEST="landing-page/public/app-release.apk"
+
+if [ -f "$APK_SRC" ]; then
+  echo "📦 Copying latest Flutter APK release to landing-page/public..."
+  cp "$APK_SRC" "$APK_DEST"
+  git add "$APK_DEST"
+  echo "✅ APK successfully updated in landing-page/public!"
+else
+  echo "⚠️ Warning: $APK_SRC not found. Skipping APK copy."
+fi
