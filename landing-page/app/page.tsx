@@ -227,8 +227,8 @@ export default function Page() {
 
             <div className="pt-2">
               <a
-                href="/snap-notes.apk"
-                download
+                href="/app-release.apk"
+                download="snap-notes.apk"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium rounded-md bg-slate-900 text-white hover:bg-slate-800 transition-colors"
               >
                 <Download className="w-4 h-4" />
