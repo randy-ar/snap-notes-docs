@@ -5,6 +5,11 @@
     "dev:landing": "pnpm --filter landing-page dev",
     "build:landing": "pnpm --filter landing-page build",
     "dev:backend": "pnpm --filter backend-snap-notes dev",
-    "build:backend": "pnpm --filter backend-snap-notes build"
+    "build:backend": "pnpm --filter backend-snap-notes build",
+    "prepare": "husky",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
   }
 }
