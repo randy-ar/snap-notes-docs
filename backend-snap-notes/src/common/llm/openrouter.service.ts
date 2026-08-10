@@ -84,53 +84,57 @@ export class OpenRouterService implements ILLMProvider {
     let batchInfo = '';
 
     ocrDataBatch.forEach((ocrData, index) => {
-      let layoutInfo = '';
-      if (ocrData.lines && ocrData.lines.length > 0 && ocrData.imageSize) {
-        const lineInfo = ocrData.lines.map((line: any) => {
-          const centerX = (line.boundingBox.left + line.boundingBox.right) / 2;
-          const centerY = (line.boundingBox.top + line.boundingBox.bottom) / 2;
-          const relativeX = (centerX / ocrData.imageSize.width * 100).toFixed(1);
-          const relativeY = (centerY / ocrData.imageSize.height * 100).toFixed(1);
-          const textPreview = line.text.substring(0, 40);
-          const ellipsis = line.text.length > 40 ? '...' : '';
-          return `[${line.lineIndex}] X:${relativeX}% Y:${relativeY}% | "${textPreview}${ellipsis}"`;
-        }).join('\n');
-
-        layoutInfo = `INFO LAYOUT LINE POSISI:\n${lineInfo}\n`;
-      }
-
-      batchInfo += `\n--- STRUK ${index + 1} ---\nTEKS OCR:\n"""\n${ocrData.rawText}\n"""\n${layoutInfo}`;
+      batchInfo += `\n--- STRUK ${index + 1} ---\nTEKS OCR:\n"""\n${ocrData.rawText}\n"""\n`;
     });
 
     const currentDate = new Date().toISOString().split('T')[0];
 
-    return `Anda adalah parser struk belanja. Analisis ${ocrDataBatch.length} teks OCR berikut dan ekstrak informasi setiap struk ke format array JSON.
+    return `Anda adalah parser struk belanja berbasis penalaran hierarkis & matematika finansial. Analisis ${ocrDataBatch.length} teks OCR berikut dan ekstrak informasi setiap struk ke format array JSON.
 
 DATA BATCH OCR:
 ${batchInfo}
 
 ${customPrompt ? `KONTEKS TAMBAHAN DARI USER UNTUK KOREKSI:\n"""\n${customPrompt}\n"""\n` : ''}
+
+METODOLOGI EKSTRAKSI KONTEKSTUAL (BERHAP):
+1. **Analisis Informasi Kunci Per Item (Array \`item\`)**:
+   - Ekstrak setiap item transaksi: nama item, jumlah (qty), harga_satuan, diskon (jika ada potongan per item), dan subtotal.
+   - Formula per item: subtotal = (jumlah * harga_satuan) - diskon.
+
+2. **Kerucutkan ke Total Item (\`totalItem\`)**:
+   - Hitung total kotor dari seluruh item: \`totalItem\` = penjumlahan seluruh \`subtotal\` dari item di array \`item\`.
+   - Pastikan nilai \`totalItem\` konsisten dengan jumlah akumulasi subtotal array \`item\`.
+
+3. **Kerucutkan ke Total Belanja (\`total\`)**:
+   - \`diskon\` pada level struk adalah diskon/voucher/potongan transaksi secara keseluruhan.
+   - Formula Total Belanja: \`total\` = \`totalItem\` - \`diskon\`.
+   - Jika terdapat selisih pembulatan, biaya admin, biaya penanganan, kantong plastik/kresek, atau biaya membingungkan lainnya yang membuat \`total\` pada struk tidak sesuai dengan hitungan di atas, **MASUKKAN SELISIH BIAYA TERSEBUT SEBAGAI ITEM BARU** ke dalam array \`item\` dengan nama \`"Biaya lainnya"\` (kategori \`"Lain-lain"\`, jumlah 1, subtotal sesuai selisih).
+   - Pastikan secara mutlak matematika perhitungan konsisten: penjumlahan seluruh subtotal item = \`totalItem\`, dan \`totalItem\` - \`diskon\` = \`total\`.
+
+FORMAT OUTPUT JSON:
 Ekstrak informasi seluruh struk dalam format Array JSON yang berisi objek-objek struk dengan urutan yang sama (dari struk 1 hingga ${ocrDataBatch.length}):
 [
   {
     "nama_toko": "Nama toko/merchant",
     "tanggal": "YYYY-MM-DD",
     "total": 0,
+    "totalItem": 0,
+    "diskon": 0,
     "kategori_toko": "Kategori toko (opsional)",
     "item": [
       {
         "nama": "Nama item",
         "jumlah": 1,
         "harga_satuan": 0,
+        "diskon": 0,
         "subtotal": 0,
         "kategori": "Pilihan dari 10 kategori di bawah"
       }
     ]
-  },
-  ...
+  }
 ]
 
-Aturan Kategori Pengeluaran:
+${kategoriContext ? `${kategoriContext}\n` : `Aturan Kategori Pengeluaran:
 Kamu HANYA diizinkan mengklasifikasikan item ke dalam salah satu dari 10 kategori persis berikut (jangan membuat kategori baru):
 1. "Makanan & Minuman"
 2. "Perumahan & Utilitas"
@@ -142,21 +146,15 @@ Kamu HANYA diizinkan mengklasifikasikan item ke dalam salah satu dari 10 kategor
 8. "Perawatan Pribadi"
 9. "Pakaian"
 10. "Lain-lain"
-8. "Perawatan Pribadi"
-9. "Pakaian"
-10. "Lain-lain"
-
+`}
 Aturan WAJIB:
-1. Kembalikan array JSON berisi persis ${ocrDataBatch.length} object struk (sesuai jumlah struk pada input).
-2. Jika ada struk yang teksnya tidak jelas atau kosong, kembalikan object tersebut dengan array item kosong dan error: "error": "Gambar struk tidak jelas". Namun struktur lainnya (nama_toko dsb) tetap isi sebisanya.
-3. Selalu isi field nama_toko, tanggal, total, dan item.
+1. Kembalikan array JSON berisi persis ${ocrDataBatch.length} object struk.
+2. Jika ada struk yang teksnya tidak jelas atau kosong, kembalikan object tersebut dengan array item kosong dan error: "error": "Gambar struk tidak jelas".
+3. Selalu isi field nama_toko, tanggal, total, totalItem, diskon, dan item. Untuk field diskon (baik pada struk maupun item), isi 0 jika tidak ada.
 4. Jika nama_toko tidak ditemukan, gunakan "Tidak diketahui".
-5. Jika tanggal tidak ditemukan dalam teks, gunakan tanggal hari ini: ${currentDate}
-6. Tanggal harus format YYYY-MM-DD.
-7. Total adalah angka keseluruhan struk (bukan subtotal item). Jika tidak ada total, jumlahkan subtotal item.
-8. Harga dalam format number tanpa pemisah ribuan.
-9. Pastikan jumlah * harga_satuan = subtotal untuk setiap item.
-10. Return HANYA JSON array, tanpa markdown atau string tambahan lain.`;
+5. Jika tanggal tidak ditemukan, gunakan tanggal hari ini: ${currentDate} (format YYYY-MM-DD).
+6. Harga/nominal berupa angka (number) tanpa pemisah ribuan.
+7. Return HANYA JSON array murni, tanpa markdown (\`\`\`json) atau teks tambahan lain.`;
   }
 
   private validasiResponseBatch(text: string, expectedLength: number): ParsedStrukDto[] {

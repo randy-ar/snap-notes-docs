@@ -95,12 +95,12 @@ export class GeminiService {
     this.model = 'gemini-2.5-flash';
   }
 
-  async parseStrukOCR(rawText: string, lines?: OcrLine[], imageSize?: ImageSize): Promise<ParsedStrukDto> {
+  async parseStrukOCR(rawText: string): Promise<ParsedStrukDto> {
     try {
-      const prompt = this.buatPrompt(rawText, lines, imageSize);
+      const prompt = this.buatPrompt(rawText);
 
       const geminiPromise = this.genAI.models.generateContent({
-        model: this.model,
+        model: 'gemini-2.5-flash',
         contents: prompt,
         config: {
           responseMimeType: 'application/json',
@@ -132,50 +132,37 @@ export class GeminiService {
     }
   }
 
-  private buatPrompt(rawText: string, lines?: OcrLine[], imageSize?: ImageSize): string {
-    let layoutInfo = '';
-
-    if (lines && lines.length > 0 && imageSize) {
-      const lineInfo = lines.map((line) => {
-        const centerX = (line.boundingBox.left + line.boundingBox.right) / 2;
-        const centerY = (line.boundingBox.top + line.boundingBox.bottom) / 2;
-        const relativeX = (centerX / imageSize.width * 100).toFixed(1);
-        const relativeY = (centerY / imageSize.height * 100).toFixed(1);
-        const textPreview = line.text.substring(0, 40);
-        const ellipsis = line.text.length > 40 ? '...' : '';
-        return `[${line.lineIndex}] X:${relativeX}% Y:${relativeY}% | "${textPreview}${ellipsis}"`;
-      }).join('\n');
-
-      layoutInfo = `
-        INFO LAYOUT LINE POSISI (persentase dari ukuran gambar ${imageSize.width}x${imageSize.height}px):
-        ${lineInfo}
-        Analisis posisi:
-        - X 0-30% = Kolom kiri (biasanya nama item/produk)
-        - X 30-60% = Kolom tengah (biasanya qty/jumlah)
-        - X 60-100% = Kolom kanan (biasanya harga/total)
-        - Y urutan dari atas ke bawah menunjukkan urutan item
-        - lineIndex menunjukkan urutan baris dari atas ke bawah`;
-    }
-
+  private buatPrompt(rawText: string): string {
     const currentDate = new Date().toISOString().split('T')[0];
 
-    return `Anda adalah parser struk belanja. Analisis teks OCR berikut dan ekstrak informasi struk ke format JSON.
-      TEKS OCR:
-      ${layoutInfo}
-      Aturan WAJIB:
-      1. SELALU kembalikan semua field yang dibutuhkan, jangan biarkan kosong
-      2. Jika nama_toko tidak ditemukan, gunakan "Tidak diketahui"
-      3. Jika tanggal tidak ditemukan dalam teks, gunakan tanggal hari ini: ${currentDate}
-      4. Jika total tidak ditemukan, jumlahkan semua subtotal dari item untuk mendapatkan total
-      5. Jika tidak ada item produk sama sekali yang bisa diidentifikasi, return JSON dengan error message di field "error": "Gambar struk tidak jelas, mohon upload ulang"
-      6. Tanggal harus dalam format YYYY-MM-DD (konversi dari format Indonesia DD-MM-YYYY atau DD/MM/YYYY)
-      7. Total adalah angka total keseluruhan struk (bukan subtotal item)
-      8. Harga dalam format number tanpa pemisah ribuan (contoh: 10500 bukan 10.500)
-      9. Kategori bisa: Makanan & Minuman, Perumahan & Utilitas, Komunikasi, Transportasi, Kesehatan, Pendidikan, Hiburan, Perawatan Pribadi, Pakaian, Lain-lain
-      10. Pastikan jumlah * harga_satuan = subtotal untuk setiap item
-      11. Gunakan info posisi X untuk membedakan kolom: kiri=item, tengah=qty, kanan=harga
-      12. Jika ada teks seperti "1 5,000" di posisi tengah+kanan, interpretasikan sebagai qty=1, harga=5000
-      13. Gunakan info posisi X dan Y untuk memastikan pengelompokan item yang benar`;
+    return `Anda adalah parser struk belanja berbasis penalaran hierarkis & matematika finansial. Analisis teks OCR berikut dan ekstrak informasi struk ke format JSON.
+TEKS OCR:
+"""
+${rawText}
+"""
+
+METODOLOGI EKSTRAKSI KONTEKSTUAL (BERHAP):
+1. **Analisis Informasi Kunci Per Item (Array \`item\`)**:
+   - Ekstrak setiap item transaksi: nama item, jumlah (qty), harga_satuan, diskon (jika ada potongan per item), dan subtotal.
+   - Formula per item: subtotal = (jumlah * harga_satuan) - diskon.
+
+2. **Kerucutkan ke Total Item (\`totalItem\`)**:
+   - Hitung total kotor dari seluruh item: \`totalItem\` = penjumlahan seluruh \`subtotal\` dari item di array \`item\`.
+   - Pastikan nilai \`totalItem\` konsisten dengan jumlah akumulasi subtotal array \`item\`.
+
+3. **Kerucutkan ke Total Belanja (\`total\`)**:
+   - \`diskon\` pada level struk adalah diskon/voucher/potongan transaksi secara keseluruhan.
+   - Formula Total Belanja: \`total\` = \`totalItem\` - \`diskon\`.
+   - Jika terdapat selisih pembulatan, biaya admin, biaya penanganan, kantong plastik/kresek, atau biaya membingungkan lainnya yang membuat \`total\` pada struk tidak sesuai dengan hitungan di atas, **MASUKKAN SELISIH BIAYA TERSEBUT SEBAGAI ITEM BARU** ke dalam array \`item\` dengan nama \`"Biaya lainnya"\` (kategori \`"Lain-lain"\`, jumlah 1, subtotal sesuai selisih).
+   - Pastikan secara mutlak matematika perhitungan konsisten: penjumlahan seluruh subtotal item = \`totalItem\`, dan \`totalItem\` - \`diskon\` = \`total\`.
+
+Aturan WAJIB:
+1. SELALU kembalikan semua field yang dibutuhkan (\`nama_toko\`, \`tanggal\`, \`total\`, \`totalItem\`, \`diskon\`, \`item\`).
+2. Jika nama_toko tidak ditemukan, gunakan "Tidak diketahui".
+3. Jika tanggal tidak ditemukan dalam teks, gunakan tanggal hari ini: ${currentDate} (format YYYY-MM-DD).
+4. Jika tidak ada item produk sama sekali yang bisa diidentifikasi, return JSON dengan error message di field "error": "Gambar struk tidak jelas, mohon upload ulang".
+5. Harga/nominal berupa angka (number) tanpa pemisah ribuan.
+6. Kategori bisa: Makanan & Minuman, Perumahan & Utilitas, Komunikasi, Transportasi, Kesehatan, Pendidikan, Hiburan, Perawatan Pribadi, Pakaian, Lain-lain.`;
   }
 
   private validasiResponse(response: string): ParsedStrukDto {
