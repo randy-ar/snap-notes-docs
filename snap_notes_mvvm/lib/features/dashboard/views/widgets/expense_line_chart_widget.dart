@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:snap_notes_mvvm/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 
-const Color colorGreen = Color(0xFF22C55E); // Tailwind Green 500
-const Color colorRed = Color(0xFFEF4444); // Tailwind Red 500
+const Color colorGreen = Color(0xFF4ADE80); // Tailwind Green 400 (Soft Green)
+const Color colorRed = Color(0xFFF87171); // Tailwind Red 400 (Soft Red)
 
 class ExpenseLineChartWidget extends StatelessWidget {
   const ExpenseLineChartWidget({super.key});

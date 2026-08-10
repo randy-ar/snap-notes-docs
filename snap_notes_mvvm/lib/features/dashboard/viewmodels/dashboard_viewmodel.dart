@@ -17,11 +17,13 @@ class DashboardViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   // State untuk Heatmap (Kalender Pengeluaran & Pemasukan)
-  Map<DateTime, double>? _calendarPengeluaran;
-  Map<DateTime, double>? get calendarPengeluaran => _calendarPengeluaran;
+  final Map<DateTime, double> _calendarPengeluaranCache = {};
+  Map<DateTime, double> get calendarPengeluaran => _calendarPengeluaranCache;
 
-  Map<DateTime, double>? _calendarPemasukan;
-  Map<DateTime, double>? get calendarPemasukan => _calendarPemasukan;
+  final Map<DateTime, double> _calendarPemasukanCache = {};
+  Map<DateTime, double> get calendarPemasukan => _calendarPemasukanCache;
+
+  final Set<String> _loadedCalendarMonths = {};
 
   // State untuk Pie Chart (Kategori Pengeluaran)
   List<Map<String, dynamic>>? _kategoriData;
@@ -57,6 +59,11 @@ class DashboardViewModel extends ChangeNotifier {
 
   Future<void> initDashboard({int? bulan, int? tahun, bool force = false}) async {
     _focusMonth = DateTime(tahun ?? DateTime.now().year, bulan ?? DateTime.now().month, 1);
+    if (force) {
+      _calendarPengeluaranCache.clear();
+      _calendarPemasukanCache.clear();
+      _loadedCalendarMonths.clear();
+    }
     await Future.wait([
       loadRingkasan(bulan: _focusMonth.month, tahun: _focusMonth.year),
       loadMonthlyTrend(force: force),
@@ -82,14 +89,38 @@ class DashboardViewModel extends ChangeNotifier {
   }
 
   Future<void> loadCalendarData({int? bulan, int? tahun}) async {
+    final targetBulan = bulan ?? _focusMonth.month;
+    final targetTahun = tahun ?? _focusMonth.year;
+
+    // Ambil range bulan: targetBulan - 2 hingga targetBulan
+    final monthsToFetch = <DateTime>[];
+    for (int i = 2; i >= 0; i--) {
+      final date = DateTime(targetTahun, targetBulan - i, 1);
+      final key = '${date.year}-${date.month}';
+      if (!_loadedCalendarMonths.contains(key)) {
+        monthsToFetch.add(date);
+      }
+    }
+
+    if (monthsToFetch.isEmpty) {
+      notifyListeners();
+      return;
+    }
+
     _errorMessage = null;
     try {
-      final data = await _dashboardService.getKalender(
-        bulan: bulan,
-        tahun: tahun,
+      final results = await Future.wait(
+        monthsToFetch.map((d) => _dashboardService.getKalender(bulan: d.month, tahun: d.year)),
       );
-      _calendarPengeluaran = data['pengeluaran'];
-      _calendarPemasukan = data['pemasukan'];
+
+      for (int i = 0; i < monthsToFetch.length; i++) {
+        final d = monthsToFetch[i];
+        final key = '${d.year}-${d.month}';
+        final res = results[i];
+        _calendarPengeluaranCache.addAll(res['pengeluaran'] ?? {});
+        _calendarPemasukanCache.addAll(res['pemasukan'] ?? {});
+        _loadedCalendarMonths.add(key);
+      }
     } catch (e) {
       _errorMessage = e.toString();
     } finally {

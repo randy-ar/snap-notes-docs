@@ -1,7 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
-import 'package:snap_notes_mvvm/features/pengeluaran/models/pengeluaran.dart';
+import 'package:snap_notes_mvvm/features/dashboard/viewmodels/dashboard_viewmodel.dart';
 
 class ExpensePieChartWidget extends StatefulWidget {
   final List<Map<String, dynamic>> kategoriData;
@@ -14,6 +15,7 @@ class ExpensePieChartWidget extends StatefulWidget {
 
 class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
   int _touchedIndex = -1;
+  DateTime _selectedDate = DateTime.now();
 
   // Palette warna Tailwind yang modern & harmonis
   final List<Color> _colorPalette = const [
@@ -53,66 +55,64 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
 
     // 3. Jika tidak ada transaksi, tampilkan pie chart abu-abu placeholder
     if (categoryData.isEmpty) {
-      return Column(
-        children: [
-          Card(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      return Card(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Text('Kategori Pengeluaran').small().muted(),
-                  ],
-                ),
-                const Gap(16),
-                SizedBox(
-                  height: 220,
-                  child: PieChart(
-                    PieChartData(
-                      borderData: FlBorderData(show: false),
-                      sectionsSpace: 0,
-                      centerSpaceRadius: 0,
-                      sections: [
-                        PieChartSectionData(
-                          color: theme.colorScheme.muted,
-                          value: 1,
-                          title: 'Belum ada data',
-                          radius: 85,
-                          titleStyle: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: theme.colorScheme.mutedForeground,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const Gap(24),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.muted.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Total Pengeluaran').medium().muted(),
-                      Text(currencyFormat.format(0)).medium().semiBold(),
-                    ],
-                  ),
-                ),
+                Text('Kategori Pengeluaran').small().muted(),
+                _buildMonthPickerButton(context),
               ],
             ),
-          ),
-          const Gap(8),
-          Text(
-            'Belum ada data pengeluaran di bulan ${_getMonthName(currentMonth)} $currentYear.',
-            textAlign: TextAlign.center,
-          ).xSmall().muted(),
-        ],
+            const Gap(16),
+            SizedBox(
+              height: 220,
+              child: PieChart(
+                PieChartData(
+                  borderData: FlBorderData(show: false),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 0,
+                  sections: [
+                    PieChartSectionData(
+                      color: theme.colorScheme.muted,
+                      value: 1,
+                      title: 'Belum ada data',
+                      radius: 85,
+                      titleStyle: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: theme.colorScheme.mutedForeground,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const Gap(24),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.muted.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Total Pengeluaran').medium().muted(),
+                  Text(currencyFormat.format(0)).medium().semiBold(),
+                ],
+              ),
+            ),
+            const Gap(12),
+            Text(
+              'Belum ada data pengeluaran di bulan ${_getMonthName(_selectedDate.month)} ${_selectedDate.year}.',
+              textAlign: TextAlign.center,
+            ).xSmall().muted(),
+          ],
+        ),
       );
     }
 
@@ -164,8 +164,10 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Kategori Pengeluaran').small().muted(),
+              _buildMonthPickerButton(context),
             ],
           ),
           const Gap(16),
@@ -231,6 +233,143 @@ class _ExpensePieChartWidgetState extends State<ExpensePieChartWidget> {
                 ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMonthPickerButton(BuildContext context) {
+    return Builder(
+      builder: (popoverContext) {
+        return GhostButton(
+          density: ButtonDensity.compact,
+          onPressed: () {
+            showPopover(
+              context: popoverContext,
+              alignment: Alignment.bottomRight,
+              builder: (overlayContext) {
+                return _MonthPickerPopover(
+                  initialDate: _selectedDate,
+                  onSelected: (date) {
+                    closeOverlay(overlayContext);
+                    setState(() {
+                      _selectedDate = date;
+                    });
+                    popoverContext.read<DashboardViewModel>().loadKategoriData(
+                          bulan: date.month,
+                          tahun: date.year,
+                        );
+                  },
+                );
+              },
+            );
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('${_getMonthName(_selectedDate.month)} ${_selectedDate.year}')
+                  .xSmall()
+                  .medium(),
+              const Gap(4),
+              const Icon(LucideIcons.chevronDown, size: 14),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _MonthPickerPopover extends StatefulWidget {
+  final DateTime initialDate;
+  final ValueChanged<DateTime> onSelected;
+
+  const _MonthPickerPopover({
+    required this.initialDate,
+    required this.onSelected,
+  });
+
+  @override
+  State<_MonthPickerPopover> createState() => _MonthPickerPopoverState();
+}
+
+class _MonthPickerPopoverState extends State<_MonthPickerPopover> {
+  late int _displayYear;
+
+  @override
+  void initState() {
+    super.initState();
+    _displayYear = widget.initialDate.year;
+  }
+
+  static const _months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+    'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return ModalContainer(
+      padding: const EdgeInsets.all(12),
+      child: SizedBox(
+        width: 220,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton.ghost(
+                  icon: const Icon(LucideIcons.chevronLeft, size: 16),
+                  onPressed: () {
+                    setState(() {
+                      _displayYear--;
+                    });
+                  },
+                ),
+                Text('$_displayYear').small().bold(),
+                IconButton.ghost(
+                  icon: const Icon(LucideIcons.chevronRight, size: 16),
+                  onPressed: () {
+                    setState(() {
+                      _displayYear++;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const Gap(8),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 2.2,
+                crossAxisSpacing: 6,
+                mainAxisSpacing: 6,
+              ),
+              itemCount: 12,
+              itemBuilder: (context, index) {
+                final isSelected = widget.initialDate.year == _displayYear &&
+                    widget.initialDate.month == (index + 1);
+                return GhostButton(
+                  density: ButtonDensity.compact,
+                  onPressed: () {
+                    widget.onSelected(DateTime(_displayYear, index + 1));
+                  },
+                  child: Text(
+                    _months[index],
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      color: isSelected ? theme.colorScheme.primary : null,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

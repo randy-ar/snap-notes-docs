@@ -1,10 +1,8 @@
 import { Injectable, NotFoundException, ForbiddenException, UnprocessableEntityException, ServiceUnavailableException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { LLMFactory } from '../common/llm/llm.factory';
-import { ParsedStrukDto } from '../common/llm/llm-provider.interface';
+import { GeminiService, ParsedStrukDto } from '../common/gemini/gemini.service';
 import { StorageService } from '../common/storage/storage.service';
 import { ScanStrukBatchDto, OcrDataDto } from './dto/scan-struk.dto';
-import { ReparseStrukDto } from './dto/reparse-struk.dto';
 import { UpdateStrukDto } from './dto/update-struk.dto';
 import { StrukResponseDto, ItemStrukResponseDto } from './dto/struk-response.dto';
 
@@ -12,7 +10,7 @@ import { StrukResponseDto, ItemStrukResponseDto } from './dto/struk-response.dto
 export class StrukService {
   constructor(
     private prisma: PrismaService,
-    private llmFactory: LLMFactory,
+    private geminiService: GeminiService,
     private storageService: StorageService,
   ) {}
 
@@ -40,11 +38,10 @@ export class StrukService {
     }
 
     let parsedDataArray: ParsedStrukDto[];
-    const llmProvider = this.llmFactory.getProvider();
 
     try {
       const kategoriContext = await this.getKategoriContext(penggunaId);
-      parsedDataArray = await llmProvider.parseStrukOCRBatch(
+      parsedDataArray = await this.geminiService.parseStrukOCRBatch(
         dto.ocrDataBatch,
         dto.ocrDataBatch[0]?.customPrompt, // Gunakan prompt custom pertama jika ada
         kategoriContext
@@ -88,9 +85,10 @@ export class StrukService {
         let itemKategoriNama: string | null = null;
 
         if (item.kategori) {
-          // Cari kategori di memori alih-alih query DB
+          // Cari kategori di memori berdasarkan ID atau Nama
+          const target = item.kategori.trim().toLowerCase();
           const itemKategori = semuaKategori.find((k) =>
-            k.nama.toLowerCase().includes(item.kategori!.toLowerCase())
+            k.id === item.kategori || k.nama.toLowerCase().includes(target)
           );
           itemKategoriId = itemKategori?.id || null;
           itemKategoriNama = itemKategori?.nama || null;
@@ -129,22 +127,26 @@ export class StrukService {
       let kategoriId: string | null = dominanKategoriId;
       let kategoriNama: string | null = dominanKategoriNama;
 
-      // Fallback 1: Jika tidak ada kategori item, gunakan kategori_toko
-      if (!kategoriId && parsedData.kategori_toko) {
-        const kategoriToko = semuaKategori.find((k) =>
-          k.nama.toLowerCase().includes(parsedData.kategori_toko!.toLowerCase())
-        );
-        kategoriId = kategoriToko?.id || null;
-        kategoriNama = kategoriToko?.nama || null;
+      // Fallback 1: Gunakan kategori tingkat struk dari Gemini (ID/Nama) atau kategori_toko
+      if (!kategoriId) {
+        const rootCat = parsedData.kategori || parsedData.kategori_toko;
+        if (rootCat) {
+          const target = rootCat.trim().toLowerCase();
+          const foundKategori = semuaKategori.find((k) =>
+            k.id === rootCat || k.nama.toLowerCase().includes(target)
+          );
+          kategoriId = foundKategori?.id || null;
+          kategoriNama = foundKategori?.nama || null;
+        }
       }
 
-      // Fallback 2: Jika masih null, gunakan kategori 'Lainnya' (PENGELUARAN)
+      // Fallback 2: Jika masih null, gunakan kategori 'Lain-lain' (PENGELUARAN)
       if (!kategoriId) {
-        const kategoriLainnya = semuaKategori.find(
-          (k) => k.nama === 'Lainnya' && k.jenis === 'PENGELUARAN' && k.adalahPreset
+        const kategoriLainlain = semuaKategori.find(
+          (k) => (k.nama === 'Lain-lain' || k.nama === 'Lainnya') && k.jenis === 'PENGELUARAN' && k.adalahPreset
         );
-        kategoriId = kategoriLainnya?.id || null;
-        kategoriNama = kategoriLainnya?.nama || null;
+        kategoriId = kategoriLainlain?.id || null;
+        kategoriNama = kategoriLainlain?.nama || null;
       }
 
       responseDtos.push({
@@ -253,7 +255,8 @@ export class StrukService {
           penggunaId,
           strukId: createdStruk.id,
           kategoriId: receiptData.kategoriId || null,
-          deskripsi: `Pembelian di ${receiptData.namaToko}`,
+          deskripsi: receiptData.namaToko,
+          catatan: `Pembelian di ${receiptData.namaToko}`,
           jumlah: receiptData.total,
           tanggal: new Date(receiptData.tanggalBelanja),
         },
@@ -266,184 +269,6 @@ export class StrukService {
     console.log(`[saveAnalyzedStruk] Completed in ${endTime - startTime}ms for penggunaId: ${penggunaId}`);
 
     return this.mapToResponseDto(struk);
-  }
-
-  async reparseStruk(penggunaId: string, id: string, dto: ReparseStrukDto): Promise<StrukResponseDto> {
-    const startTime = Date.now();
-
-    const existingStruk = await this.prisma.struk.findUnique({
-      where: { id },
-    });
-
-    if (!existingStruk) {
-      throw new NotFoundException('Struk tidak ditemukan');
-    }
-
-    if (existingStruk.penggunaId !== penggunaId) {
-      throw new ForbiddenException('Anda tidak memiliki akses ke struk ini');
-    }
-
-    if (!existingStruk.rawTextOcr) {
-      throw new UnprocessableEntityException('Data OCR tidak tersedia untuk struk ini');
-    }
-
-    let ocrData: OcrDataDto;
-    try {
-      ocrData = JSON.parse(existingStruk.rawTextOcr) as OcrDataDto;
-    } catch {
-      throw new UnprocessableEntityException('Format ocrData JSON tidak valid pada struk yang ada');
-    }
-
-    let parsedData: ParsedStrukDto;
-    const llmProvider = this.llmFactory.getProvider();
-
-    try {
-      const kategoriContext = await this.getKategoriContext(penggunaId);
-      const parsedDataArray = await llmProvider.parseStrukOCRBatch(
-        [ocrData],
-        dto.prompt,
-        kategoriContext
-      );
-      parsedData = parsedDataArray[0];
-    } catch (error) {
-      if (error instanceof ServiceUnavailableException || error instanceof UnprocessableEntityException) {
-        throw error;
-      }
-      throw new ServiceUnavailableException('Gagal memproses ulang struk dengan AI');
-    }
-
-    // Resolusi kategori untuk setiap item struk dan tentukan kategori utama struk
-    const resolvedItems: {
-      nama: string;
-      jumlah: number;
-      hargaSatuan: number;
-      subtotal: number;
-      kategoriId: string | null;
-    }[] = [];
-    const subtotalPerKategori: Record<string, number> = {};
-
-    for (const item of parsedData.item) {
-      let itemKategoriId: string | null = null;
-
-      if (item.kategori) {
-        const itemKategori = await this.prisma.kategori.findFirst({
-          where: {
-            OR: [
-              { nama: { contains: item.kategori, mode: 'insensitive' }, adalahPreset: true },
-              { nama: { contains: item.kategori, mode: 'insensitive' }, penggunaId },
-            ],
-          },
-        });
-        itemKategoriId = itemKategori?.id || null;
-      }
-
-      const subtotal = item.subtotal || (item.jumlah * item.harga_satuan);
-      if (itemKategoriId) {
-        subtotalPerKategori[itemKategoriId] = (subtotalPerKategori[itemKategoriId] || 0) + subtotal;
-      }
-
-      resolvedItems.push({
-        nama: item.nama,
-        jumlah: item.jumlah,
-        hargaSatuan: item.harga_satuan,
-        subtotal,
-        kategoriId: itemKategoriId,
-      });
-    }
-
-    // Cari kategori item yang dominan (subtotal terbesar)
-    let dominanKategoriId: string | null = null;
-    let maxSubtotal = -1;
-    for (const [catId, subtotal] of Object.entries(subtotalPerKategori)) {
-      if (subtotal > maxSubtotal) {
-        maxSubtotal = subtotal;
-        dominanKategoriId = catId;
-      }
-    }
-
-    let kategoriId: string | null = dominanKategoriId;
-
-    // Fallback 1: Jika tidak ada kategori item, gunakan kategori_toko
-    if (!kategoriId && parsedData.kategori_toko) {
-      const kategoriToko = await this.prisma.kategori.findFirst({
-        where: {
-          OR: [
-            { nama: { contains: parsedData.kategori_toko, mode: 'insensitive' }, adalahPreset: true },
-            { nama: { contains: parsedData.kategori_toko, mode: 'insensitive' }, penggunaId },
-          ],
-        },
-      });
-      kategoriId = kategoriToko?.id || null;
-    }
-
-    // Fallback 2: Jika masih null, gunakan kategori 'Lainnya' (PENGELUARAN)
-    if (!kategoriId) {
-      const kategoriLainnya = await this.prisma.kategori.findFirst({
-        where: {
-          nama: 'Lainnya',
-          jenis: 'PENGELUARAN',
-          adalahPreset: true,
-        },
-      });
-      kategoriId = kategoriLainnya?.id || null;
-    }
-
-    const updatedStruk = await this.prisma.$transaction(async (tx) => {
-      // Delete existing itemStruks
-      await tx.itemStruk.deleteMany({
-        where: { strukId: id },
-      });
-
-      // Update Struk
-      const strukResult = await tx.struk.update({
-        where: { id },
-        data: {
-          kategoriId,
-          namaToko: parsedData.nama_toko,
-          tanggalBelanja: new Date(parsedData.tanggal),
-          total: parsedData.total,
-        },
-        include: {
-          kategori: true,
-        },
-      });
-
-      const items = await Promise.all(
-        resolvedItems.map(resolvedItem => 
-          tx.itemStruk.create({
-            data: {
-              strukId: id,
-              kategoriId: resolvedItem.kategoriId,
-              namaItem: resolvedItem.nama,
-              jumlah: resolvedItem.jumlah,
-              hargaSatuan: resolvedItem.hargaSatuan,
-              subtotal: resolvedItem.subtotal,
-            },
-            include: {
-              kategori: true,
-            },
-          })
-        )
-      );
-
-      // Update Pengeluaran
-      await tx.pengeluaran.updateMany({
-        where: { strukId: id },
-        data: {
-          kategoriId,
-          deskripsi: `Pembelian di ${parsedData.nama_toko}`,
-          jumlah: parsedData.total,
-          tanggal: new Date(parsedData.tanggal),
-        },
-      });
-
-      return { ...strukResult, itemStruks: items };
-    }, { timeout: 15000 });
-
-    const endTime = Date.now();
-    console.log(`[reparseStruk] Completed in ${endTime - startTime}ms for penggunaId: ${penggunaId}, strukId: ${id}`);
-
-    return this.mapToResponseDto(updatedStruk);
   }
 
   async getDaftarStruk(penggunaId: string, query?: { bulan?: number; tahun?: number }): Promise<StrukResponseDto[]> {
@@ -551,7 +376,10 @@ export class StrukService {
       if (dto.total || dto.namaToko || dto.kategoriId || dto.tanggalBelanja) {
         const pengeluaranUpdateData: any = {};
         if (dto.total) pengeluaranUpdateData.jumlah = dto.total;
-        if (dto.namaToko) pengeluaranUpdateData.deskripsi = `Pembelian di ${dto.namaToko}`;
+        if (dto.namaToko) {
+          pengeluaranUpdateData.deskripsi = dto.namaToko;
+          pengeluaranUpdateData.catatan = `Pembelian di ${dto.namaToko}`;
+        }
         if (dto.kategoriId) pengeluaranUpdateData.kategoriId = dto.kategoriId;
         if (dto.tanggalBelanja) pengeluaranUpdateData.tanggal = new Date(dto.tanggalBelanja);
 
@@ -685,16 +513,16 @@ export class StrukService {
     });
 
     const presetDescriptions: Record<string, string> = {
-      'Makanan & Minuman': 'Padi-padian, umbi-umbian, ikan, daging, telur, susu, sayuran, kacang, buah, minyak, bumbu, minuman siap saji, rokok, tembakau',
-      'Perumahan & Utilitas': 'Sewa rumah, listrik, air, gas LPG, minyak tanah, kayu bakar, pemeliharaan rumah, iuran kebersihan/keamanan',
-      'Komunikasi': 'Pulsa HP, paket data, tagihan telepon, biaya internet/warnet, ongkos kirim paket',
-      'Transportasi': 'Bensin, solar, ongkos transportasi umum, tiket perjalanan, biaya tol, parkir',
-      'Kesehatan': 'Obat-obatan, vitamin, biaya dokter/klinik/rumah sakit, iuran BPJS Kesehatan',
-      'Pendidikan': 'Uang sekolah, buku pelajaran, alat tulis, kursus/les, biaya pendidikan lainnya',
-      'Hiburan': 'Tiket rekreasi/bioskop, mainan, hobi, langganan streaming, penginapan/hotel',
-      'Perawatan Pribadi': 'Sabun mandi, pasta gigi, sampo, kosmetik, skincare, parfum, potong rambut/salon',
-      'Pakaian': 'Baju, celana, alas kaki (sepatu/sandal), tutup kepala (topi/jilbab), bahan pakaian, ongkos jahit',
-      'Lain-lain': 'Pajak (PBB/kendaraan), asuransi, barang tahan lama (perabot/elektronik/kendaraan), keperluan pesta/upacara (pernikahan/ulang tahun)',
+      'Makanan & Minuman': '[Standard BPS: Kelompok Makanan] Padi-padian, umbi-umbian, ikan, daging, telur, susu, sayuran, kacang, buah, minyak, bumbu, minuman siap saji, rokok, tembakau',
+      'Perumahan & Utilitas': '[Standard BPS: Kelompok Bukan Makanan - Utilitas] Sewa rumah, listrik, air, gas LPG, minyak tanah, pemeliharaan rumah, iuran kebersihan/keamanan',
+      'Komunikasi': '[Standard BPS: Kelompok Bukan Makanan - Komunikasi Digital] Pulsa HP, paket data, tagihan telepon, biaya internet, ongkos kirim paket',
+      'Transportasi': '[Standard BPS: Kelompok Bukan Makanan - Mobilisasi] Bensin, solar, ongkos transportasi umum, tiket perjalanan, biaya tol, parkir',
+      'Kesehatan': '[Standard BPS: Kelompok Bukan Makanan - Medis] Obat-obatan, vitamin, biaya dokter/klinik/rumah sakit, iuran BPJS Kesehatan',
+      'Pendidikan': '[Standard BPS: Kelompok Bukan Makanan - Edukasi] Uang sekolah/kuliah, buku pelajaran, alat tulis, kursus/les, biaya pendidikan',
+      'Hiburan': '[Standard BPS: Kelompok Bukan Makanan - Rekreasi & Gaya Hidup] Tiket rekreasi/bioskop, mainan, hobi, langganan streaming, penginapan/hotel',
+      'Perawatan Pribadi': '[Standard BPS: Kelompok Bukan Makanan - Higienitas Diri] Sabun mandi, pasta gigi, sampo, kosmetik, skincare, parfum, potong rambut/salon',
+      'Pakaian': '[Standard BPS: Kelompok Bukan Makanan - Sandang] Baju, celana, alas kaki (sepatu/sandal), tutup kepala (topi/jilbab), bahan pakaian, ongkos jahit',
+      'Lain-lain': '[Standard BPS: Kelompok Bukan Makanan - Barang Tahan Lama & Jasa Lain] Pajak (PBB/kendaraan), asuransi, perabot/elektronik, keperluan pesta/upacara',
       'Saku': 'Uang jatah bulanan/mingguan dari orang tua',
       'Gaji': 'Hasil part-time, pekerjaan tetap, upah',
       'Beasiswa': 'Pencairan dana beasiswa',
@@ -709,6 +537,6 @@ export class StrukService {
       return `- [${k.id}] ${k.nama}${desc}`;
     });
 
-    return `KATEGORI PENGELUARAN YANG TERSEDIA:\n${lines.join('\n')}\n(Gunakan ID kategori dari daftar di atas. Jika tidak ada yang cocok, gunakan kategori 'Lainnya')`;
+    return `KATEGORI PENGELUARAN YANG TERSEDIA:\n${lines.join('\n')}\n(Gunakan ID kategori dari daftar di atas. Jika tidak ada yang cocok, gunakan kategori 'Lain-lain')`;
   }
 }

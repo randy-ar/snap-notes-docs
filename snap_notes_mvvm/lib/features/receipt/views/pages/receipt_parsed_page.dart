@@ -1195,112 +1195,92 @@ class _ManualEditSheetState extends State<_ManualEditSheet> {
             ),
             const Gap(8),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      shadcn.FormField(
-                        key: shadcn.TextFieldKey('itemQty_$index'),
-                        label: const Text('Jumlah').xSmall().muted(),
-                        validator: const shadcn.NotEmptyValidator(message: 'Jumlah tidak boleh kosong'),
-                        showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
-                        child: shadcn.TextField(
-                          controller: group.quantityController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [RupiahInputFormatter()],
-                          onChanged: (_) => _recalculateItemTotal(group),
+                  flex: 1,
+                  child: shadcn.FormField(
+                    key: shadcn.TextFieldKey('itemQty_$index'),
+                    label: const Text('Jumlah').xSmall().muted(),
+                    validator: const shadcn.NotEmptyValidator(message: 'Wajib diisi') &
+                        shadcn.ValidationMode(
+                          shadcn.ConditionalValidator((value) async {
+                            if (value == null) return false;
+                            final qty = int.tryParse(value.toString());
+                            return qty != null && qty >= 1;
+                          }, message: 'Min 1'),
+                          mode: {shadcn.FormValidationMode.submitted},
                         ),
-                      ),
-                    ],
+                    showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+                    child: shadcn.TextField(
+                      controller: group.quantityController,
+                      keyboardType: TextInputType.number,
+                      placeholder: const Text('1'),
+                      onChanged: (_) => _recalculateItemTotal(group),
+                    ),
                   ),
                 ),
                 const Gap(12),
                 Expanded(
-                  flex: 3,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      shadcn.FormField(
-                        key: shadcn.TextFieldKey('itemPrice_$index'),
-                        label: const Text('Harga Satuan (Rp)').xSmall().muted(),
-                        validator: const shadcn.NotEmptyValidator(message: 'Harga tidak boleh kosong'),
-                        showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
-                        child: shadcn.TextField(
-                          controller: group.priceController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [RupiahInputFormatter()],
-                          onChanged: (_) => _recalculateItemTotal(group),
-                          features: [
-                            shadcn.InputLeadingFeature(
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 12.0,
-                                  right: 8.0,
-                                ),
-                                child: Text(
-                                  'Rp',
-                                  style: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.mutedForeground,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  flex: 2,
+                  child: shadcn.FormField(
+                    key: shadcn.TextFieldKey('itemPrice_$index'),
+                    label: const Text('Harga Satuan').xSmall().muted(),
+                    validator: const shadcn.NotEmptyValidator(message: 'Harga tidak boleh kosong'),
+                    showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+                    child: shadcn.TextField(
+                      controller: group.priceController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [RupiahInputFormatter()],
+                      placeholder: const Text('0'),
+                      onChanged: (_) => _recalculateItemTotal(group),
+                      features: const [
+                        shadcn.InputFeature.leading(Text('Rp ')),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
             const Gap(8),
-            shadcn.FormField(
-              key: shadcn.TextFieldKey('itemDiscount_$index'),
-              label: const Text('Diskon Item (Rp)').xSmall().muted(),
-              showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
-              child: shadcn.TextField(
-                controller: group.discountController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [RupiahInputFormatter()],
-                onChanged: (_) => _recalculateItemTotal(group),
-                placeholder: const Text('Opsional'),
-                features: [
-                  shadcn.InputLeadingFeature(
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12.0, right: 8.0),
-                      child: Text(
-                        'Rp',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.mutedForeground,
-                        ),
-                      ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: shadcn.FormField(
+                    key: shadcn.TextFieldKey('itemDiscount_$index'),
+                    label: const Text('Diskon Item').xSmall().muted(),
+                    showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+                    child: shadcn.TextField(
+                      controller: group.discountController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [RupiahInputFormatter()],
+                      onChanged: (_) => _recalculateItemTotal(group),
+                      placeholder: const Text('0'),
+                      features: const [
+                        shadcn.InputFeature.leading(Text('Rp ')),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            const Gap(8),
-            const Text('Subtotal / Total Harga Item (Rp)').xSmall().muted(),
-            const Gap(4),
-            shadcn.TextField(
-              controller: group.totalPriceController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [RupiahInputFormatter()],
-              onChanged: (_) => _recalculateGrandTotal(),
-              readOnly: true,
-              features: [
-                shadcn.InputLeadingFeature(
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12.0, right: 8.0),
-                    child: Text(
-                      'Rp',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.mutedForeground,
-                      ),
+                ),
+                const Gap(12),
+                Expanded(
+                  flex: 1,
+                  child: shadcn.FormField(
+                    key: shadcn.TextFieldKey('itemTotal_$index'),
+                    label: const Text('Subtotal Item').xSmall().muted(),
+                    showErrors: const {shadcn.FormValidationMode.changed, shadcn.FormValidationMode.submitted},
+                    child: shadcn.TextField(
+                      controller: group.totalPriceController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [RupiahInputFormatter()],
+                      onChanged: (_) => _recalculateGrandTotal(),
+                      placeholder: const Text('0'),
+                      readOnly: true,
+                      features: const [
+                        shadcn.InputFeature.leading(Text('Rp ')),
+                      ],
                     ),
                   ),
                 ),

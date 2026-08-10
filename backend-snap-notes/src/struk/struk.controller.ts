@@ -4,7 +4,6 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes, ApiBody
 import { SupabaseAuthGuard } from '../auth/guards/supabase-auth.guard';
 import { StrukService } from './struk.service';
 import { ScanStrukBatchDto } from './dto/scan-struk.dto';
-import { ReparseStrukDto } from './dto/reparse-struk.dto';
 import { UpdateStrukDto } from './dto/update-struk.dto';
 import { StrukResponseDto } from './dto/struk-response.dto';
 import { QueryStrukDto } from './dto/query-struk.dto';
@@ -68,28 +67,6 @@ export class StrukController {
     @Body('receiptData') receiptData: string,
   ): Promise<StrukResponseDto> {
     return this.strukService.saveAnalyzedStruk(req.user.id, file, receiptData);
-  }
-
-  @Post(':id/reparse')
-  @UseGuards(SupabaseAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Proses ulang struk dengan memberikan konteks AI (Koreksi)' })
-  @ApiBody({
-    description: 'Konteks tambahan untuk AI',
-    type: ReparseStrukDto,
-  })
-  @ApiResponse({ status: 200, description: 'Struk berhasil diproses ulang', type: StrukResponseDto })
-  @ApiResponse({ status: 400, description: 'Data tidak valid' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 404, description: 'Struk tidak ditemukan' })
-  @ApiResponse({ status: 503, description: 'Service AI tidak tersedia' })
-  async reparseStruk(
-    @Req() req: RequestWithUser,
-    @Param('id') id: string,
-    @Body() dto: ReparseStrukDto,
-  ): Promise<StrukResponseDto> {
-    return this.strukService.reparseStruk(req.user.id, id, dto);
   }
 
   @Get()

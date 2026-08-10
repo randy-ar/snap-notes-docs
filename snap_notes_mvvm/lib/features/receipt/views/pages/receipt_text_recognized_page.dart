@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
+import 'package:snap_notes_mvvm/core/utils/toast_formatter.dart';
 import 'package:snap_notes_mvvm/features/receipt/models/recognized_text.dart';
 import 'package:snap_notes_mvvm/features/receipt/viewmodels/receipt_viewmodel.dart';
 import 'package:snap_notes_mvvm/features/receipt/views/pages/receipt_parsed_page.dart';
@@ -41,46 +42,65 @@ class _ReceiptTextRecognizedPageState extends State<ReceiptTextRecognizedPage> {
     });
   }
 
-  void submitAnalisis() {
+  Future<void> submitAnalisis() async {
     final viewModel = context.read<ReceiptViewModel>();
-    // Backend returns parsed JSON from Gemini API, saving it to viewModel state.
-    // We don't await because we want the loading overlay to show.
-    viewModel.uploadToServer(null).then((_) {
-      if (mounted && viewModel.receiptDetail != null) {
+    await viewModel.uploadToServer(null);
+    if (!mounted) return;
+    if (viewModel.receiptDetail != null || viewModel.batchReceipts.isNotEmpty) {
+      final receipt = viewModel.receiptDetail ?? viewModel.batchReceipts.first;
+      final image = widget.image ?? viewModel.selectedImage ?? (viewModel.selectedImages.isNotEmpty ? viewModel.selectedImages.first : null);
+      if (image != null) {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider.value(
               value: viewModel,
               child: ReceiptParsedPage(
                 isBatchMode: false,
-                image: widget.image!,
-                receipt: viewModel.receiptDetail!,
+                image: image,
+                receipt: receipt,
               ),
             ),
           ),
         );
       }
-    });
+    } else if (viewModel.errorMessage != null) {
+      showToast(
+        context: context,
+        builder: (context, overlay) => ToastFormatter.error(
+          'Gagal Menganalisis Struk',
+          viewModel.errorMessage,
+        ),
+      );
+    }
   }
 
-  void submitBatchAnalisis() {
+  Future<void> submitBatchAnalisis() async {
     final viewModel = context.read<ReceiptViewModel>();
-    viewModel.uploadBatchToServer(null).then((_) {
-      if (mounted && viewModel.batchReceipts.isNotEmpty) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => ChangeNotifierProvider.value(
-              value: viewModel,
-              child: ReceiptParsedPage(
-                isBatchMode: true,
-                images: widget.images,
-                receipts: viewModel.batchReceipts,
-              ),
+    await viewModel.uploadBatchToServer(null);
+    if (!mounted) return;
+    if (viewModel.batchReceipts.isNotEmpty) {
+      final images = widget.images ?? viewModel.selectedImages;
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider.value(
+            value: viewModel,
+            child: ReceiptParsedPage(
+              isBatchMode: true,
+              images: images,
+              receipts: viewModel.batchReceipts,
             ),
           ),
-        );
-      }
-    });
+        ),
+      );
+    } else if (viewModel.errorMessage != null) {
+      showToast(
+        context: context,
+        builder: (context, overlay) => ToastFormatter.error(
+          'Gagal Menganalisis Struk',
+          viewModel.errorMessage,
+        ),
+      );
+    }
   }
 
   // ---------------------------------------------------------------------------

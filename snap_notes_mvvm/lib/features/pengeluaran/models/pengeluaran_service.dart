@@ -165,7 +165,7 @@ class PengeluaranService {
       }
 
       final strukData = {
-        'namaToko': deskripsi?.replaceAll('Pembelian di ', '') ?? deskripsi,
+        'namaToko': deskripsi,
         'total': jumlah,
         'totalItem': totalItem,
         'diskon': totalDiscount > 0 ? totalDiscount : null,

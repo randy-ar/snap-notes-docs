@@ -52,6 +52,7 @@ class _MainPageState extends State<MainPage> {
             bottom: 24,
             right: 24,
             child: PrimaryButton(
+              size: ButtonSize.large,
               shape: ButtonShape.circle,
               onPressed: () {
                 Navigator.of(context).push(
@@ -63,7 +64,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                 );
               },
-              child: const Icon(LucideIcons.scanLine),
+              child: const Icon(LucideIcons.scanLine, size: 28),
             ),
           ),
         ],

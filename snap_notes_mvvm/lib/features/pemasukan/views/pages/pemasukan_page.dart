@@ -359,34 +359,55 @@ class PemasukanView extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text('Total Pemasukan').muted(),
-                                  isGoodTrending
-                                      ? SecondaryBadge(
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Icon(
-                                                LucideIcons.trendingUp,
-                                                size: 14,
-                                                color: Theme.of(context).colorScheme.primary,
-                                              ),
-                                              const Gap(4),
-                                              Text(percentageText),
-                                            ],
-                                          ),
-                                        )
-                                      : DestructiveBadge(
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Icon(
-                                                LucideIcons.trendingDown,
-                                                size: 14,
-                                              ),
-                                              const Gap(4),
-                                              Text(percentageText),
-                                            ],
-                                          ),
+                                  Builder(
+                                    builder: (context) {
+                                      final isNegative = percentageChange < 0;
+                                      final isPositive = percentageChange > 0;
+
+                                      Color bgColor = Theme.of(context).colorScheme.muted;
+                                      Color textColor = Theme.of(context).colorScheme.foreground;
+
+                                      if (isPositive) {
+                                        bgColor = const Color(0xFFDCFCE7); // Soft Green 100
+                                        textColor = const Color(0xFF15803D); // Green 700
+                                      } else if (isNegative) {
+                                        bgColor = const Color(0xFFFEE2E2); // Soft Red 100
+                                        textColor = const Color(0xFFB91C1C); // Red 700
+                                      }
+
+                                      return Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 4,
                                         ),
+                                        decoration: BoxDecoration(
+                                          color: bgColor,
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              isNegative
+                                                  ? LucideIcons.trendingDown
+                                                  : LucideIcons.trendingUp,
+                                              size: 14,
+                                              color: textColor,
+                                            ),
+                                            const Gap(4),
+                                            Text(
+                                              percentageText,
+                                              style: TextStyle(
+                                                color: textColor,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ],
                               ),
                               const Gap(16),

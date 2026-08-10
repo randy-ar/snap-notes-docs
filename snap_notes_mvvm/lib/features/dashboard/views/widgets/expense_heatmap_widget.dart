@@ -169,7 +169,13 @@ class _ExpenseHeatmapWidgetState extends State<ExpenseHeatmapWidget> {
                   const SizedBox.shrink(),
             ),
             onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
+              setState(() {
+                _focusedDay = focusedDay;
+              });
+              context.read<DashboardViewModel>().loadCalendarData(
+                    bulan: focusedDay.month,
+                    tahun: focusedDay.year,
+                  );
             },
             onDaySelected: (selectedDay, focusedDay) {
               setState(() {

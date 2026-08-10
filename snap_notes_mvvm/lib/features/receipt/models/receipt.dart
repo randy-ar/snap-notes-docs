@@ -162,7 +162,7 @@ class ReceiptItem extends Equatable {
     return ReceiptItem(
       id: json['id'] as String?,
       name: json['namaItem'] as String,
-      quantity: json['jumlah'] as int,
+      quantity: (json['jumlah'] as num).toInt(),
       price: (json['hargaSatuan'] as num).toDouble(),
       discount: json['diskon'] != null
           ? (json['diskon'] as num).toDouble()
