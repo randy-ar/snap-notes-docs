@@ -212,6 +212,77 @@ class ExpenseLineChartWidget extends StatelessWidget {
                 minY: 0,
                 maxY: maxVal,
                 lineTouchData: LineTouchData(
+                  enabled: true,
+                  handleBuiltInTouches: true,
+                  touchSpotThreshold: 50,
+                  touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
+                    if (event is! FlTapUpEvent && event is! FlPanEndEvent) return;
+                    if (touchResponse == null || touchResponse.lineBarSpots == null || touchResponse.lineBarSpots!.isEmpty) return;
+
+                    final spot = touchResponse.lineBarSpots!.first;
+                    final index = spot.spotIndex;
+                    if (index < 0 || index >= trendData.length) return;
+
+                    final bulanNama = _getMonthName(trendData[index]['bulan'] as int);
+                    final tahun = trendData[index]['tahun'];
+                    final pem = trendData[index]['totalPemasukan'] as double;
+                    final peng = trendData[index]['totalPengeluaran'] as double;
+                    final selisih = pem - peng;
+
+                    showDialog(
+                      context: context,
+                      builder: (dialogContext) => AlertDialog(
+                        title: Text('Detail $bulanNama $tahun'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Pemasukan:'),
+                                Text(
+                                  currencyFormat.format(pem),
+                                  style: const TextStyle(color: colorGreen, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            const Gap(8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Pengeluaran:'),
+                                Text(
+                                  currencyFormat.format(peng),
+                                  style: const TextStyle(color: colorRed, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            const Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Selisih:'),
+                                Text(
+                                  currencyFormat.format(selisih),
+                                  style: TextStyle(
+                                    color: selisih >= 0 ? colorGreen : colorRed,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          Button.outline(
+                            onPressed: () => Navigator.of(dialogContext).pop(),
+                            child: const Text('Tutup'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                   touchTooltipData: LineTouchTooltipData(
                     getTooltipColor: (touchedSpot) =>
                         Theme.of(context).colorScheme.card,
@@ -219,8 +290,18 @@ class ExpenseLineChartWidget extends StatelessWidget {
                       color: Theme.of(context).colorScheme.border,
                     ),
                     getTooltipItems: (touchedSpots) {
+                      final index = touchedSpots.first.spotIndex;
+                      final pem = trendData[index]['totalPemasukan'] as double;
+                      final peng = trendData[index]['totalPengeluaran'] as double;
+                      final selisih = pem - peng;
+                      final showSelisihOnPemasukan = peng > pem;
+
                       return touchedSpots.map((spot) {
                         final isPemasukan = spot.barIndex == 0;
+                        final showSelisihHere = isPemasukan
+                            ? showSelisihOnPemasukan
+                            : !showSelisihOnPemasukan;
+
                         return LineTooltipItem(
                           '${isPemasukan ? 'Pemasukan' : 'Pengeluaran'}\n',
                           TextStyle(
@@ -230,13 +311,35 @@ class ExpenseLineChartWidget extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: currencyFormat.format(spot.y),
+                              text: showSelisihHere
+                                  ? '${currencyFormat.format(spot.y)}\n\n'
+                                  : currencyFormat.format(spot.y),
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.foreground,
                                 fontWeight: FontWeight.normal,
                                 fontSize: 11,
                               ),
                             ),
+                            if (showSelisihHere) ...[
+                              TextSpan(
+                                text: 'Selisih\n',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.foreground,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              TextSpan(
+                                text: currencyFormat.format(selisih),
+                                style: TextStyle(
+                                  color: selisih < 0
+                                      ? colorRed
+                                      : Theme.of(context).colorScheme.foreground,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
                           ],
                         );
                       }).toList();
@@ -252,7 +355,7 @@ class ExpenseLineChartWidget extends StatelessWidget {
                     color: colorGreen.withValues(alpha: 0.8),
                     barWidth: 2,
                     isStrokeCapRound: true,
-                    dotData: const FlDotData(show: false),
+                    dotData: const FlDotData(show: true),
                     belowBarData: BarAreaData(
                       show: true,
                       gradient: LinearGradient(
@@ -273,7 +376,7 @@ class ExpenseLineChartWidget extends StatelessWidget {
                     color: colorRed.withValues(alpha: 0.8),
                     barWidth: 2,
                     isStrokeCapRound: true,
-                    dotData: const FlDotData(show: false),
+                    dotData: const FlDotData(show: true),
                     belowBarData: BarAreaData(
                       show: true,
                       gradient: LinearGradient(

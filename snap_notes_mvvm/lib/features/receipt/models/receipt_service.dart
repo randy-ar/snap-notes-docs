@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart' show decodeImageFromList, Rect;
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as img;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart' hide TextLine;
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart' as mlkit show RecognizedText;
@@ -41,6 +42,30 @@ class ReceiptService {
       return newFile;
     } catch (e) {
       throw LocalException('Gagal memutar gambar: ${e.toString()}');
+    }
+  }
+
+  /// Melakukan kompresi file gambar seoptimal mungkin menggunakan flutter_image_compress
+  /// sebelum dikirim via multipart upload.
+  Future<File> compressImageFile(File image, {int minDimension = 1920, int quality = 70}) async {
+    try {
+      final targetPath = '${image.path}_compressed_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final compressedFile = await FlutterImageCompress.compressAndGetFile(
+        image.absolute.path,
+        targetPath,
+        quality: quality,
+        minWidth: minDimension,
+        minHeight: minDimension,
+        keepExif: false,
+        format: CompressFormat.jpeg,
+      );
+
+      if (compressedFile != null && await File(compressedFile.path).exists()) {
+        return File(compressedFile.path);
+      }
+      return image;
+    } catch (_) {
+      return image; // Fallback jika kompresi native gagal
     }
   }
 
@@ -147,13 +172,14 @@ class ReceiptService {
 
   Future<Receipt> saveReceipt(Receipt receipt, File image) async {
     try {
+      final compressedImage = await compressImageFile(image);
       final receiptData = jsonEncode(receipt.toJson());
 
       final formData = FormData.fromMap({
         'receiptData': receiptData,
         'gambar': await MultipartFile.fromFile(
-          image.path,
-          filename: image.path.split('/').last,
+          compressedImage.path,
+          filename: compressedImage.path.split('/').last,
         ),
       });
 
