@@ -31,7 +31,7 @@ export class DashboardController {
     @Req() req: any,
     @Query() query: QueryDashboardDto,
   ): Promise<RingkasanResponseDto> {
-    const penggunaId = req.user.sub;
+    const penggunaId = req.user.id || req.user.sub;
     return this.dashboardService.getRingkasan(penggunaId, query);
   }
 
@@ -48,7 +48,7 @@ export class DashboardController {
     @Req() req: any,
     @Query() query: QueryDashboardDto,
   ): Promise<any[]> {
-    const penggunaId = req.user.sub;
+    const penggunaId = req.user.id || req.user.sub;
     return this.dashboardService.getTrend(penggunaId, query);
   }
 
@@ -65,7 +65,7 @@ export class DashboardController {
     @Req() req: any,
     @Query() query: QueryDashboardDto,
   ): Promise<any> {
-    const penggunaId = req.user.sub;
+    const penggunaId = req.user.id || req.user.sub;
     return this.dashboardService.getKalender(penggunaId, query);
   }
 
@@ -82,7 +82,7 @@ export class DashboardController {
     @Req() req: any,
     @Query('tanggal') tanggal: string,
   ): Promise<any> {
-    const penggunaId = req.user.sub;
+    const penggunaId = req.user.id || req.user.sub;
     return this.dashboardService.getDetailHarian(penggunaId, tanggal);
   }
 
@@ -99,7 +99,7 @@ export class DashboardController {
     @Req() req: any,
     @Query() query: QueryDashboardDto,
   ): Promise<any[]> {
-    const penggunaId = req.user.sub;
+    const penggunaId = req.user.id || req.user.sub;
     return this.dashboardService.getKategori(penggunaId, query);
   }
 }

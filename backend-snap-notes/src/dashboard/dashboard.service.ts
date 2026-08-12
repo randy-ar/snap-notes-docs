@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { RingkasanResponseDto } from './dto/ringkasan-response.dto';
 import { QueryDashboardDto } from './dto/query-dashboard.dto';
@@ -13,6 +13,7 @@ export class DashboardService {
     penggunaId: string,
     query: QueryDashboardDto,
   ): Promise<RingkasanResponseDto> {
+    if (!penggunaId) throw new UnauthorizedException('penggunaId tidak valid');
     const now = new Date();
     const bulan = query.bulan ? parseInt(query.bulan, 10) : now.getMonth() + 1;
     const tahun = query.tahun ? parseInt(query.tahun, 10) : now.getFullYear();
@@ -68,6 +69,7 @@ export class DashboardService {
     penggunaId: string,
     query: QueryDashboardDto,
   ): Promise<{ pengeluaran: Record<string, number>; pemasukan: Record<string, number> }> {
+    if (!penggunaId) throw new UnauthorizedException('penggunaId tidak valid');
     const now = new Date();
     const bulan = query.bulan ? parseInt(query.bulan, 10) : now.getMonth() + 1;
     const tahun = query.tahun ? parseInt(query.tahun, 10) : now.getFullYear();
@@ -105,6 +107,7 @@ export class DashboardService {
     penggunaId: string,
     tanggalStr: string,
   ): Promise<{ pengeluaran: any[]; pemasukan: any[] }> {
+    if (!penggunaId) throw new UnauthorizedException('penggunaId tidak valid');
     const targetDate = new Date(tanggalStr);
     const tahun = targetDate.getUTCFullYear();
     const bulan = targetDate.getUTCMonth();
@@ -160,6 +163,7 @@ export class DashboardService {
     penggunaId: string,
     query: QueryDashboardDto,
   ): Promise<any[]> {
+    if (!penggunaId) throw new UnauthorizedException('penggunaId tidak valid');
     const now = new Date();
     const bulan = query.bulan ? parseInt(query.bulan, 10) : now.getMonth() + 1;
     const tahun = query.tahun ? parseInt(query.tahun, 10) : now.getFullYear();
@@ -202,6 +206,7 @@ export class DashboardService {
     penggunaId: string,
     query: QueryDashboardDto,
   ): Promise<any[]> {
+    if (!penggunaId) throw new UnauthorizedException('penggunaId tidak valid');
     const now = new Date();
     const focusBulan = query.bulan ? parseInt(query.bulan, 10) : now.getMonth() + 1;
     const focusTahun = query.tahun ? parseInt(query.tahun, 10) : now.getFullYear();
