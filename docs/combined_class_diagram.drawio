@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0">
   <diagram id="combined_class_diagram" name="Combined Class Diagram">
-    <mxGraphModel dx="744" dy="1234" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="5000" pageHeight="5000" math="0" shadow="0">
+    <mxGraphModel dx="1093" dy="1268" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="5000" pageHeight="5000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -347,97 +347,97 @@
           <mxGeometry height="26" width="390" y="424" as="geometry" />
         </mxCell>
         <mxCell id="f9_pengeluaranviewmodel" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="PengeluaranViewModel" vertex="1">
-          <mxGeometry height="788" width="752" x="40" y="868" as="geometry" />
+          <mxGeometry height="788" width="1065" x="40" y="868" as="geometry" />
         </mxCell>
         <mxCell id="f9_attr1" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _pengeluaranService : PengeluaranService" vertex="1">
-          <mxGeometry height="26" width="752" y="26" as="geometry" />
+          <mxGeometry height="26" width="1065" y="26" as="geometry" />
         </mxCell>
         <mxCell id="f9_attr2" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _isLoading : bool" vertex="1">
-          <mxGeometry height="26" width="752" y="52" as="geometry" />
+          <mxGeometry height="26" width="1065" y="52" as="geometry" />
         </mxCell>
         <mxCell id="f9_attr3" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _pengeluaranList : List&lt;Pengeluaran&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="78" as="geometry" />
+          <mxGeometry height="26" width="1065" y="78" as="geometry" />
         </mxCell>
         <mxCell id="f9_attr4" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _currentPage : int" vertex="1">
-          <mxGeometry height="26" width="752" y="104" as="geometry" />
+          <mxGeometry height="26" width="1065" y="104" as="geometry" />
         </mxCell>
         <mxCell id="f9_attr5" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _hasMoreData : bool" vertex="1">
-          <mxGeometry height="26" width="752" y="130" as="geometry" />
+          <mxGeometry height="26" width="1065" y="130" as="geometry" />
         </mxCell>
         <mxCell id="f9_attr6" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _isLoadingMore : bool" vertex="1">
-          <mxGeometry height="26" width="752" y="156" as="geometry" />
+          <mxGeometry height="26" width="1065" y="156" as="geometry" />
         </mxCell>
         <mxCell id="f9_attr7" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _overviewData : Map&lt;String, dynamic&gt;?" vertex="1">
-          <mxGeometry height="26" width="752" y="182" as="geometry" />
+          <mxGeometry height="26" width="1065" y="182" as="geometry" />
         </mxCell>
         <mxCell id="f9_attr8" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _pengeluaranDetail : Pengeluaran?" vertex="1">
-          <mxGeometry height="26" width="752" y="208" as="geometry" />
+          <mxGeometry height="26" width="1065" y="208" as="geometry" />
         </mxCell>
         <mxCell id="f9_attr9" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _errorMessage : String?" vertex="1">
-          <mxGeometry height="26" width="752" y="234" as="geometry" />
+          <mxGeometry height="26" width="1065" y="234" as="geometry" />
         </mxCell>
         <mxCell id="f9_attr10" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _categories : List&lt;Kategori&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="260" as="geometry" />
+          <mxGeometry height="26" width="1065" y="260" as="geometry" />
         </mxCell>
         <mxCell id="f9_div1" parent="f9_pengeluaranviewmodel" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
-          <mxGeometry height="8" width="752" y="286" as="geometry" />
+          <mxGeometry height="8" width="1065" y="286" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth1" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ isLoading() : bool" vertex="1">
-          <mxGeometry height="26" width="752" y="294" as="geometry" />
+          <mxGeometry height="26" width="1065" y="294" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth2" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ pengeluaranList() : List&lt;Pengeluaran&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="320" as="geometry" />
+          <mxGeometry height="26" width="1065" y="320" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth3" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ currentPage() : int" vertex="1">
-          <mxGeometry height="26" width="752" y="346" as="geometry" />
+          <mxGeometry height="26" width="1065" y="346" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth4" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ hasMoreData() : bool" vertex="1">
-          <mxGeometry height="26" width="752" y="372" as="geometry" />
+          <mxGeometry height="26" width="1065" y="372" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth5" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ isLoadingMore() : bool" vertex="1">
-          <mxGeometry height="26" width="752" y="398" as="geometry" />
+          <mxGeometry height="26" width="1065" y="398" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth6" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ overviewData() : Map&lt;String, dynamic&gt;?" vertex="1">
-          <mxGeometry height="26" width="752" y="424" as="geometry" />
+          <mxGeometry height="26" width="1065" y="424" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth7" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ pengeluaranDetail() : Pengeluaran?" vertex="1">
-          <mxGeometry height="26" width="752" y="450" as="geometry" />
+          <mxGeometry height="26" width="1065" y="450" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth8" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ errorMessage() : String?" vertex="1">
-          <mxGeometry height="26" width="752" y="476" as="geometry" />
+          <mxGeometry height="26" width="1065" y="476" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth9" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ categories() : List&lt;Kategori&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="502" as="geometry" />
+          <mxGeometry height="26" width="1065" y="502" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth10" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _setLoading(value: bool) : void" vertex="1">
-          <mxGeometry height="26" width="752" y="528" as="geometry" />
+          <mxGeometry height="26" width="1065" y="528" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth11" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadPengeluaranDetail(id: String) : Future&lt;void&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="554" as="geometry" />
+          <mxGeometry height="26" width="1065" y="554" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth12" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadOverview(bulan: int?, tahun: int?) : Future&lt;void&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="580" as="geometry" />
+          <mxGeometry height="26" width="1065" y="580" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth13" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadPengeluaran(isRefresh: bool) : Future&lt;void&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="606" as="geometry" />
+          <mxGeometry height="26" width="1065" y="606" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth14" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadMorePengeluaran() : Future&lt;void&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="632" as="geometry" />
+          <mxGeometry height="26" width="1065" y="632" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth15" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadCategories(jenis: String?) : Future&lt;void&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="658" as="geometry" />
+          <mxGeometry height="26" width="1065" y="658" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth16" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ tambahPengeluaran(deskripsi: String, jumlah: double, tanggal: DateTime, kategoriId: String?, catatan: String?) : Future&lt;void&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="684" as="geometry" />
+          <mxGeometry height="26" width="1065" y="684" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth17" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ updatePengeluaran(id: String, deskripsi: String?, jumlah: double?, tanggal: DateTime?, kategoriId: String?, catatan: String?) : Future&lt;void&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="710" as="geometry" />
+          <mxGeometry height="26" width="1065" y="710" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth18" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ hapusPengeluaran(id: String) : Future&lt;void&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="736" as="geometry" />
+          <mxGeometry height="26" width="1065" y="736" as="geometry" />
         </mxCell>
         <mxCell id="f9_meth19" parent="f9_pengeluaranviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ reparseStruk(strukId: String, prompt: String) : Future&lt;void&gt;" vertex="1">
-          <mxGeometry height="26" width="752" y="762" as="geometry" />
+          <mxGeometry height="26" width="1065" y="762" as="geometry" />
         </mxCell>
         <mxCell id="f10_kategori" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Kategori" vertex="1">
           <mxGeometry height="216" width="367" x="1145" y="868" as="geometry" />
@@ -556,122 +556,119 @@
         <mxCell id="f14_div1" parent="f14_dashboardservice" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
           <mxGeometry height="8" width="329" y="52" as="geometry" />
         </mxCell>
-        <mxCell id="f14_meth2" parent="f14_dashboardservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getTrend(bulan: int?, tahun: int?) : Future List" vertex="1">
+        <mxCell id="f14_meth2" parent="f14_dashboardservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getTrend(bulan: int?, tahun: int?) : Future&amp;lt;Array&amp;gt;" vertex="1">
           <mxGeometry height="26" width="329" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="f14_meth3" parent="f14_dashboardservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getKalender(bulan: int?, tahun: int?) : Future Map" vertex="1">
+        <mxCell id="f14_meth3" parent="f14_dashboardservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getKalender(bulan: int?, tahun: int?) : Future&amp;lt;Map&amp;gt;" vertex="1">
           <mxGeometry height="26" width="329" y="86" as="geometry" />
         </mxCell>
-        <mxCell id="f14_meth4" parent="f14_dashboardservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getPerKategori(bulan: int?, tahun: int?) : Future List" vertex="1">
+        <mxCell id="f14_meth4" parent="f14_dashboardservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getPerKategori(bulan: int?, tahun: int?) : Future&amp;lt;Array&amp;gt;" vertex="1">
           <mxGeometry height="26" width="329" y="112" as="geometry" />
         </mxCell>
         <mxCell id="f15_dashboardviewmodel" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="DashboardViewModel" vertex="1">
-          <mxGeometry height="528" width="417" x="4183" y="870" as="geometry" />
+          <mxGeometry height="502" width="337" x="4183" y="870" as="geometry" />
         </mxCell>
         <mxCell id="f15_attr1" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _dashboardService : DashboardService" vertex="1">
-          <mxGeometry height="26" width="417" y="26" as="geometry" />
+          <mxGeometry height="26" width="337" y="26" as="geometry" />
         </mxCell>
         <mxCell id="f15_attr2" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _isLoading : bool" vertex="1">
-          <mxGeometry height="26" width="417" y="52" as="geometry" />
+          <mxGeometry height="26" width="337" y="52" as="geometry" />
         </mxCell>
         <mxCell id="f15_attr4" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _errorMessage : String?" vertex="1">
-          <mxGeometry height="26" width="417" y="78" as="geometry" />
+          <mxGeometry height="26" width="337" y="78" as="geometry" />
         </mxCell>
-        <mxCell id="f15_attr5" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _calendarData : List&amp;lt;Map&amp;gt;?" vertex="1">
-          <mxGeometry height="26" width="417" y="104" as="geometry" />
+        <mxCell id="f15_attr5" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _calendarData : Map&lt;DateTime, double&gt;?" vertex="1">
+          <mxGeometry height="26" width="337" y="104" as="geometry" />
         </mxCell>
-        <mxCell id="f15_attr6" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _kategoriData : List&amp;lt;Map&amp;gt;?" vertex="1">
-          <mxGeometry height="26" width="417" y="130" as="geometry" />
-        </mxCell>
-        <mxCell id="IMk8NsoXldi6IUOEdzel-1" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="-&amp;nbsp;_trendCache: List&amp;lt;Map&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="417" y="156" as="geometry" />
+        <mxCell id="f15_attr6" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _kategoriData : List&lt;Map&lt;String, dynamic&gt;&gt;?" vertex="1">
+          <mxGeometry height="26" width="337" y="130" as="geometry" />
         </mxCell>
         <mxCell id="f15_attr8" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _focusMonth : DateTime" vertex="1">
-          <mxGeometry height="26" width="417" y="182" as="geometry" />
+          <mxGeometry height="26" width="337" y="156" as="geometry" />
         </mxCell>
         <mxCell id="f15_div1" parent="f15_dashboardviewmodel" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
-          <mxGeometry height="8" width="417" y="208" as="geometry" />
+          <mxGeometry height="8" width="337" y="182" as="geometry" />
         </mxCell>
         <mxCell id="f15_meth1" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ isLoading() : bool" vertex="1">
-          <mxGeometry height="26" width="417" y="216" as="geometry" />
+          <mxGeometry height="26" width="337" y="190" as="geometry" />
         </mxCell>
         <mxCell id="f15_meth3" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ errorMessage() : String?" vertex="1">
-          <mxGeometry height="26" width="417" y="242" as="geometry" />
+          <mxGeometry height="26" width="337" y="216" as="geometry" />
         </mxCell>
         <mxCell id="f15_meth4" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ calendarData() : Map&lt;DateTime, double&gt;?" vertex="1">
-          <mxGeometry height="26" width="417" y="268" as="geometry" />
+          <mxGeometry height="26" width="337" y="242" as="geometry" />
         </mxCell>
         <mxCell id="f15_meth5" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ kategoriData() : List&lt;Map&lt;String, dynamic&gt;&gt;?" vertex="1">
-          <mxGeometry height="26" width="417" y="294" as="geometry" />
+          <mxGeometry height="26" width="337" y="268" as="geometry" />
         </mxCell>
         <mxCell id="f15_meth8" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ focusMonth() : DateTime" vertex="1">
-          <mxGeometry height="26" width="417" y="320" as="geometry" />
+          <mxGeometry height="26" width="337" y="294" as="geometry" />
         </mxCell>
         <mxCell id="f15_meth10" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _setLoading(value: bool) : void" vertex="1">
-          <mxGeometry height="26" width="417" y="346" as="geometry" />
+          <mxGeometry height="26" width="337" y="320" as="geometry" />
         </mxCell>
-        <mxCell id="f15_meth11" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ initDashboard(bulan: int?, tahun: int?) : Future&amp;lt;void&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="417" y="372" as="geometry" />
+        <mxCell id="f15_meth11" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ initDashboard(bulan: int?, tahun: int?) : Future&lt;void&gt;" vertex="1">
+          <mxGeometry height="26" width="337" y="346" as="geometry" />
         </mxCell>
-        <mxCell id="f15_meth13" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadCalendarData(bulan: int?, tahun: int?) : Future&amp;lt;void&amp;gt;&amp;nbsp;" vertex="1">
-          <mxGeometry height="26" width="417" y="398" as="geometry" />
+        <mxCell id="f15_meth13" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadCalendarData(bulan: int?, tahun: int?) : Future&lt;void&gt;" vertex="1">
+          <mxGeometry height="26" width="337" y="372" as="geometry" />
         </mxCell>
-        <mxCell id="f15_meth14" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadKategoriData(bulan: int?, tahun: int?) : Future&amp;lt;void&amp;gt;&amp;nbsp;" vertex="1">
-          <mxGeometry height="26" width="417" y="424" as="geometry" />
+        <mxCell id="f15_meth14" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadKategoriData(bulan: int?, tahun: int?) : Future&lt;void&gt;" vertex="1">
+          <mxGeometry height="26" width="337" y="398" as="geometry" />
         </mxCell>
-        <mxCell id="f15_meth15" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadMonthlyTrend(force: bool, isBackground: bool) :&amp;nbsp;Future&amp;lt;void&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="417" y="450" as="geometry" />
+        <mxCell id="f15_meth15" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ loadMonthlyTrend(force: bool, isBackground: bool) : Future&lt;void&gt;" vertex="1">
+          <mxGeometry height="26" width="337" y="424" as="geometry" />
         </mxCell>
         <mxCell id="f15_meth16" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ nextMonth() : void" vertex="1">
-          <mxGeometry height="26" width="417" y="476" as="geometry" />
+          <mxGeometry height="26" width="337" y="450" as="geometry" />
         </mxCell>
         <mxCell id="f15_meth17" parent="f15_dashboardviewmodel" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ prevMonth() : void" vertex="1">
-          <mxGeometry height="26" width="417" y="502" as="geometry" />
+          <mxGeometry height="26" width="337" y="476" as="geometry" />
         </mxCell>
         <mxCell id="f16_notifikasiservice" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="NotifikasiService" vertex="1">
-          <mxGeometry height="372" width="520" x="40" y="1696" as="geometry" />
+          <mxGeometry height="372" width="440" x="40" y="1696" as="geometry" />
         </mxCell>
         <mxCell id="f16_attr1" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _dio : Dio" vertex="1">
-          <mxGeometry height="26" width="520" y="26" as="geometry" />
+          <mxGeometry height="26" width="440" y="26" as="geometry" />
         </mxCell>
         <mxCell id="f16_attr2" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _notificationsPlugin : FlutterLocalNotificationsPlugin" vertex="1">
-          <mxGeometry height="26" width="520" y="52" as="geometry" />
+          <mxGeometry height="26" width="440" y="52" as="geometry" />
         </mxCell>
         <mxCell id="f16_attr3" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _storage : FlutterSecureStorage" vertex="1">
-          <mxGeometry height="26" width="520" y="78" as="geometry" />
+          <mxGeometry height="26" width="440" y="78" as="geometry" />
         </mxCell>
         <mxCell id="f16_div1" parent="f16_notifikasiservice" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
-          <mxGeometry height="8" width="520" y="104" as="geometry" />
+          <mxGeometry height="8" width="440" y="104" as="geometry" />
         </mxCell>
-        <mxCell id="f16_meth3" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ init() : Future&amp;lt;void&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="520" y="112" as="geometry" />
+        <mxCell id="f16_meth3" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ init() : Future&lt;void&gt;" vertex="1">
+          <mxGeometry height="26" width="440" y="112" as="geometry" />
         </mxCell>
-        <mxCell id="f16_meth4" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getPreferensiList() : Future &amp;lt;PreferensiNotifikasi&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="520" y="138" as="geometry" />
+        <mxCell id="f16_meth4" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getPreferensiList() : Future&lt;List&lt;PreferensiNotifikasi&gt;&gt;" vertex="1">
+          <mxGeometry height="26" width="440" y="138" as="geometry" />
         </mxCell>
-        <mxCell id="f16_meth5" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ createPreferensi(preferensi: PreferensiNotifikasi) : Future&amp;lt;PreferensiNotifikasi&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="520" y="164" as="geometry" />
+        <mxCell id="f16_meth5" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ createPreferensi(preferensi: PreferensiNotifikasi) : Future&lt;PreferensiNotifikasi&gt;" vertex="1">
+          <mxGeometry height="26" width="440" y="164" as="geometry" />
         </mxCell>
-        <mxCell id="f16_meth6" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ updatePreferensi(id: String, preferensi: PreferensiNotifikasi) : Future&amp;lt;PreferensiNotifikasi&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="520" y="190" as="geometry" />
+        <mxCell id="f16_meth6" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ updatePreferensi(id: String, preferensi: PreferensiNotifikasi) : Future&lt;PreferensiNotifikasi&gt;" vertex="1">
+          <mxGeometry height="26" width="440" y="190" as="geometry" />
         </mxCell>
-        <mxCell id="f16_meth7" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ deletePreferensi(id: String) : Future&amp;lt;void&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="520" y="216" as="geometry" />
+        <mxCell id="f16_meth7" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ deletePreferensi(id: String) : Future&lt;void&gt;" vertex="1">
+          <mxGeometry height="26" width="440" y="216" as="geometry" />
         </mxCell>
-        <mxCell id="f16_meth8" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ scheduleNotifications(preferensiList: List) : Future&amp;lt;void&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="520" y="242" as="geometry" />
+        <mxCell id="f16_meth8" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ scheduleNotifications(preferensiList: List&lt;PreferensiNotifikasi&gt;) : Future&lt;void&gt;" vertex="1">
+          <mxGeometry height="26" width="440" y="242" as="geometry" />
         </mxCell>
         <mxCell id="f16_meth9" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ onScheduledTimeReached(notifikasiId: int) : Future&lt;void&gt;" vertex="1">
-          <mxGeometry height="26" width="520" y="268" as="geometry" />
+          <mxGeometry height="26" width="440" y="268" as="geometry" />
         </mxCell>
-        <mxCell id="f16_meth10" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ checkCatatanHariIni() : Future &amp;lt;bool&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="520" y="294" as="geometry" />
+        <mxCell id="f16_meth10" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ checkCatatanHariIni() : Future&lt;bool&gt;" vertex="1">
+          <mxGeometry height="26" width="440" y="294" as="geometry" />
         </mxCell>
-        <mxCell id="f16_meth11" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ showLocalNotification(id: int, title: String, body: String) : Future&amp;lt;void&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="520" y="320" as="geometry" />
+        <mxCell id="f16_meth11" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ showLocalNotification(id: int, title: String, body: String) : Future&lt;void&gt;" vertex="1">
+          <mxGeometry height="26" width="440" y="320" as="geometry" />
         </mxCell>
-        <mxCell id="f16_meth12" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ batalkanPengiriman(id: int) : Future&amp;lt;void&amp;gt;" vertex="1">
-          <mxGeometry height="26" width="520" y="346" as="geometry" />
+        <mxCell id="f16_meth12" parent="f16_notifikasiservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ batalkanPengiriman(id: int) : Future&lt;void&gt;" vertex="1">
+          <mxGeometry height="26" width="440" y="346" as="geometry" />
         </mxCell>
         <mxCell id="f17_preferensinotifikasi" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="PreferensiNotifikasi" vertex="1">
           <mxGeometry height="216" width="457" x="792" y="1696" as="geometry" />
@@ -850,7 +847,7 @@
         <mxCell id="f20_meth5" parent="f20_pemasukanservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ updatePemasukan(id: String, deskripsi: String?, jumlah: double?, tanggal: DateTime?, kategoriId: String?, catatan: String?) : Future&lt;Pemasukan&gt;" vertex="1">
           <mxGeometry height="26" width="1087" y="164" as="geometry" />
         </mxCell>
-        <mxCell id="f20_meth6" parent="f20_pemasukanservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ deletePemasukan(id: String) : Future&amp;lt;void&amp;gt;" vertex="1">
+        <mxCell id="f20_meth6" parent="f20_pemasukanservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ deletePemasukan(id: String) : Future&lt;void&gt;" vertex="1">
           <mxGeometry height="26" width="1087" y="190" as="geometry" />
         </mxCell>
         <mxCell id="f20_meth7" parent="f20_pemasukanservice" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ getDaftarKategori(jenis: String?) : Future&lt;List&lt;Kategori&gt;&gt;" vertex="1">

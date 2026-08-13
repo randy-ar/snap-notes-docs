@@ -870,7 +870,7 @@
         </mxCell>
       
         <mxCell id="f16_notifikasiservice" value="NotifikasiService" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="40.0" y="1696.0" width="712" height="502" as="geometry" />
+          <mxGeometry x="1940.0" y="40.0" width="712" height="538" as="geometry" />
         </mxCell>
         
         <mxCell id="f16_attr1" value="- _dio : Dio" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="f16_notifikasiservice">
@@ -941,12 +941,16 @@
           <mxGeometry y="424" width="712" height="26" as="geometry" />
         </mxCell>
         
-        <mxCell id="f16_meth13" value="- _nextInstanceOfDayAndTime(day: int, hour: int, minute: int) : TZDateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="f16_notifikasiservice">
+        <mxCell id="f16_meth13" value="+ cancelAllNotifications() : Future&lt;void&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="f16_notifikasiservice">
           <mxGeometry y="450" width="712" height="26" as="geometry" />
         </mxCell>
         
-        <mxCell id="f16_meth14" value="- _nextInstanceOfTime(hour: int, minute: int) : TZDateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="f16_notifikasiservice">
+        <mxCell id="f16_meth14" value="- _nextInstanceOfDayAndTime(day: int, hour: int, minute: int) : TZDateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="f16_notifikasiservice">
           <mxGeometry y="476" width="712" height="26" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="f16_meth15" value="- _nextInstanceOfTime(hour: int, minute: int) : TZDateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="f16_notifikasiservice">
+          <mxGeometry y="502" width="712" height="26" as="geometry" />
         </mxCell>
       
         <mxCell id="f17_preferensinotifikasi" value="PreferensiNotifikasi" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
