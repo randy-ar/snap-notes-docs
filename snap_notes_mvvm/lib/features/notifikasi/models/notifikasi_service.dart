@@ -61,9 +61,6 @@ class NotifikasiService {
 
     await _notificationsPlugin.initialize(initializationSettings);
 
-    // Cancel stale scheduled notifications from previous installs/configs
-    await _notificationsPlugin.cancelAll();
-
     // Request notification permission (Android 13+)
     await _notificationsPlugin
         .resolvePlatformSpecificImplementation<
