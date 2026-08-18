@@ -207,101 +207,115 @@ class _NotifikasiSettingsPageState extends State<NotifikasiSettingsPage> {
 
           return Stack(
             children: [
-              if (list.isEmpty)
-                Center(
-                  child: Text(
-                    'Belum ada jadwal pengingat yang ditambahkan.',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.mutedForeground,
-                    ),
-                  ),
-                )
-              else
-                ListView.separated(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: list.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    final item = list[index];
-                    return Card(
-                      child: Row(
+              RefreshTrigger(
+                onRefresh: () async {
+                  final viewModel = context.read<NotifikasiViewModel>();
+                  await viewModel.loadPreferensi();
+                },
+                child: list.isEmpty
+                    ? ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.7,
+                            child: Center(
+                              child: Text(
+                                'Belum ada jadwal pengingat yang ditambahkan.',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.mutedForeground,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : ListView.separated(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(16),
+                        itemCount: list.length,
+                        separatorBuilder: (context, index) => const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final item = list[index];
+                          return Card(
+                            child: Row(
                               children: [
-                                Text(
-                                  item.jamNotifikasi,
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.jamNotifikasi,
+                                        style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        _formatHariAktif(item.hariAktif),
+                                        style: TextStyle(
+                                          color: Theme.of(context).colorScheme.mutedForeground,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  _formatHariAktif(item.hariAktif),
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.mutedForeground,
-                                    fontSize: 14,
-                                  ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Switch(
+                                      value: item.aktif,
+                                      onChanged: (val) async {
+                                        final viewModel = context.read<NotifikasiViewModel>();
+                                        final updated = PreferensiNotifikasi(
+                                          id: item.id,
+                                          hariAktif: item.hariAktif,
+                                          jamNotifikasi: item.jamNotifikasi,
+                                          aktif: val,
+                                        );
+                                        await viewModel.updatePreferensi(item.id!, updated);
+                                        // Reschedule after toggle
+                                        if (mounted && viewModel.preferensiList.isNotEmpty) {
+                                          await viewModel.scheduleNotifications(viewModel.preferensiList);
+                                        }
+                                      },
+                                    ),
+                                    const SizedBox(width: 8),
+                                    IconButton.ghost(
+                                      icon: const Icon(Icons.more_vert),
+                                      onPressed: () {
+                                        showDropdown(
+                                          context: context,
+                                          builder: (dropdownContext) => DropdownMenu(
+                                            children: [
+                                              MenuButton(
+                                                onPressed: (_) {
+                                                  closeOverlay(dropdownContext);
+                                                  _navigateToForm(preferensi: item);
+                                                },
+                                                child: const Text('Edit'),
+                                              ),
+                                              MenuButton(
+                                                onPressed: (_) {
+                                                  closeOverlay(dropdownContext);
+                                                  _showDeleteConfirmation(context, item);
+                                                },
+                                                child: const Text('Hapus'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Switch(
-                                value: item.aktif,
-                                onChanged: (val) async {
-                                  final viewModel = context.read<NotifikasiViewModel>();
-                                  final updated = PreferensiNotifikasi(
-                                    id: item.id,
-                                    hariAktif: item.hariAktif,
-                                    jamNotifikasi: item.jamNotifikasi,
-                                    aktif: val,
-                                  );
-                                  await viewModel.updatePreferensi(item.id!, updated);
-                                  // Reschedule after toggle
-                                  if (mounted && viewModel.preferensiList.isNotEmpty) {
-                                    await viewModel.scheduleNotifications(viewModel.preferensiList);
-                                  }
-                                },
-                              ),
-                              const SizedBox(width: 8),
-                              IconButton.ghost(
-                                icon: const Icon(Icons.more_vert),
-                                onPressed: () {
-                                  showDropdown(
-                                    context: context,
-                                    builder: (dropdownContext) => DropdownMenu(
-                                      children: [
-                                        MenuButton(
-                                          onPressed: (_) {
-                                            closeOverlay(dropdownContext);
-                                            _navigateToForm(preferensi: item);
-                                          },
-                                          child: const Text('Edit'),
-                                        ),
-                                        MenuButton(
-                                          onPressed: (_) {
-                                            closeOverlay(dropdownContext);
-                                            _showDeleteConfirmation(context, item);
-                                          },
-                                          child: const Text('Hapus'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
+              ),
               Positioned(
                 bottom: 24,
                 right: 24,
