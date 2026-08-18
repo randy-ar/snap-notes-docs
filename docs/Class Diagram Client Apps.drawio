@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" scale="1" border="0">
+  <diagram name="Page-1" id="k6pW_wWTCICUab9nNfzy">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2500" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c_LoginPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="LoginPage" vertex="1">
+          <mxGeometry height="40" width="200" x="230" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PemasukanPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PemasukanPage" vertex="1">
+          <mxGeometry height="40" width="200" x="660" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PemasukanDetailPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PemasukanDetailPage" vertex="1">
+          <mxGeometry height="40" width="200" x="660" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PemasukanFormPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PemasukanFormPage" vertex="1">
+          <mxGeometry height="40" width="200" x="660" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PengeluaranPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PengeluaranPage" vertex="1">
+          <mxGeometry height="40" width="200" x="960" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PengeluaranDetailPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PengeluaranDetailPage" vertex="1">
+          <mxGeometry height="40" width="200" x="960" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PengeluaranFormPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PengeluaranFormPage" vertex="1">
+          <mxGeometry height="40" width="200" x="960" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ReceiptScanPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="ReceiptScanPage" vertex="1">
+          <mxGeometry height="40" width="200" x="1380" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ReceiptUploadPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="ReceiptUploadPage" vertex="1">
+          <mxGeometry height="40" width="200" x="1380" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ReceiptTextRecognizedPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="ReceiptTextRecognizedPage" vertex="1">
+          <mxGeometry height="40" width="200" x="1380" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ReceiptParsedPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="ReceiptParsedPage" vertex="1">
+          <mxGeometry height="40" width="200" x="1380" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="c_DashboardPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="DashboardPage" vertex="1">
+          <mxGeometry height="40" width="200" x="1800" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="c_NotifikasiPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="NotifikasiPage" vertex="1">
+          <mxGeometry height="40" width="200" x="2100" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="c_NotifikasiFormPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="NotifikasiFormPage" vertex="1">
+          <mxGeometry height="40" width="200" x="2100" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c_LoginViewModel" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="LoginViewModel" vertex="1">
+          <mxGeometry height="40" width="200" x="100" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="c_AuthViewModel" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="AuthViewModel" vertex="1">
+          <mxGeometry height="40" width="200" x="360" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PemasukanViewModel" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PemasukanViewModel" vertex="1">
+          <mxGeometry height="40" width="200" x="660" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PengeluaranViewModel" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PengeluaranViewModel" vertex="1">
+          <mxGeometry height="40" width="200" x="960" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ReceiptViewModel" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="ReceiptViewModel" vertex="1">
+          <mxGeometry height="40" width="200" x="1380" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="c_DashboardViewModel" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="DashboardViewModel" vertex="1">
+          <mxGeometry height="40" width="200" x="1800" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="c_NotifikasiViewModel" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="NotifikasiViewModel" vertex="1">
+          <mxGeometry height="40" width="200" x="2100" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="c_AuthService" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="AuthService" vertex="1">
+          <mxGeometry height="40" width="200" x="230" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PemasukanService" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PemasukanService" vertex="1">
+          <mxGeometry height="40" width="200" x="660" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PengeluaranService" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PengeluaranService" vertex="1">
+          <mxGeometry height="40" width="200" x="960" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ReceiptService" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="ReceiptService" vertex="1">
+          <mxGeometry height="40" width="200" x="1380" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="c_DashboardService" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="DashboardService" vertex="1">
+          <mxGeometry height="40" width="200" x="1800" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="c_NotifikasiService" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="NotifikasiService" vertex="1">
+          <mxGeometry height="40" width="200" x="2100" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="c_DioClient" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="DioClient" vertex="1">
+          <mxGeometry height="40" width="200" x="1170" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="c_AuthInterceptor" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="AuthInterceptor" vertex="1">
+          <mxGeometry height="40" width="200" x="1430" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="c_Pengguna" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Pengguna" vertex="1">
+          <mxGeometry height="40" width="200" x="100" y="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="c_AuthToken" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="AuthToken" vertex="1">
+          <mxGeometry height="40" width="200" x="360" y="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="c_Pemasukan" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Pemasukan" vertex="1">
+          <mxGeometry height="40" width="200" x="660" y="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="c_Pengeluaran" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Pengeluaran" vertex="1">
+          <mxGeometry height="40" width="200" x="960" y="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="c_Kategori" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Kategori" vertex="1">
+          <mxGeometry height="40" width="200" x="960" y="1140" as="geometry" />
+        </mxCell>
+        <mxCell id="c_Receipt" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Receipt" vertex="1">
+          <mxGeometry height="40" width="200" x="1380" y="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ReceiptItem" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="ReceiptItem" vertex="1">
+          <mxGeometry height="40" width="200" x="1380" y="1140" as="geometry" />
+        </mxCell>
+        <mxCell id="c_RecognizedText" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="RecognizedText" vertex="1">
+          <mxGeometry height="40" width="200" x="1640" y="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="c_Ringkasan" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="Ringkasan" vertex="1">
+          <mxGeometry height="40" width="200" x="1800" y="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="c_PreferensiNotifikasi" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=light-dark(#eeeeee,#1f2020);strokeColor=light-dark(#999999,#cccccc);fontColor=light-dark(#333333,#cccccc);" value="PreferensiNotifikasi" vertex="1">
+          <mxGeometry height="40" width="200" x="2100" y="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dio_interceptor" parent="1" source="c_DioClient" target="c_AuthInterceptor" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_loginpage_vm" parent="1" source="c_LoginPage" target="c_LoginViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_loginvm_service" parent="1" source="c_LoginViewModel" target="c_AuthService" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.25;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_authvm_service" parent="1" source="c_AuthViewModel" target="c_AuthService" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.75;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_authservice_dio" parent="1" source="c_AuthService" target="c_DioClient" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0;entryY=0.25;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_authservice_pengguna" parent="1" source="c_AuthService" target="c_Pengguna" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_authservice_token" parent="1" source="c_AuthService" target="c_AuthToken" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.75;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_authvm_pengguna" parent="1" source="c_AuthViewModel" target="c_Pengguna" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.75;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pemasukanpage_vm" parent="1" source="c_PemasukanPage" target="c_PemasukanViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pemasukandetail_vm" parent="1" source="c_PemasukanDetailPage" target="c_PemasukanViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pemasukanform_vm" parent="1" source="c_PemasukanFormPage" target="c_PemasukanViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pemasukanpage_detail" parent="1" source="c_PemasukanPage" target="c_PemasukanDetailPage" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.25;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pemasukandetail_form" parent="1" source="c_PemasukanDetailPage" target="c_PemasukanFormPage" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.25;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pemasukanvm_service" parent="1" source="c_PemasukanViewModel" target="c_PemasukanService" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pemasukanservice_dio" parent="1" source="c_PemasukanService" target="c_DioClient" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.25;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pemasukanservice_model" parent="1" source="c_PemasukanService" target="c_Pemasukan" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pemasukan_kategori" parent="1" source="c_Pemasukan" target="c_Kategori" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=1;exitY=0.5;entryX=0;entryY=0.25;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pengeluaranpage_vm" parent="1" source="c_PengeluaranPage" target="c_PengeluaranViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pengeluarandetail_vm" parent="1" source="c_PengeluaranDetailPage" target="c_PengeluaranViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pengeluaranform_vm" parent="1" source="c_PengeluaranFormPage" target="c_PengeluaranViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pengeluaranpage_detail" parent="1" source="c_PengeluaranPage" target="c_PengeluaranDetailPage" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.25;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pengeluarandetail_form" parent="1" source="c_PengeluaranDetailPage" target="c_PengeluaranFormPage" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.25;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pengeluaranvm_service" parent="1" source="c_PengeluaranViewModel" target="c_PengeluaranService" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pengeluaranservice_dio" parent="1" source="c_PengeluaranService" target="c_DioClient" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.4;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pengeluaranservice_model" parent="1" source="c_PengeluaranService" target="c_Pengeluaran" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pengeluaran_kategori" parent="1" source="c_Pengeluaran" target="c_Kategori" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_pengeluaran_receipt" parent="1" source="c_Pengeluaran" target="c_Receipt" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receiptscan_vm" parent="1" source="c_ReceiptScanPage" target="c_ReceiptViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receiptupload_vm" parent="1" source="c_ReceiptUploadPage" target="c_ReceiptViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receiptrecognized_vm" parent="1" source="c_ReceiptTextRecognizedPage" target="c_ReceiptViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receiptparsed_vm" parent="1" source="c_ReceiptParsedPage" target="c_ReceiptViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_flow_scan_upload" parent="1" source="c_ReceiptScanPage" target="c_ReceiptUploadPage" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.25;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_flow_upload_recog" parent="1" source="c_ReceiptUploadPage" target="c_ReceiptTextRecognizedPage" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.25;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_flow_recog_parsed" parent="1" source="c_ReceiptTextRecognizedPage" target="c_ReceiptParsedPage" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.25;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receiptrecognized_text" parent="1" source="c_ReceiptTextRecognizedPage" target="c_RecognizedText" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=1;exitY=0.5;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receiptvm_service" parent="1" source="c_ReceiptViewModel" target="c_ReceiptService" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receiptservice_dio" parent="1" source="c_ReceiptService" target="c_DioClient" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.6;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receiptservice_model" parent="1" source="c_ReceiptService" target="c_Receipt" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receiptservice_text" parent="1" source="c_ReceiptService" target="c_RecognizedText" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=1;exitY=0.5;entryX=0;entryY=0.5;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receipt_item" parent="1" source="c_Receipt" target="c_ReceiptItem" style="startArrow=diamondThin;startSize=14;startFill=1;endArrow=none;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_receiptitem_kategori" parent="1" source="c_ReceiptItem" target="c_Kategori" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0;exitY=0.5;entryX=1;entryY=0.75;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dashboardpage_vm" parent="1" source="c_DashboardPage" target="c_DashboardViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dashboardvm_service" parent="1" source="c_DashboardViewModel" target="c_DashboardService" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dashboardservice_dio" parent="1" source="c_DashboardService" target="c_DioClient" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.75;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dashboardservice_ringkasan" parent="1" source="c_DashboardService" target="c_Ringkasan" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_notifikasipage_vm" parent="1" source="c_NotifikasiPage" target="c_NotifikasiViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.35;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_notifikasiform_vm" parent="1" source="c_NotifikasiFormPage" target="c_NotifikasiViewModel" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.65;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_notifikasipage_form" parent="1" source="c_NotifikasiPage" target="c_NotifikasiFormPage" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.25;exitY=1;entryX=0.25;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_notifikasivm_service" parent="1" source="c_NotifikasiViewModel" target="c_NotifikasiService" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_notifikasiservice_dio" parent="1" source="c_NotifikasiService" target="c_DioClient" style="startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=1;entryY=0.25;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_notifikasiservice_model" parent="1" source="c_NotifikasiService" target="c_PreferensiNotifikasi" style="dashed=1;startArrow=none;endArrow=open;endSize=12;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;verticalAlign=middle;edgeStyle=orthogonalEdgeStyle;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

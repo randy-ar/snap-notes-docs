@@ -1,0 +1,46 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Class Diagram Detail" id="0">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="600" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="class_PemasukanFormPage" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="PemasukanFormPage" vertex="1">
+          <mxGeometry height="320" width="520" x="140" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_attr_0" parent="class_PemasukanFormPage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ pemasukan: Pemasukan?" vertex="1">
+          <mxGeometry height="26" width="520" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_attr_1" parent="class_PemasukanFormPage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _deskripsiController: TextEditingController" vertex="1">
+          <mxGeometry height="26" width="520" y="52" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_attr_2" parent="class_PemasukanFormPage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _jumlahController: TextEditingController" vertex="1">
+          <mxGeometry height="26" width="520" y="78" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_attr_3" parent="class_PemasukanFormPage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _catatanController: TextEditingController" vertex="1">
+          <mxGeometry height="26" width="520" y="104" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_attr_4" parent="class_PemasukanFormPage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _selectedDate: DateTime" vertex="1">
+          <mxGeometry height="26" width="520" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_sep" parent="class_PemasukanFormPage" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
+          <mxGeometry height="8" width="520" y="156" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_meth_0" parent="class_PemasukanFormPage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ isEdit(): bool" vertex="1">
+          <mxGeometry height="26" width="520" y="164" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_meth_1" parent="class_PemasukanFormPage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _submit(): Future&amp;lt;void&amp;gt;" vertex="1">
+          <mxGeometry height="26" width="520" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_meth_2" parent="class_PemasukanFormPage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _showToast(title: String, message: String): void" vertex="1">
+          <mxGeometry height="26" width="520" y="216" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_meth_3" parent="class_PemasukanFormPage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ navigateToPemasukanForm(context: BuildContext, pemasukan: Pemasukan?): void" vertex="1">
+          <mxGeometry height="26" width="520" y="242" as="geometry" />
+        </mxCell>
+        <mxCell id="class_PemasukanFormPage_meth_4" parent="class_PemasukanFormPage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ build(context: BuildContext): Widget" vertex="1">
+          <mxGeometry height="26" width="520" y="268" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

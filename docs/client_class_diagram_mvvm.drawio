@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0">
   <diagram id="combined_class_diagram" name="Combined Class Diagram">
     <mxGraphModel dx="744" dy="1234" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="5000" pageHeight="5000" math="0" shadow="0">
@@ -21,24 +22,6 @@
         </mxCell>
         <mxCell id="f0_divider" parent="f0_recognizedtext" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
           <mxGeometry height="8" width="320" y="130" as="geometry" />
-        </mxCell>
-        <mxCell id="f1_2" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="ReceiptUploadPage" vertex="1">
-          <mxGeometry height="138" width="420" x="400" y="40" as="geometry" />
-        </mxCell>
-        <mxCell id="f1_3" parent="f1_2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _currentIndex: int" vertex="1">
-          <mxGeometry height="26" width="420" y="26" as="geometry" />
-        </mxCell>
-        <mxCell id="f1_4" parent="f1_2" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
-          <mxGeometry height="8" width="420" y="52" as="geometry" />
-        </mxCell>
-        <mxCell id="f1_5" parent="f1_2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ tampilkanHasilUpload(): void" vertex="1">
-          <mxGeometry height="26" width="420" y="60" as="geometry" />
-        </mxCell>
-        <mxCell id="f1_6" parent="f1_2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ scanLagi(): void" vertex="1">
-          <mxGeometry height="26" width="420" y="86" as="geometry" />
-        </mxCell>
-        <mxCell id="f1_7" parent="f1_2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ selesai(): void" vertex="1">
-          <mxGeometry height="26" width="420" y="112" as="geometry" />
         </mxCell>
         <mxCell id="f2_receipt" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Receipt" vertex="1">
           <mxGeometry height="372" width="320" x="860" y="40" as="geometry" />
@@ -526,26 +509,8 @@
         <mxCell id="f12_meth-6" parent="f12_dashboardpage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ navigateToLoginPage(context: BuildContext): void" vertex="1">
           <mxGeometry height="26" width="442" y="190" as="geometry" />
         </mxCell>
-        <mxCell id="f13_ringkasandashboard" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="RingkasanDashboard" vertex="1">
+        <mxCell id="f13_ringkasandashboard" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="DioClient" vertex="1">
           <mxGeometry height="164" width="442" x="3069" y="868" as="geometry" />
-        </mxCell>
-        <mxCell id="f13_attr1" parent="f13_ringkasandashboard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ totalPemasukan : double" vertex="1">
-          <mxGeometry height="26" width="442" y="26" as="geometry" />
-        </mxCell>
-        <mxCell id="f13_attr2" parent="f13_ringkasandashboard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ totalPengeluaran : double" vertex="1">
-          <mxGeometry height="26" width="442" y="52" as="geometry" />
-        </mxCell>
-        <mxCell id="f13_attr3" parent="f13_ringkasandashboard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ saldo : double" vertex="1">
-          <mxGeometry height="26" width="442" y="78" as="geometry" />
-        </mxCell>
-        <mxCell id="f13_div1" parent="f13_ringkasandashboard" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
-          <mxGeometry height="8" width="442" y="104" as="geometry" />
-        </mxCell>
-        <mxCell id="f13_meth1" parent="f13_ringkasandashboard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ fromJson(json: Map&lt;String, dynamic&gt;) : RingkasanDashboard" vertex="1">
-          <mxGeometry height="26" width="442" y="112" as="geometry" />
-        </mxCell>
-        <mxCell id="f13_meth2" parent="f13_ringkasandashboard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ get props() : List&lt;Object?&gt;" vertex="1">
-          <mxGeometry height="26" width="442" y="138" as="geometry" />
         </mxCell>
         <mxCell id="f14_dashboardservice" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="DashboardService" vertex="1">
           <mxGeometry height="138" width="329" x="3551" y="868" as="geometry" />
@@ -1171,7 +1136,7 @@
         <mxCell id="f29_meth-4" parent="f29_loginpage" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ navigateToDashboardPage(): Future void" vertex="1">
           <mxGeometry height="26" width="320" y="216" as="geometry" />
         </mxCell>
-      </root>
+      <mxCell id="f13_attr1" parent="f13_ringkasandashboard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _dio: Dio" vertex="1"><mxGeometry height="26" width="442" y="26" as="geometry" /></mxCell><mxCell id="f13_attr2" parent="f13_ringkasandashboard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="- _storage: FlutterSecureStorage" vertex="1"><mxGeometry height="26" width="442" y="52" as="geometry" /></mxCell><mxCell id="f13_div1" parent="f13_ringkasandashboard" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1"><mxGeometry height="8" width="442" y="78" as="geometry" /></mxCell><mxCell id="f13_meth1" parent="f13_ringkasandashboard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ dio: Dio" vertex="1"><mxGeometry height="26" width="442" y="86" as="geometry" /></mxCell><mxCell id="f13_meth2" parent="f13_ringkasandashboard" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ init(): Future&lt;void&gt;" vertex="1"><mxGeometry height="26" width="442" y="112" as="geometry" /></mxCell></root>
     </mxGraphModel>
   </diagram>
 </mxfile>
