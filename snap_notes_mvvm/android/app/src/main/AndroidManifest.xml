@@ -51,6 +51,11 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="false"/>
 
+        <!-- Notification Meta Data -->
+        <meta-data
+            android:name="com.dexterous.flutterlocalnotifications.default_notification_icon"
+            android:resource="@drawable/ic_stat_logo" />
+
         <!-- Notification Receivers -->
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver" />
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />

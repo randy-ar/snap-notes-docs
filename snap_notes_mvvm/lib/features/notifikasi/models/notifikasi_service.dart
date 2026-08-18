@@ -53,13 +53,16 @@ class NotifikasiService {
     tz.setLocalLocation(tz.getLocation('Asia/Jakarta'));
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('ic_stat_logo');
 
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
 
     await _notificationsPlugin.initialize(initializationSettings);
+
+    // Cancel stale scheduled notifications from previous installs/configs
+    await _notificationsPlugin.cancelAll();
 
     // Request notification permission (Android 13+)
     await _notificationsPlugin
@@ -153,6 +156,7 @@ class NotifikasiService {
       channelDescription: 'Notifikasi pengingat pencatatan keuangan harian',
       importance: Importance.max,
       priority: Priority.high,
+      icon: 'ic_stat_logo',
     );
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -233,6 +237,7 @@ class NotifikasiService {
       channelDescription: 'Notifikasi pengingat pencatatan keuangan harian',
       importance: Importance.max,
       priority: Priority.high,
+      icon: 'ic_stat_logo',
     );
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
